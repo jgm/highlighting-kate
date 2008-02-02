@@ -44,10 +44,9 @@ highlighting, users may wish to create their own CSS files that use
 language-specific classes.
 
 The parsers in Text/Highlighting/Kate/Syntax were automatically generated
-from the Kate syntax definitions in the xml directory.  (Note that in a
-few cases, the xml files have been modified; the original has been left
-with a .orig suffix.)  You may modify the xml files in this directory,
-or add new ones, and then regenerate the parsers by doing:
+from the Kate syntax definitions in the xml directory. You may modify
+the xml files in this directory, or add new ones, and then regenerate
+the parsers by doing:
 
     runghc ParseSyntaxFiles.hs xml
 
@@ -66,4 +65,12 @@ There is information on the syntax highlighting definitions at
     http://kate-editor.org/article/writing_a_kate_highlighting_xml_file
 
 Thanks are due to all the authors of these syntax definitions!
+Changes have been made to the following xml files (the originals have been
+left in the directory, with .orig extensions):
+
+- javascript.xml:  Fixed regex \s* (which matches empty string) by changes to DetectSpaces
+- perl.xml:  Fixed regexes - needed backslash-escapes before ] and ^
+- haskell.xml:  Added support for module names
+
+Please send bug reports and patches to the author (jgm at berkeley dot edu).
 
