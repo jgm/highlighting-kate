@@ -79,6 +79,7 @@ Library
   Build-Depends:     parsec, pcre-light, xhtml
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
+                     Text.Highlighting.Kate.Definitions
                      Text.Highlighting.Kate.Format
                      Text.Highlighting.Kate.Syntax.Alert
                      Text.Highlighting.Kate.Syntax.Ada
@@ -134,7 +135,6 @@ Library
                      Text.Highlighting.Kate.Syntax.Xml
                      Text.Highlighting.Kate.Syntax.Xslt
                      Text.Highlighting.Kate.Syntax.Yacc
-  Other-Modules:     Text.Highlighting.Kate.Definitions
-                     Text.Highlighting.Kate.Common
+  Other-Modules:     Text.Highlighting.Kate.Common
   Ghc-Options:       -O2 -W
 

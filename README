@@ -24,6 +24,11 @@ To install:
 The last command must be run as root, or --user may be specified to install
 the library into the user package database.
 
+Haddock documentation can be generated (in dist/doc/html/highlighting-kate)
+using
+
+    runghc Setup.lhs haddock
+
 For an example of the use of the library, see Highlight.hs.
 After installing the library using the steps above, you can compile
 this program with the following command:
