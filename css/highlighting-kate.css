@@ -1,0 +1,56 @@
+/* Based on kate's own default colors for Haskell */
+pre.sourceCode { 
+   padding: 0.5em;
+}
+pre.sourceCode span.LineNumber {
+   display: none;
+}
+pre.numberLines span.LineNumber {
+   display: inline; 
+   background-color: #EBEBEB;
+   padding-right: 0; 
+   margin-right: 3px;
+}
+pre span.Normal { 
+}
+pre span.Keyword {
+   font-weight: bold;
+} 
+pre span.DataType { 
+   color: #800000;
+}
+pre span.DecVal { 
+  color: #0000FF;
+}
+pre span.BaseN {
+  color: #0000FF;
+}
+pre span.Float {
+  color: #800080;
+}
+pre span.Char { 
+   color: #FF00FF;
+}
+pre span.String {
+   color: #DD0000;
+} 
+pre span.Comment {
+   color: #808080;
+   font-style: italic;
+}
+pre span.Others {
+}
+pre span.Alert {
+  color: green;
+  font-weight: bold; 
+}
+pre span.Function { 
+   color: #000080;
+}
+pre span.RegionMarker {
+}
+pre span.Error { 
+  color: red;
+  font-weight: bold;
+}
+

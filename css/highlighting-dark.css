@@ -1,0 +1,57 @@
+/* Based on ultraviolet's espresso_libre.css */
+pre.sourceCode { 
+   padding: 0.5em;
+   background-color: #2A211C;
+   color: #BDAE9D;
+}
+pre.sourceCode span.LineNumber {
+   display: none;
+}
+pre.numberLines span.LineNumber {
+   display: inline; 
+}
+pre span.Normal { 
+}
+pre span.Keyword {
+   font-weight: bold;
+   color: #43A8ED;
+} 
+pre span.DataType { 
+  text-decoration: underline; 
+}
+pre span.DecVal { 
+  color: #44AA43;
+}
+pre span.BaseN {
+  color: #44AA43;
+}
+pre span.Float {
+  color: #44AA43;
+}
+pre span.Char { 
+   color: #049B0A;
+}
+pre span.String {
+   color: #049B0A;
+} 
+pre span.Comment {
+   color: #0066FF;
+   font-style: italic;
+}
+pre span.Others {
+}
+pre span.Alert {
+  color: yellow;
+  font-weight: bold; 
+}
+pre span.Function { 
+   font-weight: bold;
+   color: #FF9358;
+}
+pre span.RegionMarker {
+}
+pre span.Error { 
+  color: yellow;
+  font-weight: bold;
+}
+
