@@ -1,0 +1,69 @@
+highlighting-kate is a Haskell source code highlighting library, based
+on Kate's syntax description files.
+
+Currently, the following languages are supported:
+
+Ada        Asp              Awk            Bash             Bibtex
+C          Cmake            Coldfusion     Commonlisp       Cpp
+Css        D                Diff           Djangotemplate   Doxygen
+Dtd        Erlang           Fortran        Haskell          Html
+Java       Javadoc          Javascript     Json             Latex
+Lex        LiterateHaskell  Lua            Makefile         Matlab
+Mediawiki  Nasm             Objectivec     Objectivecpp     Ocaml
+Pascal     Perl             Php            Postscript       Prolog
+Python     Ruby             Scala          Scheme           Sgml
+Sql        SqlMysql         SqlPostgresql  Tcl              Texinfo
+Xml        Xslt             Yacc
+
+To install:
+
+    runghc Setup.lhs configure
+    runghc Setup.lhs build 
+    runghc Setup.lhs install 
+
+The last command must be run as root, or --user may be specified to install
+the library into the user package database.
+
+For an example of the use of the library, see Highlight.hs.
+After installing the library using the steps above, you can compile
+this program with the following command:
+
+    ghc Highlight.hs -package highlighting-kate -o Highlight
+
+To run Highlight, provide two arguments, the language name and the
+file to be highligted.  For example,
+
+    ./Highlight haskell Highlight.hs > example.html
+
+will highlight Highlight.hs and put the result in example.html.
+
+Styling is done using span tags, so text will not appear any different
+unless an appropriate CSS file is used.  There are two CSS files in
+the css directory.  These use generic class names; for more fine-grained
+highlighting, users may wish to create their own CSS files that use
+language-specific classes.
+
+The parsers in Text/Highlighting/Kate/Syntax were automatically generated
+from the Kate syntax definitions in the xml directory.  (Note that in a
+few cases, the xml files have been modified; the original has been left
+with a .orig suffix.)  You may modify the xml files in this directory,
+or add new ones, and then regenerate the parsers by doing:
+
+    runghc ParseSyntaxFiles.hs xml
+
+Note that ParseSyntaxFiles.hs requires the HXT package.
+
+You can browse the available Kate syntax highlighting files at
+
+    http://kate-editor.org/downloads/syntax_highlighting
+
+or retrieve them all using Subversion:
+
+    svn co svn://anonsvn.kde.org/home/kde/trunk/KDE/kdelibs/kate/syntax/data kate-data 
+
+There is information on the syntax highlighting definitions at
+
+    http://kate-editor.org/article/writing_a_kate_highlighting_xml_file
+
+Thanks are due to all the authors of these syntax definitions!
+

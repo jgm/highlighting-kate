@@ -1,0 +1,140 @@
+Name:                highlighting-kate
+Version:             0.1
+Cabal-Version:       >= 1.2
+Description:         Syntax highlighting based on Kate syntax descriptions.
+License:             GPL
+License-file:        LICENSE
+Author:              John MacFarlane
+Maintainer:          jgm@berkeley.edu
+Extra-Source-Files:  README
+                     Highlight.hs
+                     ParseSyntaxFiles.hs
+                     xml/ada.xml
+                     xml/alert.xml
+                     xml/asp.xml
+                     xml/awk.xml
+                     xml/bash.xml
+                     xml/bibtex.xml
+                     xml/cmake.xml
+                     xml/coldfusion.xml
+                     xml/commonlisp.xml
+                     xml/cpp.xml
+                     xml/css.xml
+                     xml/c.xml
+                     xml/diff.xml
+                     xml/djangotemplate.xml
+                     xml/doxygen.xml
+                     xml/dtd.xml
+                     xml/d.xml
+                     xml/erlang.xml
+                     xml/fortran.xml
+                     xml/haskell.xml
+                     xml/haskell.xml.orig
+                     xml/html.xml
+                     xml/javadoc.xml
+                     xml/javascript.xml
+                     xml/javascript.xml.orig
+                     xml/java.xml
+                     xml/json.xml
+                     xml/language.dtd
+                     xml/latex.xml
+                     xml/lex.xml
+                     xml/literate-haskell.xml
+                     xml/lua.xml
+                     xml/makefile.xml
+                     xml/matlab.xml
+                     xml/mediawiki.xml
+                     xml/nasm.xml
+                     xml/objectivecpp.xml
+                     xml/objectivec.xml
+                     xml/ocaml.xml
+                     xml/pascal.xml
+                     xml/perl.xml
+                     xml/perl.xml.orig
+                     xml/php.xml
+                     xml/postscript.xml
+                     xml/prolog.xml
+                     xml/python.xml
+                     xml/ruby.xml
+                     xml/scala.xml
+                     xml/scheme.xml
+                     xml/sgml.xml
+                     xml/sql-mysql.xml
+                     xml/sql-postgresql.xml
+                     xml/sql.xml
+                     xml/tcl.xml
+                     xml/texinfo.xml
+                     xml/xml.xml
+                     xml/xslt.xml
+                     xml/yacc.xml
+Flag splitBase
+  Description:       Choose the new, smaller, split-up base package.
+  Default:           True
+
+Library
+  if flag(splitBase)
+    Build-Depends:   base >= 3, pretty, containers
+  else
+    Build-Depends:   base < 3
+  Build-Depends:     parsec, pcre-light, xhtml
+  Exposed-Modules:   Text.Highlighting.Kate
+                     Text.Highlighting.Kate.Syntax
+                     Text.Highlighting.Kate.Format
+                     Text.Highlighting.Kate.Syntax.Alert
+                     Text.Highlighting.Kate.Syntax.Ada
+                     Text.Highlighting.Kate.Syntax.Asp
+                     Text.Highlighting.Kate.Syntax.Awk
+                     Text.Highlighting.Kate.Syntax.Bash
+                     Text.Highlighting.Kate.Syntax.Bibtex
+                     Text.Highlighting.Kate.Syntax.C
+                     Text.Highlighting.Kate.Syntax.Cmake
+                     Text.Highlighting.Kate.Syntax.Coldfusion
+                     Text.Highlighting.Kate.Syntax.Commonlisp
+                     Text.Highlighting.Kate.Syntax.Cpp
+                     Text.Highlighting.Kate.Syntax.Css
+                     Text.Highlighting.Kate.Syntax.D
+                     Text.Highlighting.Kate.Syntax.Diff
+                     Text.Highlighting.Kate.Syntax.Djangotemplate
+                     Text.Highlighting.Kate.Syntax.Doxygen
+                     Text.Highlighting.Kate.Syntax.Dtd
+                     Text.Highlighting.Kate.Syntax.Erlang
+                     Text.Highlighting.Kate.Syntax.Fortran
+                     Text.Highlighting.Kate.Syntax.Haskell
+                     Text.Highlighting.Kate.Syntax.Html
+                     Text.Highlighting.Kate.Syntax.Java
+                     Text.Highlighting.Kate.Syntax.Javadoc
+                     Text.Highlighting.Kate.Syntax.Javascript
+                     Text.Highlighting.Kate.Syntax.Json
+                     Text.Highlighting.Kate.Syntax.Latex
+                     Text.Highlighting.Kate.Syntax.Lex
+                     Text.Highlighting.Kate.Syntax.LiterateHaskell
+                     Text.Highlighting.Kate.Syntax.Lua
+                     Text.Highlighting.Kate.Syntax.Makefile
+                     Text.Highlighting.Kate.Syntax.Matlab
+                     Text.Highlighting.Kate.Syntax.Mediawiki
+                     Text.Highlighting.Kate.Syntax.Nasm
+                     Text.Highlighting.Kate.Syntax.Objectivec
+                     Text.Highlighting.Kate.Syntax.Objectivecpp
+                     Text.Highlighting.Kate.Syntax.Ocaml
+                     Text.Highlighting.Kate.Syntax.Pascal
+                     Text.Highlighting.Kate.Syntax.Perl
+                     Text.Highlighting.Kate.Syntax.Php
+                     Text.Highlighting.Kate.Syntax.Postscript
+                     Text.Highlighting.Kate.Syntax.Prolog
+                     Text.Highlighting.Kate.Syntax.Python
+                     Text.Highlighting.Kate.Syntax.Ruby
+                     Text.Highlighting.Kate.Syntax.Scala
+                     Text.Highlighting.Kate.Syntax.Scheme
+                     Text.Highlighting.Kate.Syntax.Sgml
+                     Text.Highlighting.Kate.Syntax.SqlMysql
+                     Text.Highlighting.Kate.Syntax.SqlPostgresql
+                     Text.Highlighting.Kate.Syntax.Sql
+                     Text.Highlighting.Kate.Syntax.Tcl
+                     Text.Highlighting.Kate.Syntax.Texinfo
+                     Text.Highlighting.Kate.Syntax.Xml
+                     Text.Highlighting.Kate.Syntax.Xslt
+                     Text.Highlighting.Kate.Syntax.Yacc
+  Other-Modules:     Text.Highlighting.Kate.Definitions
+                     Text.Highlighting.Kate.Common
+  Ghc-Options:       -O2 -W
+
