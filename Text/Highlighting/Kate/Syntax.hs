@@ -1,5 +1,6 @@
-module Text.Highlighting.Kate.Syntax ( highlight, languages ) where
+module Text.Highlighting.Kate.Syntax ( highlight, languages, languagesByExtension ) where
 import Data.Char (toLower)
+import Data.Maybe (fromMaybe)
 import Text.Highlighting.Kate.Definitions
 import qualified Text.Highlighting.Kate.Syntax.Doxygen as Doxygen
 import qualified Text.Highlighting.Kate.Syntax.Ada as Ada
@@ -59,6 +60,24 @@ import qualified Text.Highlighting.Kate.Syntax.Yacc as Yacc
 -- | List of supported languages.
 languages :: [String]
 languages = ["Doxygen","Ada","Alert","Asp","Awk","Bash","Bibtex","C","Cmake","Cpp","Coldfusion","Commonlisp","Css","D","Diff","LiterateHaskell","Djangotemplate","Dtd","Erlang","Fortran","Haskell","Html","Java","Javadoc","Javascript","Json","Latex","Lex","Makefile","Lua","Texinfo","Matlab","Nasm","Mediawiki","Objectivecpp","Objectivec","Ocaml","Pascal","Perl","Php","Prolog","Postscript","Python","Ruby","Scala","Scheme","Sgml","Sql","SqlMysql","Tcl","SqlPostgresql","Xml","Xslt","Yacc"]
+
+-- | List of language extensions.
+languageExtensions :: [(String, String)]
+languageExtensions = [("Doxygen", Doxygen.syntaxExtensions), ("Ada", Ada.syntaxExtensions), ("Alert", Alert.syntaxExtensions), ("Asp", Asp.syntaxExtensions), ("Awk", Awk.syntaxExtensions), ("Bash", Bash.syntaxExtensions), ("Bibtex", Bibtex.syntaxExtensions), ("C", C.syntaxExtensions), ("Cmake", Cmake.syntaxExtensions), ("Cpp", Cpp.syntaxExtensions), ("Coldfusion", Coldfusion.syntaxExtensions), ("Commonlisp", Commonlisp.syntaxExtensions), ("Css", Css.syntaxExtensions), ("D", D.syntaxExtensions), ("Diff", Diff.syntaxExtensions), ("LiterateHaskell", LiterateHaskell.syntaxExtensions), ("Djangotemplate", Djangotemplate.syntaxExtensions), ("Dtd", Dtd.syntaxExtensions), ("Erlang", Erlang.syntaxExtensions), ("Fortran", Fortran.syntaxExtensions), ("Haskell", Haskell.syntaxExtensions), ("Html", Html.syntaxExtensions), ("Java", Java.syntaxExtensions), ("Javadoc", Javadoc.syntaxExtensions), ("Javascript", Javascript.syntaxExtensions), ("Json", Json.syntaxExtensions), ("Latex", Latex.syntaxExtensions), ("Lex", Lex.syntaxExtensions), ("Makefile", Makefile.syntaxExtensions), ("Lua", Lua.syntaxExtensions), ("Texinfo", Texinfo.syntaxExtensions), ("Matlab", Matlab.syntaxExtensions), ("Nasm", Nasm.syntaxExtensions), ("Mediawiki", Mediawiki.syntaxExtensions), ("Objectivecpp", Objectivecpp.syntaxExtensions), ("Objectivec", Objectivec.syntaxExtensions), ("Ocaml", Ocaml.syntaxExtensions), ("Pascal", Pascal.syntaxExtensions), ("Perl", Perl.syntaxExtensions), ("Php", Php.syntaxExtensions), ("Prolog", Prolog.syntaxExtensions), ("Postscript", Postscript.syntaxExtensions), ("Python", Python.syntaxExtensions), ("Ruby", Ruby.syntaxExtensions), ("Scala", Scala.syntaxExtensions), ("Scheme", Scheme.syntaxExtensions), ("Sgml", Sgml.syntaxExtensions), ("Sql", Sql.syntaxExtensions), ("SqlMysql", SqlMysql.syntaxExtensions), ("Tcl", Tcl.syntaxExtensions), ("SqlPostgresql", SqlPostgresql.syntaxExtensions), ("Xml", Xml.syntaxExtensions), ("Xslt", Xslt.syntaxExtensions), ("Yacc", Yacc.syntaxExtensions)]
+
+-- | Returns a list of languages appropriate for the given file extension.
+languagesByExtension :: String -> [String]
+languagesByExtension ext = filter (hasExtension ext) languages
+
+-- | True if extension belongs to language.
+hasExtension ext lang =
+  let exts = fromMaybe "" (lookup lang languageExtensions)
+      matchExtension _ [] = False
+      matchExtension ext ('.':xs) =
+        let (next, rest) = span (/=';') xs
+        in  if next == ext then True else matchExtension ext rest
+      matchExtension ext (_:xs) = matchExtension ext xs
+  in  matchExtension (dropWhile (=='.') ext) exts
 
 -- | Highlight source code using a specified syntax definition.
 highlight :: String                        -- ^ Language syntax
