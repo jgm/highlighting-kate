@@ -104,16 +104,33 @@ main = do
   putStrLn $ "Writing " ++ syntaxFile
   let names = map nameFromPath files 
   let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
-  let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names 
+  let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
+  let languageExtensions = concat $ intersperse ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names
   writeFile syntaxFile $
-           "module Text.Highlighting.Kate.Syntax ( highlight, languages ) where\n\
+           "module Text.Highlighting.Kate.Syntax ( highlight, languages, languagesByExtension ) where\n\
            \import Data.Char (toLower)\n\
+           \import Data.Maybe (fromMaybe)\n\
            \import Text.Highlighting.Kate.Definitions\n" ++
            imports ++ "\n" ++
            "-- | List of supported languages.\n\
            \languages :: [String]\n\
-           \languages = " ++ show names ++ "\n\n" ++
-           "-- | Highlight source code using a specified syntax definition.\n\
+           \languages = " ++ show names ++ "\n\n\
+           \-- | List of language extensions.\n\
+           \languageExtensions :: [(String, String)]\n\
+           \languageExtensions = [" ++ languageExtensions ++ "]\n\n" ++
+           "-- | Returns a list of languages appropriate for the given file extension.\n\
+           \languagesByExtension :: String -> [String]\n\
+           \languagesByExtension ext = filter (hasExtension ext) languages\n\n\
+           \-- | True if extension belongs to language.\n\
+           \hasExtension ext lang =\n\
+           \  let exts = fromMaybe \"\" (lookup lang languageExtensions)\n\
+           \      matchExtension _ [] = False\n\
+           \      matchExtension ext ('.':xs) =\n\
+           \        let (next, rest) = span (/=';') xs\n\
+           \        in  if next == ext then True else matchExtension ext rest\n\
+           \      matchExtension ext (_:xs) = matchExtension ext xs\n\
+           \  in  matchExtension (dropWhile (=='.') ext) exts\n\n\
+           \-- | Highlight source code using a specified syntax definition.\n\
            \highlight :: String                        -- ^ Language syntax\n\
            \          -> String                        -- ^ Source code to highlight\n\
            \          -> Either String [SourceLine]    -- ^ Either error message or result\n\
