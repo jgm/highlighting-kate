@@ -11,45 +11,45 @@ pre.numberLines span.LineNumber {
    padding-right: 0; 
    margin-right: 3px;
 }
-pre span.Normal { 
+pre.sourceCode span.Normal { 
 }
-pre span.Keyword {
+pre.sourceCode span.Keyword {
    font-weight: bold;
 } 
-pre span.DataType { 
+pre.sourceCode span.DataType { 
    color: #800000;
 }
-pre span.DecVal { 
+pre.sourceCode span.DecVal { 
   color: #0000FF;
 }
-pre span.BaseN {
+pre.sourceCode span.BaseN {
   color: #0000FF;
 }
-pre span.Float {
+pre.sourceCode span.Float {
   color: #800080;
 }
-pre span.Char { 
+pre.sourceCode span.Char { 
    color: #FF00FF;
 }
-pre span.String {
+pre.sourceCode span.String {
    color: #DD0000;
 } 
-pre span.Comment {
+pre.sourceCode span.Comment {
    color: #808080;
    font-style: italic;
 }
-pre span.Others {
+pre.sourceCode span.Others {
 }
-pre span.Alert {
+pre.sourceCode span.Alert {
   color: green;
   font-weight: bold; 
 }
-pre span.Function { 
+pre.sourceCode span.Function { 
    color: #000080;
 }
-pre span.RegionMarker {
+pre.sourceCode span.RegionMarker {
 }
-pre span.Error { 
+pre.sourceCode span.Error { 
   color: red;
   font-weight: bold;
 }
