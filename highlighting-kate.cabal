@@ -70,6 +70,9 @@ Extra-Source-Files:  README
 Flag splitBase
   Description:       Choose the new, smaller, split-up base package.
   Default:           True
+Flag buildExecutable
+  Description:       Build the Highlight executable.
+  Default:           False
 
 Library
   if flag(splitBase)
@@ -137,4 +140,16 @@ Library
                      Text.Highlighting.Kate.Syntax.Yacc
   Other-Modules:     Text.Highlighting.Kate.Common
   Ghc-Options:       -O2 -W
+  Ghc-Prof-Options:  -auto-all
+
+Executable Highlight
+  Main-Is:          Highlight.hs
+  Build-Depends:    base, containers, parsec, xhtml, pretty
+  Ghc-Options:      -O2 -W
+  Ghc-Prof-Options: -auto-all
+
+  if flag(buildExecutable)
+    Buildable:      True
+  else
+    Buildable:      False
 

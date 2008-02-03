@@ -35,6 +35,11 @@ this program with the following command:
 
     ghc Highlight.hs -package highlighting-kate -o Highlight
 
+Or, you can tell Cabal to build the executable along with the
+library:
+
+    runghc Setup.lhs configure -fbuildExecutable
+
 To run Highlight, provide two arguments, the language name and the
 file to be highligted.  For example,
 
