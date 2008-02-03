@@ -3,17 +3,17 @@ on Kate's syntax description files.
 
 Currently, the following languages are supported:
 
-Ada        Asp              Awk            Bash             Bibtex
-C          Cmake            Coldfusion     Commonlisp       Cpp
-Css        D                Diff           Djangotemplate   Doxygen
-Dtd        Erlang           Fortran        Haskell          Html
-Java       Javadoc          Javascript     Json             Latex
-Lex        LiterateHaskell  Lua            Makefile         Matlab
-Mediawiki  Nasm             Objectivec     Objectivecpp     Ocaml
-Pascal     Perl             Php            Postscript       Prolog
-Python     Ruby             Scala          Scheme           Sgml
-Sql        SqlMysql         SqlPostgresql  Tcl              Texinfo
-Xml        Xslt             Yacc
+Ada        Asp           Awk             Bash             Bibtex
+C          Cmake         Coldfusion      Commonlisp       Cpp
+Css        D             Diff            Djangotemplate   Doxygen
+Dtd        Eiffel        Erlang          Fortran          Haskell
+Html       Java          Javadoc         Javascript       Json
+Latex      Lex           LiterateHaskell Lua              Makefile
+Matlab     Mediawiki     Nasm            Objectivec       Objectivecpp
+Ocaml      Pascal        Perl            Php              Postscript
+Prolog     Python        Ruby            Scala            Scheme
+Sgml       Sql           SqlMysql        SqlPostgresql    Tcl
+Texinfo    Xml           Xslt            Yacc
 
 To install:
 
@@ -40,12 +40,14 @@ library:
 
     runghc Setup.lhs configure -fbuildExecutable
 
-To run Highlight, provide two arguments, the language name and the
-file to be highligted.  For example,
+To run Highlight, specify the language name using -s:
 
-    ./Highlight haskell Highlight.hs > example.html
+    ./Highlight -s haskell Highlight.hs > example.html
 
-will highlight Highlight.hs and put the result in example.html.
+If you don't specify a language name, Highlight will try to guess it
+from the file extension.  For other options,
+
+    ./Highlight --help
 
 Styling is done using span tags, so text will not appear any different
 unless an appropriate CSS file is used.  There are two CSS files in
