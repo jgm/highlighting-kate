@@ -101,6 +101,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Djangotemplate
                      Text.Highlighting.Kate.Syntax.Doxygen
                      Text.Highlighting.Kate.Syntax.Dtd
+                     Text.Highlighting.Kate.Syntax.Eiffel
                      Text.Highlighting.Kate.Syntax.Erlang
                      Text.Highlighting.Kate.Syntax.Fortran
                      Text.Highlighting.Kate.Syntax.Haskell
