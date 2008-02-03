@@ -27,7 +27,7 @@ import Control.Arrow
 import Control.Arrow.ArrowList
 import Data.List
 import Data.Maybe
-import Data.Char (toUpper, isAlphaNum)
+import Data.Char (toUpper, toLower, isAlphaNum)
 import qualified Data.Map as Map
 import System.IO
 import System.Directory
@@ -104,10 +104,10 @@ main = do
   putStrLn $ "Writing " ++ syntaxFile
   let names = map nameFromPath files 
   let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
-  let cases = unlines $ map (\name -> "        " ++ show name ++ " -> " ++ name ++ ".highlight") names 
+  let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names 
   writeFile syntaxFile $
            "module Text.Highlighting.Kate.Syntax ( highlight, languages ) where\n\
-           \import Text.Highlighting.Kate.Common (capitalize)\n\
+           \import Data.Char (toLower)\n\
            \import Text.Highlighting.Kate.Definitions\n" ++
            imports ++ "\n" ++
            "-- | List of supported languages.\n\
@@ -118,7 +118,7 @@ main = do
            \          -> String                        -- ^ Source code to highlight\n\
            \          -> Either String [SourceLine]    -- ^ Either error message or result\n\
            \highlight lang =\n\
-           \  case (capitalize lang) of\n" ++
+           \  case (map toLower lang) of\n" ++
            cases ++
            "        _ -> (\\_ -> Left (\"Unknown language ++ \" ++ lang))\n"
 
