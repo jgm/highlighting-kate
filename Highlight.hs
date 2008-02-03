@@ -12,6 +12,7 @@ import Data.Char (toLower)
 
 data Flag = CssPath String
           | Help
+          | Fragment
           | List
           | NumberLines
           | Syntax String
@@ -21,6 +22,7 @@ data Flag = CssPath String
 options :: [OptDescr Flag]
 options =
   [ Option ['c'] ["css"] (ReqArg CssPath "PATH") "link CSS file"
+  , Option ['f'] ["fragment"] (NoArg Fragment)  "fragment, without document header"
   , Option ['h'] ["help"] (NoArg Help)   "show usage message"
   , Option ['l'] ["list"] (NoArg List)   "list available language syntaxes"
   , Option ['n'] ["number-lines"] (NoArg NumberLines)  "number lines"
@@ -73,7 +75,9 @@ main = do
                       (if NumberLines `elem` opts then [OptNumberLines] else [])
   let css = fromMaybe "css/highlighting-kate.css" $ cssPathOf opts
   let hcode = xhtmlHighlight highlightOpts lang code
-  let renderedHtml = renderHtml $ header << [thelink ! [thetype "text/css", href css, rel "stylesheet"] << noHtml] +++
-                                  body << hcode
-  putStrLn renderedHtml
+  if Fragment `elem` opts
+     then putStrLn $ renderHtmlFragment hcode
+     else putStrLn $ renderHtml $ header << 
+                     [thelink ! [thetype "text/css", href css, rel "stylesheet"] << noHtml] +++
+                     body << hcode
 
