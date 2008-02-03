@@ -156,6 +156,9 @@ mkParser syntax =
              text ("syntaxExtensions = " ++ show (synExtensions syntax))
       styles = text ("styles = " ++ (show $ map (\(typ, sty) -> (typ, drop 2 sty)) $ synItemDatas syntax))
       withAttr = text "withAttribute attr txt = do" $$ (nest 2 $
+                   text "if null txt" $$
+                   text "   then fail \"Parser matched no text\"" $$
+                   text "   else return ()" $$
                    text "let style = fromMaybe \"\" $ lookup attr styles" $$
                    text "st <- getState" $$
                    text "let oldCharsParsed = synStCharsParsedInLine st" $$
