@@ -71,7 +71,7 @@ There is information on the syntax highlighting definitions at
 
 Thanks are due to all the authors of these syntax definitions!
 Changes have been made to the following xml files (the originals have been
-left in the directory, with .orig extensions):
+left in the directory, with .bkp extensions):
 
 - javascript.xml:  Fixed regex \s* (which matches empty string) by changes to DetectSpaces
 - perl.xml:  Fixed regexes - needed backslash-escapes before ] and ^
