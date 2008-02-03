@@ -104,6 +104,9 @@ pEndLine = do
   updateState $ \st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0 }
 
 withAttribute attr txt = do
+  if null txt
+     then fail "Parser matched no text"
+     else return ()
   let style = fromMaybe "" $ lookup attr styles
   st <- getState
   let oldCharsParsed = synStCharsParsedInLine st
@@ -245,7 +248,7 @@ parseRules "FindOthers" =
                         <|>
                         ((pRegExpr (compileRegex "\\{(?!(\\s|$))\\S*\\}") >>= withAttribute "Escape"))
                         <|>
-                        ((pRegExpr (compileRegex "([\\w_@.%*?+-]|\\\\ )+(?=/)") >>= withAttribute "Path"))
+                        ((pRegExpr (compileRegex "([\\w_@.%*?+-]|\\\\ )*(?=/)") >>= withAttribute "Path"))
                         <|>
                         ((pRegExpr (compileRegex "~\\w*") >>= withAttribute "Path"))
                         <|>

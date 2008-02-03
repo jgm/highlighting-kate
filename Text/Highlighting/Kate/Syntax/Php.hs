@@ -65,6 +65,9 @@ pEndLine = do
   updateState $ \st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0 }
 
 withAttribute attr txt = do
+  if null txt
+     then fail "Parser matched no text"
+     else return ()
   let style = fromMaybe "" $ lookup attr styles
   st <- getState
   let oldCharsParsed = synStCharsParsedInLine st
