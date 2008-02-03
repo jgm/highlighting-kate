@@ -102,7 +102,7 @@ main = do
   mapM processOneFile files >> return ()
   let syntaxFile = combine libraryPath (addExtension "Syntax" "hs")
   putStrLn $ "Writing " ++ syntaxFile
-  let names = map nameFromPath files 
+  let names = sort $ map nameFromPath files 
   let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
   let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
   let languageExtensions = concat $ intersperse ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names
