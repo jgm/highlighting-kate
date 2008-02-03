@@ -245,7 +245,7 @@ parseRules "FindOthers" =
                         <|>
                         ((pRegExpr (compileRegex "\\{(?!(\\s|$))\\S*\\}") >>= withAttribute "Escape"))
                         <|>
-                        ((pRegExpr (compileRegex "([\\w_@.%*?+-]|\\\\ )*(?=/)") >>= withAttribute "Path"))
+                        ((pRegExpr (compileRegex "([\\w_@.%*?+-]|\\\\ )+(?=/)") >>= withAttribute "Path"))
                         <|>
                         ((pRegExpr (compileRegex "~\\w*") >>= withAttribute "Path"))
                         <|>

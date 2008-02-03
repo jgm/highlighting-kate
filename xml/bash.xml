@@ -541,7 +541,7 @@
         <RegExpr attribute="Escape" context="#stay" String="\\[][;\\$`{}()|&amp;&lt;&gt;* ]" />
         <RegExpr attribute="Keyword" context="#stay" String="\\$" />
         <RegExpr attribute="Escape" context="#stay" String="\{(?!(\s|$))\S*\}" />
-        <RegExpr attribute="Path" context="#stay" String="&pathpart;*(?=/)" />
+        <RegExpr attribute="Path" context="#stay" String="&pathpart;+(?=/)" />
         <RegExpr attribute="Path" context="#stay" String="~\w*" />
         <RegExpr attribute="Path" context="#stay" String="/&pathpart;*(?=([\s/):;$`'&quot;]|$))" />
         <!-- TODO: shell globs beside * and ? (in Path's) -->
