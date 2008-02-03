@@ -144,7 +144,7 @@ Library
 
 Executable Highlight
   Main-Is:          Highlight.hs
-  Build-Depends:    base, containers, parsec, xhtml, pretty
+  Build-Depends:    base, containers, parsec, xhtml, pretty, filepath
   Ghc-Options:      -O2 -W
   Ghc-Prof-Options: -auto-all
 
