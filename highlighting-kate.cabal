@@ -26,6 +26,7 @@ Extra-Source-Files:  README
                      xml/doxygen.xml
                      xml/dtd.xml
                      xml/d.xml
+                     xml/eiffel.xml
                      xml/erlang.xml
                      xml/fortran.xml
                      xml/haskell.xml
@@ -44,6 +45,7 @@ Extra-Source-Files:  README
                      xml/makefile.xml
                      xml/matlab.xml
                      xml/mediawiki.xml
+                     xml/modula-3.xml
                      xml/nasm.xml
                      xml/objectivecpp.xml
                      xml/objectivec.xml
@@ -55,6 +57,7 @@ Extra-Source-Files:  README
                      xml/postscript.xml
                      xml/prolog.xml
                      xml/python.xml
+                     xml/rhtml.xml
                      xml/ruby.xml
                      xml/scala.xml
                      xml/scheme.xml
@@ -117,6 +120,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Makefile
                      Text.Highlighting.Kate.Syntax.Matlab
                      Text.Highlighting.Kate.Syntax.Mediawiki
+                     Text.Highlighting.Kate.Syntax.Modula3
                      Text.Highlighting.Kate.Syntax.Nasm
                      Text.Highlighting.Kate.Syntax.Objectivec
                      Text.Highlighting.Kate.Syntax.Objectivecpp
@@ -127,6 +131,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Postscript
                      Text.Highlighting.Kate.Syntax.Prolog
                      Text.Highlighting.Kate.Syntax.Python
+                     Text.Highlighting.Kate.Syntax.Rhtml
                      Text.Highlighting.Kate.Syntax.Ruby
                      Text.Highlighting.Kate.Syntax.Scala
                      Text.Highlighting.Kate.Syntax.Scheme
