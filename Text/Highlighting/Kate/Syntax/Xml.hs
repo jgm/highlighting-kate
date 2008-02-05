@@ -40,7 +40,7 @@ parseSource = do
   lineContents <- lookAhead wholeLine
   updateState $ \st -> st { synStCurrentLine = lineContents }
   result <- manyTill parseSourceLine eof
-  return $ zipWith (\num line -> SourceLine num (normalizeHighlighting line)) [1..] result
+  return $ map normalizeHighlighting result
 
 startingState = SyntaxState {synStContexts = fromList [("XML",["Start"])], synStLanguage = "XML", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
 

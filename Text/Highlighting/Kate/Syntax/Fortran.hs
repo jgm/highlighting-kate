@@ -39,7 +39,7 @@ parseSource = do
   lineContents <- lookAhead wholeLine
   updateState $ \st -> st { synStCurrentLine = lineContents }
   result <- manyTill parseSourceLine eof
-  return $ zipWith (\num line -> SourceLine num (normalizeHighlighting line)) [1..] result
+  return $ map normalizeHighlighting result
 
 startingState = SyntaxState {synStContexts = fromList [("Fortran",["default"])], synStLanguage = "Fortran", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = False, synStKeywordCaseSensitive = False, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
 

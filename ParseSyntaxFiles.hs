@@ -224,7 +224,7 @@ mkParser syntax =
                              -- text "context <- currentContext" $$
                              -- text "pushContext (fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$
                              text "result <- manyTill parseSourceLine eof" $$
-                             text "return $ zipWith (\\num line -> SourceLine num (normalizeHighlighting line)) [1..] result")
+                             text "return $ map normalizeHighlighting result")
       mainFunction = text $ "-- | Highlight source code using this syntax definition.\n\
                             \highlight :: String -> Either String [SourceLine]\n\
                             \highlight input =\n\
