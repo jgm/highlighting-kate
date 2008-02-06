@@ -55,6 +55,25 @@ xhtmlHighlight opts lang code =
        Right result -> formatAsXHtml opts lang result
        Left  _      -> pre $ thecode << code
 
+defaultCss = 
+  "pre.sourceCode { }\n\
+  \pre.sourceCode span.LineNumber { display: none; }\n\
+  \pre.numberLines span.LineNumber { display: inline; color: #AAAAAA; padding-right: 0; border-right: 1px solid #AAAAAA; margin-right: 3px; }\n\
+  \pre.sourceCode span.Normal { }\n\
+  \pre.sourceCode span.Keyword { color: #007020; font-weight: bold; } \n\
+  \pre.sourceCode span.DataType { color: #902000; }\n\
+  \pre.sourceCode span.DecVal { color: #40a070; }\n\
+  \pre.sourceCode span.BaseN { color: #40a070; }\n\
+  \pre.sourceCode span.Float { color: #40a070; }\n\
+  \pre.sourceCode span.Char { color: #4070a0; }\n\
+  \pre.sourceCode span.String { color: #4070a0; }\n\
+  \pre.sourceCode span.Comment { color: #60a0b0; font-style: italic; }\n\
+  \pre.sourceCode span.Others { color: #007020; }\n\
+  \pre.sourceCode span.Alert { color: red; font-weight: bold; }\n\
+  \pre.sourceCode span.Function { color: #06287e; }\n\
+  \pre.sourceCode span.RegionMarker { }\n\
+  \pre.sourceCode span.Error { color: red; font-weight: bold; }"
+
 main = do
   (opts, fnames, errs) <- getArgs >>= return . getOpt Permute options 
   let usageHeader = "Highlight [options] [files...]"
@@ -88,11 +107,10 @@ main = do
      else return ()
   let highlightOpts = (if TitleAttributes `elem` opts then [OptTitleAttributes] else []) ++
                       (if NumberLines `elem` opts then [OptNumberLines] else [])
-  let css = fromMaybe "css/hk-default.css" $ cssPathOf opts
+  let css = case cssPathOf opts of
+                   Nothing      -> style ! [thetype "text/css"] $ primHtml defaultCss 
+                   Just cssPath -> thelink ! [thetype "text/css", href cssPath, rel "stylesheet"] << noHtml
   let hcode = xhtmlHighlight highlightOpts lang code
   if Fragment `elem` opts
      then putStrLn $ renderHtmlFragment hcode
-     else putStrLn $ renderHtml $ header << 
-                     [thelink ! [thetype "text/css", href css, rel "stylesheet"] << noHtml] +++
-                     body << hcode
-
+     else putStrLn $ renderHtml $ header << [css] +++ body << hcode
