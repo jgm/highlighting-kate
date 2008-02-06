@@ -18,16 +18,16 @@ normalizeHighlighting [] = []
 normalizeHighlighting ((a,x):(b,y):xs) | a == b = normalizeHighlighting ((a, x++y):xs)
 normalizeHighlighting (x:xs) = x : normalizeHighlighting xs
 
-pushContext context = do st <- getState
-                         if context == "#stay"
-                            then return ()
-                            else let contexts = synStContexts st
-                                     lang = synStLanguage st
-                                     addContext c x = case x of
-                                                        Nothing -> Just [c]
-                                                        Just cs -> Just (c:cs)
-                                     newContexts = Map.alter (addContext context) lang contexts 
-                                 in  updateState $ \st -> st { synStContexts = newContexts }
+pushContext context = if context == "#stay"
+                         then return ()
+                         else do st <- getState
+                                 let contexts = synStContexts st
+                                 let lang = synStLanguage st
+                                 let addContext c x = case x of
+                                                       Nothing -> Just [c]
+                                                       Just cs -> Just (c:cs)
+                                 let newContexts = Map.alter (addContext context) lang contexts 
+                                 updateState $ \st -> st { synStContexts = newContexts }
 
 popContext = do st <- getState
                 let contexts = synStContexts st
@@ -65,13 +65,9 @@ pFirstNonSpace = do
      then return ()
      else fail "Not first nonspace"
 
-nonSpaceChar ch = not (ch `elem` " \t")
-
 currentColumn = getPosition >>= return . sourceColumn
 
 currentLine = getState >>= return . synStCurrentLine
-
-pChar ch = char ch
 
 pColumn col = do
   curCol <- currentColumn
@@ -88,7 +84,7 @@ pGetCapture capNum = do
 pDetectChar dynamic ch = do 
   if dynamic && isDigit ch
      then pGetCapture (read [ch]) >>= try . string
-     else pChar ch >>= return . (:[])
+     else char ch >>= return . (:[])
 
 pDetect2Chars dynamic ch1 ch2 = try $ do
   [c1] <- pDetectChar dynamic ch1
@@ -116,7 +112,7 @@ pKeyword list = try $ do
              then return word
              else fail "Keyword not in list"
 
-pString dynamic str = do
+pString dynamic str =
   if dynamic
      then subDynamic str >>= try . string
      else try $ string str
@@ -167,9 +163,7 @@ escapeRegex ('\\':x:y:z:rest) | isDigit x && isDigit y && isDigit z =
   chr (read ['0','o',x,y,z]) : escapeRegex rest
 escapeRegex (x:xs) = x : escapeRegex xs 
 
-compileRegex regexpStr = 
-  let regexpStr' = escapeRegex regexpStr
-  in  compile ('.':regexpStr') [anchored]
+compileRegex regexpStr = compile ('.' : escapeRegex regexpStr) [anchored]
 
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
@@ -214,8 +208,6 @@ pRangeDetect startChar endChar = try $ do
   return $ startChar : (body ++ [endChar])
 
 pLineContinue = try $ string "\\\n"
-
-pIncludeRules = pUnimplemented -- or, handle at level of parsing xml?
 
 pDetectSpaces = many1 (oneOf "\t ")
 
