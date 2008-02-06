@@ -95,25 +95,20 @@ pDetect2Chars dynamic ch1 ch2 = try $ do
   [c2] <- pDetectChar dynamic ch2
   return [c1, c2]
 
-prevCharacter = do
-  st <- getState
-  let ln = synStCurrentLine st
-  let charsParsed = synStCharsParsedInLine st
-  if charsParsed == 0
-     then return Nothing
-     else if length ln < charsParsed
-             then fail $ "Line shorter than number of characters parsed"
-             else return $ Just $ ln !! (charsParsed - 1)
-
 pKeyword list = try $ do
   st <- getState
   let caseSensitive = synStKeywordCaseSensitive st
   let delims = synStKeywordDelims st
-  prevChar <- prevCharacter
+  let curLine = synStCurrentLine st
+  let charsParsed = synStCharsParsedInLine st
+  let prevChar = if charsParsed == 0
+                    then Nothing
+                    else if length curLine < charsParsed
+                            then Nothing
+                            else Just $ curLine !! (charsParsed - 1)
   case prevChar of
-         Just x | x `elem` delims -> return ()
-         Nothing -> return ()
-         _ -> fail "Not preceded by a delimiter"
+         Just x | not (x `elem` delims) -> fail "Not preceded by a delimiter"
+         _ -> return ()
   word <- many1 (noneOf delims)
   if word `elem` list
      then return word
