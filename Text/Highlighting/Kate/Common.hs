@@ -130,6 +130,10 @@ pAnyChar chars = oneOf chars >>= return . (:[])
 
 pDefault = noneOf "\n" >>= return . (:[])
 
+-- The following alternative gives a 25% speed improvement, but it's possible
+-- that it won't work for all syntaxes:
+-- pDefault = (many1 alphaNum) <|> (noneOf "\n" >>= return . (:[]))
+
 subDynamic ('%':x:xs) | isDigit x = do
   captures <- getState >>= return . synStCaptures
   let capNum = read [x]
@@ -148,7 +152,7 @@ pRegExpr compiledRegex = do
   let remaining = if charsParsedInLine == 0
                      then ' ':curLine
                      else drop (charsParsedInLine - 1) curLine 
-  case match compiledRegex remaining [] of
+  case match compiledRegex remaining [exec_notempty] of
         Just (x:xs) -> do if null xs
                              then return ()
                              else updateState (\st -> st {synStCaptures = xs})
@@ -170,7 +174,7 @@ escapeRegex (x:xs) = x : escapeRegex xs
 
 compileRegex regexpStr = 
   let regexpStr' = escapeRegex regexpStr
-  in  compile ('^':'.':regexpStr') []
+  in  compile ('.':regexpStr') [anchored]
 
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
