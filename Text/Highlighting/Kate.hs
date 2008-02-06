@@ -1,15 +1,34 @@
-module Text.Highlighting.Kate ( highlight, xhtmlHighlight, FormatOption (..) ) where
+{- |
+   Module      : Text.Highlighting.Kate
+   Copyright   : Copyright (C) 2008 John MacFarlane
+   License     : GNU GPL, version 2 or above 
+
+   Maintainer  : John MacFarlane <jgm@berkeley.edu>
+   Stability   : alpha 
+   Portability : portable
+
+This helper module exports the main highlighting and formatting
+functions.
+  
+A typical application will combine a highlighter and a formatter:
+
+> main = do
+>   code <- getContents
+>   case highlightAs "ruby" code of
+>         Right result -> putStrLn $ renderHtmlFragment $ 
+>                         formatAsXHtml [OptNumberLines] "ruby" result
+>         Left  err    -> error $ "Could not parse input: " ++ err
+
+-}
+
+module Text.Highlighting.Kate ( highlightAs
+                              , languages
+                              , languagesByExtension
+                              , formatAsXHtml
+                              , FormatOption (..)
+                              , SourceLine
+                              , LabeledSource
+                              ) where
 import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..) )
-import Text.Highlighting.Kate.Syntax ( highlight )
-import Text.XHtml.Transitional
-
--- | Highlight source code in XHTML using specified syntax.
-xhtmlHighlight :: [FormatOption] -- ^ Options
-               -> String         -- ^ Name of syntax to use
-               -> String         -- ^ Source code to highlight
-               -> Html
-xhtmlHighlight opts lang code =
-  case highlight lang code of
-       Right result -> formatAsXHtml opts lang result
-       Left  _      -> pre $ thecode << code
-
+import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension )
+import Text.Highlighting.Kate.Definitions ( SourceLine, LabeledSource )

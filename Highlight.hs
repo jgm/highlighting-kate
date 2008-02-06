@@ -1,6 +1,5 @@
 module Main where
 import Text.Highlighting.Kate
-import Text.Highlighting.Kate.Syntax (languages, languagesByExtension)
 import System.IO
 import System.Environment
 import Text.XHtml.Transitional
@@ -40,6 +39,22 @@ syntaxOf [] = Nothing
 syntaxOf (Syntax s : _) = Just s
 syntaxOf (_:xs) = syntaxOf xs
 
+filterNewlines :: String -> String
+filterNewlines ('\r':'\n':xs) = '\n' : filterNewlines xs
+filterNewlines ('\r':xs) = '\n' : filterNewlines xs
+filterNewlines (x:xs) = x : filterNewlines xs
+filterNewlines [] = []
+
+-- | Highlight source code in XHTML using specified syntax.
+xhtmlHighlight :: [FormatOption] -- ^ Options
+               -> String         -- ^ Name of syntax to use
+               -> String         -- ^ Source code to highlight
+               -> Html
+xhtmlHighlight opts lang code =
+  case highlightAs lang code of
+       Right result -> formatAsXHtml opts lang result
+       Left  _      -> pre $ thecode << code
+
 main = do
   (opts, fnames, errs) <- getArgs >>= return . getOpt Permute options 
   let usageHeader = "Highlight [options] [files...]"
@@ -54,8 +69,8 @@ main = do
           exitWith (ExitFailure 1)
      else return ()
   code <- if null fnames
-             then getContents
-             else mapM readFile fnames >>= return . concat
+             then getContents >>= return . filterNewlines
+             else mapM readFile fnames >>= return . filterNewlines . concat
   let lang' = case syntaxOf opts of
                     Just e   -> Just e
                     Nothing  -> if null fnames

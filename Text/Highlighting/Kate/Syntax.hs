@@ -1,4 +1,4 @@
-module Text.Highlighting.Kate.Syntax ( highlight, languages, languagesByExtension ) where
+module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension ) where
 import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 import Text.Highlighting.Kate.Definitions
@@ -83,10 +83,10 @@ hasExtension ext lang =
   in  matchExtension (dropWhile (=='.') ext) exts
 
 -- | Highlight source code using a specified syntax definition.
-highlight :: String                        -- ^ Language syntax
-          -> String                        -- ^ Source code to highlight
-          -> Either String [SourceLine]    -- ^ Either error message or result
-highlight lang =
+highlightAs :: String                        -- ^ Language syntax
+            -> String                        -- ^ Source code to highlight
+            -> Either String [SourceLine]    -- ^ Either error message or result
+highlightAs lang =
   case (map toLower lang) of
         "ada" -> Ada.highlight
         "alert" -> Alert.highlight

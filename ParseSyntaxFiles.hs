@@ -107,7 +107,7 @@ main = do
   let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
   let languageExtensions = concat $ intersperse ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names
   writeFile syntaxFile $
-           "module Text.Highlighting.Kate.Syntax ( highlight, languages, languagesByExtension ) where\n\
+           "module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension ) where\n\
            \import Data.Char (toLower)\n\
            \import Data.Maybe (fromMaybe)\n\
            \import Text.Highlighting.Kate.Definitions\n" ++
@@ -131,10 +131,10 @@ main = do
            \      matchExtension ext (_:xs) = matchExtension ext xs\n\
            \  in  matchExtension (dropWhile (=='.') ext) exts\n\n\
            \-- | Highlight source code using a specified syntax definition.\n\
-           \highlight :: String                        -- ^ Language syntax\n\
-           \          -> String                        -- ^ Source code to highlight\n\
-           \          -> Either String [SourceLine]    -- ^ Either error message or result\n\
-           \highlight lang =\n\
+           \highlightAs :: String                        -- ^ Language syntax\n\
+           \            -> String                        -- ^ Source code to highlight\n\
+           \            -> Either String [SourceLine]    -- ^ Either error message or result\n\
+           \highlightAs lang =\n\
            \  case (map toLower lang) of\n" ++
            cases ++
            "        _ -> (\\_ -> Left (\"Unknown language ++ \" ++ lang))\n"

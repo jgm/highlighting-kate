@@ -11,7 +11,7 @@ data FormatOption = OptNumberLines     -- ^ Number lines
 
 -- | Format a list of highlighted @SourceLine@s as XHtml.
 formatAsXHtml :: [FormatOption]  -- ^ Options
-              -> String          -- ^ Language definition to use
+              -> String          -- ^ Language
               -> [SourceLine]    -- ^ Source lines to format
               -> Html
 formatAsXHtml opts lang lines =
