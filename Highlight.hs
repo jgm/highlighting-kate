@@ -88,7 +88,7 @@ main = do
      else return ()
   let highlightOpts = (if TitleAttributes `elem` opts then [OptTitleAttributes] else []) ++
                       (if NumberLines `elem` opts then [OptNumberLines] else [])
-  let css = fromMaybe "css/highlighting-kate.css" $ cssPathOf opts
+  let css = fromMaybe "css/hk-default.css" $ cssPathOf opts
   let hcode = xhtmlHighlight highlightOpts lang code
   if Fragment `elem` opts
      then putStrLn $ renderHtmlFragment hcode
