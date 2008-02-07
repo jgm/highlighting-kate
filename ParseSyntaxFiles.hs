@@ -161,7 +161,7 @@ processOneFile src = do
            \import Data.List (nub)\n\
            \import Data.Map (fromList)\n\
            \import Data.Maybe (fromMaybe)\n\n" ++
-           render (mkParser syntax)
+           render (mkParser syntax) ++ "\n"
 
 mkParser :: SyntaxDefinition -> Doc
 mkParser syntax = 
