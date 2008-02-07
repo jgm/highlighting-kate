@@ -56,22 +56,22 @@ xhtmlHighlight opts lang code =
        Left  _      -> pre $ thecode << code
 
 defaultCss = 
-  "pre.sourceCode { }\n\
-  \pre.sourceCode span.LineNumber { display: none; }\n\
-  \pre.numberLines span.LineNumber { display: inline; color: #AAAAAA; padding-right: 0; border-right: 1px solid #AAAAAA; margin-right: 3px; }\n\
-  \pre.sourceCode span.Normal { }\n\
-  \pre.sourceCode span.Keyword { color: #007020; font-weight: bold; } \n\
-  \pre.sourceCode span.DataType { color: #902000; }\n\
-  \pre.sourceCode span.DecVal { color: #40a070; }\n\
-  \pre.sourceCode span.BaseN { color: #40a070; }\n\
-  \pre.sourceCode span.Float { color: #40a070; }\n\
-  \pre.sourceCode span.Char { color: #4070a0; }\n\
-  \pre.sourceCode span.String { color: #4070a0; }\n\
-  \pre.sourceCode span.Comment { color: #60a0b0; font-style: italic; }\n\
-  \pre.sourceCode span.Others { color: #007020; }\n\
-  \pre.sourceCode span.Alert { color: red; font-weight: bold; }\n\
-  \pre.sourceCode span.Function { color: #06287e; }\n\
-  \pre.sourceCode span.RegionMarker { }\n\
+  "pre.sourceCode { }\n\ 
+  \pre.sourceCode span.LineNumber { display: none; }\n\ 
+  \pre.numberLines span.LineNumber { display: inline; color: #AAAAAA; padding-right: 0; border-right: 1px solid #AAAAAA; margin-right: 3px; }\n\ 
+  \pre.sourceCode span.Normal { }\n\ 
+  \pre.sourceCode span.Keyword { color: #007020; font-weight: bold; } \n\ 
+  \pre.sourceCode span.DataType { color: #902000; }\n\ 
+  \pre.sourceCode span.DecVal { color: #40a070; }\n\ 
+  \pre.sourceCode span.BaseN { color: #40a070; }\n\ 
+  \pre.sourceCode span.Float { color: #40a070; }\n\ 
+  \pre.sourceCode span.Char { color: #4070a0; }\n\ 
+  \pre.sourceCode span.String { color: #4070a0; }\n\ 
+  \pre.sourceCode span.Comment { color: #60a0b0; font-style: italic; }\n\ 
+  \pre.sourceCode span.Others { color: #007020; }\n\ 
+  \pre.sourceCode span.Alert { color: red; font-weight: bold; }\n\ 
+  \pre.sourceCode span.Function { color: #06287e; }\n\ 
+  \pre.sourceCode span.RegionMarker { }\n\ 
   \pre.sourceCode span.Error { color: red; font-weight: bold; }"
 
 main = do
