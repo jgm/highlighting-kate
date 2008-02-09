@@ -1,7 +1,7 @@
 Name:                highlighting-kate
 Version:             0.1
 Cabal-Version:       >= 1.2
-Synopsis:            Syntax highlighting for over 50 languages
+Synopsis:            Syntax highlighting
 Description:         highlighting-kate is a syntax highlighting library
                      with support for over 50 languages. The syntax
                      parsers are automatically generated from Kate syntax
