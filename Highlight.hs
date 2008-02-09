@@ -81,7 +81,7 @@ main = do
      then ioError (userError $ concat errs ++ usageInfo usageHeader options)
      else return ()
   if List `elem` opts
-     then hPutStrLn stderr (unwords languages) >> exitWith (ExitFailure 2)
+     then putStrLn (unwords languages) >> exitWith ExitSuccess
      else return ()
   if Help `elem` opts
      then hPutStrLn stderr (usageInfo usageHeader options) >> 
