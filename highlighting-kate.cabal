@@ -10,17 +10,16 @@ Description:         highlighting-kate is a syntax highlighting library
                      provided, along with a utility for generating
                      new parsers from Kate XML syntax descriptions.
                      .
-                     Currently the following languages are
-                     supported: Ada, Asp, Awk, Bash, Bibtex, C,
-                     Cmake, Coldfusion, Commonlisp, Cpp, Css, D, Diff,
-                     Djangotemplate, Doxygen, Dtd, Eiffel, Erlang,
-                     Fortran, Haskell, Html, Java, Javadoc, Javascript,
-                     Json, Latex, Lex, LiterateHaskell, Lua, Makefile,
-                     Matlab, Mediawiki, Modula3, Nasm, Objectivec,
-                     Objectivecpp, Ocaml, Pascal, Perl, Php, Postscript,
-                     Prolog, Python, Rhtml, Ruby, Scala, Scheme, Sgml,
-                     Sql, SqlMysql, SqlPostgresql, Tcl, Texinfo, Xml,
-                     Xslt, Yacc.
+                     Currently the following languages are supported:
+                     Ada, Asp, Awk, Bash, Bibtex, C, Cmake, Coldfusion,
+                     Commonlisp, Cpp, Css, D, Djangotemplate, Doxygen,
+                     Dtd, Eiffel, Erlang, Fortran, Haskell, Html,
+                     Java, Javadoc, Javascript, Json, Latex, Lex,
+                     LiterateHaskell, Lua, Makefile, Matlab, Mediawiki,
+                     Modula3, Nasm, Objectivec, Ocaml, Pascal, Perl,
+                     Php, Postscript, Prolog, Python, Rhtml, Ruby,
+                     Scala, Scheme, Sgml, Sql, SqlMysql, SqlPostgresql,
+                     Tcl, Texinfo, Xml, Xslt, Yacc.
 License:             GPL
 License-file:        LICENSE
 Author:              John MacFarlane
@@ -44,7 +43,6 @@ Extra-Source-Files:  README
                      xml/cpp.xml
                      xml/css.xml
                      xml/c.xml
-                     xml/diff.xml
                      xml/djangotemplate.xml
                      xml/doxygen.xml
                      xml/dtd.xml
@@ -70,7 +68,6 @@ Extra-Source-Files:  README
                      xml/mediawiki.xml
                      xml/modula-3.xml
                      xml/nasm.xml
-                     xml/objectivecpp.xml
                      xml/objectivec.xml
                      xml/ocaml.xml
                      xml/pascal.xml
@@ -123,7 +120,6 @@ Library
                      Text.Highlighting.Kate.Syntax.Cpp
                      Text.Highlighting.Kate.Syntax.Css
                      Text.Highlighting.Kate.Syntax.D
-                     Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
                      Text.Highlighting.Kate.Syntax.Doxygen
                      Text.Highlighting.Kate.Syntax.Dtd
@@ -146,7 +142,6 @@ Library
                      Text.Highlighting.Kate.Syntax.Modula3
                      Text.Highlighting.Kate.Syntax.Nasm
                      Text.Highlighting.Kate.Syntax.Objectivec
-                     Text.Highlighting.Kate.Syntax.Objectivecpp
                      Text.Highlighting.Kate.Syntax.Ocaml
                      Text.Highlighting.Kate.Syntax.Pascal
                      Text.Highlighting.Kate.Syntax.Perl
