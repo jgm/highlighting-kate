@@ -1,5 +1,5 @@
 highlighting-kate is a Haskell source code highlighting library, based
-on Kate's syntax description files.
+on Kate's syntax description files (http://kate-editor.org/).
 
 Currently, the following languages are supported:
 
