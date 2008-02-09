@@ -16,6 +16,7 @@ data Flag = CssPath String
           | NumberLines
           | Syntax String
           | TitleAttributes
+          | Version
           deriving (Eq, Show)
 
 options :: [OptDescr Flag]
@@ -27,6 +28,7 @@ options =
   , Option ['n'] ["number-lines"] (NoArg NumberLines)  "number lines"
   , Option ['s'] ["syntax"] (ReqArg Syntax "SYNTAX")  "specify language syntax to use"
   , Option ['t'] ["title-attributes"] (NoArg TitleAttributes)  "include structure in title attributes"
+  , Option ['v'] ["version"] (NoArg Version)   "print version"
   ]
 
 cssPathOf :: [Flag] -> Maybe String
@@ -75,8 +77,9 @@ defaultCss =
   \pre.sourceCode span.Error { color: red; font-weight: bold; }"
 
 main = do
-  (opts, fnames, errs) <- getArgs >>= return . getOpt Permute options 
-  let usageHeader = "Highlight [options] [files...]"
+  (opts, fnames, errs) <- getArgs >>= return . getOpt Permute options
+  prg <- getProgName
+  let usageHeader = prg ++ " [options] [files...]"
   if not (null errs)
      then ioError (userError $ concat errs ++ usageInfo usageHeader options)
      else return ()
@@ -86,6 +89,10 @@ main = do
   if Help `elem` opts
      then hPutStrLn stderr (usageInfo usageHeader options) >> 
           exitWith (ExitFailure 1)
+     else return ()
+  if Version `elem` opts
+     then putStrLn (prg ++ " " ++ highlightingKateVersion ++ " - (c) 2008 John MacFarlane") >> 
+          exitWith ExitSuccess
      else return ()
   code <- if null fnames
              then getContents >>= return . filterNewlines
