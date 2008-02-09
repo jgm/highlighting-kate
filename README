@@ -34,7 +34,7 @@ this program with the following command:
 Or, you can tell Cabal to build the executable along with the
 library:
 
-    runghc Setup.lhs configure -fbuildExecutable
+    runghc Setup.lhs configure -fexecutable
 
 To run Highlight, specify the language name using -s:
 

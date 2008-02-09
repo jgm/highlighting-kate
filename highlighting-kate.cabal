@@ -73,7 +73,7 @@ Extra-Source-Files:  README
 Flag splitBase
   Description:       Choose the new, smaller, split-up base package.
   Default:           True
-Flag buildExecutable
+Flag executable
   Description:       Build the Highlight executable.
   Default:           False
 
@@ -154,7 +154,7 @@ Executable Highlight
   Ghc-Options:      -O2 -W
   Ghc-Prof-Options: -auto-all
 
-  if flag(buildExecutable)
+  if flag(executable)
     Buildable:      True
   else
     Buildable:      False
