@@ -1,3 +1,15 @@
+{- |
+   Module      : Text.Highlighting.Kate.Definitions
+   Copyright   : Copyright (C) 2008 John MacFarlane
+   License     : GNU GPL, version 2 or above 
+
+   Maintainer  : John MacFarlane <jgm@berkeley.edu>
+   Stability   : alpha 
+   Portability : portable
+
+Definitions for data structures needed by highlighting-kate.
+-}
+
 module Text.Highlighting.Kate.Definitions where
 import qualified Data.Map as Map
 

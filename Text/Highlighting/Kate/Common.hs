@@ -1,3 +1,15 @@
+{- |
+   Module      : Text.Highlighting.Kate.Common
+   Copyright   : Copyright (C) 2008 John MacFarlane
+   License     : GNU GPL, version 2 or above 
+
+   Maintainer  : John MacFarlane <jgm@berkeley.edu>
+   Stability   : alpha 
+   Portability : portable
+
+Parsers used in all the individual syntax parsers.
+-}
+
 module Text.Highlighting.Kate.Common where
 import Text.Regex.PCRE.Light.Char8
 import Text.Highlighting.Kate.Definitions
@@ -10,6 +22,7 @@ import qualified Data.Map as Map
 (>>~) :: (Monad m) => m a -> m b -> m a
 a >>~ b = a >>= \x -> b >> return x
 
+capitalize :: [Char] -> [Char]
 capitalize [] = []
 capitalize (a:as) = toUpper a : as
 
@@ -18,6 +31,7 @@ normalizeHighlighting [] = []
 normalizeHighlighting ((a,x):(b,y):xs) | a == b = normalizeHighlighting ((a, x++y):xs)
 normalizeHighlighting (x:xs) = x : normalizeHighlighting xs
 
+pushContext :: [Char] -> GenParser tok SyntaxState ()
 pushContext context = if context == "#stay"
                          then return ()
                          else do st <- getState
@@ -29,6 +43,7 @@ pushContext context = if context == "#stay"
                                  let newContexts = Map.alter (addContext context) lang contexts 
                                  updateState $ \st -> st { synStContexts = newContexts }
 
+popContext :: GenParser tok SyntaxState String
 popContext = do st <- getState
                 let contexts = synStContexts st
                 let lang = synStLanguage st
@@ -41,6 +56,7 @@ popContext = do st <- getState
                                                 return (head conts)
                     Nothing    -> fail $ "No context stack for language " ++ lang 
 
+currentContext :: GenParser tok SyntaxState String
 currentContext = do st <- getState
                     let contexts = synStContexts st
                     let lang = synStLanguage st
@@ -50,13 +66,18 @@ currentContext = do st <- getState
                                           else return (head conts)
                          Nothing    -> fail $ "No context stack for language " ++ lang
 
+withChildren :: GenParser tok SyntaxState LabeledSource
+             -> GenParser tok SyntaxState LabeledSource
+             -> GenParser tok SyntaxState LabeledSource
 withChildren parent child = do
   (pAttr, pResult) <- parent
   (_, cResult) <- option ([],"") child
   return (pAttr, pResult ++ cResult)
 
+wholeLine :: GenParser Char st [Char]
 wholeLine = manyTill anyChar (newline <|> (eof >> return '\n'))
 
+pFirstNonSpace :: GenParser tok SyntaxState ()
 pFirstNonSpace = do
   curLine <- currentLine
   charsParsedInLine <- getState >>= return . synStCharsParsedInLine
@@ -65,32 +86,39 @@ pFirstNonSpace = do
      then return ()
      else fail "Not first nonspace"
 
+currentColumn :: GenParser tok st Column
 currentColumn = getPosition >>= return . sourceColumn
 
+currentLine :: GenParser tok SyntaxState String
 currentLine = getState >>= return . synStCurrentLine
 
+pColumn :: Column -> GenParser tok st ()
 pColumn col = do
   curCol <- currentColumn
   if col == (curCol - 1) -- parsec's columns start with 1
      then return ()
      else fail $ "Not column " ++ show col
 
+pGetCapture :: Int -> GenParser tok SyntaxState String
 pGetCapture capNum = do
   captures <- getState >>= return . synStCaptures
   if length captures < capNum
      then fail "Not enough captures"
      else return $ captures !! (capNum - 1)
 
+pDetectChar :: Bool -> Char -> GenParser Char SyntaxState String
 pDetectChar dynamic ch = do 
   if dynamic && isDigit ch
      then pGetCapture (read [ch]) >>= try . string
      else char ch >>= return . (:[])
 
+pDetect2Chars :: Bool -> Char -> Char -> GenParser Char SyntaxState [Char]
 pDetect2Chars dynamic ch1 ch2 = try $ do
   [c1] <- pDetectChar dynamic ch1
   [c2] <- pDetectChar dynamic ch2
   return [c1, c2]
 
+pKeyword :: [[Char]] -> GenParser Char SyntaxState [Char]
 pKeyword list = try $ do
   st <- getState
   let caseSensitive = synStKeywordCaseSensitive st
@@ -112,19 +140,23 @@ pKeyword list = try $ do
              then return word
              else fail "Keyword not in list"
 
+pString :: Bool -> [Char] -> GenParser Char SyntaxState String
 pString dynamic str =
   if dynamic
      then subDynamic str >>= try . string
      else try $ string str
 
+pAnyChar :: [Char] -> GenParser Char st [Char]
 pAnyChar chars = oneOf chars >>= return . (:[])
 
+pDefault :: GenParser Char st [Char]
 pDefault = noneOf "\n" >>= return . (:[])
 
 -- The following alternative gives a 25% speed improvement, but it's possible
 -- that it won't work for all syntaxes:
 -- pDefault = (many1 alphaNum) <|> (noneOf "\n" >>= return . (:[]))
 
+subDynamic :: [Char] -> GenParser tok SyntaxState [Char]
 subDynamic ('%':x:xs) | isDigit x = do
   captures <- getState >>= return . synStCaptures
   let capNum = read [x]
@@ -135,6 +167,7 @@ subDynamic ('%':x:xs) | isDigit x = do
 subDynamic (x:xs) = subDynamic xs >>= return . (x:)
 subDynamic "" = return ""
 
+pRegExpr :: Regex -> GenParser Char SyntaxState String
 pRegExpr compiledRegex = do
   st <- getState
   let curLine = synStCurrentLine st
@@ -150,6 +183,7 @@ pRegExpr compiledRegex = do
                           string (drop 1 x) 
         _           -> fail $ "Regex " ++ (show compiledRegex) ++ " failed to match"
 
+pRegExprDynamic :: [Char] -> GenParser Char SyntaxState String
 pRegExprDynamic regexpStr = do
   regexpStr' <- subDynamic regexpStr
   let compiledRegex = compileRegex regexpStr'
@@ -163,10 +197,13 @@ escapeRegex ('\\':x:y:z:rest) | isDigit x && isDigit y && isDigit z =
   chr (read ['0','o',x,y,z]) : escapeRegex rest
 escapeRegex (x:xs) = x : escapeRegex xs 
 
+compileRegex :: String -> Regex
 compileRegex regexpStr = compile ('.' : escapeRegex regexpStr) [anchored]
 
+integerRegex :: Regex
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
+pInt :: GenParser Char SyntaxState String
 pInt = pRegExpr integerRegex 
 
 pUnimplemented :: GenParser Char st [Char]
@@ -174,18 +211,25 @@ pUnimplemented = do
   fail "Not implemented"
   return ""
 
+floatRegex :: Regex
 floatRegex = compileRegex "\\b[-+]?(([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)([Ee][-+]?[0-9]+)?|[0-9]+[Ee][-+]?[0-9]+)\\b"
 
+pFloat :: GenParser Char SyntaxState String
 pFloat = pRegExpr floatRegex
 
+octRegex :: Regex
 octRegex = compileRegex "\\b[-+]?0[Oo][0-7]+\\b"
 
+pHlCOct :: GenParser Char SyntaxState String
 pHlCOct = pRegExpr octRegex
 
+hexRegex :: Regex
 hexRegex = compileRegex "\\b[-+]?0[Xx][0-9A-Fa-f]+\\b"
 
+pHlCHex :: GenParser Char SyntaxState String
 pHlCHex = pRegExpr hexRegex
 
+pHlCStringChar :: GenParser Char st [Char]
 pHlCStringChar = try $ do 
   char '\\'
   (oneOf "abefnrtv\"'?\\" >>= return  . (\x -> ['\\',x]))
@@ -196,21 +240,26 @@ pHlCStringChar = try $ do
             b <- many1 octDigit
             return ('\\':a:b))
 
+pHlCChar :: GenParser Char st [Char]
 pHlCChar = try $ do
   char '\''
   c <- pHlCStringChar
   char '\''
   return ('\'' : c ++ "'")
 
+pRangeDetect :: Char -> Char -> GenParser Char st [Char]
 pRangeDetect startChar endChar = try $ do
   char startChar
   body <- manyTill (noneOf ['\n', endChar]) (char endChar)
   return $ startChar : (body ++ [endChar])
 
+pLineContinue :: GenParser Char st String
 pLineContinue = try $ string "\\\n"
 
+pDetectSpaces :: GenParser Char st [Char]
 pDetectSpaces = many1 (oneOf "\t ")
 
+pDetectIdentifier :: GenParser Char st [Char]
 pDetectIdentifier = do
   first <- letter
   rest <- many alphaNum

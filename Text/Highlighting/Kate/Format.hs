@@ -1,3 +1,15 @@
+{- |
+   Module      : Text.Highlighting.Kate.Format
+   Copyright   : Copyright (C) 2008 John MacFarlane
+   License     : GNU GPL, version 2 or above 
+
+   Maintainer  : John MacFarlane <jgm@berkeley.edu>
+   Stability   : alpha 
+   Portability : portable
+
+Formatters that convert a list of annotated source lines to various output formats.
+-}
+
 module Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..) ) where
 import Text.Highlighting.Kate.Definitions
 import Text.XHtml.Transitional
