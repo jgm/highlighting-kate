@@ -15,41 +15,32 @@ To install:
 
     runghc Setup.lhs configure
     runghc Setup.lhs build 
-    runghc Setup.lhs install 
-
-The last command must be run as root, or --user may be specified to install
-the library into the user package database.
-
-Haddock documentation can be generated (in dist/doc/html/highlighting-kate)
-using
-
-    runghc Setup.lhs haddock
+    runghc Setup.lhs haddock    # optional, if you want library documentation
+    runghc Setup.lhs install    # as root, or specify --user 
 
 For an example of the use of the library, see Highlight.hs.
-After installing the library using the steps above, you can compile
-this program with the following command:
-
-    ghc Highlight.hs -package highlighting-kate -o Highlight
-
-Or, you can tell Cabal to build the executable along with the
-library:
+To compile this program along with the library, specify the 'executable'
+flag in the configure step above:
 
     runghc Setup.lhs configure -fexecutable
 
 To run Highlight, specify the language name using -s:
 
-    ./Highlight -s haskell Highlight.hs > example.html
+    Highlight -s haskell Highlight.hs > example.html
 
 If you don't specify a language name, Highlight will try to guess it
-from the file extension.  For other options,
+from the file extension.  Highlight can also be used as a pipe, reading
+input from STDIN.  For other options,
 
-    ./Highlight --help
+    Highlight --help
 
-Styling is done using span tags, so text will not appear any different
-unless an appropriate CSS file is used.  There are two CSS files in
-the css directory.  These use generic class names; for more fine-grained
-highlighting, users may wish to create their own CSS files that use
-language-specific classes.
+Styling is done using span tags.  The Highlight program will include
+default styles in the generated HTML, unless a link to a CSS file is
+provided using the '--css' option. Some sample CSS files can be found
+in the css directory. These use generic class names (Normal, Keyword,
+DataType, DecVal, BaseN, Float, Char, String, Comment, Function, Others,
+Alert, Error). For more fine-grained highlighting, users may wish to
+create their own CSS files that use language-specific classes.
 
 The parsers in Text/Highlighting/Kate/Syntax were automatically generated
 from the Kate syntax definitions in the xml directory. You may modify
@@ -72,9 +63,10 @@ There is information on the syntax highlighting definitions at
 
     http://kate-editor.org/article/writing_a_kate_highlighting_xml_file
 
-Thanks are due to all the authors of these syntax definitions!
-Changes have been made to the following xml files (the originals have been
-left in the directory, with .bkp extensions):
+Thanks are due to all the authors of these syntax definitions.
+
+Changes have been made to the following xml files (the originals have
+been left in the directory, with .bkp extensions):
 
 - javascript.xml:  Fixed regex \s* (which matches empty string) by changes to DetectSpaces
 - perl.xml:  Fixed regexes - needed backslash-escapes before ] and ^
