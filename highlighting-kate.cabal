@@ -37,6 +37,7 @@ Extra-Source-Files:  README
                      xml/asp.xml
                      xml/awk.xml
                      xml/bash.xml
+                     xml/bash.xml.bkp
                      xml/bibtex.xml
                      xml/cmake.xml
                      xml/coldfusion.xml

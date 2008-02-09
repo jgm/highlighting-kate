@@ -256,9 +256,9 @@ parseRules "FindOthers" =
      return (attr, result)
 
 parseRules "FindStrings" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '\'' >>= withAttribute "Escape"))
+  do (attr, result) <- (((pDetect2Chars False '\\' '\'' >>= withAttribute "Escape"))
                         <|>
-                        ((pDetect2Chars False '*' '"' >>= withAttribute "Escape"))
+                        ((pDetect2Chars False '\\' '"' >>= withAttribute "Escape"))
                         <|>
                         ((pDetectChar False '\'' >>= withAttribute "String SingleQ") >>~ pushContext "StringSQ")
                         <|>

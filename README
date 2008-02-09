@@ -70,6 +70,7 @@ been left in the directory, with .bkp extensions):
 - javascript.xml:  Fixed regex \s* (which matches empty string) by changes to DetectSpaces
 - perl.xml:  Fixed regexes - needed backslash-escapes before ] and ^
 - haskell.xml:  Added support for module names
+- bash.xml: Changed "\\" to "\" in two Detect2Char rules in FindString
 
 NOTE:  This software is largely untested.  Known bugs are recorded in the file
 BUGS. Please send bug reports (or better, patches) to the author (jgm at
