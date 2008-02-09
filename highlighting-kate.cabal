@@ -26,8 +26,12 @@ License-file:        LICENSE
 Author:              John MacFarlane
 Maintainer:          jgm@berkeley.edu
 Extra-Source-Files:  README
+                     BUGS
                      Highlight.hs
                      ParseSyntaxFiles.hs
+                     css/hk-dark.css
+                     css/hk-kate.css
+                     css/hk-pyg.css
                      xml/ada.xml
                      xml/alert.xml
                      xml/asp.xml
@@ -49,11 +53,11 @@ Extra-Source-Files:  README
                      xml/erlang.xml
                      xml/fortran.xml
                      xml/haskell.xml
-                     xml/haskell.xml.orig
+                     xml/haskell.xml.bkp
                      xml/html.xml
                      xml/javadoc.xml
                      xml/javascript.xml
-                     xml/javascript.xml.orig
+                     xml/javascript.xml.bkp
                      xml/java.xml
                      xml/json.xml
                      xml/language.dtd
@@ -71,7 +75,7 @@ Extra-Source-Files:  README
                      xml/ocaml.xml
                      xml/pascal.xml
                      xml/perl.xml
-                     xml/perl.xml.orig
+                     xml/perl.xml.bkp
                      xml/php.xml
                      xml/postscript.xml
                      xml/prolog.xml
