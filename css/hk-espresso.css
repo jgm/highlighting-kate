@@ -1,9 +1,9 @@
 /* Based on ultraviolet's espresso_libre.css */
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre 
    { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }
-td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; } 
+td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; padding-left: 5px; } 
+pre.sourceCode, table.sourceCode { background-color: #2A211C; color: #BDAE9D; }
 td.sourceCode { padding-left: 5px; }
-table.sourceCode { background-color: #2A211C; color: #BDAE9D; }
 pre.sourceCode span.Normal { }
 pre.sourceCode span.Keyword { color: #43A8ED; font-weight: bold; } 
 pre.sourceCode span.DataType { text-decoration: underline; }

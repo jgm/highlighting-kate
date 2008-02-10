@@ -60,7 +60,7 @@ xhtmlHighlight opts lang code =
 defaultCss = 
   "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre \n\ 
   \   { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }\n\ 
-  \td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; }\n\  
+  \td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; padding-left: 5px; }\n\  
   \td.sourceCode { padding-left: 5px; }\n\ 
   \pre.sourceCode { }\n\ 
   \pre.sourceCode span.Normal { }\n\ 
