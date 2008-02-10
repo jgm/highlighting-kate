@@ -5,7 +5,7 @@ Synopsis:            Syntax highlighting
 Description:         highlighting-kate is a syntax highlighting library
                      with support for over 50 languages. The syntax
                      parsers are automatically generated from Kate
-                     syntax descriptions (http://kate-editor.org/),
+                     syntax descriptions (<http://kate-editor.org/>),
                      so any syntax supported by Kate can be added.
                      An (optional) command-line program is provided, along
                      with a utility for generating new parsers from Kate
