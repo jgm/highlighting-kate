@@ -26,11 +26,12 @@ module Text.Highlighting.Kate ( highlightAs
                               , languagesByExtension
                               , formatAsXHtml
                               , FormatOption (..)
+                              , defaultHighlightingCss
                               , SourceLine
                               , LabeledSource
                               , highlightingKateVersion
                               ) where
-import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..) )
+import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..), defaultHighlightingCss )
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension )
 import Text.Highlighting.Kate.Definitions ( SourceLine, LabeledSource )
 
