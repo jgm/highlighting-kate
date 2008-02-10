@@ -29,7 +29,7 @@ Extra-Source-Files:  README
                      BUGS
                      Highlight.hs
                      ParseSyntaxFiles.hs
-                     css/hk-dark.css
+                     css/hk-espresso.css
                      css/hk-kate.css
                      css/hk-pyg.css
                      xml/ada.xml
