@@ -1,7 +1,9 @@
 /* Loosely based on pygment's default colors */
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre 
+   { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }
+td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; } 
+td.sourceCode { padding-left: 5px; }
 pre.sourceCode { }
-pre.sourceCode span.LineNumber { display: none; }
-pre.numberLines span.LineNumber { display: inline; color: #AAAAAA; padding-right: 0; border-right: 1px solid #AAAAAA; margin-right: 3px; }
 pre.sourceCode span.Normal { }
 pre.sourceCode span.Keyword { color: #007020; font-weight: bold; } 
 pre.sourceCode span.DataType { color: #902000; }

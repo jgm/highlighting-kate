@@ -1,57 +1,20 @@
 /* Based on ultraviolet's espresso_libre.css */
-pre.sourceCode { 
-   padding: 0.5em;
-   background-color: #2A211C;
-   color: #BDAE9D;
-}
-pre.sourceCode span.LineNumber {
-   display: none;
-}
-pre.numberLines span.LineNumber {
-   display: inline; 
-}
-pre.sourceCode span.Normal { 
-}
-pre.sourceCode span.Keyword {
-   font-weight: bold;
-   color: #43A8ED;
-} 
-pre.sourceCode span.DataType { 
-  text-decoration: underline; 
-}
-pre.sourceCode span.DecVal { 
-  color: #44AA43;
-}
-pre.sourceCode span.BaseN {
-  color: #44AA43;
-}
-pre.sourceCode span.Float {
-  color: #44AA43;
-}
-pre.sourceCode span.Char { 
-   color: #049B0A;
-}
-pre.sourceCode span.String {
-   color: #049B0A;
-} 
-pre.sourceCode span.Comment {
-   color: #0066FF;
-   font-style: italic;
-}
-pre.sourceCode span.Others {
-}
-pre.sourceCode span.Alert {
-  color: yellow;
-  font-weight: bold; 
-}
-pre.sourceCode span.Function { 
-   font-weight: bold;
-   color: #FF9358;
-}
-pre.sourceCode span.RegionMarker {
-}
-pre.sourceCode span.Error { 
-  color: yellow;
-  font-weight: bold;
-}
-
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre 
+   { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }
+td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; } 
+td.sourceCode { padding-left: 5px; }
+table.sourceCode { background-color: #2A211C; color: #BDAE9D; }
+pre.sourceCode span.Normal { }
+pre.sourceCode span.Keyword { color: #43A8ED; font-weight: bold; } 
+pre.sourceCode span.DataType { text-decoration: underline; }
+pre.sourceCode span.DecVal { color: #44AA43; }
+pre.sourceCode span.BaseN { color: #44AA43; }
+pre.sourceCode span.Float { color: #44AA43; }
+pre.sourceCode span.Char { color: #049B0A; }
+pre.sourceCode span.String { color: #049B0A; }
+pre.sourceCode span.Comment { color: #0066FF; font-style: italic; }
+pre.sourceCode span.Others { }
+pre.sourceCode span.Alert { color: yellow; font-weight: bold; }
+pre.sourceCode span.Function { color: #FF9358; font-weight: bold; }
+pre.sourceCode span.RegionMarker { }
+pre.sourceCode span.Error { color: yellow; font-weight: bold; }
