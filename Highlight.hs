@@ -5,8 +5,8 @@ import System.Environment
 import Text.XHtml.Transitional
 import System.Console.GetOpt
 import System.Exit
-import System.FilePath
-import Data.Maybe
+import System.FilePath (takeFileName, takeExtension)
+import Data.Maybe (listToMaybe)
 import Data.Char (toLower)
 
 data Flag = CssPath String
