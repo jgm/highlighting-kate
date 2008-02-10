@@ -120,6 +120,9 @@ main = do
                    Nothing      -> style ! [thetype "text/css"] $ primHtml defaultCss 
                    Just cssPath -> thelink ! [thetype "text/css", href cssPath, rel "stylesheet"] << noHtml
   let hcode = xhtmlHighlight highlightOpts lang code
+  let pageTitle = if null fnames then noHtml else thetitle << (takeFileName $ head fnames)
+  let metadata = meta ! [httpequiv "Content-Type", content "text/html; charset=UTF-8"] +++
+                 meta ! [name "generator", content "highlight-kate"]
   if Fragment `elem` opts
      then putStrLn $ renderHtmlFragment hcode
-     else putStrLn $ renderHtml $ header << [css] +++ body << hcode
+     else putStrLn $ renderHtml $ header << [pageTitle, metadata, css] +++ body << hcode
