@@ -42,7 +42,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Erlang",["Normal Text"])], synStLanguage = "Erlang", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Erlang",["Normal Text"])], synStLanguage = "Erlang", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -80,13 +80,13 @@ defaultAttributes = [("Normal Text","Normal Text"),("isfunction","Function"),("a
 parseRules "Normal Text" = 
   do (attr, result) <- (((pColumn 0 >> pRegExpr (compileRegex "(?:-module|-export|-define|-undef|-ifdef|-ifndef|-else|-endif|-include|-include_lib)") >>= withAttribute "Pragma"))
                         <|>
-                        ((pKeyword ["after","begin","case","catch","cond","end","fun","if","let","of","query","receive","all_true","some_true"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["after","begin","case","catch","cond","end","fun","if","let","of","query","receive","all_true","some_true"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["div","rem","or","xor","bor","bxor","bsl","bsr","and","band","not","bnot"] >>= withAttribute "Operator"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["div","rem","or","xor","bor","bxor","bsl","bsr","and","band","not","bnot"] >>= withAttribute "Operator"))
                         <|>
                         ((pRegExpr (compileRegex "(?:\\+|-|\\*|\\/|==|\\/=|=:=|=\\/=|<|=<|>|>=|\\+\\+|--|=|!|<-)") >>= withAttribute "Operator"))
                         <|>
-                        ((pKeyword ["abs","accept","alarm","apply","atom_to_list","binary_to_list","binary_to_term","check_process_code","concat_binary","date","delete_module","disconnect_node","element","erase","exit","float","float_to_list","garbage_collect","get","get_keys","group_leader","halt","hd","integer_to_list","is_alive","is_atom","is_binary","is_boolean","is_float","is_function","is_integer","is_list","is_number","is_pid","is_port","is_process_alive","is_record","is_reference","is_tuple","length","link","list_to_atom","list_to_binary","list_to_float","list_to_integer","list_to_pid","list_to_tuple","load_module","loaded","localtime","make_ref","module_loaded","node","nodes","now","open_port","pid_to_list","port_close","port_command","port_connect","port_control","ports","pre_loaded","process_flag","process_info","processes","purge_module","put","register","registered","round","self","setelement","size","spawn","spawn_link","spawn_opt","split_binary","statistics","term_to_binary","throw","time","tl","trunc","tuple_to_list","unlink","unregister","whereis"] >>= withAttribute "Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["abs","accept","alarm","apply","atom_to_list","binary_to_list","binary_to_term","check_process_code","concat_binary","date","delete_module","disconnect_node","element","erase","exit","float","float_to_list","garbage_collect","get","get_keys","group_leader","halt","hd","integer_to_list","is_alive","is_atom","is_binary","is_boolean","is_float","is_function","is_integer","is_list","is_number","is_pid","is_port","is_process_alive","is_record","is_reference","is_tuple","length","link","list_to_atom","list_to_binary","list_to_float","list_to_integer","list_to_pid","list_to_tuple","load_module","loaded","localtime","make_ref","module_loaded","node","nodes","now","open_port","pid_to_list","port_close","port_command","port_connect","port_control","ports","pre_loaded","process_flag","process_info","processes","purge_module","put","register","registered","round","self","setelement","size","spawn","spawn_link","spawn_opt","split_binary","statistics","term_to_binary","throw","time","tl","trunc","tuple_to_list","unlink","unregister","whereis"] >>= withAttribute "Function"))
                         <|>
                         ((pRegExpr (compileRegex "(?:\\(|\\)|\\{|\\}|\\[|\\]|\\.|\\:|\\||\\|\\||;|\\,|\\?|->|\\#)") >>= withAttribute "Separator"))
                         <|>

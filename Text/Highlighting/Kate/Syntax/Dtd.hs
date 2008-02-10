@@ -42,7 +42,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("DTD",["Normal"])], synStLanguage = "DTD", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("DTD",["Normal"])], synStLanguage = "DTD", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -129,9 +129,9 @@ parseRules "Declaration" =
                         <|>
                         ((pRegExpr (compileRegex "%\\s") >>= withAttribute "Local"))
                         <|>
-                        ((pKeyword ["EMPTY","ANY","CDATA","ID","IDREF","IDREFS","NMTOKEN","NMTOKENS","ENTITY","ENTITIES","NOTATION","PUBLIC","SYSTEM","NDATA"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["EMPTY","ANY","CDATA","ID","IDREF","IDREFS","NMTOKEN","NMTOKENS","ENTITY","ENTITIES","NOTATION","PUBLIC","SYSTEM","NDATA"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["#PCDATA","#REQUIRED","#IMPLIED","#FIXED"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["#PCDATA","#REQUIRED","#IMPLIED","#FIXED"] >>= withAttribute "Keyword"))
                         <|>
                         ((pRegExpr (compileRegex "\\b[\\-\\w\\d\\.:_]+\\b") >>= withAttribute "Name")))
      return (attr, result)

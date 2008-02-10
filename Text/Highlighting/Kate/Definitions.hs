@@ -25,7 +25,6 @@ data SyntaxState = SyntaxState
   , synStCharsParsedInLine    :: Int          -- ^ Num characters parsed in line
   , synStCaseSensitive        :: Bool         -- ^ Language is case-sensitive
   , synStKeywordCaseSensitive :: Bool         -- ^ Keywords are case-sensitive
-  , synStKeywordDelims        :: [Char]       -- ^ List of keyword delimiters
   , synStCaptures             :: [String]     -- ^ List of regex captures from
                                               --   last capturing match
   } deriving (Read, Show)

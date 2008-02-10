@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("SGML",["Normal Text"])], synStLanguage = "SGML", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("SGML",["Normal Text"])], synStLanguage = "SGML", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 

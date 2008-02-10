@@ -44,7 +44,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Django HTML Template",["Start"])], synStLanguage = "Django HTML Template", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Django HTML Template",["Start"])], synStLanguage = "Django HTML Template", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -168,7 +168,7 @@ parseRules "Template Filter" =
      return (attr, result)
 
 parseRules "Template Tag" = 
-  do (attr, result) <- (((pKeyword ["for","block","if","ifequal","ifnotequal","ifchanged","blocktrans","spaceless"] >>= withAttribute "Template Tag") >>~ pushContext "Found Block Tag")
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["for","block","if","ifequal","ifnotequal","ifchanged","blocktrans","spaceless"] >>= withAttribute "Template Tag") >>~ pushContext "Found Block Tag")
                         <|>
                         ((pDetectIdentifier >>= withAttribute "Template Tag") >>~ pushContext "In Template Tag"))
      return (attr, result)
@@ -188,7 +188,7 @@ parseRules "In Block Tag" =
      return (attr, result)
 
 parseRules "Non Matching Tag" = 
-  do (attr, result) <- (((pKeyword ["endfor","endblock","endif","endifequal","endifnotequal","endifchanged","endblocktrans","endspaceless"] >>= withAttribute "Mismatched Block Tag") >>~ (popContext >> return ()))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["endfor","endblock","endif","endifequal","endifnotequal","endifchanged","endblocktrans","endspaceless"] >>= withAttribute "Mismatched Block Tag") >>~ (popContext >> return ()))
                         <|>
                         ((pDetectIdentifier >>= withAttribute "Template Tag") >>~ (popContext >> return ())))
      return (attr, result)

@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Ada",["Default"])], synStLanguage = "Ada", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Ada",["Default"])], synStLanguage = "Ada", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -104,11 +104,11 @@ parseRules "Default" =
                         <|>
                         ((pFirstNonSpace >> pString False "--  END" >>= withAttribute "Region Marker") >>~ pushContext "Region Marker")
                         <|>
-                        ((pKeyword ["abort","abs","abstract","accept","access","aliased","all","and","array","at","begin","body","constant","declare","delay","delta","digits","do","else","elsif","end","entry","exception","exit","for","function","generic","goto","in","interface","is","limited","mod","new","not","null","of","or","others","out","overriding","package","pragma","private","procedure","protected","raise","range","rem","record","renames","requeue","return","reverse","separate","subtype","tagged","task","terminate","then","type","until","use","when","while","with","xor"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["abort","abs","abstract","accept","access","aliased","all","and","array","at","begin","body","constant","declare","delay","delta","digits","do","else","elsif","end","entry","exception","exit","for","function","generic","goto","in","interface","is","limited","mod","new","not","null","of","or","others","out","overriding","package","pragma","private","procedure","protected","raise","range","rem","record","renames","requeue","return","reverse","separate","subtype","tagged","task","terminate","then","type","until","use","when","while","with","xor"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["all_calls_remote","assert","assertion_policy","asynchronous","atomic","atomic_components","attach_handler","controlled","convention","detect_blocking","discard_names","elaborate","elaborate_all","elaborate_body","export","import","inline","inspection_point","interrupt_handler","interrupt_priority","linker_options","list","locking_policy","no_return","normalize_scalars","optimize","pack","page","partition_elaboration_policy","preelaborable_initialization","preelaborate","priority","priority_specific_dispatching","profile","pure","queuing_policy","relative_deadline","remote_call_interface","remote_types","restrictions","reviewable","shared_passive","storage_size","suppress","task_dispatching_policy","unchecked_union","unsuppress","volatile","volatile_components"] >>= withAttribute "Pragmas"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["all_calls_remote","assert","assertion_policy","asynchronous","atomic","atomic_components","attach_handler","controlled","convention","detect_blocking","discard_names","elaborate","elaborate_all","elaborate_body","export","import","inline","inspection_point","interrupt_handler","interrupt_priority","linker_options","list","locking_policy","no_return","normalize_scalars","optimize","pack","page","partition_elaboration_policy","preelaborable_initialization","preelaborate","priority","priority_specific_dispatching","profile","pure","queuing_policy","relative_deadline","remote_call_interface","remote_types","restrictions","reviewable","shared_passive","storage_size","suppress","task_dispatching_policy","unchecked_union","unsuppress","volatile","volatile_components"] >>= withAttribute "Pragmas"))
                         <|>
-                        ((pKeyword ["boolean","char","float","integer","long_float","long_integer","long_long_float","long_long_integer","short_float","short_integer","string","wide_string","wide_char","wide_wide_char","wide_wide_string"] >>= withAttribute "Data Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["boolean","char","float","integer","long_float","long_integer","long_long_float","long_long_integer","short_float","short_integer","string","wide_string","wide_char","wide_wide_char","wide_wide_string"] >>= withAttribute "Data Type"))
                         <|>
                         ((pFloat >>= withAttribute "Float"))
                         <|>

@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("ASP",["nosource"])], synStLanguage = "ASP", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("ASP",["nosource"])], synStLanguage = "ASP", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -123,7 +123,7 @@ parseRules "aspsource" =
                         <|>
                         ((pAnyChar ";()}{:,[]" >>= withAttribute "Other"))
                         <|>
-                        ((pKeyword [] >>= withAttribute "Other"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" [] >>= withAttribute "Other"))
                         <|>
                         ((pRegExpr (compileRegex "\\belseif\\b") >>= withAttribute "Control Structures"))
                         <|>
@@ -171,11 +171,11 @@ parseRules "aspsource" =
                         <|>
                         ((pRegExpr (compileRegex "\\bend select\\b") >>= withAttribute "Control Structures"))
                         <|>
-                        ((pKeyword ["dim","redim","preserve","const","erase","nothing","set","new","me","function","sub","call","class","private","public","with","randomize","open","close","movenext","execute","eof","not","true","false","or","and","xor"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["dim","redim","preserve","const","erase","nothing","set","new","me","function","sub","call","class","private","public","with","randomize","open","close","movenext","execute","eof","not","true","false","or","and","xor"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["select","case","end select","if","then","else","elseif","end if","while","do","until","loop","wend","for","each","to","in","next","exit","continue"] >>= withAttribute "Control Structures"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["select","case","end select","if","then","else","elseif","end if","while","do","until","loop","wend","for","each","to","in","next","exit","continue"] >>= withAttribute "Control Structures"))
                         <|>
-                        ((pKeyword ["response","write","redirect","end","request","form","querystring","servervariables","cookies","session","server","createobject","abs","array","asc","atn","cbool","cbyte","ccur","cdate","cdbl","chr","cint","clng","cos","csng","cstr","date","dateadd","DateDiff","DatePart","DateSerial","DateValue","Date","Day","Exp","Filter","Fix","FormatCurrency","FormatDateTime","FormatNumber","FormatPercent","GetObject","Hex","Hour","InputBox","InStr","InStrRev","Int","IsArray","IsDate","IsEmpty","IsNull","IsNumeric","IsObject","Join","LBound","LCase","Left","Len","LoadPicture","Log","LTrim","Mid","Minute","Month","MonthName","MsgBox","Now","Oct","Replace","RGB","Right","Rnd","Round","RTrim","ScriptEngine","ScriptEngineBuildVersion","ScriptEngineMajorVersion","ScriptEngineMinorVersion","Second","Sgn","Sin","Space","Split","Sqr","StrComp","StrReverse","String","Tan","Time","Timer","TimeSerial","TimeValue","Trim","TypeName","UBound","UCase","VarType","Weekday","WeekdayName","Year","Add","AddFolders","BuildPath","Clear","Close","Copy","CopyFile","CopyFolder","CreateFolder","CreateTextFile","Delete","DeleteFile","DeleteFolder","DriveExists","Exists","FileExists","FolderExists","GetAbsolutePathName","GetBaseName","GetDrive","GetDriveName","GetExtensionName","GetFile","GetFileName","GetFolder","GetParentFolderName","GetSpecialFolder","GetTempName","Items","item","Keys","Move","MoveFile","MoveFolder","OpenAsTextStream","OpenTextFile","Raise","Read","ReadAll","ReadLine","Remove","RemoveAll","Skip","SkipLine","Write","WriteBlankLines","WriteLine"] >>= withAttribute "Function")))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["response","write","redirect","end","request","form","querystring","servervariables","cookies","session","server","createobject","abs","array","asc","atn","cbool","cbyte","ccur","cdate","cdbl","chr","cint","clng","cos","csng","cstr","date","dateadd","DateDiff","DatePart","DateSerial","DateValue","Date","Day","Exp","Filter","Fix","FormatCurrency","FormatDateTime","FormatNumber","FormatPercent","GetObject","Hex","Hour","InputBox","InStr","InStrRev","Int","IsArray","IsDate","IsEmpty","IsNull","IsNumeric","IsObject","Join","LBound","LCase","Left","Len","LoadPicture","Log","LTrim","Mid","Minute","Month","MonthName","MsgBox","Now","Oct","Replace","RGB","Right","Rnd","Round","RTrim","ScriptEngine","ScriptEngineBuildVersion","ScriptEngineMajorVersion","ScriptEngineMinorVersion","Second","Sgn","Sin","Space","Split","Sqr","StrComp","StrReverse","String","Tan","Time","Timer","TimeSerial","TimeValue","Trim","TypeName","UBound","UCase","VarType","Weekday","WeekdayName","Year","Add","AddFolders","BuildPath","Clear","Close","Copy","CopyFile","CopyFolder","CreateFolder","CreateTextFile","Delete","DeleteFile","DeleteFolder","DriveExists","Exists","FileExists","FolderExists","GetAbsolutePathName","GetBaseName","GetDrive","GetDriveName","GetExtensionName","GetFile","GetFileName","GetFolder","GetParentFolderName","GetSpecialFolder","GetTempName","Items","item","Keys","Move","MoveFile","MoveFolder","OpenAsTextStream","OpenTextFile","Raise","Read","ReadAll","ReadLine","Remove","RemoveAll","Skip","SkipLine","Write","WriteBlankLines","WriteLine"] >>= withAttribute "Function")))
      return (attr, result)
 
 parseRules "asp_onelinecomment" = 
@@ -249,11 +249,11 @@ parseRules "scripts" =
                         <|>
                         ((pDetect2Chars False '/' '*' >>= withAttribute "Comment") >>~ pushContext "twolinecomment")
                         <|>
-                        ((pKeyword ["select","case","end select","if","then","else","elseif","end if","while","do","until","loop","wend","for","each","to","in","next","exit","continue"] >>= withAttribute "Control Structures"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["select","case","end select","if","then","else","elseif","end if","while","do","until","loop","wend","for","each","to","in","next","exit","continue"] >>= withAttribute "Control Structures"))
                         <|>
-                        ((pKeyword ["dim","redim","preserve","const","erase","nothing","set","new","me","function","sub","call","class","private","public","with","randomize","open","close","movenext","execute","eof","not","true","false","or","and","xor"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["dim","redim","preserve","const","erase","nothing","set","new","me","function","sub","call","class","private","public","with","randomize","open","close","movenext","execute","eof","not","true","false","or","and","xor"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["response","write","redirect","end","request","form","querystring","servervariables","cookies","session","server","createobject","abs","array","asc","atn","cbool","cbyte","ccur","cdate","cdbl","chr","cint","clng","cos","csng","cstr","date","dateadd","DateDiff","DatePart","DateSerial","DateValue","Date","Day","Exp","Filter","Fix","FormatCurrency","FormatDateTime","FormatNumber","FormatPercent","GetObject","Hex","Hour","InputBox","InStr","InStrRev","Int","IsArray","IsDate","IsEmpty","IsNull","IsNumeric","IsObject","Join","LBound","LCase","Left","Len","LoadPicture","Log","LTrim","Mid","Minute","Month","MonthName","MsgBox","Now","Oct","Replace","RGB","Right","Rnd","Round","RTrim","ScriptEngine","ScriptEngineBuildVersion","ScriptEngineMajorVersion","ScriptEngineMinorVersion","Second","Sgn","Sin","Space","Split","Sqr","StrComp","StrReverse","String","Tan","Time","Timer","TimeSerial","TimeValue","Trim","TypeName","UBound","UCase","VarType","Weekday","WeekdayName","Year","Add","AddFolders","BuildPath","Clear","Close","Copy","CopyFile","CopyFolder","CreateFolder","CreateTextFile","Delete","DeleteFile","DeleteFolder","DriveExists","Exists","FileExists","FolderExists","GetAbsolutePathName","GetBaseName","GetDrive","GetDriveName","GetExtensionName","GetFile","GetFileName","GetFolder","GetParentFolderName","GetSpecialFolder","GetTempName","Items","item","Keys","Move","MoveFile","MoveFolder","OpenAsTextStream","OpenTextFile","Raise","Read","ReadAll","ReadLine","Remove","RemoveAll","Skip","SkipLine","Write","WriteBlankLines","WriteLine"] >>= withAttribute "Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["response","write","redirect","end","request","form","querystring","servervariables","cookies","session","server","createobject","abs","array","asc","atn","cbool","cbyte","ccur","cdate","cdbl","chr","cint","clng","cos","csng","cstr","date","dateadd","DateDiff","DatePart","DateSerial","DateValue","Date","Day","Exp","Filter","Fix","FormatCurrency","FormatDateTime","FormatNumber","FormatPercent","GetObject","Hex","Hour","InputBox","InStr","InStrRev","Int","IsArray","IsDate","IsEmpty","IsNull","IsNumeric","IsObject","Join","LBound","LCase","Left","Len","LoadPicture","Log","LTrim","Mid","Minute","Month","MonthName","MsgBox","Now","Oct","Replace","RGB","Right","Rnd","Round","RTrim","ScriptEngine","ScriptEngineBuildVersion","ScriptEngineMajorVersion","ScriptEngineMinorVersion","Second","Sgn","Sin","Space","Split","Sqr","StrComp","StrReverse","String","Tan","Time","Timer","TimeSerial","TimeValue","Trim","TypeName","UBound","UCase","VarType","Weekday","WeekdayName","Year","Add","AddFolders","BuildPath","Clear","Close","Copy","CopyFile","CopyFolder","CreateFolder","CreateTextFile","Delete","DeleteFile","DeleteFolder","DriveExists","Exists","FileExists","FolderExists","GetAbsolutePathName","GetBaseName","GetDrive","GetDriveName","GetExtensionName","GetFile","GetFileName","GetFolder","GetParentFolderName","GetSpecialFolder","GetTempName","Items","item","Keys","Move","MoveFile","MoveFolder","OpenAsTextStream","OpenTextFile","Raise","Read","ReadAll","ReadLine","Remove","RemoveAll","Skip","SkipLine","Write","WriteBlankLines","WriteLine"] >>= withAttribute "Function"))
                         <|>
                         ((pString False "<%" >>= withAttribute "Keyword") >>~ pushContext "aspsource")
                         <|>
@@ -277,7 +277,7 @@ parseRules "scripts" =
                         <|>
                         ((pAnyChar ";()}{:,[]" >>= withAttribute "Other"))
                         <|>
-                        ((pKeyword [] >>= withAttribute "Other")))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" [] >>= withAttribute "Other")))
      return (attr, result)
 
 parseRules "scripts_onelinecomment" = 

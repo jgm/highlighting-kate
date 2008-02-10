@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Fortran",["default"])], synStLanguage = "Fortran", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = False, synStKeywordCaseSensitive = False, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Fortran",["default"])], synStLanguage = "Fortran", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = False, synStKeywordCaseSensitive = False, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -167,7 +167,7 @@ parseRules "find_io_stmnts" =
                         <|>
                         ((pRegExpr (compileRegex "\\bend\\s*file\\b") >>= withAttribute "IO Function"))
                         <|>
-                        ((pKeyword ["access","backspace","close","inquire","open","print","read","rewind","write","format"] >>= withAttribute "IO Function")))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["access","backspace","close","inquire","open","print","read","rewind","write","format"] >>= withAttribute "IO Function")))
      return (attr, result)
 
 parseRules "find_io_paren" = 
@@ -177,11 +177,11 @@ parseRules "find_io_paren" =
                         <|>
                         ((pDetectChar False ')' >>= withAttribute "IO Function") >>~ (popContext >> return ()))
                         <|>
-                        ((pKeyword ["unit","end","err","fmt","iostat","status","advance","size","eor"] >>= withAttribute "IO Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["unit","end","err","fmt","iostat","status","advance","size","eor"] >>= withAttribute "IO Function"))
                         <|>
-                        ((pKeyword ["unit","iostat","err","file","exist","opened","number","named","name","access","sequential","direct","form","formatted","unformatted","recl","nextrec","blank","position","action","read","write","readwrite","delim","pad"] >>= withAttribute "IO Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["unit","iostat","err","file","exist","opened","number","named","name","access","sequential","direct","form","formatted","unformatted","recl","nextrec","blank","position","action","read","write","readwrite","delim","pad"] >>= withAttribute "IO Function"))
                         <|>
-                        ((pKeyword ["unit","iostat","err","file","status","access","form","recl","blank","position","action","delim","pad"] >>= withAttribute "IO Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["unit","iostat","err","file","status","access","form","recl","blank","position","action","delim","pad"] >>= withAttribute "IO Function"))
                         <|>
                         ((parseRules "find_strings"))
                         <|>
@@ -229,7 +229,7 @@ parseRules "find_decls" =
                         <|>
                         ((pRegExpr (compileRegex "\\bend\\s*type\\b") >>= withAttribute "Data Type"))
                         <|>
-                        ((pKeyword ["double","precision","parameter","save","pointer","public","private","target","allocatable","optional","sequence"] >>= withAttribute "Data Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["double","precision","parameter","save","pointer","public","private","target","allocatable","optional","sequence"] >>= withAttribute "Data Type"))
                         <|>
                         ((pColumn 0 >> pRegExpr (compileRegex "\\s*data\\b") >>= withAttribute "Data Type"))
                         <|>
@@ -253,15 +253,15 @@ parseRules "find_paren" =
      return (attr, result)
 
 parseRules "find_intrinsics" = 
-  do (attr, result) <- (((pKeyword ["allocate","break","call","case","common","contains","continue","cycle","deallocate","default","do","forall","where","elsewhere","elseif","else","equivalence","exit","external","for","go","goto","if","implicit","include","interface","intrinsic","namelist","none","nullify","operator","assignment","pause","procedure","pure","elemental","record","recursive","result","return","select","selectcase","stop","then","to","use","only","entry","while"] >>= withAttribute "Keyword"))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["allocate","break","call","case","common","contains","continue","cycle","deallocate","default","do","forall","where","elsewhere","elseif","else","equivalence","exit","external","for","go","goto","if","implicit","include","interface","intrinsic","namelist","none","nullify","operator","assignment","pause","procedure","pure","elemental","record","recursive","result","return","select","selectcase","stop","then","to","use","only","entry","while"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["abs","cabs","dabs","iabs","aimag","aint","dint","anint","dnint","ceiling","cmplx","dcmplx","dimag","floor","nint","idnint","int","idint","ifix","real","float","sngl","dble","dreal","aprime","dconjg","dfloat","ddmim","rand","modulo","conjg","dprod","dim","ddim","idim","max","amax0","amax1","max0","max1","dmax1","min","amin0","amin1","min0","min1","dmin1","mod","amod","dmod","sign","dsign","isign","acos","dacos","asin","dasin","atan","datan","atan2","datan2","cos","ccos","dcos","cosh","dcosh","exp","cexp","dexp","log","alog","dlog","clog","log10","alog10","dlog10","sin","csin","dsin","sinh","dsinh","sqrt","csqrt","dsqrt","tan","dtan","tanh","dtanh","achar","char","iachar","ichar","lge","lgt","lle","llt","adjustl","adjustr","index","len_trim","scan","verify","logical","exponent","fraction","nearest","rrspacing","scale","set_exponent","spacing","btest","iand","ibclr","ibits","ibset","ieor","ior","ishft","ishftc","not","mvbits","merge"] >>= withAttribute "Elemental Procedure"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["abs","cabs","dabs","iabs","aimag","aint","dint","anint","dnint","ceiling","cmplx","dcmplx","dimag","floor","nint","idnint","int","idint","ifix","real","float","sngl","dble","dreal","aprime","dconjg","dfloat","ddmim","rand","modulo","conjg","dprod","dim","ddim","idim","max","amax0","amax1","max0","max1","dmax1","min","amin0","amin1","min0","min1","dmin1","mod","amod","dmod","sign","dsign","isign","acos","dacos","asin","dasin","atan","datan","atan2","datan2","cos","ccos","dcos","cosh","dcosh","exp","cexp","dexp","log","alog","dlog","clog","log10","alog10","dlog10","sin","csin","dsin","sinh","dsinh","sqrt","csqrt","dsqrt","tan","dtan","tanh","dtanh","achar","char","iachar","ichar","lge","lgt","lle","llt","adjustl","adjustr","index","len_trim","scan","verify","logical","exponent","fraction","nearest","rrspacing","scale","set_exponent","spacing","btest","iand","ibclr","ibits","ibset","ieor","ior","ishft","ishftc","not","mvbits","merge"] >>= withAttribute "Elemental Procedure"))
                         <|>
-                        ((pKeyword ["associated","present","kind","len","digits","epsilon","huge","maxexponent","minexponent","precision","radix","range","tiny","bit_size","allocated","lbound","ubound","shape","size"] >>= withAttribute "Inquiry Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["associated","present","kind","len","digits","epsilon","huge","maxexponent","minexponent","precision","radix","range","tiny","bit_size","allocated","lbound","ubound","shape","size"] >>= withAttribute "Inquiry Function"))
                         <|>
-                        ((pKeyword ["repeat","trim","selected_int_kind","selected_real_kind","transfer","dot_product","matmul","all","any","count","maxval","minval","product","sum","pack","unpack","reshape","spread","cshift","eoshift","transpose","maxloc","minloc"] >>= withAttribute "Transformational Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["repeat","trim","selected_int_kind","selected_real_kind","transfer","dot_product","matmul","all","any","count","maxval","minval","product","sum","pack","unpack","reshape","spread","cshift","eoshift","transpose","maxloc","minloc"] >>= withAttribute "Transformational Function"))
                         <|>
-                        ((pKeyword ["date_and_time","system_clock","random_number","random_seed"] >>= withAttribute "Non elemental subroutine")))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["date_and_time","system_clock","random_number","random_seed"] >>= withAttribute "Non elemental subroutine")))
      return (attr, result)
 
 parseRules "find_numbers" = 

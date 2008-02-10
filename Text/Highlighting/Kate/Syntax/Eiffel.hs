@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Eiffel",["Normal"])], synStLanguage = "Eiffel", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Eiffel",["Normal"])], synStLanguage = "Eiffel", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -75,11 +75,11 @@ parseExpressionInternal = do
 defaultAttributes = [("Normal","Normal Text"),("Quoted String","String"),("Documentation","Comment")]
 
 parseRules "Normal" = 
-  do (attr, result) <- (((pKeyword ["agent","alias","all","and","as","assign","class","convert","create","creation","debug","deferred","do","else","elseif","end","expanded","export","external","feature","from","frozen","if","implies","indexing","infix","inherit","inspect","is","like","local","loop","not","obsolete","old","once","or","prefix","pure","redefine","reference","rename","rescue","retry","separate","then","undefine"] >>= withAttribute "Keyword"))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["agent","alias","all","and","as","assign","class","convert","create","creation","debug","deferred","do","else","elseif","end","expanded","export","external","feature","from","frozen","if","implies","indexing","infix","inherit","inspect","is","like","local","loop","not","obsolete","old","once","or","prefix","pure","redefine","reference","rename","rescue","retry","separate","then","undefine"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["Current","False","Precursor","Result","True","TUPLE"] >>= withAttribute "Predefined entities"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["Current","False","Precursor","Result","True","TUPLE"] >>= withAttribute "Predefined entities"))
                         <|>
-                        ((pKeyword ["check","ensure","require","variant","invariant"] >>= withAttribute "Assertions"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["check","ensure","require","variant","invariant"] >>= withAttribute "Assertions"))
                         <|>
                         ((pInt >>= withAttribute "Decimal"))
                         <|>

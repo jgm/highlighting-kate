@@ -53,8 +53,7 @@ data SyntaxDefinition =
 
 data SyntaxKeywordAttr =
   SyntaxKeywordAttr  { keywordCaseSensitive   :: Bool
-                     , keywordWeakDelim       :: [Char]
-                     , keywordAdditionalDelim :: [Char]
+                     , keywordDelims          :: [Char]
                      } deriving (Read, Show)
 
 data SyntaxContext = 
@@ -199,22 +198,16 @@ mkParser syntax =
       -- Note: lineBeginContexts seems not to be used in any of the xml files
       -- lineBeginContexts = 
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
-      contexts = map (mkRules syntax) $ synContexts syntax
       startingContext = head (synContexts syntax)
       contextCatchAll = text $ "parseRules x = fail $ \"Unknown context\" ++ x"
-      keywordAttributes = synKeywordAttr syntax
-      weakDelim = keywordWeakDelim keywordAttributes
-      additionalDelims = keywordAdditionalDelim keywordAttributes
-      standardDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\"
-      delims = (standardDelims ++ additionalDelims) \\ weakDelim
+      contexts = map (mkRules syntax) $ synContexts syntax
       initialContextStack = Map.fromList [(synLanguage syntax, [contName startingContext])]
       startingState = SyntaxState { synStContexts = initialContextStack
                                   , synStLanguage = synLanguage syntax
                                   , synStCurrentLine = ""
                                   , synStCharsParsedInLine = 0
                                   , synStCaseSensitive = synCaseSensitive syntax
-                                  , synStKeywordCaseSensitive = keywordCaseSensitive keywordAttributes
-                                  , synStKeywordDelims = delims 
+                                  , synStKeywordCaseSensitive = keywordCaseSensitive $ synKeywordAttr syntax
                                   , synStCaptures = [] }
       initState = text $ "startingState = " ++ show startingState
       sourceLineParser = text "parseSourceLine = manyTill parseExpressionInternal pEndLine"
@@ -282,7 +275,8 @@ mkSyntaxParser syntax context parser =
             "RegExpr"          -> if parserDynamic parser
                                      then "pRegExprDynamic " ++ show (parserString parser)
                                      else "pRegExpr (compileRegex " ++ show (parserString parser) ++ ")"
-            "keyword"          -> "pKeyword " ++ show (fromMaybe [] $ lookup (parserString parser) (synLists syntax))
+            "keyword"          -> "pKeyword " ++ show (keywordDelims $ synKeywordAttr syntax) ++ " " ++ 
+                                                 show (fromMaybe [] $ lookup (parserString parser) (synLists syntax))
             "Int"              -> "pInt"
             "Float"            -> "pFloat"
             "HlCOct"           -> "pHlCOct"
@@ -470,12 +464,12 @@ getKeywordAttrs = listA $ multi $ hasName "keywords"
                                     additionalDelim <- getAttrValue "additionalDeliminator" -< x
                                     returnA -< SyntaxKeywordAttr 
                                                       { keywordCaseSensitive = vBool True caseSensitive
-                                                      , keywordWeakDelim = weakDelim
-                                                      , keywordAdditionalDelim = additionalDelim }
+                                                      , keywordDelims = (standardDelims ++ additionalDelim) \\ weakDelim }
+
+standardDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" 
 
 defaultKeywordAttr = SyntaxKeywordAttr { keywordCaseSensitive = True
-                                       , keywordWeakDelim = ""
-                                       , keywordAdditionalDelim = "" }
+                                       , keywordDelims = standardDelims }
 
 stripWhitespaceLeft = dropWhile isWhitespace 
 isWhitespace x = elem x [' ', '\t', '\n']

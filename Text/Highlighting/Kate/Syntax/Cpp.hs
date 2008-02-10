@@ -43,7 +43,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("C++",["Normal"])], synStLanguage = "C++", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("C++",["Normal"])], synStLanguage = "C++", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -95,11 +95,11 @@ parseRules "Normal" =
                         <|>
                         ((pFirstNonSpace >> pString False "//END" >>= withAttribute "Region Marker") >>~ pushContext "Region Marker")
                         <|>
-                        ((pKeyword ["asm","break","case","catch","class","const_cast","continue","default","delete","do","dynamic_cast","else","enum","explicit","export","extern","false","friend","for","goto","if","inline","namespace","new","operator","private","protected","public","qobject_cast","reinterpret_cast","return","sizeof","static_cast","struct","switch","template","this","throw","true","try","typedef","typeid","type_info","typename","union","using","virtual","while","and","and_eq","bad_cast","bad_typeid","bitand","bitor","compl","not","not_eq","or","or_eq","xor","xor_eq","except","finally","xalloc"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["asm","break","case","catch","class","const_cast","continue","default","delete","do","dynamic_cast","else","enum","explicit","export","extern","false","friend","for","goto","if","inline","namespace","new","operator","private","protected","public","qobject_cast","reinterpret_cast","return","sizeof","static_cast","struct","switch","template","this","throw","true","try","typedef","typeid","type_info","typename","union","using","virtual","while","and","and_eq","bad_cast","bad_typeid","bitand","bitor","compl","not","not_eq","or","or_eq","xor","xor_eq","except","finally","xalloc"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["K_DCOP","SLOT","SIGNAL","Q_CLASSINFO","Q_ENUMS","Q_EXPORT","Q_OBJECT","Q_OVERRIDE","Q_PROPERTY","Q_SETS","Q_SIGNALS","Q_SLOTS","Q_FOREACH","Q_DECLARE_FLAGS","Q_INIT_RESOURCE","Q_CLEANUP_RESOURCE","Q_GLOBAL_STATIC","Q_GLOBAL_STATIC_WITH_ARGS","Q_DECLARE_INTERFACE","Q_DECLARE_TYPEINFO","Q_DECLARE_SHARED","Q_DECLARE_FLAGS","Q_DECLARE_OPERATORS_FOR_FLAGS","Q_FOREVER","Q_DECLARE_PRIVATE","Q_DECLARE_PUBLIC","Q_D","Q_Q","Q_DISABLE_COPY","Q_INTERFACES","Q_FLAGS","Q_SCRIPTABLE","Q_INVOKABLE","Q_GADGET","Q_ARG","Q_RETURN_ARG","Q_ASSERT","Q_ASSERT_X","Q_PRIVATE_SLOT","Q_DECLARE_METATYPE","Q_NOREPLY","TRUE","FALSE","connect","disconnect","emit","signals","slots","foreach","forever"] >>= withAttribute "Extensions"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["K_DCOP","SLOT","SIGNAL","Q_CLASSINFO","Q_ENUMS","Q_EXPORT","Q_OBJECT","Q_OVERRIDE","Q_PROPERTY","Q_SETS","Q_SIGNALS","Q_SLOTS","Q_FOREACH","Q_DECLARE_FLAGS","Q_INIT_RESOURCE","Q_CLEANUP_RESOURCE","Q_GLOBAL_STATIC","Q_GLOBAL_STATIC_WITH_ARGS","Q_DECLARE_INTERFACE","Q_DECLARE_TYPEINFO","Q_DECLARE_SHARED","Q_DECLARE_FLAGS","Q_DECLARE_OPERATORS_FOR_FLAGS","Q_FOREVER","Q_DECLARE_PRIVATE","Q_DECLARE_PUBLIC","Q_D","Q_Q","Q_DISABLE_COPY","Q_INTERFACES","Q_FLAGS","Q_SCRIPTABLE","Q_INVOKABLE","Q_GADGET","Q_ARG","Q_RETURN_ARG","Q_ASSERT","Q_ASSERT_X","Q_PRIVATE_SLOT","Q_DECLARE_METATYPE","Q_NOREPLY","TRUE","FALSE","connect","disconnect","emit","signals","slots","foreach","forever"] >>= withAttribute "Extensions"))
                         <|>
-                        ((pKeyword ["auto","bool","char","const","double","float","int","long","mutable","register","short","signed","static","unsigned","void","volatile","uchar","uint","int8_t","int16_t","int32_t","int64_t","uint8_t","uint16_t","uint32_t","uint64_t","wchar_t"] >>= withAttribute "Data Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["auto","bool","char","const","double","float","int","long","mutable","register","short","signed","static","unsigned","void","volatile","uchar","uint","int8_t","int16_t","int32_t","int64_t","uint8_t","uint16_t","uint32_t","uint64_t","wchar_t"] >>= withAttribute "Data Type"))
                         <|>
                         ((pHlCChar >>= withAttribute "Char"))
                         <|>

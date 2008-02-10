@@ -44,7 +44,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Ruby/Rails/RHTML",["Start"])], synStLanguage = "Ruby/Rails/RHTML", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():+,-<=>%&*/;[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Ruby/Rails/RHTML",["Start"])], synStLanguage = "Ruby/Rails/RHTML", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -487,19 +487,19 @@ parseRules "rubysource" =
                         <|>
                         ((pRegExpr (compileRegex "\\s\\?(\\\\M\\-)?(\\\\C\\-)?\\\\?\\S") >>= withAttribute "Dec"))
                         <|>
-                        ((pKeyword ["BEGIN","END","and","begin","break","case","defined?","do","else","elsif","end","ensure","for","if","in","include","next","not","or","redo","rescue","retry","return","then","unless","until","when","while","yield"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["BEGIN","END","and","begin","break","case","defined?","do","else","elsif","end","ensure","for","if","in","include","next","not","or","redo","rescue","retry","return","then","unless","until","when","while","yield"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["attr_reader","attr_writer","attr_accessor"] >>= withAttribute "Attribute Definition"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["attr_reader","attr_writer","attr_accessor"] >>= withAttribute "Attribute Definition"))
                         <|>
-                        ((pKeyword ["private_class_method","private","protected","public_class_method","public"] >>= withAttribute "Access Control"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["private_class_method","private","protected","public_class_method","public"] >>= withAttribute "Access Control"))
                         <|>
-                        ((pKeyword ["alias","module","class","def","undef"] >>= withAttribute "Definition"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["alias","module","class","def","undef"] >>= withAttribute "Definition"))
                         <|>
-                        ((pKeyword ["self","super","nil","false","true","caller","__FILE__","__LINE__"] >>= withAttribute "Pseudo variable"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["self","super","nil","false","true","caller","__FILE__","__LINE__"] >>= withAttribute "Pseudo variable"))
                         <|>
-                        ((pKeyword ["$stdout","$defout","$stderr","$deferr","$stdin"] >>= withAttribute "Default globals"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["$stdout","$defout","$stderr","$deferr","$stdin"] >>= withAttribute "Default globals"))
                         <|>
-                        ((pKeyword ["abort","at_exit","autoload","autoload?","binding","block_given?","callcc","caller","catch","chomp","chomp!","chop","chop!","eval","exec","exit","exit!","fail","fork","format","getc","gets","global_variables","gsub","gsub!","iterator?","lambda","load","local_variables","loop","method_missing","open","p","print","printf","proc","putc","puts","raise","rand","readline","readlines","require","scan","select","set_trace_func","sleep","split","sprintf","srand","sub","sub!","syscall","system","test","throw","trace_var","trap","untrace_var","warn","auto_complete_field","auto_complete_result","auto_discovery_link_tag","auto_link","benchmark","button_to","cache","capture","check_box","check_box_tag","collection_select","concat","content_for","content_tag","country_options_for_select","country_select","current_page?","date_select","datetime_select","debug","define_javascript_functions","distance_of_time_in_words","distance_of_time_in_words_to_now","draggable_element","drop_receiving_element","end_form_tag","error_message_on","error_messages_for","escape_javascript","evaluate_remote_response","excerpt","file_field","file_field_tag","finish_upload_status","form","form_remote_tag","form_tag","form_tag_with_upload_progress","h","hidden_field","hidden_field_tag","highlight","human_size","image_path","image_submit_tag","image_tag","input","javascript_include_tag","javascript_path","javascript_tag","link_image_to","link_to","link_to_function","link_to_if","link_to_image","link_to_remote","link_to_unless","link_to_unless_current","mail_to","markdown","number_to_currency","number_to_human_size","number_to_percentage","number_to_phone","number_with_delimiter","number_with_precision","observe_field","observe_form","option_groups_from_collection_for_select","options_for_select","options_from_collection_for_select","pagination_links","password_field","password_field_tag","periodically_call_remote","pluralize","radio_button","radio_button_tag","register_template_handler","render","render_file","render_template","sanitize","select","select_date","select_datetime","select_day","select_hour","select_minute","select_month","select_second","select_tag","select_time","select_year","simple_format","sortable_element","start_form_tag","strip_links","stylesheet_link_tag","stylesheet_path","submit_tag","submit_to_remote","tag","text_area","text_area_tag","text_field","text_field_tag","text_field_with_auto_complete","textilize","textilize_without_paragraph","time_ago_in_words","time_zone_options_for_select","time_zone_select","truncate","update_element_function","upload_progress_status","upload_progress_text","upload_progress_update_bar_js","upload_status_progress_bar_tag","upload_status_tag","upload_status_text_tag","url_for","visual_effect","word_wrap"] >>= withAttribute "Kernel methods"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["abort","at_exit","autoload","autoload?","binding","block_given?","callcc","caller","catch","chomp","chomp!","chop","chop!","eval","exec","exit","exit!","fail","fork","format","getc","gets","global_variables","gsub","gsub!","iterator?","lambda","load","local_variables","loop","method_missing","open","p","print","printf","proc","putc","puts","raise","rand","readline","readlines","require","scan","select","set_trace_func","sleep","split","sprintf","srand","sub","sub!","syscall","system","test","throw","trace_var","trap","untrace_var","warn","auto_complete_field","auto_complete_result","auto_discovery_link_tag","auto_link","benchmark","button_to","cache","capture","check_box","check_box_tag","collection_select","concat","content_for","content_tag","country_options_for_select","country_select","current_page?","date_select","datetime_select","debug","define_javascript_functions","distance_of_time_in_words","distance_of_time_in_words_to_now","draggable_element","drop_receiving_element","end_form_tag","error_message_on","error_messages_for","escape_javascript","evaluate_remote_response","excerpt","file_field","file_field_tag","finish_upload_status","form","form_remote_tag","form_tag","form_tag_with_upload_progress","h","hidden_field","hidden_field_tag","highlight","human_size","image_path","image_submit_tag","image_tag","input","javascript_include_tag","javascript_path","javascript_tag","link_image_to","link_to","link_to_function","link_to_if","link_to_image","link_to_remote","link_to_unless","link_to_unless_current","mail_to","markdown","number_to_currency","number_to_human_size","number_to_percentage","number_to_phone","number_with_delimiter","number_with_precision","observe_field","observe_form","option_groups_from_collection_for_select","options_for_select","options_from_collection_for_select","pagination_links","password_field","password_field_tag","periodically_call_remote","pluralize","radio_button","radio_button_tag","register_template_handler","render","render_file","render_template","sanitize","select","select_date","select_datetime","select_day","select_hour","select_minute","select_month","select_second","select_tag","select_time","select_year","simple_format","sortable_element","start_form_tag","strip_links","stylesheet_link_tag","stylesheet_path","submit_tag","submit_to_remote","tag","text_area","text_area_tag","text_field","text_field_tag","text_field_with_auto_complete","textilize","textilize_without_paragraph","time_ago_in_words","time_zone_options_for_select","time_zone_select","truncate","update_element_function","upload_progress_status","upload_progress_text","upload_progress_update_bar_js","upload_status_progress_bar_tag","upload_status_tag","upload_status_text_tag","url_for","visual_effect","word_wrap"] >>= withAttribute "Kernel methods"))
                         <|>
                         ((pRegExpr (compileRegex "\\$[a-zA-Z_0-9]+") >>= withAttribute "Global Variable"))
                         <|>
@@ -681,13 +681,13 @@ parseRules "Member Access" =
 parseRules "Comment Line" = 
   do (attr, result) <- (((pRegExpr (compileRegex "\\w\\:\\:\\s") >>= withAttribute "Ruby Comment") >>~ pushContext "RDoc Label")
                         <|>
-                        ((pKeyword ["TODO","FIXME","NOTE"] >>= withAttribute "Alert"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["TODO","FIXME","NOTE"] >>= withAttribute "Alert"))
                         <|>
                         ((pRegExpr (compileRegex "-?%>") >>= withAttribute "Keyword") >>~ (popContext >> popContext >> return ())))
      return (attr, result)
 
 parseRules "General Comment" = 
-  do (attr, result) <- ((pKeyword ["TODO","FIXME","NOTE"] >>= withAttribute "Dec"))
+  do (attr, result) <- ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["TODO","FIXME","NOTE"] >>= withAttribute "Dec"))
      return (attr, result)
 
 parseRules "RDoc Label" = 

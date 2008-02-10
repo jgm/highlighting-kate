@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Objective Caml",["Normal"])], synStLanguage = "Objective Caml", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Objective Caml",["Normal"])], synStLanguage = "Objective Caml", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -88,11 +88,11 @@ parseRules "Normal" =
                         <|>
                         ((pRegExpr (compileRegex "<:[A-Za-z\\0300-\\0326\\0330-\\0366\\0370-\\0377_][A-Za-z\\0300-\\0326\\0330-\\0366\\0370-\\03770-9_']*<") >>= withAttribute "Camlp4 Quotation") >>~ pushContext "Camlp4 Quotation Constant")
                         <|>
-                        ((pKeyword ["and","as","assert","asr","begin","class","closed","constraint","do","done","downto","else","end","exception","external","false","for","fun","function","functor","if","in","include","inherit","land","lazy","let","lor","lsl","lsr","lxor","match","method","mod","module","mutable","new","of","open","or","parser","private","rec","sig","struct","then","to","true","try","type","val","virtual","when","while","with"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["and","as","assert","asr","begin","class","closed","constraint","do","done","downto","else","end","exception","external","false","for","fun","function","functor","if","in","include","inherit","land","lazy","let","lor","lsl","lsr","lxor","match","method","mod","module","mutable","new","of","open","or","parser","private","rec","sig","struct","then","to","true","try","type","val","virtual","when","while","with"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["declare","value","where"] >>= withAttribute "Revised Syntax Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["declare","value","where"] >>= withAttribute "Revised Syntax Keyword"))
                         <|>
-                        ((pKeyword ["exn","lazy_t","format","unit","int","real","char","string","ref","array","bool","list","option"] >>= withAttribute "Core Data Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["exn","lazy_t","format","unit","int","real","char","string","ref","array","bool","list","option"] >>= withAttribute "Core Data Type"))
                         <|>
                         ((pRegExpr (compileRegex "[A-Za-z\\0300-\\0326\\0330-\\0366\\0370-\\0377_][A-Za-z\\0300-\\0326\\0330-\\0366\\0370-\\03770-9_']*") >>= withAttribute "Identifier"))
                         <|>

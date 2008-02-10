@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Python",["Normal"])], synStLanguage = "Python", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Python",["Normal"])], synStLanguage = "Python", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -86,21 +86,21 @@ parseExpressionInternal = do
 defaultAttributes = [("Normal","Normal Text"),("parenthesised","Normal Text"),("Tripple A-comment","Comment"),("Tripple Q-comment","Comment"),("Tripple A-string","String"),("Raw Tripple A-string","Raw String"),("Tripple Q-string","String"),("Raw Tripple Q-string","Raw String"),("Single A-comment","Comment"),("Single Q-comment","Comment"),("Single A-string","String"),("Single Q-string","String"),("Raw A-string","Raw String"),("Raw Q-string","Raw String")]
 
 parseRules "Normal" = 
-  do (attr, result) <- (((pKeyword ["import","from","as"] >>= withAttribute "Preprocessor"))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["import","from","as"] >>= withAttribute "Preprocessor"))
                         <|>
-                        ((pKeyword ["class","def","del","global","lambda"] >>= withAttribute "Definition Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["class","def","del","global","lambda"] >>= withAttribute "Definition Keyword"))
                         <|>
-                        ((pKeyword ["and","assert","in","is","not","or"] >>= withAttribute "Operator"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["and","assert","in","is","not","or"] >>= withAttribute "Operator"))
                         <|>
-                        ((pKeyword ["exec","print"] >>= withAttribute "Command Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["exec","print"] >>= withAttribute "Command Keyword"))
                         <|>
-                        ((pKeyword ["break","continue","elif","else","except","finally","for","if","pass","raise","return","try","while","yield"] >>= withAttribute "Flow Control Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["break","continue","elif","else","except","finally","for","if","pass","raise","return","try","while","yield"] >>= withAttribute "Flow Control Keyword"))
                         <|>
-                        ((pKeyword ["__import__","abs","all","any","apply","basestring","bool","buffer","callable","chr","classmethod","cmp","coerce","compile","complex","delattr","dict","dir","divmod","enumerate","eval","execfile","file","filter","float","frozenset","getattr","globals","hasattr","hash","hex","id","input","int","intern","isinstance","issubclass","iter","len","list","locals","long","map","max","min","object","oct","open","ord","pow","property","range","raw_input","reduce","reload","repr","reversed","round","set","setattr","slice","sorted","staticmethod","str","sum","super","tuple","type","unichr","unicode","vars","xrange","zip"] >>= withAttribute "Builtin Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["__import__","abs","all","any","apply","basestring","bool","buffer","callable","chr","classmethod","cmp","coerce","compile","complex","delattr","dict","dir","divmod","enumerate","eval","execfile","file","filter","float","frozenset","getattr","globals","hasattr","hash","hex","id","input","int","intern","isinstance","issubclass","iter","len","list","locals","long","map","max","min","object","oct","open","ord","pow","property","range","raw_input","reduce","reload","repr","reversed","round","set","setattr","slice","sorted","staticmethod","str","sum","super","tuple","type","unichr","unicode","vars","xrange","zip"] >>= withAttribute "Builtin Function"))
                         <|>
-                        ((pKeyword ["None","self","True","False","NotImplemented","Ellipsis"] >>= withAttribute "Special Variable"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["None","self","True","False","NotImplemented","Ellipsis"] >>= withAttribute "Special Variable"))
                         <|>
-                        ((pKeyword ["SIGNAL","SLOT","connect"] >>= withAttribute "Extensions"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["SIGNAL","SLOT","connect"] >>= withAttribute "Extensions"))
                         <|>
                         ((pRegExpr (compileRegex "[a-zA-Z_][a-zA-Z_0-9]+") >>= withAttribute "Normal"))
                         <|>

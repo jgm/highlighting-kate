@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Prolog",["normal"])], synStLanguage = "Prolog", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Prolog",["normal"])], synStLanguage = "Prolog", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -77,17 +77,17 @@ parseExpressionInternal = do
 defaultAttributes = [("normal","Symbol"),("comment","Comment"),("string","String"),("string2","String"),("comment region","Comment")]
 
 parseRules "normal" = 
-  do (attr, result) <- (((pKeyword ["abstract","align","as","and","class","clauses","constants","database","determ","domains","elsedef","endclass","enddef","erroneous","facts","failure","global","goal","if","ifdef","ifndef","implement","include","language","multi","nocopy","nondeterm","object","or","procedure","protected","predicates","reference","single","static","struct","this"] >>= withAttribute "Keyword"))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["abstract","align","as","and","class","clauses","constants","database","determ","domains","elsedef","endclass","enddef","erroneous","facts","failure","global","goal","if","ifdef","ifndef","implement","include","language","multi","nocopy","nondeterm","object","or","procedure","protected","predicates","reference","single","static","struct","this"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["ABSTRACT","ALIGN","AS","AND","CLASS","CLAUSES","CONSTANTS","DATABASE","DETERM","DOMAINS","ELSEDEF","ENDCLASS","ENDDEF","ERRONEOUS","FACTS","FAILURE","GLOBAL","GOAL","IF","IFDEF","IFNDEF","IMPLEMENT","INCLUDE","LANGUAGE","MULTI","NOCOPY","NONDETERM","OBJECT","OR","PROCEDURE","PROTECTED","PREDICATES","REFERENCE","SINGLE","STATIC","STRUCT","THIS"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["ABSTRACT","ALIGN","AS","AND","CLASS","CLAUSES","CONSTANTS","DATABASE","DETERM","DOMAINS","ELSEDEF","ENDCLASS","ENDDEF","ERRONEOUS","FACTS","FAILURE","GLOBAL","GOAL","IF","IFDEF","IFNDEF","IMPLEMENT","INCLUDE","LANGUAGE","MULTI","NOCOPY","NONDETERM","OBJECT","OR","PROCEDURE","PROTECTED","PREDICATES","REFERENCE","SINGLE","STATIC","STRUCT","THIS"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["mod","div","abs","exp","ln","log","sqrt","round","trunc","val","cos","sin","tan","arctan","random","randominit"] >>= withAttribute "Arithmetic"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["mod","div","abs","exp","ln","log","sqrt","round","trunc","val","cos","sin","tan","arctan","random","randominit"] >>= withAttribute "Arithmetic"))
                         <|>
-                        ((pKeyword ["bgidriver","bgifont","check_determ","code","config","diagnostics","error","errorlevel","heap","gstacksize","nobreak","nowarnings","printermenu","project"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["bgidriver","bgifont","check_determ","code","config","diagnostics","error","errorlevel","heap","gstacksize","nobreak","nowarnings","printermenu","project"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["assert","asserta","assertz","bound","chain_inserta","chain_insertafter","chain_insertz","chain_terms","consult","db_btrees","db_chains","fail","findall","format","free","msgrecv","msgsend","nl","not","readterm","ref_term","retract","retractall","save","term_bin","term_replace","term_str","trap","write","writef"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["assert","asserta","assertz","bound","chain_inserta","chain_insertafter","chain_insertz","chain_terms","consult","db_btrees","db_chains","fail","findall","format","free","msgrecv","msgsend","nl","not","readterm","ref_term","retract","retractall","save","term_bin","term_replace","term_str","trap","write","writef"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["char","real","string","symbol","byte","sbyte","short","ushort","word","integer","unsigned","dword","long","ulong","binary","ref"] >>= withAttribute "Data Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["char","real","string","symbol","byte","sbyte","short","ushort","word","integer","unsigned","dword","long","ulong","binary","ref"] >>= withAttribute "Data Type"))
                         <|>
                         ((pRegExpr (compileRegex "[A-Z_][A-Za-z0-9_]*") >>= withAttribute "Variable"))
                         <|>

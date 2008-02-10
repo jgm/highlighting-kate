@@ -42,7 +42,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("AWK",["Base"])], synStLanguage = "AWK", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("AWK",["Base"])], synStLanguage = "AWK", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -88,11 +88,11 @@ parseRules "Base" =
                         <|>
                         ((pDetectChar False '"' >>= withAttribute "String") >>~ pushContext "String")
                         <|>
-                        ((pKeyword ["if","else","while","do","for","in","continue","break","print","printf","getline","function","return","next","exit"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["if","else","while","do","for","in","continue","break","print","printf","getline","function","return","next","exit"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["ARGC","ARGV","CONVFMT","ENVIRON","FILENAME","FNR","FS","NF","NR","OFMT","OFS","ORS","RS","RSTART","RLENGTH","SUBSEP"] >>= withAttribute "Builtin"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["ARGC","ARGV","CONVFMT","ENVIRON","FILENAME","FNR","FS","NF","NR","OFMT","OFS","ORS","RS","RSTART","RLENGTH","SUBSEP"] >>= withAttribute "Builtin"))
                         <|>
-                        ((pKeyword ["gsub","gensub","index","length","match","split","sprintf","sub","substr","tolower","toupper","atan2","cos","exp","int","log","rand","sin","sqrt","srand","close","fflush","system"] >>= withAttribute "Function"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["gsub","gensub","index","length","match","split","sprintf","sub","substr","tolower","toupper","atan2","cos","exp","int","log","rand","sin","sqrt","srand","close","fflush","system"] >>= withAttribute "Function"))
                         <|>
                         ((pFloat >>= withAttribute "Float"))
                         <|>

@@ -42,7 +42,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Objective-C",["Default"])], synStLanguage = "Objective-C", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Objective-C",["Default"])], synStLanguage = "Objective-C", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -79,9 +79,9 @@ parseExpressionInternal = do
 defaultAttributes = [("Default","Normal Text"),("String","String"),("SingleLineComment","Comment"),("MultiLineComment","Comment"),("Preprocessor","Preprocessor"),("MultiLineCommentPrep","Comment")]
 
 parseRules "Default" = 
-  do (attr, result) <- (((pKeyword ["break","case","continue","default","do","else","enum","extern","for","goto","if","return","sizeof","struct","switch","typedef","union","while","@class","@defs","@encode","@end","@implementation","@interface","@private","@protected","@protocol","@public","@selector","self","super"] >>= withAttribute "Keyword"))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["break","case","continue","default","do","else","enum","extern","for","goto","if","return","sizeof","struct","switch","typedef","union","while","@class","@defs","@encode","@end","@implementation","@interface","@private","@protected","@protocol","@public","@selector","self","super"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["auto","char","const","double","float","int","long","register","short","signed","static","unsigned","void","volatile"] >>= withAttribute "Data Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["auto","char","const","double","float","int","long","register","short","signed","static","unsigned","void","volatile"] >>= withAttribute "Data Type"))
                         <|>
                         ((pDetectChar False '{' >>= withAttribute "Symbol"))
                         <|>

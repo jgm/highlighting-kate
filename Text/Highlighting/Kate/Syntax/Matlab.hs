@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Matlab",["_normal"])], synStLanguage = "Matlab", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Matlab",["_normal"])], synStLanguage = "Matlab", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -86,7 +86,7 @@ parseRules "_normal" =
                         <|>
                         ((pRegExpr (compileRegex "'[^']*(''[^']*)*") >>= withAttribute "Incomplete String"))
                         <|>
-                        ((pKeyword ["break","case","catch","continue","else","elseif","end","for","function","global","if","otherwise","persistent","return","switch","try","while"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["break","case","catch","continue","else","elseif","end","for","function","global","if","otherwise","persistent","return","switch","try","while"] >>= withAttribute "Keyword"))
                         <|>
                         ((pRegExpr (compileRegex "%.*$") >>= withAttribute "Comment"))
                         <|>

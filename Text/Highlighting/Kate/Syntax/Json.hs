@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("JSON",["Normal"])], synStLanguage = "JSON", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("JSON",["Normal"])], synStLanguage = "JSON", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -112,7 +112,7 @@ parseRules "Value" =
                         <|>
                         ((pDetectSpaces >>= withAttribute "Style_Normal"))
                         <|>
-                        ((pKeyword ["null","true","false"] >>= withAttribute "Style_Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["null","true","false"] >>= withAttribute "Style_Keyword"))
                         <|>
                         ((pRegExpr (compileRegex "-?(?:[0-9]|[1-9][0-9]+)\\.[0-9]+(?:[eE][+-]?[0-9]+)?") >>= withAttribute "Style_Float"))
                         <|>
@@ -136,7 +136,7 @@ parseRules "Array" =
                         <|>
                         ((pDetectSpaces >>= withAttribute "Style_Normal"))
                         <|>
-                        ((pKeyword ["null","true","false"] >>= withAttribute "Style_Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["null","true","false"] >>= withAttribute "Style_Keyword"))
                         <|>
                         ((pRegExpr (compileRegex "-?(?:[0-9]|[1-9][0-9]+)\\.[0-9]+(?:[eE][+-]?[0-9]+)?") >>= withAttribute "Style_Float"))
                         <|>

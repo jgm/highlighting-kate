@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Ruby",["Normal"])], synStLanguage = "Ruby", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():+,-<=>%&*/;[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Ruby",["Normal"])], synStLanguage = "Ruby", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -189,19 +189,19 @@ parseRules "Normal" =
                         <|>
                         ((pRegExpr (compileRegex "\\s\\?(\\\\M\\-)?(\\\\C\\-)?\\\\?\\S") >>= withAttribute "Dec"))
                         <|>
-                        ((pKeyword ["BEGIN","END","and","begin","break","case","defined?","do","else","elsif","end","ensure","for","if","in","include","next","not","or","redo","rescue","retry","return","then","unless","until","when","while","yield"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["BEGIN","END","and","begin","break","case","defined?","do","else","elsif","end","ensure","for","if","in","include","next","not","or","redo","rescue","retry","return","then","unless","until","when","while","yield"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["attr_reader","attr_writer","attr_accessor"] >>= withAttribute "Attribute Definition"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["attr_reader","attr_writer","attr_accessor"] >>= withAttribute "Attribute Definition"))
                         <|>
-                        ((pKeyword ["private_class_method","private","protected","public_class_method","public"] >>= withAttribute "Access Control"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["private_class_method","private","protected","public_class_method","public"] >>= withAttribute "Access Control"))
                         <|>
-                        ((pKeyword ["alias","module","class","def","undef"] >>= withAttribute "Definition"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["alias","module","class","def","undef"] >>= withAttribute "Definition"))
                         <|>
-                        ((pKeyword ["self","super","nil","false","true","caller","__FILE__","__LINE__"] >>= withAttribute "Pseudo variable"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["self","super","nil","false","true","caller","__FILE__","__LINE__"] >>= withAttribute "Pseudo variable"))
                         <|>
-                        ((pKeyword ["$stdout","$defout","$stderr","$deferr","$stdin"] >>= withAttribute "Default globals"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["$stdout","$defout","$stderr","$deferr","$stdin"] >>= withAttribute "Default globals"))
                         <|>
-                        ((pKeyword ["abort","at_exit","autoload","autoload?","binding","block_given?","callcc","caller","catch","chomp","chomp!","chop","chop!","eval","exec","exit","exit!","fail","fork","format","getc","gets","global_variables","gsub","gsub!","iterator?","lambda","load","local_variables","loop","method_missing","open","p","print","printf","proc","putc","puts","raise","rand","readline","readlines","require","scan","select","set_trace_func","sleep","split","sprintf","srand","sub","sub!","syscall","system","test","throw","trace_var","trap","untrace_var","warn"] >>= withAttribute "Kernel methods"))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["abort","at_exit","autoload","autoload?","binding","block_given?","callcc","caller","catch","chomp","chomp!","chop","chop!","eval","exec","exit","exit!","fail","fork","format","getc","gets","global_variables","gsub","gsub!","iterator?","lambda","load","local_variables","loop","method_missing","open","p","print","printf","proc","putc","puts","raise","rand","readline","readlines","require","scan","select","set_trace_func","sleep","split","sprintf","srand","sub","sub!","syscall","system","test","throw","trace_var","trap","untrace_var","warn"] >>= withAttribute "Kernel methods"))
                         <|>
                         ((pRegExpr (compileRegex "\\$[a-zA-Z_0-9]+") >>= withAttribute "Global Variable"))
                         <|>
@@ -389,11 +389,11 @@ parseRules "Member Access" =
 parseRules "Comment Line" = 
   do (attr, result) <- (((pRegExpr (compileRegex "\\w\\:\\:\\s") >>= withAttribute "Comment") >>~ pushContext "RDoc Label")
                         <|>
-                        ((pKeyword ["TODO","FIXME","NOTE"] >>= withAttribute "Alert")))
+                        ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["TODO","FIXME","NOTE"] >>= withAttribute "Alert")))
      return (attr, result)
 
 parseRules "General Comment" = 
-  do (attr, result) <- ((pKeyword ["TODO","FIXME","NOTE"] >>= withAttribute "Dec"))
+  do (attr, result) <- ((pKeyword " \n\t.():+,-<=>%&*/;[]^{|}~\\" ["TODO","FIXME","NOTE"] >>= withAttribute "Dec"))
      return (attr, result)
 
 parseRules "RDoc Label" = 

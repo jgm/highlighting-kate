@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Alerts",["Normal Text"])], synStLanguage = "Alerts", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Alerts",["Normal Text"])], synStLanguage = "Alerts", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -73,7 +73,7 @@ parseExpressionInternal = do
 defaultAttributes = [("Normal Text","Normal Text")]
 
 parseRules "Normal Text" = 
-  do (attr, result) <- ((pKeyword ["FIXME","HACK","NOTE","NOTICE","TASK","TODO","DEPRECATED","WARNING","###"] >>= withAttribute "Alert"))
+  do (attr, result) <- ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["FIXME","HACK","NOTE","NOTICE","TASK","TODO","DEPRECATED","WARNING","###"] >>= withAttribute "Alert"))
      return (attr, result)
 
 parseRules x = fail $ "Unknown context" ++ x

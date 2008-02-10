@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("BibTeX",["Normal"])], synStLanguage = "BibTeX", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("BibTeX",["Normal"])], synStLanguage = "BibTeX", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = False, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -77,9 +77,9 @@ defaultAttributes = [("Normal","Normal Text"),("Entry","Ref Key"),("String","Str
 parseRules "Normal" = 
   do (attr, result) <- (((pFirstNonSpace >> pRegExpr (compileRegex "([a-zA-Z]+)\\s*=") >>= withAttribute "Field"))
                         <|>
-                        ((pKeyword ["@article","@book","@booklet","@conference","@inbook","@incollection","@inproceedings","@manual","@mastersthesis","@misc","@phdthesis","@proceedings","@techreport","@unpublished","@collection","@patent"] >>= withAttribute "Entry") >>~ pushContext "Entry")
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~" ["@article","@book","@booklet","@conference","@inbook","@incollection","@inproceedings","@manual","@mastersthesis","@misc","@phdthesis","@proceedings","@techreport","@unpublished","@collection","@patent"] >>= withAttribute "Entry") >>~ pushContext "Entry")
                         <|>
-                        ((pKeyword ["@string","@preamble","@comment"] >>= withAttribute "Command"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~" ["@string","@preamble","@comment"] >>= withAttribute "Command"))
                         <|>
                         ((pDetectChar False '{' >>= withAttribute "Normal Text"))
                         <|>

@@ -118,11 +118,10 @@ pDetect2Chars dynamic ch1 ch2 = try $ do
   [c2] <- pDetectChar dynamic ch2
   return [c1, c2]
 
-pKeyword :: [[Char]] -> GenParser Char SyntaxState [Char]
-pKeyword list = try $ do
+pKeyword :: [Char] -> [[Char]] -> GenParser Char SyntaxState [Char]
+pKeyword delims list = try $ do
   st <- getState
   let caseSensitive = synStKeywordCaseSensitive st
-  let delims = synStKeywordDelims st
   let curLine = synStCurrentLine st
   let charsParsed = synStCharsParsedInLine st
   let prevChar = if charsParsed == 0

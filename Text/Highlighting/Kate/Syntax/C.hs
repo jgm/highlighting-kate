@@ -43,7 +43,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("C",["Normal"])], synStLanguage = "C", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("C",["Normal"])], synStLanguage = "C", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -95,9 +95,9 @@ parseRules "Normal" =
                         <|>
                         ((pFirstNonSpace >> pString False "//END" >>= withAttribute "Region Marker") >>~ pushContext "Region Marker")
                         <|>
-                        ((pKeyword ["break","case","continue","default","do","else","enum","extern","for","goto","if","inline","return","sizeof","struct","switch","typedef","union","while"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["break","case","continue","default","do","else","enum","extern","for","goto","if","inline","return","sizeof","struct","switch","typedef","union","while"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["auto","char","const","double","float","int","long","register","restrict","short","signed","static","unsigned","void","volatile","_Imaginary","_Complex","_Bool"] >>= withAttribute "Data Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["auto","char","const","double","float","int","long","register","restrict","short","signed","static","unsigned","void","volatile","_Imaginary","_Complex","_Bool"] >>= withAttribute "Data Type"))
                         <|>
                         ((pDetectIdentifier >>= withAttribute "Normal Text"))
                         <|>

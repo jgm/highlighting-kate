@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("D",["normal"])], synStLanguage = "D", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("D",["normal"])], synStLanguage = "D", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -91,29 +91,29 @@ parseExpressionInternal = do
 defaultAttributes = [("normal","Normal Text"),("UnicodeShort","EscapeString"),("UnicodeLong","EscapeString"),("HTMLEntity","EscapeString"),("ModuleName","Module Name"),("Deprecated","Deprecated"),("Linkage","Linkage"),("Linkage2","Linkage"),("Version","Version"),("Version2","Version"),("Pragmas","Pragma"),("RawString","RawString"),("BQString","BQString"),("HexString","HexString"),("CharLiteral","Char"),("String","String"),("CommentLine","Comment"),("CommentBlock","Comment"),("CommentNested","Comment")]
 
 parseRules "normal" = 
-  do (attr, result) <- (((pKeyword ["abstract","alias","align","asm","auto","body","break","case","cast","catch","class","const","continue","default","delegate","delete","do","else","enum","export","false","final","finally","for","foreach","foreach_reverse","function","goto","if","in","inout","interface","invariant","is","lazy","macro","mixin","new","null","out","override","package","private","protected","public","ref","return","scope","static","struct","super","switch","synchronized","template","this","throw","true","try","typedef","typeid","typeof","union","volatile","while","with"] >>= withAttribute "Keyword"))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["abstract","alias","align","asm","auto","body","break","case","cast","catch","class","const","continue","default","delegate","delete","do","else","enum","export","false","final","finally","for","foreach","foreach_reverse","function","goto","if","in","inout","interface","invariant","is","lazy","macro","mixin","new","null","out","override","package","private","protected","public","ref","return","scope","static","struct","super","switch","synchronized","template","this","throw","true","try","typedef","typeid","typeof","union","volatile","while","with"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["module","import"] >>= withAttribute "Module") >>~ pushContext "ModuleName")
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["module","import"] >>= withAttribute "Module") >>~ pushContext "ModuleName")
                         <|>
-                        ((pKeyword ["void","bool","byte","ubyte","short","ushort","int","uint","long","ulong","cent","ucent","float","double","real","ireal","ifloat","idouble","creal","cfloat","cdouble","char","wchar","dchar"] >>= withAttribute "Type"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["void","bool","byte","ubyte","short","ushort","int","uint","long","ulong","cent","ucent","float","double","real","ireal","ifloat","idouble","creal","cfloat","cdouble","char","wchar","dchar"] >>= withAttribute "Type"))
                         <|>
-                        ((pKeyword ["string","wstring","dstring","size_t","ptrdiff_t","hash_t","Error","Exception","Object","TypeInfo","ClassInfo"] >>= withAttribute "LibrarySymbols"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["string","wstring","dstring","size_t","ptrdiff_t","hash_t","Error","Exception","Object","TypeInfo","ClassInfo"] >>= withAttribute "LibrarySymbols"))
                         <|>
-                        ((pKeyword ["extern"] >>= withAttribute "Linkage") >>~ pushContext "Linkage")
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["extern"] >>= withAttribute "Linkage") >>~ pushContext "Linkage")
                         <|>
-                        ((pKeyword ["debug"] >>= withAttribute "Debug"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["debug"] >>= withAttribute "Debug"))
                         <|>
-                        ((pKeyword ["assert"] >>= withAttribute "Assert"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["assert"] >>= withAttribute "Assert"))
                         <|>
-                        ((pKeyword ["pragma"] >>= withAttribute "Pragma") >>~ pushContext "Pragmas")
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["pragma"] >>= withAttribute "Pragma") >>~ pushContext "Pragmas")
                         <|>
-                        ((pKeyword ["version"] >>= withAttribute "Version") >>~ pushContext "Version")
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["version"] >>= withAttribute "Version") >>~ pushContext "Version")
                         <|>
-                        ((pKeyword ["unittest"] >>= withAttribute "Unit Test"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["unittest"] >>= withAttribute "Unit Test"))
                         <|>
-                        ((pKeyword ["__FILE__","__LINE__","__DATE__","__TIME__","__TIMESTAMP__","__VENDOR__","__VERSION__","__EOF__"] >>= withAttribute "SpecialTokens"))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["__FILE__","__LINE__","__DATE__","__TIME__","__TIMESTAMP__","__VENDOR__","__VERSION__","__EOF__"] >>= withAttribute "SpecialTokens"))
                         <|>
-                        ((pKeyword ["deprecated"] >>= withAttribute "Deprecated") >>~ pushContext "Deprecated")
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["deprecated"] >>= withAttribute "Deprecated") >>~ pushContext "Deprecated")
                         <|>
                         ((pDetect2Chars False 'r' '"' >>= withAttribute "RawString") >>~ pushContext "RawString")
                         <|>
@@ -213,7 +213,7 @@ parseRules "Linkage2" =
                         <|>
                         ((pString False "C++" >>= withAttribute "Linkage Type") >>~ (popContext >> return ()))
                         <|>
-                        ((pKeyword ["C","D","Windows","Pascal","System"] >>= withAttribute "Linkage Type") >>~ (popContext >> return ()))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["C","D","Windows","Pascal","System"] >>= withAttribute "Linkage Type") >>~ (popContext >> return ()))
                         <|>
                         ((pRegExpr (compileRegex "[^)]+") >>= withAttribute "Error") >>~ (popContext >> return ()))
                         <|>
@@ -239,7 +239,7 @@ parseRules "Version" =
 parseRules "Version2" = 
   do (attr, result) <- (((pDetectSpaces >>= withAttribute "Version"))
                         <|>
-                        ((pKeyword ["DigitalMars","X86","AMD64","Windows","Win32","Win64","linux","LittleEndian","BigEndian","D_InlineAsm","none"] >>= withAttribute "Version Type") >>~ (popContext >> return ()))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["DigitalMars","X86","AMD64","Windows","Win32","Win64","linux","LittleEndian","BigEndian","D_InlineAsm","none"] >>= withAttribute "Version Type") >>~ (popContext >> return ()))
                         <|>
                         ((pDetectIdentifier >>= withAttribute "Normal Text") >>~ (popContext >> return ()))
                         <|>
@@ -253,7 +253,7 @@ parseRules "Version2" =
 parseRules "Pragmas" = 
   do (attr, result) <- (((pDetectChar False '(' >>= withAttribute "Normal Text"))
                         <|>
-                        ((pKeyword ["msg","lib"] >>= withAttribute "Version Type") >>~ (popContext >> return ()))
+                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["msg","lib"] >>= withAttribute "Version Type") >>~ (popContext >> return ()))
                         <|>
                         ((pDetectIdentifier >>= withAttribute "Normal Text") >>~ (popContext >> return ())))
      return (attr, result)

@@ -42,7 +42,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Lua",["Normal"])], synStLanguage = "Lua", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Lua",["Normal"])], synStLanguage = "Lua", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -82,7 +82,7 @@ defaultAttributes = [("Normal","Normal Text"),("Comment","Comment"),("Block Comm
 parseRules "Normal" = 
   do (attr, result) <- (((Text.Highlighting.Kate.Syntax.Doxygen.parseExpression >>= ((withAttribute "") . snd)))
                         <|>
-                        ((pKeyword ["table.foreach","table.foreachi","foreach","foreachi"] >>= withAttribute "Error"))
+                        ((pKeyword " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"" ["table.foreach","table.foreachi","foreach","foreachi"] >>= withAttribute "Error"))
                         <|>
                         ((pDetectSpaces >>= withAttribute "Normal Text"))
                         <|>
@@ -94,13 +94,13 @@ parseRules "Normal" =
                         <|>
                         ((pDetectChar False '"' >>= withAttribute "Strings") >>~ pushContext "String_double")
                         <|>
-                        ((pKeyword ["string.byte","string.char","string.find","string.len","string.lower","string.rep","string.sub","string.upper","string.format","string.gfind","string.gsub","table.concat","table.getn","table.sort","table.insert","table.remove","table.setn","math.abs","math.sin","math.cos","math.tan","math.asin","math.acos","math.atan","math.atan2","math.ceil","math.floor","math.mod","math.frexp","math.ldexp","math.squrt","math.min","math.max","math.log","math.log10","math.exp","math.deg","math.rad","math.random","math.randomseed","io.close","io.flush","io.input","io.lines","io.open","io.output","io.read","io.stderr","io.stdin","io.stdout","io.tmpfile","io.write","os.clock","os.date","os.difftime","os.execute","os.exit","os.getenv","os.remove","os.rename","os.setlocale","os.time","os.tmpname","debug.getinfo","debug.getlocal","debug.setlocal","debug.sethook","debug.gethook","assert","collectgarbage","dofile","error","next","print","rawget","rawset","tonumber","tostring","type","_ALERT","_ERRORMESSAGE","call","getmetatable","gcinfo","ipairs","loadfile","loadstring","pairs","pcall","require","LUA_PATH","setmetatable","_LOADED","_VERSION","gettagmethod","globals","newtag","setglobal","settag","settagmethod","setlinehook","getglobals","copytagmethods","dostring","getglobal","tag","setglobals","unpack","exit","readfrom","writeto","appendto","read","write","getinfo","getlocal","setlocal","setcallhook","tinsert","tremove","flush","seek","setlocale","execute","remove","rename","tmpname","getenv","getn","sort","table.foreach","table.foreachi","foreach","foreachi","abs","sin","cos","tan","asin","acos","atan","atan2","ceil","floor","mod","frexp","ldexp","squrt","min","max","log","log10","exp","deg","rad","random","randomseed","strlen","strsub","strlower","strupper","strchar","strrep","ascii","strbyte","format","strfind","gsub","openfile","closefile","date","clock","cgilua","cgilua.lp.translate","cgilua.contentheader","cgilua.script_file","cgilua.header","cgilua.script_path","cgilua.htmlheader","cgilua.script_pdir","cgilua.redirect","cgilua.script_vdir","cgilua.mkabsoluteurl","cgilua.script_vpath","cgilua.mkurlpath","cgilua.servervariable","cgilua.put","cgilua.urlpath","cgilua.handlelp","cgilua.errorlog","cgilua.lp.compile","cgilua.seterrorhandler","cgilua.lp.include","cgilua.seterroroutput","cgilua.lp.setcompatmode","cgilua.addclosefunction","cgilua.lp.setoutfunc","cgilua.addopenfunction","cgilua.addscripthandler","cgilua.addscripthandler","cgilua.buildprocesshandler","cgilua.setmaxfilesize","cgilua.setmaxinput","cgilua.urlcode.encodetable","cgilua.urlcode.escape","cgilua.urlcode.parsequery","cgilua.urlcode.unescape","cgilua.urlcode.insertfield","cgilua.setoutfunc","cgilua.addopenfunction","cgilua.doif","cgilua.doscript","cgilua.pack","cgilua.splitpath","cgilua.cookies.get","cgilua.cookies.set","cgilua.cookies.sethtml","cgilua.cookies.delete","cgilua.serialize","cgilua.session.close","cgilua.session.data","cgilua.session.load","cgilua.session.new","cgilua.session.open","cgilua.session.save","cgilua.session.setsessiondir","cgilua.session.delete","cgilua.session","cgilua.cookies","numrows","connect","close","fetch","getcolnames","getcoltypes","commit","rollback","setautocommit","lfs","lfs.attributes","lfs.chdir","lfs.currentdir","lfs.dir","lfs.lock","lfs.mkdir","lfs.rmdir","lfs.touch","lfs.unlock","zip","zip.open","zip.openfile","files","seek","close","lines"] >>= withAttribute "BFunc"))
+                        ((pKeyword " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"" ["string.byte","string.char","string.find","string.len","string.lower","string.rep","string.sub","string.upper","string.format","string.gfind","string.gsub","table.concat","table.getn","table.sort","table.insert","table.remove","table.setn","math.abs","math.sin","math.cos","math.tan","math.asin","math.acos","math.atan","math.atan2","math.ceil","math.floor","math.mod","math.frexp","math.ldexp","math.squrt","math.min","math.max","math.log","math.log10","math.exp","math.deg","math.rad","math.random","math.randomseed","io.close","io.flush","io.input","io.lines","io.open","io.output","io.read","io.stderr","io.stdin","io.stdout","io.tmpfile","io.write","os.clock","os.date","os.difftime","os.execute","os.exit","os.getenv","os.remove","os.rename","os.setlocale","os.time","os.tmpname","debug.getinfo","debug.getlocal","debug.setlocal","debug.sethook","debug.gethook","assert","collectgarbage","dofile","error","next","print","rawget","rawset","tonumber","tostring","type","_ALERT","_ERRORMESSAGE","call","getmetatable","gcinfo","ipairs","loadfile","loadstring","pairs","pcall","require","LUA_PATH","setmetatable","_LOADED","_VERSION","gettagmethod","globals","newtag","setglobal","settag","settagmethod","setlinehook","getglobals","copytagmethods","dostring","getglobal","tag","setglobals","unpack","exit","readfrom","writeto","appendto","read","write","getinfo","getlocal","setlocal","setcallhook","tinsert","tremove","flush","seek","setlocale","execute","remove","rename","tmpname","getenv","getn","sort","table.foreach","table.foreachi","foreach","foreachi","abs","sin","cos","tan","asin","acos","atan","atan2","ceil","floor","mod","frexp","ldexp","squrt","min","max","log","log10","exp","deg","rad","random","randomseed","strlen","strsub","strlower","strupper","strchar","strrep","ascii","strbyte","format","strfind","gsub","openfile","closefile","date","clock","cgilua","cgilua.lp.translate","cgilua.contentheader","cgilua.script_file","cgilua.header","cgilua.script_path","cgilua.htmlheader","cgilua.script_pdir","cgilua.redirect","cgilua.script_vdir","cgilua.mkabsoluteurl","cgilua.script_vpath","cgilua.mkurlpath","cgilua.servervariable","cgilua.put","cgilua.urlpath","cgilua.handlelp","cgilua.errorlog","cgilua.lp.compile","cgilua.seterrorhandler","cgilua.lp.include","cgilua.seterroroutput","cgilua.lp.setcompatmode","cgilua.addclosefunction","cgilua.lp.setoutfunc","cgilua.addopenfunction","cgilua.addscripthandler","cgilua.addscripthandler","cgilua.buildprocesshandler","cgilua.setmaxfilesize","cgilua.setmaxinput","cgilua.urlcode.encodetable","cgilua.urlcode.escape","cgilua.urlcode.parsequery","cgilua.urlcode.unescape","cgilua.urlcode.insertfield","cgilua.setoutfunc","cgilua.addopenfunction","cgilua.doif","cgilua.doscript","cgilua.pack","cgilua.splitpath","cgilua.cookies.get","cgilua.cookies.set","cgilua.cookies.sethtml","cgilua.cookies.delete","cgilua.serialize","cgilua.session.close","cgilua.session.data","cgilua.session.load","cgilua.session.new","cgilua.session.open","cgilua.session.save","cgilua.session.setsessiondir","cgilua.session.delete","cgilua.session","cgilua.cookies","numrows","connect","close","fetch","getcolnames","getcoltypes","commit","rollback","setautocommit","lfs","lfs.attributes","lfs.chdir","lfs.currentdir","lfs.dir","lfs.lock","lfs.mkdir","lfs.rmdir","lfs.touch","lfs.unlock","zip","zip.open","zip.openfile","files","seek","close","lines"] >>= withAttribute "BFunc"))
                         <|>
                         ((pRegExpr (compileRegex "\\bfunction\\b") >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["and","function","in","local","not","or"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"" ["and","function","in","local","not","or"] >>= withAttribute "Keyword"))
                         <|>
-                        ((pKeyword ["nil","false","true"] >>= withAttribute "Keyword"))
+                        ((pKeyword " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"" ["nil","false","true"] >>= withAttribute "Keyword"))
                         <|>
                         ((pRegExpr (compileRegex "\\belse\\b") >>= withAttribute "Control"))
                         <|>
@@ -112,7 +112,7 @@ parseRules "Normal" =
                         <|>
                         ((pRegExpr (compileRegex "\\bend\\b") >>= withAttribute "Control"))
                         <|>
-                        ((pKeyword ["break","do","else","elseif","end","for","if","repeat","return","then","until","while"] >>= withAttribute "Control"))
+                        ((pKeyword " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"" ["break","do","else","elseif","end","for","if","repeat","return","then","until","while"] >>= withAttribute "Control"))
                         <|>
                         ((pDetectChar False '{' >>= withAttribute "Symbols"))
                         <|>
@@ -146,7 +146,7 @@ parseRules "Comment" =
                         <|>
                         ((pDetect2Chars False '-' '-' >>= withAttribute "Alerts"))
                         <|>
-                        ((pKeyword ["TODO","FIXME","NOTE"] >>= withAttribute "Alerts")))
+                        ((pKeyword " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"" ["TODO","FIXME","NOTE"] >>= withAttribute "Alerts")))
      return (attr, result)
 
 parseRules "Block Comment" = 
@@ -154,7 +154,7 @@ parseRules "Block Comment" =
                         <|>
                         ((pDetect2Chars False '-' '-' >>= withAttribute "Alerts"))
                         <|>
-                        ((pKeyword ["TODO","FIXME","NOTE"] >>= withAttribute "Alerts")))
+                        ((pKeyword " \n\t():!+,-<=>%&*/;?[]^{|}~\\\"" ["TODO","FIXME","NOTE"] >>= withAttribute "Alerts")))
      return (attr, result)
 
 parseRules "String_single" = 

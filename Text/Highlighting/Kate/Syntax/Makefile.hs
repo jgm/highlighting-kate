@@ -41,7 +41,7 @@ parseSource = do
   result <- manyTill parseSourceLine eof
   return $ map normalizeHighlighting result
 
-startingState = SyntaxState {synStContexts = fromList [("Makefile",["Normal"])], synStLanguage = "Makefile", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStKeywordDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\", synStCaptures = []}
+startingState = SyntaxState {synStContexts = fromList [("Makefile",["Normal"])], synStLanguage = "Makefile", synStCurrentLine = "", synStCharsParsedInLine = 0, synStCaseSensitive = True, synStKeywordCaseSensitive = True, synStCaptures = []}
 
 parseSourceLine = manyTill parseExpressionInternal pEndLine
 
@@ -78,7 +78,7 @@ parseExpressionInternal = do
 defaultAttributes = [("Normal","Normal Text"),("String","String"),("Value","String"),("VarFromValue","Variable"),("VarFromNormal","Variable"),("Commands","Normal Text")]
 
 parseRules "Normal" = 
-  do (attr, result) <- (((pKeyword ["include","define","else","endef","endif","ifdef","ifeq","ifndef","ifneq"] >>= withAttribute "Keyword"))
+  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["include","define","else","endef","endif","ifdef","ifeq","ifndef","ifneq"] >>= withAttribute "Keyword"))
                         <|>
                         ((pRegExpr (compileRegex "[_\\w\\d]*\\s*(?=:=|=)") >>= withAttribute "Variable") >>~ pushContext "Value")
                         <|>
