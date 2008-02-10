@@ -13,7 +13,6 @@ Formatters that convert a list of annotated source lines to various output forma
 module Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..) ) where
 import Text.Highlighting.Kate.Definitions
 import Text.XHtml.Transitional
-import Text.Printf
 
 -- | Options for formatters.
 data FormatOption = OptNumberLines     -- ^ Number lines
@@ -28,9 +27,17 @@ formatAsXHtml :: [FormatOption]  -- ^ Options
               -> Html
 formatAsXHtml opts lang lines =
   let startNum = getStartNum opts
-  in  pre ! [theclass $ unwords $ ["sourceCode", lang] ++ 
-            if OptNumberLines `elem` opts then ["numberLines"] else []] $
-            thecode << zipWith (sourceLineToHtml opts) [startNum..] lines
+      numberOfLines = length lines
+      code = thecode << map (sourceLineToHtml opts) lines
+  in  if OptNumberLines `elem` opts
+         then let lnTitle = title "Click to toggle line numbers"
+                  lnOnClick = strAttr "onclick" "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
+                  lineNumbers = td ! [theclass "lineNumbers", lnTitle, lnOnClick] $ pre <<
+                                     (unlines $ map show [startNum..(startNum + numberOfLines - 1)])
+                  sourceCode = td ! [theclass "sourceCode"] $ 
+                                    pre ! [theclass $ unwords ["sourceCode", lang]] $ code
+              in  table ! [theclass "sourceCode"] $ tr << [lineNumbers, sourceCode]
+         else pre ! [theclass $ unwords ["sourceCode", lang]] $ code
 
 labeledSourceToHtml :: [FormatOption] -> LabeledSource -> Html
 labeledSourceToHtml opts (syntaxType, txt) =
@@ -43,13 +50,9 @@ labeledSourceToHtml opts (syntaxType, txt) =
                               else []
              in  thespan ! attribs << txt 
 
-sourceLineToHtml :: [FormatOption] -> Int -> SourceLine -> Html
-sourceLineToHtml opts num contents =
-  concatHtml $ (thespan ! [theclass "LineNumber"] << (formatLineNumber num)) :
-               (map (labeledSourceToHtml opts) contents) ++ [br]
-
-formatLineNumber :: Int -> String
-formatLineNumber = printf "%4d "
+sourceLineToHtml :: [FormatOption] -> SourceLine -> Html
+sourceLineToHtml opts contents =
+  concatHtml $ (map (labeledSourceToHtml opts) contents) ++ [br]
 
 removeSpaces :: String -> String
 removeSpaces = filter (/= ' ')

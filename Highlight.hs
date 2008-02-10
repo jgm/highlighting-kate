@@ -58,9 +58,11 @@ xhtmlHighlight opts lang code =
        Left  _      -> pre $ thecode << code
 
 defaultCss = 
-  "pre.sourceCode { }\n\ 
-  \pre.sourceCode span.LineNumber { display: none; }\n\ 
-  \pre.numberLines span.LineNumber { display: inline; color: #AAAAAA; padding-right: 0; border-right: 1px solid #AAAAAA; margin-right: 3px; }\n\ 
+  "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre \n\ 
+  \   { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }\n\ 
+  \td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; }\n\  
+  \td.sourceCode { padding-left: 5px; }\n\ 
+  \pre.sourceCode { }\n\ 
   \pre.sourceCode span.Normal { }\n\ 
   \pre.sourceCode span.Keyword { color: #007020; font-weight: bold; } \n\ 
   \pre.sourceCode span.DataType { color: #902000; }\n\ 
