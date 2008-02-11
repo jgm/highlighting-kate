@@ -1,0 +1,10 @@
+highlighting-kate (0.2.1)
+
+  *  Implemented lookAhead in parsers, which fixed bugs in perl, bash,
+     and other parsers.
+
+highlighting-kate 0.2
+
+  *  Initial release
+  
+ -- John MacFarlane <jgm@berkeley.edu> 10 Feb 2008
