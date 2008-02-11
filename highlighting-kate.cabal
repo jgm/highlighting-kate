@@ -30,6 +30,7 @@ Maintainer:          jgm@berkeley.edu
 Homepage:            http://johnmacfarlane.net/highlighting-kate
 Extra-Source-Files:  README
                      BUGS
+                     changelog
                      Highlight.hs
                      ParseSyntaxFiles.hs
                      css/hk-espresso.css
