@@ -178,7 +178,7 @@ parseRules "normal" =
                         <|>
                         ((pDetectChar False '`' >>= withAttribute "Operator") >>~ pushContext "Backticked")
                         <|>
-                        ((pRegExpr (compileRegex "(?:[$@]\\S|%[\\w{]|\\*[^\\d\\*{\\$@%=(])") >>= withAttribute "Normal Text") >>~ pushContext "find_variable")
+                        ((lookAhead (pRegExpr (compileRegex "(?:[$@]\\S|%[\\w{]|\\*[^\\d\\*{\\$@%=(])")) >> return ([],"") ) >>~ pushContext "find_variable")
                         <|>
                         ((pRegExpr (compileRegex "<[A-Z0-9_]+>") >>= withAttribute "Keyword"))
                         <|>
@@ -266,7 +266,7 @@ parseRules "ipstring_internal" =
                         <|>
                         ((pRegExpr (compileRegex "\\\\.") >>= withAttribute "String (interpolated)"))
                         <|>
-                        ((pRegExpr (compileRegex "(?:[\\$@]\\S|%[\\w{])") >>= withAttribute "Normal Text") >>~ pushContext "find_variable_unsafe"))
+                        ((lookAhead (pRegExpr (compileRegex "(?:[\\$@]\\S|%[\\w{])")) >> return ([],"") ) >>~ pushContext "find_variable_unsafe"))
      return (attr, result)
 
 parseRules "ip_string" = 
@@ -590,7 +590,7 @@ parseRules "regex_pattern_internal" =
 parseRules "regex_pattern_internal_ip" = 
   do (attr, result) <- (((parseRules "regex_pattern_internal_rules_1"))
                         <|>
-                        ((pRegExpr (compileRegex "[$@][^\\]\\s{}()|>']") >>= withAttribute "Data Type") >>~ pushContext "find_variable_unsafe")
+                        ((lookAhead (pRegExpr (compileRegex "[$@][^\\]\\s{}()|>']")) >> return ([],"") ) >>~ pushContext "find_variable_unsafe")
                         <|>
                         ((parseRules "regex_pattern_internal_rules_2")))
      return (attr, result)
@@ -802,7 +802,7 @@ parseRules "package_qualified_blank" =
 parseRules "sub_name_def" = 
   do (attr, result) <- (((pRegExpr (compileRegex "\\w+") >>= withAttribute "Function"))
                         <|>
-                        ((pRegExpr (compileRegex "\\$\\S") >>= withAttribute "Normal Text") >>~ pushContext "find_variable")
+                        ((lookAhead (pRegExpr (compileRegex "\\$\\S")) >> return ([],"") ) >>~ pushContext "find_variable")
                         <|>
                         ((pRegExpr (compileRegex "\\s*\\(") >>= withAttribute "Normal Text") >>~ pushContext "sub_arg_definition")
                         <|>

@@ -127,7 +127,7 @@ parseRules "Comment" =
 parseRules "New command line" = 
   do (attr, result) <- (((pRegExpr (compileRegex "\\s*#") >>= withAttribute "Comment") >>~ pushContext "Comment")
                         <|>
-                        ((pRegExpr (compileRegex ".") >>= withAttribute "Normal Text") >>~ (popContext >> return ())))
+                        ((lookAhead (pRegExpr (compileRegex ".")) >> return ([],"") ) >>~ (popContext >> return ())))
      return (attr, result)
 
 parseRules x = fail $ "Unknown context" ++ x

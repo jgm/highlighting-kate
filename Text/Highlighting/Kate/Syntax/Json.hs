@@ -106,9 +106,9 @@ parseRules "Value" =
                         <|>
                         ((pDetectChar False '[' >>= withAttribute "Style_Seperator_Array") >>~ pushContext "Array")
                         <|>
-                        ((pDetectChar False '}' >>= withAttribute "Style_Error") >>~ (popContext >> return ()))
+                        ((lookAhead (pDetectChar False '}') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
-                        ((pDetectChar False ',' >>= withAttribute "Style_Error") >>~ (popContext >> return ()))
+                        ((lookAhead (pDetectChar False ',') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pDetectSpaces >>= withAttribute "Style_Normal"))
                         <|>

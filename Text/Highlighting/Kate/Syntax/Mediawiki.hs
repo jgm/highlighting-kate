@@ -172,7 +172,7 @@ parseRules "WikiLink" =
      return (attr, result)
 
 parseRules "WikiLinkDescription" = 
-  do (attr, result) <- ((pDetect2Chars False ']' ']' >>= withAttribute "Wiki-Tag") >>~ (popContext >> return ()))
+  do (attr, result) <- ((lookAhead (pDetect2Chars False ']' ']') >> return ([],"") ) >>~ (popContext >> return ()))
      return (attr, result)
 
 parseRules "Link" = 

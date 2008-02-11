@@ -94,7 +94,7 @@ parseExpressionInternal = do
 defaultAttributes = [("Pre Start","Normal Text"),("Definitions","Normal Text"),("Rules","Normal Text"),("User Code","Normal Text"),("Percent Command","Directive"),("Comment","Comment"),("Definition RegExpr","RegExpr"),("Rule RegExpr","RegExpr"),("RegExpr (","RegExpr"),("RegExpr [","RegExpr"),("RegExpr {","RegExpr"),("RegExpr Q","RegExpr"),("RegExpr Base","RegExpr"),("Start Conditions Scope","Normal Text"),("Action","Normal Text"),("Detect C","Normal Text"),("Indented C","Normal Text"),("Lex C Bloc","Normal Text"),("Lex Rule C Bloc","Normal Text"),("Normal C Bloc","Normal Text"),("Action C","Normal Text")]
 
 parseRules "Pre Start" = 
-  do (attr, result) <- ((pRegExpr (compileRegex ".") >>= withAttribute "Normal Text") >>~ pushContext "Definitions")
+  do (attr, result) <- ((lookAhead (pRegExpr (compileRegex ".")) >> return ([],"") ) >>~ pushContext "Definitions")
      return (attr, result)
 
 parseRules "Definitions" = 

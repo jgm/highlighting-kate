@@ -96,7 +96,7 @@ parseRules "Normal Text" =
                         <|>
                         ((pRegExpr (compileRegex "\\b[a-z][_a-z@-Z0-9]*(?:(?=[^_a-z@-Z0-9])|$):\\b[a-z][_a-z@-Z0-9]*(?:(?=[^_a-z@-Z0-9])|$)") >>= withAttribute "Function") >>~ (popContext >> return ()))
                         <|>
-                        ((pRegExpr (compileRegex "\\b[a-z][_a-z@-Z0-9]*(?:(?=[^_a-z@-Z0-9])|$)\\(") >>= withAttribute "Functon") >>~ pushContext "isfunction")
+                        ((lookAhead (pRegExpr (compileRegex "\\b[a-z][_a-z@-Z0-9]*(?:(?=[^_a-z@-Z0-9])|$)\\(")) >> return ([],"") ) >>~ pushContext "isfunction")
                         <|>
                         ((pRegExpr (compileRegex "\\b[_A-Z][_a-z@-Z0-9]*(?:(?=[^_a-z@-Z0-9])|$)") >>= withAttribute "Variable") >>~ (popContext >> return ()))
                         <|>

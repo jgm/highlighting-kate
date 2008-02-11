@@ -303,10 +303,13 @@ mkSyntaxParser syntax context parser =
                      else empty) <>
                   if parserType parser == "IncludeRules"
                      then mainParser <> char ')'
-                     else mainParser <> text " >>= withAttribute " <> 
-                          text (if null (parserAttribute parser)
-                                   then show (contAttribute context)
-                                   else show (parserAttribute parser)) <> char ')' <>
+                     else (if parserLookAhead parser
+                             then text "lookAhead (" <> mainParser <> text ") >> return ([],\"\") " 
+                             else mainParser <> text " >>= withAttribute " <> 
+                                  text (if null (parserAttribute parser)
+                                           then show (contAttribute context)
+                                           else show (parserAttribute parser))) <> 
+                          char ')' <>
                           (if parserContext parser `elem` ["", "#stay"]
                               then empty 
                               else text " >>~ " <> switchContext (parserContext parser))

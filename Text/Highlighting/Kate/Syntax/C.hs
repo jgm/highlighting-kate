@@ -89,7 +89,7 @@ parseRules "Normal" =
                         <|>
                         ((pFirstNonSpace >> pRegExpr (compileRegex "#\\s*if\\s+0") >>= withAttribute "Preprocessor") >>~ pushContext "Outscoped")
                         <|>
-                        ((pFirstNonSpace >> pDetectChar False '#' >>= withAttribute "Normal Text") >>~ pushContext "AfterHash")
+                        ((pFirstNonSpace >> lookAhead (pDetectChar False '#') >> return ([],"") ) >>~ pushContext "AfterHash")
                         <|>
                         ((pFirstNonSpace >> pString False "//BEGIN" >>= withAttribute "Region Marker") >>~ pushContext "Region Marker")
                         <|>

@@ -100,7 +100,7 @@ parseRules "Pre Start" =
                         <|>
                         ((pColumn 0 >> pDetect2Chars False '%' '{' >>= withAttribute "Content-Type Delimiter") >>~ pushContext "C Declarations")
                         <|>
-                        ((pRegExpr (compileRegex ".") >>= withAttribute "Normal Text") >>~ pushContext "Declarations"))
+                        ((lookAhead (pRegExpr (compileRegex ".")) >> return ([],"") ) >>~ pushContext "Declarations"))
      return (attr, result)
 
 parseRules "C Declarations" = 
@@ -176,7 +176,7 @@ parseRules "User Code" =
 parseRules "Percent Command" = 
   do (attr, result) <- (((parseRules "Comment"))
                         <|>
-                        ((pRegExpr (compileRegex "\\W") >>= withAttribute "Normal Text") >>~ pushContext "Percent Command In"))
+                        ((lookAhead (pRegExpr (compileRegex "\\W")) >> return ([],"") ) >>~ pushContext "Percent Command In"))
      return (attr, result)
 
 parseRules "Percent Command In" = 

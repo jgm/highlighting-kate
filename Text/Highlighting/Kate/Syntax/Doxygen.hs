@@ -172,13 +172,13 @@ parseRules "BlockComment" =
      return (attr, result)
 
 parseRules "ML_TagWord" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((parseRules "SL_TagWord")))
      return (attr, result)
 
 parseRules "ML_TagParam" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pDetectSpaces >>= withAttribute "Comment"))
                         <|>
@@ -194,7 +194,7 @@ parseRules "ML_TagParam" =
      return (attr, result)
 
 parseRules "ML_TagWordWord" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pDetectSpaces >>= withAttribute "Comment"))
                         <|>
@@ -204,7 +204,7 @@ parseRules "ML_TagWordWord" =
      return (attr, result)
 
 parseRules "ML_Tag2ndWord" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> popContext >> return ()))
                         <|>
                         ((parseRules "SL_Tag2ndWord")))
      return (attr, result)
@@ -212,7 +212,7 @@ parseRules "ML_Tag2ndWord" =
 parseRules "ML_TagString" = 
   do (attr, result) <- (((pDetectSpaces >>= withAttribute "Comment"))
                         <|>
-                        ((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+                        ((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pString False "<!--" >>= withAttribute "HTML Comment") >>~ pushContext "ML_htmlcomment")
                         <|>
@@ -224,13 +224,13 @@ parseRules "ML_TagString" =
      return (attr, result)
 
 parseRules "ML_TagWordString" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((parseRules "SL_TagWordString")))
      return (attr, result)
 
 parseRules "ML_htmltag" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pDetect2Chars False '/' '>' >>= withAttribute "HTML Tag") >>~ (popContext >> return ()))
                         <|>
@@ -240,7 +240,7 @@ parseRules "ML_htmltag" =
      return (attr, result)
 
 parseRules "ML_htmlcomment" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((Text.Highlighting.Kate.Syntax.Alert.parseExpression >>= ((withAttribute "") . snd)))
                         <|>
@@ -248,7 +248,7 @@ parseRules "ML_htmlcomment" =
      return (attr, result)
 
 parseRules "ML_identifiers" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pRegExpr (compileRegex "\\s*#?[a-zA-Z0-9]*") >>= withAttribute "String") >>~ (popContext >> return ()))
                         <|>
@@ -258,13 +258,13 @@ parseRules "ML_identifiers" =
      return (attr, result)
 
 parseRules "ML_types1" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pDetectChar False '\'' >>= withAttribute "Types") >>~ (popContext >> popContext >> return ())))
      return (attr, result)
 
 parseRules "ML_types2" = 
-  do (attr, result) <- (((pDetect2Chars False '*' '/' >>= withAttribute "Comment") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pDetect2Chars False '*' '/') >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pDetectChar False '"' >>= withAttribute "Types") >>~ (popContext >> popContext >> return ())))
      return (attr, result)
@@ -272,7 +272,7 @@ parseRules "ML_types2" =
 parseRules "SL_TagWord" = 
   do (attr, result) <- (((pDetectSpaces >>= withAttribute "Comment"))
                         <|>
-                        ((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}" ["\\addtogroup","\\a","\\anchor","\\b","\\c","\\class","\\cond","\\copydoc","\\def","\\dontinclude","\\dotfile","\\e","\\elseif","\\em","\\enum","\\example","\\exception","\\exceptions","\\file","\\htmlinclude","\\if","\\ifnot","\\include","\\link","\\namespace","\\p","\\package","\\ref","\\relatesalso","\\relates","\\retval","\\throw","\\throws","\\verbinclude","\\version","\\xrefitem","@addtogroup","@a","@anchor","@b","@c","@class","@cond","@copydoc","@def","@dontinclude","@dotfile","@e","@elseif","@em","@enum","@example","@exception","@exceptions","@file","@htmlinclude","@if","@ifnot","@include","@link","@namespace","@p","@package","@ref","@relatesalso","@relates","@retval","@throw","@throws","@verbinclude","@version","@xrefitem"] >>= withAttribute "Tags") >>~ (popContext >> return ()))
+                        ((lookAhead (pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}" ["\\addtogroup","\\a","\\anchor","\\b","\\c","\\class","\\cond","\\copydoc","\\def","\\dontinclude","\\dotfile","\\e","\\elseif","\\em","\\enum","\\example","\\exception","\\exceptions","\\file","\\htmlinclude","\\if","\\ifnot","\\include","\\link","\\namespace","\\p","\\package","\\ref","\\relatesalso","\\relates","\\retval","\\throw","\\throws","\\verbinclude","\\version","\\xrefitem","@addtogroup","@a","@anchor","@b","@c","@class","@cond","@copydoc","@def","@dontinclude","@dotfile","@e","@elseif","@em","@enum","@example","@exception","@exceptions","@file","@htmlinclude","@if","@ifnot","@include","@link","@namespace","@p","@package","@ref","@relatesalso","@relates","@retval","@throw","@throws","@verbinclude","@version","@xrefitem"]) >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pRegExpr (compileRegex "\\S(?=([][,?;()]|\\.$|\\.?\\s))") >>= withAttribute "Word") >>~ (popContext >> return ()))
                         <|>

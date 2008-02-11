@@ -230,7 +230,7 @@ parseRules "FindCommands" =
                         <|>
                         ((pRegExpr (compileRegex "\\d*<<<") >>= withAttribute "Redirection"))
                         <|>
-                        ((pString False "<<" >>= withAttribute "Redirection") >>~ pushContext "HereDoc")
+                        ((lookAhead (pString False "<<") >> return ([],"") ) >>~ pushContext "HereDoc")
                         <|>
                         ((pRegExpr (compileRegex "[<>]\\(") >>= withAttribute "Redirection") >>~ pushContext "ProcessSubst")
                         <|>
@@ -598,21 +598,21 @@ parseRules "CaseExpr" =
      return (attr, result)
 
 parseRules "HereDoc" = 
-  do (attr, result) <- (((pRegExpr (compileRegex "(<<-\\s*\"([^|&;()<>\\s]+)\")") >>= withAttribute "Redirection") >>~ pushContext "HereDocIQ")
+  do (attr, result) <- (((lookAhead (pRegExpr (compileRegex "(<<-\\s*\"([^|&;()<>\\s]+)\")")) >> return ([],"") ) >>~ pushContext "HereDocIQ")
                         <|>
-                        ((pRegExpr (compileRegex "(<<-\\s*'([^|&;()<>\\s]+)')") >>= withAttribute "Redirection") >>~ pushContext "HereDocIQ")
+                        ((lookAhead (pRegExpr (compileRegex "(<<-\\s*'([^|&;()<>\\s]+)')")) >> return ([],"") ) >>~ pushContext "HereDocIQ")
                         <|>
-                        ((pRegExpr (compileRegex "(<<-\\s*\\\\([^|&;()<>\\s]+))") >>= withAttribute "Redirection") >>~ pushContext "HereDocIQ")
+                        ((lookAhead (pRegExpr (compileRegex "(<<-\\s*\\\\([^|&;()<>\\s]+))")) >> return ([],"") ) >>~ pushContext "HereDocIQ")
                         <|>
-                        ((pRegExpr (compileRegex "(<<-\\s*([^|&;()<>\\s]+))") >>= withAttribute "Redirection") >>~ pushContext "HereDocINQ")
+                        ((lookAhead (pRegExpr (compileRegex "(<<-\\s*([^|&;()<>\\s]+))")) >> return ([],"") ) >>~ pushContext "HereDocINQ")
                         <|>
-                        ((pRegExpr (compileRegex "(<<\\s*\"([^|&;()<>\\s]+)\")") >>= withAttribute "Redirection") >>~ pushContext "HereDocQ")
+                        ((lookAhead (pRegExpr (compileRegex "(<<\\s*\"([^|&;()<>\\s]+)\")")) >> return ([],"") ) >>~ pushContext "HereDocQ")
                         <|>
-                        ((pRegExpr (compileRegex "(<<\\s*'([^|&;()<>\\s]+)')") >>= withAttribute "Redirection") >>~ pushContext "HereDocQ")
+                        ((lookAhead (pRegExpr (compileRegex "(<<\\s*'([^|&;()<>\\s]+)')")) >> return ([],"") ) >>~ pushContext "HereDocQ")
                         <|>
-                        ((pRegExpr (compileRegex "(<<\\s*\\\\([^|&;()<>\\s]+))") >>= withAttribute "Redirection") >>~ pushContext "HereDocQ")
+                        ((lookAhead (pRegExpr (compileRegex "(<<\\s*\\\\([^|&;()<>\\s]+))")) >> return ([],"") ) >>~ pushContext "HereDocQ")
                         <|>
-                        ((pRegExpr (compileRegex "(<<\\s*([^|&;()<>\\s]+))") >>= withAttribute "Redirection") >>~ pushContext "HereDocNQ")
+                        ((lookAhead (pRegExpr (compileRegex "(<<\\s*([^|&;()<>\\s]+))")) >> return ([],"") ) >>~ pushContext "HereDocNQ")
                         <|>
                         ((pString False "<<" >>= withAttribute "Redirection") >>~ (popContext >> return ())))
      return (attr, result)

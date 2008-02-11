@@ -100,7 +100,7 @@ parseRules "multiLineComment" =
      return (attr, result)
 
 parseRules "nodeFolding" = 
-  do (attr, result) <- (((pRegExpr (compileRegex "@node\\b") >>= withAttribute "Command") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pRegExpr (compileRegex "@node\\b")) >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((parseRules "Normal Text")))
      return (attr, result)

@@ -97,7 +97,7 @@ parseRules "braceregion" =
 parseRules "phpsource" = 
   do (attr, result) <- (((pDetectSpaces >>= withAttribute "PHP Text"))
                         <|>
-                        ((pString False "?>" >>= withAttribute "Keyword") >>~ (popContext >> return ()))
+                        ((lookAhead (pString False "?>") >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((pDetectChar False '#' >>= withAttribute "Comment") >>~ pushContext "onelinecomment")
                         <|>
@@ -143,7 +143,7 @@ parseRules "phpsource" =
      return (attr, result)
 
 parseRules "onelinecomment" = 
-  do (attr, result) <- ((pString False "?>" >>= withAttribute "Keyword") >>~ (popContext >> return ()))
+  do (attr, result) <- ((lookAhead (pString False "?>") >> return ([],"") ) >>~ (popContext >> return ()))
      return (attr, result)
 
 parseRules "twolinecomment" = 

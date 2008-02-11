@@ -122,7 +122,7 @@ parseRules "Start" =
      return (attr, result)
 
 parseRules "In Block" = 
-  do (attr, result) <- (((pRegExpr (compileRegex "\\{%\\s*end[a-z]+\\s*%\\}") >>= withAttribute "Normal Text") >>~ (popContext >> return ()))
+  do (attr, result) <- (((lookAhead (pRegExpr (compileRegex "\\{%\\s*end[a-z]+\\s*%\\}")) >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((parseRules "FindTemplate"))
                         <|>
@@ -168,7 +168,7 @@ parseRules "Template Filter" =
      return (attr, result)
 
 parseRules "Template Tag" = 
-  do (attr, result) <- (((pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["for","block","if","ifequal","ifnotequal","ifchanged","blocktrans","spaceless"] >>= withAttribute "Template Tag") >>~ pushContext "Found Block Tag")
+  do (attr, result) <- (((lookAhead (pKeyword " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" ["for","block","if","ifequal","ifnotequal","ifchanged","blocktrans","spaceless"]) >> return ([],"") ) >>~ pushContext "Found Block Tag")
                         <|>
                         ((pDetectIdentifier >>= withAttribute "Template Tag") >>~ pushContext "In Template Tag"))
      return (attr, result)
@@ -180,7 +180,7 @@ parseRules "Found Block Tag" =
 parseRules "In Block Tag" = 
   do (attr, result) <- (((pRegExprDynamic "\\{%\\s*end%1\\s*%\\}" >>= withAttribute "Template Tag") >>~ (popContext >> popContext >> popContext >> return ()))
                         <|>
-                        ((pRegExpr (compileRegex "\\{%\\s*end[a-z]+\\s*%\\}") >>= withAttribute "Template Tag Argument") >>~ pushContext "Non Matching Tag")
+                        ((lookAhead (pRegExpr (compileRegex "\\{%\\s*end[a-z]+\\s*%\\}")) >> return ([],"") ) >>~ pushContext "Non Matching Tag")
                         <|>
                         ((pDetect2Chars False '%' '}' >>= withAttribute "Template Tag") >>~ pushContext "In Block")
                         <|>

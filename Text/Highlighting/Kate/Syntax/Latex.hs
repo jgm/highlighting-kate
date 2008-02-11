@@ -331,7 +331,7 @@ parseRules "LatexEnv" =
 parseRules "VerbatimEnv" = 
   do (attr, result) <- (((pDetectChar False '}' >>= withAttribute "Normal Text") >>~ pushContext "Verbatim")
                         <|>
-                        ((pRegExpr (compileRegex "[a-zA-Z]") >>= withAttribute "Environment") >>~ (popContext >> return ()))
+                        ((lookAhead (pRegExpr (compileRegex "[a-zA-Z]")) >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((parseRules "EnvCommon"))
                         <|>
@@ -365,7 +365,7 @@ parseRules "VerbFindEnd" =
 parseRules "MathEnv" = 
   do (attr, result) <- (((pDetectChar False '}' >>= withAttribute "Normal Text") >>~ pushContext "MathModeEnv")
                         <|>
-                        ((pRegExpr (compileRegex "[a-zA-Z]") >>= withAttribute "Environment") >>~ (popContext >> return ()))
+                        ((lookAhead (pRegExpr (compileRegex "[a-zA-Z]")) >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((parseRules "EnvCommon")))
      return (attr, result)
@@ -375,7 +375,7 @@ parseRules "MathEnvParam" =
                         <|>
                         ((pDetectChar False '}' >>= withAttribute "Normal Text") >>~ pushContext "MathModeEnv")
                         <|>
-                        ((pRegExpr (compileRegex "[a-zA-Z]") >>= withAttribute "Environment") >>~ (popContext >> return ()))
+                        ((lookAhead (pRegExpr (compileRegex "[a-zA-Z]")) >> return ([],"") ) >>~ (popContext >> return ()))
                         <|>
                         ((parseRules "EnvCommon")))
      return (attr, result)
