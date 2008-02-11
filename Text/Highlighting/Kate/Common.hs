@@ -28,6 +28,7 @@ capitalize (a:as) = toUpper a : as
 
 normalizeHighlighting :: [LabeledSource] -> [LabeledSource]
 normalizeHighlighting [] = []
+normalizeHighlighting ((_,""):xs) = normalizeHighlighting xs
 normalizeHighlighting ((a,x):(b,y):xs) | a == b = normalizeHighlighting ((a, x++y):xs)
 normalizeHighlighting (x:xs) = x : normalizeHighlighting xs
 
