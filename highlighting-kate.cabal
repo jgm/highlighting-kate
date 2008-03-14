@@ -108,7 +108,7 @@ Library
     Build-Depends:   base >= 3, containers
   else
     Build-Depends:   base < 3
-  Build-Depends:     parsec, pcre-light, xhtml
+  Build-Depends:     parsec < 3, pcre-light, xhtml
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions
