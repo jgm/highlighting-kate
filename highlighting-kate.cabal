@@ -171,12 +171,18 @@ Library
   Other-Modules:     Text.Highlighting.Kate.Common
   Ghc-Options:       -O2 -W
   Ghc-Prof-Options:  -auto-all
+  -- the following line is needed to prevent gcc from consuming huge amounts of
+  -- memory on platforms without a native code generator:
+  Cc-Options:        -O0
 
 Executable Highlight
   Main-Is:          Highlight.hs
   Build-Depends:    base, containers, xhtml, filepath
   Ghc-Options:      -O2 -W
   Ghc-Prof-Options: -auto-all
+  -- the following line is needed to prevent gcc from consuming huge amounts of
+  -- memory on platforms without a native code generator:
+  Cc-Options:       -O0
 
   if flag(executable)
     Buildable:      True
