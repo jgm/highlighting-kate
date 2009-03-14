@@ -327,7 +327,7 @@
 		<context attribute="Comment" lineEndContext="#stay" name="literate-normal">
 			<DetectChar attribute="Special" context="normal" char="&gt;" column="0"/>
 		</context>
-		<context attribute="Normal Text" lineEndContext="literate-normal" name="normal">
+		<context attribute="Normal Text" lineEndContext="#pop" name="normal">
 			<Detect2Chars attribute="Comment" context="comment_multi_line" char="{" char1="-" />
 			<Detect2Chars attribute="Comment" context="comment_single_line" char="-" char1="-" />
 			<keyword attribute="Keyword" context="#stay" String="keywords" />
@@ -343,7 +343,7 @@
 			<Float attribute="Float" context="#stay" />
 			<Int attribute="Decimal" context="#stay" />
 		</context>
-		<context attribute="Comment" lineEndContext="#pop" name="comment_single_line" />
+		<context attribute="Comment" lineEndContext="#pop#pop" name="comment_single_line" />
 		<context attribute="Comment" lineEndContext="#stay" name="comment_multi_line">
 			<Detect2Chars attribute="Comment" context="#pop" char="-" char1="}" />
 		</context>

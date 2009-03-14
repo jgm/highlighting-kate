@@ -50,8 +50,8 @@ pEndLine = do
   context <- currentContext
   case context of
     "literate-normal" -> return ()
-    "normal" -> pushContext "literate-normal"
-    "comment_single_line" -> (popContext >> return ())
+    "normal" -> (popContext >> return ())
+    "comment_single_line" -> (popContext >> popContext >> return ())
     "comment_multi_line" -> return ()
     "string" -> return ()
     "infix" -> return ()
