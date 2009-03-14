@@ -1,4 +1,4 @@
-{-# OPTIONS -farrows #-}
+{-# LANGUAGE Arrows #-}
 
 {- 
 ParseSyntaxFiles.hs processes a directory containing Kate
@@ -22,7 +22,6 @@ module Main where
 
 import Text.XML.HXT.Arrow
 import Text.XML.HXT.Arrow.Edit
-import Text.XML.HXT.Arrow.XmlNodeSet
 import Control.Arrow
 import Control.Arrow.ArrowList
 import Data.List
