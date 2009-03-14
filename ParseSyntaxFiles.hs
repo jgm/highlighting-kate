@@ -82,25 +82,32 @@ data SyntaxParser =
                } deriving (Read, Show)
 
 
+-- | Converts a list of files (ending in .xml) and directories containing .xml files
+-- into a list of .xml files.
+argFiles :: [String] -> IO [String]
+argFiles [] = error "Specify paths of xml files and/or directories containing xml syntax files."
+argFiles args = do
+  let isXmlFile x = isSuffixOf ".xml" x
+  let (files, dirs) = partition isXmlFile args
+  dirContents <- mapM (\dir -> getDirectoryContents dir >>= return . map (combine dir) . filter isXmlFile) dirs
+  return $ nub (files ++ concat dirContents)
+
+
 libraryPath = joinPath ["Text", "Highlighting", "Kate"]
 destDir = joinPath [libraryPath, "Syntax"]
 
 main :: IO ()
 main = do
-  argv <- getArgs
-  srcDir <- if null argv 
-               then error "Specify path of directory containing xml syntax files."
-               else return $ argv !! 0
-  let isXmlFile x = isSuffixOf ".xml" x
-  files <- getDirectoryContents srcDir >>= (return . map (combine srcDir) . filter isXmlFile)
+  files <- getArgs >>= argFiles
   destDirExists <- doesDirectoryExist destDir
   if destDirExists
      then return ()
      else createDirectory destDir 
-  mapM processOneFile files >> return ()
+  mapM_ processOneFile files
   let syntaxFile = combine libraryPath (addExtension "Syntax" "hs")
   putStrLn $ "Writing " ++ syntaxFile
-  let names = sort $ map nameFromPath files 
+  -- Get all syntax files, not only the newly generated ones.
+  names <- getDirectoryContents destDir >>= return . map dropExtension . filter (isSuffixOf ".hs")
   let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
   let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
   let languageExtensions = concat $ intersperse ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names
