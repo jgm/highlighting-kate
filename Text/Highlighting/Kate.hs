@@ -35,4 +35,4 @@ import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..), default
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension )
 import Text.Highlighting.Kate.Definitions ( SourceLine, LabeledSource )
 
-highlightingKateVersion = "0.2.3"
+highlightingKateVersion = "0.2.4"
