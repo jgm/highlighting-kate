@@ -107,7 +107,7 @@ main = do
   let syntaxFile = combine libraryPath (addExtension "Syntax" "hs")
   putStrLn $ "Writing " ++ syntaxFile
   -- Get all syntax files, not only the newly generated ones.
-  names <- getDirectoryContents destDir >>= return . map dropExtension . filter (isSuffixOf ".hs")
+  names <- getDirectoryContents destDir >>= return . sort . map dropExtension . filter (isSuffixOf ".hs")
   let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
   let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
   let languageExtensions = concat $ intersperse ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names
