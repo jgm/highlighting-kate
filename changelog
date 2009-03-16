@@ -1,10 +1,39 @@
-highlighting-kate (0.2.1)
+highlighting-kate 0.2.4 (15 Mar 2009)
+
+  * Fixed bug in literate-haskell-xml. Also fixed now upstream.
+    (Bjorn Buckwalter)
+
+  * Modified ParseSyntaxFiles.hs to allow regeneration of individual
+    syntax files. With the change ParseSyntaxFiles accepts any number of
+    arguments. Those ending with .xml are assumed to be files while the
+    rest are assumed to be directories containing .xml files.
+    The syntaxes included in Syntax.hs are based on the contents of
+    destDir rather than the arguments, this allows regenerating a subset
+    of syntaxes but still having all syntaxes in Syntax.hs. (Bjorn Buckwalter)
+
+  * ParseSyntaxFiles.hs: Change deprecated pragma, remove obsolete import.
+    (Bjorn Buckwalter)
+
+highlighting-kate 0.2.3 (9 Jul 2008)
+
+  * Removed -O2 in Ghc-Options, as it provides very little speedup
+
+highlighting-kate 0.2.2 (9 Jul 2008)
+
+  * Added Cc-options -O0 to cabal file. This is needed to prevent
+    gcc from using enormous amounts of memory on platforms
+    that lack a native code generator and compile via C. See
+    http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=469893.
+
+  * Depend on parsec < 3, because parsec 3 is much slower.
+
+  * normalizeHighlighting now strips out empty strings
+
+highlighting-kate 0.2.1 (10 Feb 2008)
 
   *  Implemented lookAhead in parsers, which fixed bugs in perl, bash,
      and other parsers.
 
-highlighting-kate 0.2
+highlighting-kate 0.2 (10 Feb 2008)
 
   *  Initial release
-  
- -- John MacFarlane <jgm@berkeley.edu> 10 Feb 2008
