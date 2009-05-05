@@ -23,8 +23,7 @@ import qualified Data.Map as Map
 a >>~ b = a >>= \x -> b >> return x
 
 capitalize :: [Char] -> [Char]
-capitalize [] = []
-capitalize (a:as) = toUpper a : as
+capitalize = map toUpper
 
 normalizeHighlighting :: [LabeledSource] -> [LabeledSource]
 normalizeHighlighting [] = []
