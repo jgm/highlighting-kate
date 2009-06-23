@@ -74,6 +74,7 @@ Extra-Source-Files:  README
                      xml/postscript.xml
                      xml/prolog.xml
                      xml/python.xml
+                     xml/relaxngcompact.xml
                      xml/rhtml.xml
                      xml/ruby.xml
                      xml/scala.xml

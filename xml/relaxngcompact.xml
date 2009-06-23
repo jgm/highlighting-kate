@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language name="RelaxNG-Compact" version="0.1" kateversion="2.4" section="Markup" extensions="*.rnc" casesensitive="1" author="Rintze Zelle" license="LGPL">
+  <highlighting>
+    <list name="RNC keywords">
+      <item> attribute </item>
+      <item> div </item>
+      <item> element </item>
+      <item> empty </item>
+      <item> external </item>
+      <item> grammar </item>
+      <item> include </item>
+      <item> inherit </item>
+      <item> list </item>
+      <item> mixed </item>
+      <item> notAllowed </item>
+      <item> parent </item>
+      <item> start </item>
+      <item> string </item>
+      <item> text </item>
+      <item> token </item>      
+    </list>
+    <contexts>
+      <context attribute="Normal Text" lineEndContext="#stay" name="Normal Text" >
+        <Detect2Chars attribute="Comments" char="#" char1="#" firstNonSpace="true" context="Comments"/>
+	<keyword attribute="Keyword" context="#stay" String="RNC keywords" />
+	<DetectChar attribute="String" context="string" char="&quot;" />
+      </context>
+      <context attribute="Comments" lineEndContext="#pop" name="Comments" >
+      </context>
+      <context attribute="String" lineEndContext="#stay" name="string" >
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+    </contexts>
+    <itemDatas>
+      <itemData name="Normal Text" defStyleNum="dsNormal" />
+      <itemData name="Comments" defStyleNum="dsComment" />
+      <itemData name="String" defStyleNum="dsString" />
+      <itemData name="Keyword" defStyleNum="dsKeyword" />
+    </itemDatas>
+  </highlighting>
+  <general>
+    <keywords weakDeliminator="-"/>
+  </general>
+</language>
