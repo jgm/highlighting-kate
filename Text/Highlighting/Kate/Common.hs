@@ -22,9 +22,6 @@ import qualified Data.Map as Map
 (>>~) :: (Monad m) => m a -> m b -> m a
 a >>~ b = a >>= \x -> b >> return x
 
-capitalize :: [Char] -> [Char]
-capitalize = map toUpper
-
 normalizeHighlighting :: [LabeledSource] -> [LabeledSource]
 normalizeHighlighting [] = []
 normalizeHighlighting ((_,""):xs) = normalizeHighlighting xs

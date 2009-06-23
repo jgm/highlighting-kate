@@ -35,7 +35,6 @@ import System.Exit
 import System.FilePath
 import Text.PrettyPrint
 import Text.Highlighting.Kate.Definitions
-import Text.Highlighting.Kate.Common (capitalize)
 
 data SyntaxDefinition =
   SyntaxDefinition { synLanguage      :: String
@@ -343,6 +342,10 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
     "Javadoc" -> "Javadoc"
     "JavaScript" -> "Javascript"
     x -> x
+
+capitalize :: String -> String
+capitalize (x:xs) = toUpper x : xs
+capitalize [] = []
 
 nameFromPath :: FilePath -> String
 nameFromPath = concat . map capitalize . words . 
