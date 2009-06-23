@@ -243,12 +243,6 @@ mkParser syntax =
                                       endLineParser, withAttr, styles, parseExpressionInternal, 
                                       defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextCatchAll]
 
-mkIdentifier :: String -> String
-mkIdentifier "" = ""
-mkIdentifier ('-':x:xs) = toUpper x : mkIdentifier xs
-mkIdentifier ('-':xs) = mkIdentifier xs
-mkIdentifier (x:xs) = x : mkIdentifier xs
-
 mkAlternatives :: [Doc] -> Doc
 mkAlternatives docs = 
   let contents = vcat $ intersperse (text "<|>") docs
