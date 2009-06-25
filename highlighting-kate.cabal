@@ -147,6 +147,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Postscript
                      Text.Highlighting.Kate.Syntax.Prolog
                      Text.Highlighting.Kate.Syntax.Python
+                     Text.Highlighting.Kate.Syntax.Relaxngcompact
                      Text.Highlighting.Kate.Syntax.Rhtml
                      Text.Highlighting.Kate.Syntax.Ruby
                      Text.Highlighting.Kate.Syntax.Scala
