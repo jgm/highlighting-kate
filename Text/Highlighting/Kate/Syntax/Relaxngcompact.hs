@@ -1,4 +1,4 @@
-{- This module was generated from data in the Kate syntax highlighting file relaxngcompact.xml, version 0.1,
+{- This module was generated from data in the Kate syntax highlighting file relaxngcompact.xml, version 0.2,
    by  Rintze Zelle -}
 
 module Text.Highlighting.Kate.Syntax.Relaxngcompact ( highlight, parseExpression, syntaxName, syntaxExtensions ) where
@@ -51,7 +51,9 @@ pEndLine = do
   case context of
     "Normal Text" -> return ()
     "Comments" -> (popContext >> return ())
-    "string" -> return ()
+    "String" -> return ()
+    "Node Names" -> (popContext >> return ())
+    "Definitions" -> (popContext >> return ())
     _ -> return ()
   lineContents <- lookAhead wholeLine
   updateState $ \st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0 }
@@ -66,27 +68,41 @@ withAttribute attr txt = do
   updateState $ \st -> st { synStCharsParsedInLine = oldCharsParsed + length txt } 
   return (nub [style, attr], txt)
 
-styles = [("Normal Text","Normal"),("Comments","Comment"),("String","String"),("Keyword","Keyword")]
+styles = [("Normal Text","Normal"),("Comments","Comment"),("String","String"),("Keywords","Keyword"),("Datatypes","DataType"),("Node Names","Others"),("Definitions","Function")]
 
 parseExpressionInternal = do
   context <- currentContext
   parseRules context <|> (pDefault >>= withAttribute (fromMaybe "" $ lookup context defaultAttributes))
 
-defaultAttributes = [("Normal Text","Normal Text"),("Comments","Comments"),("string","String")]
+defaultAttributes = [("Normal Text","Normal Text"),("Comments","Comments"),("String","String"),("Node Names","Node Names"),("Definitions","Definitions")]
 
 parseRules "Normal Text" = 
-  do (attr, result) <- (((pFirstNonSpace >> pDetect2Chars False '#' '#' >>= withAttribute "Comments") >>~ pushContext "Comments")
+  do (attr, result) <- (((pFirstNonSpace >> pDetectChar False '#' >>= withAttribute "Comments") >>~ pushContext "Comments")
                         <|>
-                        ((pKeyword " \n\t.():!+,<=>%&*/;?[]^{|}~\\" ["attribute","div","element","empty","external","grammar","include","inherit","list","mixed","notAllowed","parent","start","string","text","token"] >>= withAttribute "Keyword"))
+                        ((pDetectChar False '"' >>= withAttribute "String") >>~ pushContext "String")
                         <|>
-                        ((pDetectChar False '"' >>= withAttribute "String") >>~ pushContext "string"))
+                        ((pKeyword " \n\t.()!+,<=>%&*/;?[]^{|}~\\" ["default","datatypes","div","empty","external","grammar","include","inherit","list","mixed","namespace","notAllowed","parent","start","token"] >>= withAttribute "Keywords"))
+                        <|>
+                        ((pKeyword " \n\t.()!+,<=>%&*/;?[]^{|}~\\" ["attribute","element"] >>= withAttribute "Keywords") >>~ pushContext "Node Names")
+                        <|>
+                        ((pKeyword " \n\t.()!+,<=>%&*/;?[]^{|}~\\" ["string","text","xsd:anyURI","xsd:base64Binary","xsd:boolean","xsd:byte","xsd:date","xsd:dateTime","xsd:decimal","xsd:double","xsd:duration","xsd:ENTITIES","xsd:ENTITY","xsd:float","xsd:gDay","xsd:gMonth","xsd:gMonthDay","xsd:gYear","xsd:gYearMonth","xsd:hexBinary","xsd:ID","xsd:IDREF","xsd:IDREFS","xsd:int","xsd:integer","xsd:language","xsd:long","xsd:Name","xsd:NCName","xsd:negativeInteger","xsd:NMTOKEN","xsd:NMTOKENS","xsd:nonNegativeInteger","xsd:nonPositiveInteger","xsd:normalizedString","xsd:NOTATION","xsd:positiveInteger","xsd:QName","xsd:short","xsd:string","xsd:time","xsd:token","xsd:unsignedByte","xsd:unsignedInt","xsd:unsignedLong","xsd:unsignedShort"] >>= withAttribute "Datatypes"))
+                        <|>
+                        ((lookAhead (pRegExpr (compileRegex "[\\w\\.-]+[\\s]+=")) >> return ([],"") ) >>~ pushContext "Definitions"))
      return (attr, result)
 
 parseRules "Comments" = 
   pzero
 
-parseRules "string" = 
+parseRules "String" = 
   do (attr, result) <- ((pDetectChar False '"' >>= withAttribute "String") >>~ (popContext >> return ()))
+     return (attr, result)
+
+parseRules "Node Names" = 
+  do (attr, result) <- ((lookAhead (pDetectChar False '{') >> return ([],"") ) >>~ (popContext >> return ()))
+     return (attr, result)
+
+parseRules "Definitions" = 
+  do (attr, result) <- ((lookAhead (pDetectChar False '=') >> return ([],"") ) >>~ (popContext >> popContext >> return ()))
      return (attr, result)
 
 parseRules x = fail $ "Unknown context" ++ x
