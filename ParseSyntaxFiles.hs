@@ -139,9 +139,15 @@ main = do
            \            -> String                        -- ^ Source code to highlight\n\
            \            -> Either String [SourceLine]    -- ^ Either error message or result\n\
            \highlightAs lang =\n\
-           \  case (map toLower lang) of\n" ++
+           \  let lang'  = map toLower lang\n\
+           \      lang'' = if lang' `elem` map (map toLower) languages\n\
+           \                  then lang'\n\
+           \                  else case languagesByExtension lang' of\n\
+           \                            [l]  -> map toLower l  -- go by extension if unambiguous\n\
+           \                            _    -> lang'\n\
+           \  in  case lang'' of\n" ++
            cases ++
-           "        _ -> (\\_ -> Left (\"Unknown language ++ \" ++ lang))\n"
+           "        _ -> (\\_ -> Left (\"Unknown language: \" ++ lang))\n"
 
 processOneFile :: FilePath -> IO ()
 processOneFile src = do

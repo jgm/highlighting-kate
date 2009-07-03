@@ -86,7 +86,13 @@ highlightAs :: String                        -- ^ Language syntax
             -> String                        -- ^ Source code to highlight
             -> Either String [SourceLine]    -- ^ Either error message or result
 highlightAs lang =
-  case (map toLower lang) of
+  let lang'  = map toLower lang
+      lang'' = if lang' `elem` map (map toLower) languages
+                  then lang'
+                  else case languagesByExtension lang' of
+                            [l]  -> map toLower l  -- go by extension if unambiguous
+                            _    -> lang'
+  in  case lang'' of
         "ada" -> Ada.highlight
         "alert" -> Alert.highlight
         "asp" -> Asp.highlight
@@ -143,4 +149,4 @@ highlightAs lang =
         "xml" -> Xml.highlight
         "xslt" -> Xslt.highlight
         "yacc" -> Yacc.highlight
-        _ -> (\_ -> Left ("Unknown language ++ " ++ lang))
+        _ -> (\_ -> Left ("Unknown language: " ++ lang))
