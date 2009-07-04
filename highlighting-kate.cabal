@@ -97,7 +97,7 @@ Flag executable
 
 Library
   if flag(splitBase)
-    Build-Depends:   base >= 3, containers
+    Build-Depends:   base >= 3 && < 5, containers
   else
     Build-Depends:   base < 3
   Build-Depends:     parsec < 3, pcre-light, xhtml
