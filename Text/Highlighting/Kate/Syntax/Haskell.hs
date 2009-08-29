@@ -81,7 +81,9 @@ defaultAttributes = [("normal","Normal Text"),("comment_single_line","Comment"),
 parseRules "normal" = 
   do (attr, result) <- (((pDetect2Chars False '{' '-' >>= withAttribute "Comment") >>~ pushContext "comment_multi_line")
                         <|>
-                        ((pDetect2Chars False '-' '-' >>= withAttribute "Comment") >>~ pushContext "comment_single_line")
+                        ((pRegExpr (compileRegex "--$") >>= withAttribute "Comment") >>~ pushContext "comment_single_line")
+                        <|>
+                        ((pRegExpr (compileRegex "--[ A-Za-z0-9\\-,;`].*$") >>= withAttribute "Comment") >>~ pushContext "comment_single_line")
                         <|>
                         ((pRegExpr (compileRegex "([A-Z][A-Za-z0-9]*\\.)+[A-Z][A-Za-z0-9]*") >>= withAttribute "Module Name"))
                         <|>

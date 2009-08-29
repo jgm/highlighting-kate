@@ -330,8 +330,13 @@
 	<contexts>
 		<context attribute="Normal Text" lineEndContext="#stay" name="normal">
 			<Detect2Chars attribute="Comment" context="comment_multi_line" char="{" char1="-" />
+			<!--			
 			<Detect2Chars attribute="Comment" context="comment_single_line" char="-" char1="-" />
-            <RegExpr attribute="Module Name" context="#stay" String="([A-Z][A-Za-z0-9]*\.)+[A-Z][A-Za-z0-9]*"/> 
+			-->
+			<RegExpr attribute="Comment" context="comment_single_line" String="--$" />
+			<RegExpr attribute="Comment" context="comment_single_line" 
+				String="--[ A-Za-z0-9\-,;`].*$" />
+			<RegExpr attribute="Module Name" context="#stay" String="([A-Z][A-Za-z0-9]*\.)+[A-Z][A-Za-z0-9]*"/> 
             <keyword attribute="Keyword" context="#stay" String="keywords" />
 			<keyword attribute="Class" context="#stay" String="classes" />
 			<keyword attribute="Type Constructor" context="#stay" String="type constructors" />
@@ -384,7 +389,7 @@
 	</highlighting>
 	<general>
 		<comments>
-			<comment name="singleLine" start="--" />
+			<!---	<comment name="singleLine" start="-" /> -->
 			<comment name="multiLine" start="{-" end="-}" />
 		</comments>
 		<keywords casesensitive="1" />
