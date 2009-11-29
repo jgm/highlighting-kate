@@ -1,3 +1,30 @@
+highlighting-kate 0.2.5.1 (29 Nov 2009)
+
+  * Modified ParseSyntaxFiles to use UTF8, since otherwise hscolour
+    compiled with GHC 6.12 will choke on the latin1 characters
+    in some of the comments giving the authors of the original
+    kate syntax files.  Thanks to Sergei Trofimovich for pointing
+    out the problem.
+
+  * Fixed regexp in single line comment detector so infix ops like -->
+    are not treated as comments.  (Thanks to Dmitri Golubovsky for
+	the patch, also contributed to kate upstream.)
+
+  * Use Cabal to get version instead of hardcoding it.
+
+highlighting-kate 0.2.5 (04 Jul 2009)
+
+  * Changed highlightAs to go by file extension if unambiguous.
+
+  * New Relaxngcompact syntax definition.
+
+  * Removed unused mkIdentifier in ParseSyntaxFiles.
+
+  * Moved 'capitalize' to ParseSyntaxFiles and fixed its defn.
+
+  * Removed list of supported languages from description.
+    Spell 50 as "fifty" in description.
+
 highlighting-kate 0.2.4 (15 Mar 2009)
 
   * Fixed bug in literate-haskell-xml. Also fixed now upstream.
