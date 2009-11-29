@@ -34,5 +34,7 @@ module Text.Highlighting.Kate ( highlightAs
 import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..), defaultHighlightingCss )
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension )
 import Text.Highlighting.Kate.Definitions ( SourceLine, LabeledSource )
+import Data.Version (showVersion)
+import Paths_highlighting_kate (version)
 
-highlightingKateVersion = "0.2.5"
+highlightingKateVersion = showVersion version

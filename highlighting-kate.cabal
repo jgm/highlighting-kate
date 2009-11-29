@@ -162,6 +162,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Xslt
                      Text.Highlighting.Kate.Syntax.Yacc
   Other-Modules:     Text.Highlighting.Kate.Common
+                     Paths_highlighting_kate
   Ghc-Options:       -W
   Ghc-Prof-Options:  -auto-all
   -- the following line is needed to prevent gcc from consuming huge amounts of
