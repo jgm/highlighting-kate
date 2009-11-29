@@ -28,7 +28,8 @@ import Data.List
 import Data.Maybe
 import Data.Char (toUpper, toLower, isAlphaNum)
 import qualified Data.Map as Map
-import System.IO
+import Prelude hiding (writeFile, putStrLn)
+import System.IO.UTF8 (writeFile, putStrLn)
 import System.Directory
 import System.Environment
 import System.Exit

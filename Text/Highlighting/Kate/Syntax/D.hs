@@ -1,5 +1,5 @@
 {- This module was generated from data in the Kate syntax highlighting file d.xml, version 1.43,
-   by  Aziz Köksal (aziz.koeksal@gmail.com), Jari-Matti Mäkelä (jmjm@iki.fi), Simon J Mackenzie (project.katedxml@smackoz.fastmail.fm) -}
+   by  Aziz KÃ¶ksal (aziz.koeksal@gmail.com), Jari-Matti MÃ¤kelÃ¤ (jmjm@iki.fi), Simon J Mackenzie (project.katedxml@smackoz.fastmail.fm) -}
 
 module Text.Highlighting.Kate.Syntax.D ( highlight, parseExpression, syntaxName, syntaxExtensions ) where
 import Text.Highlighting.Kate.Definitions
