@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {- |
    Module      : Text.Highlighting.Kate.Common
    Copyright   : Copyright (C) 2008 John MacFarlane
@@ -11,7 +12,12 @@ Parsers used in all the individual syntax parsers.
 -}
 
 module Text.Highlighting.Kate.Common where
+#ifdef _PCRE_LIGHT
 import Text.Regex.PCRE.Light.Char8
+#else
+import System.IO.Unsafe (unsafePerformIO)
+import Text.Regex.PCRE.String
+#endif
 import Text.Highlighting.Kate.Definitions
 import Text.ParserCombinators.Parsec
 import Data.Char (toUpper, isDigit, chr)
@@ -163,6 +169,26 @@ subDynamic ('%':x:xs) | isDigit x = do
 subDynamic (x:xs) = subDynamic xs >>= return . (x:)
 subDynamic "" = return ""
 
+compileRegex :: String -> Regex
+#ifdef _PCRE_LIGHT
+compileRegex regexpStr = compile ('.' : escapeRegex regexpStr) [anchored]
+#else
+compileRegex regexpStr =
+  case unsafePerformIO $ compile (compAnchored) (execNotEmpty) ('.' : escapeRegex regexpStr) of
+        Left _ -> error $ "Error compiling regex: " ++ regexpStr
+        Right r -> r
+#endif
+
+matchRegex :: Regex -> String -> Maybe [String]
+#ifdef _PCRE_LIGHT
+matchRegex r s = match r s [exec_notempty] 
+#else
+matchRegex r s = case unsafePerformIO (regexec r s) of 
+                      Right (Just (_, mat, _ , capts)) -> Just (mat : capts)
+                      Right Nothing -> Nothing
+                      Left matchError -> error $ show matchError
+#endif
+
 pRegExpr :: Regex -> GenParser Char SyntaxState String
 pRegExpr compiledRegex = do
   st <- getState
@@ -172,12 +198,12 @@ pRegExpr compiledRegex = do
   let remaining = if charsParsedInLine == 0
                      then ' ':curLine
                      else drop (charsParsedInLine - 1) curLine 
-  case match compiledRegex remaining [exec_notempty] of
+  case matchRegex compiledRegex remaining of
         Just (x:xs) -> do if null xs
                              then return ()
                              else updateState (\st -> st {synStCaptures = xs})
                           string (drop 1 x) 
-        _           -> fail $ "Regex " ++ (show compiledRegex) ++ " failed to match"
+        _           -> pzero
 
 pRegExprDynamic :: [Char] -> GenParser Char SyntaxState String
 pRegExprDynamic regexpStr = do
@@ -193,19 +219,11 @@ escapeRegex ('\\':x:y:z:rest) | isDigit x && isDigit y && isDigit z =
   chr (read ['0','o',x,y,z]) : escapeRegex rest
 escapeRegex (x:xs) = x : escapeRegex xs 
 
-compileRegex :: String -> Regex
-compileRegex regexpStr = compile ('.' : escapeRegex regexpStr) [anchored]
-
 integerRegex :: Regex
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
 pInt :: GenParser Char SyntaxState String
 pInt = pRegExpr integerRegex 
-
-pUnimplemented :: GenParser Char st [Char]
-pUnimplemented = do
-  fail "Not implemented"
-  return ""
 
 floatRegex :: Regex
 floatRegex = compileRegex "\\b[-+]?(([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)([Ee][-+]?[0-9]+)?|[0-9]+[Ee][-+]?[0-9]+)\\b"

@@ -94,13 +94,21 @@ Flag splitBase
 Flag executable
   Description:       Build the Highlight executable.
   Default:           False
+Flag pcre-light
+  Description:       Use the pcre-light library instead of regex-pcre-builtin
+  Default:           False
 
 Library
   if flag(splitBase)
     Build-Depends:   base >= 3 && < 5, containers
   else
     Build-Depends:   base < 3
-  Build-Depends:     parsec < 3, pcre-light, xhtml
+  if flag(pcre-light)
+    Build-depends:   pcre-light
+    cpp-options:     -D_PCRE_LIGHT
+  else
+    Build-depends:   regex-pcre-builtin
+  Build-Depends:     parsec < 3, xhtml
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions
@@ -172,6 +180,8 @@ Library
 Executable Highlight
   Main-Is:          Highlight.hs
   Build-Depends:    base, containers, xhtml, filepath
+  if flag(pcre-light)
+    cpp-options:     -D_PCRE_LIGHT
   Ghc-Options:      -W
   Ghc-Prof-Options: -auto-all
   -- the following line is needed to prevent gcc from consuming huge amounts of
