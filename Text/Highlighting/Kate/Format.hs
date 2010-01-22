@@ -18,7 +18,7 @@ import Data.List (intersperse)
 -- | Options for formatters.
 data FormatOption = OptNumberLines     -- ^ Number lines
                   | OptNumberFrom Int  -- ^ Number of first line
-                  | OptLineIdentifiers -- ^ ID tags by line number
+                  | OptLineAnchors     -- ^ Anchors on each line number 
                   | OptTitleAttributes -- ^ Include title attributes
                   deriving (Eq, Show, Read)
 
@@ -36,7 +36,7 @@ formatAsXHtml opts lang lines =
                   lnOnClick = strAttr "onclick" "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
                   lineNumbers = td ! [theclass "lineNumbers", lnTitle, lnOnClick] $ pre <<
                                      (intersperse br $ map lineNum [startNum..(startNum + numberOfLines - 1)])
-                  lineNum n = if OptLineIdentifiers `elem` opts
+                  lineNum n = if OptLineAnchors `elem` opts
                                  then anchor ! [identifier $ show n] << show n
                                  else stringToHtml $ show n
                   sourceCode = td ! [theclass "sourceCode"] $ 

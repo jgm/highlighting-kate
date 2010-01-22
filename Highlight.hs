@@ -94,7 +94,7 @@ main = do
      then hPutStrLn stderr ("Unknown syntax: " ++ lang) >> exitWith (ExitFailure 4)
      else return ()
   let highlightOpts = (if TitleAttributes `elem` opts then [OptTitleAttributes] else []) ++
-                      (if NumberLines `elem` opts then [OptNumberLines, OptLineIdentifiers] else [])
+                      (if NumberLines `elem` opts then [OptNumberLines, OptLineAnchors] else [])
   let css = case cssPathOf opts of
                    Nothing      -> style ! [thetype "text/css"] $ primHtml defaultHighlightingCss 
                    Just cssPath -> thelink ! [thetype "text/css", href cssPath, rel "stylesheet"] << noHtml
