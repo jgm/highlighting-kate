@@ -1,3 +1,15 @@
+highlighting-kate 0.2.6 (22 Jan 2010)
+
+  * Added OptLineAnchors FormatOption.  When used with
+    OptNumberLines, this includes a link anchor on each line,
+    so users can link to a particular line in a highlighted source
+    file.  Thanks to Daniel Patterson for the idea.
+
+  * Default to using regex-pcre-builtin, unless pcre-light flag is
+    turned on.  regex-pcre-builtin contains c sources for pcre, so it
+    should now be possible to install highlighting-kate without manually
+    installing the pcre library first -- a hurdle for some users.
+
 highlighting-kate 0.2.5.1 (29 Nov 2009)
 
   * Modified ParseSyntaxFiles to use UTF8, since otherwise hscolour
