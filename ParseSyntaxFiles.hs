@@ -36,8 +36,6 @@ import System.Exit
 import System.FilePath
 import Text.PrettyPrint
 import Text.Highlighting.Kate.Definitions
-import Data.Digest.Pure.SHA (sha1, showDigest)
-import Data.ByteString.Lazy.UTF8 (fromString)
 
 data SyntaxDefinition =
   SyntaxDefinition { synLanguage      :: String
@@ -251,9 +249,11 @@ mkParser syntax =
                                 text "lineContents <- lookAhead wholeLine" $$
                                 text "updateState $ \\st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0, synStPrevChar = '\\n' }")
       -- we use 'words "blah blah2 blah3"' to keep ghc from inlining the list, which makes compiling take a long time
-      listDef lists = text $ listToHash lists ++ " = Set.fromList $ words $ " ++
-                       show (if keywordCaseSensitive (synKeywordAttr syntax) then unwords lists else map toLower (unwords lists))
-      lists = vcat $ map (listDef . snd) $ synLists syntax
+      listDef (n, list) = text $ listName n ++ " = Set.fromList $ words $ " ++
+                               show (if keywordCaseSensitive (synKeywordAttr syntax)
+                                        then unwords list
+                                        else map toLower (unwords list))
+      lists = vcat $ map listDef $ synLists syntax
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser, 
                                       endLineParser, withAttr, styles, parseExpressionInternal, lists, 
                                       defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextCatchAll]
@@ -290,9 +290,10 @@ mkSyntaxParser syntax context parser =
                                      then "pRegExprDynamic " ++ show (parserString parser)
                                      else "pRegExpr (compileRegex " ++ show (parserString parser) ++ ")"
             "keyword"          -> "pKeyword " ++ show (keywordDelims $ synKeywordAttr syntax) ++ " " ++ list
-                                     where list = case lookup (parserString parser) (synLists syntax) of
-                                                   Just l   -> listToHash l
+                                     where list = case lookup string (synLists syntax) of
+                                                   Just _   -> listName string
                                                    Nothing  -> "Set.empty"
+                                           string = parserString parser
             "Int"              -> "pInt"
             "Float"            -> "pFloat"
             "HlCOct"           -> "pHlCOct"
@@ -354,8 +355,11 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
     "JavaScript" -> "Javascript"
     x -> x
 
-listToHash :: [String] -> String
-listToHash = ("list" ++) . showDigest . sha1 . fromString . concat
+listName :: String -> String
+listName n = "list_" ++ normalize n
+  where normalize "" = ""
+        normalize (x:xs) | isAlphaNum x = x : normalize xs 
+        normalize (x:xs)                = '_':normalize xs
 
 capitalize :: String -> String
 capitalize (x:xs) = toUpper x : xs
