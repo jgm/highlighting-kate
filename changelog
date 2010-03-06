@@ -1,3 +1,15 @@
+highlighting-kate 0.2.6.1 (06 March 2010)
+
+  * Performance improvements suggested by Joachim Breitner.
+    These reduce compile time and executable size significantly
+    (by almost half), and yield a slight speedup in run time.
+    + Use Set instead of list for keywords.
+    + Put keyword sets in separate definitions.
+    + Use words and unwords to trick GHC into not inlining the
+      lists of keywords, which slows compilation considerably.
+  
+  * Changed ghc-prof-options to include -caf-all and -O0.
+
 highlighting-kate 0.2.6 (22 Jan 2010)
 
   * Added OptLineAnchors FormatOption.  When used with
