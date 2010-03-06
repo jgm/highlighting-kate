@@ -23,6 +23,7 @@ data SyntaxState = SyntaxState
   , synStLanguage             :: String       -- ^ Language being parsed 
   , synStCurrentLine          :: String       -- ^ Contents of current line
   , synStCharsParsedInLine    :: Int          -- ^ Num characters parsed in line
+  , synStPrevChar             :: Char         -- ^ Last character parsed
   , synStCaseSensitive        :: Bool         -- ^ Language is case-sensitive
   , synStKeywordCaseSensitive :: Bool         -- ^ Keywords are case-sensitive
   , synStCaptures             :: [String]     -- ^ List of regex captures from

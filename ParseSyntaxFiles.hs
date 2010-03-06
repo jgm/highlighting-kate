@@ -36,6 +36,8 @@ import System.Exit
 import System.FilePath
 import Text.PrettyPrint
 import Text.Highlighting.Kate.Definitions
+import Data.Digest.Pure.SHA (sha1, showDigest)
+import Data.ByteString.Lazy.UTF8 (fromString)
 
 data SyntaxDefinition =
   SyntaxDefinition { synLanguage      :: String
@@ -80,7 +82,6 @@ data SyntaxParser =
                , parserChar1             :: Char
                , parserChildren          :: [SyntaxParser]
                } deriving (Read, Show)
-
 
 -- | Converts a list of files (ending in .xml) and directories containing .xml files
 -- into a list of .xml files.
@@ -170,6 +171,7 @@ processOneFile src = do
            unlines includeImports ++ 
            "import Text.ParserCombinators.Parsec\n\
            \import Data.List (nub)\n\
+           \import qualified Data.Set as Set\n\
            \import Data.Map (fromList)\n\
            \import Data.Maybe (fromMaybe)\n\n" ++
            render (mkParser syntax) ++ "\n"
@@ -190,7 +192,8 @@ mkParser syntax =
                    text "let style = fromMaybe \"\" $ lookup attr styles" $$
                    text "st <- getState" $$
                    text "let oldCharsParsed = synStCharsParsedInLine st" $$
-                   text "updateState $ \\st -> st { synStCharsParsedInLine = oldCharsParsed + length txt } " $$
+                   text "let prevchar = if null txt then '\\n' else last txt" $$
+                   text "updateState $ \\st -> st { synStCharsParsedInLine = oldCharsParsed + length txt, synStPrevChar = prevchar } " $$
                    text "return (nub [style, attr], txt)")
       parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $ 
                                   text "context <- currentContext" $$
@@ -218,8 +221,9 @@ mkParser syntax =
                                   , synStLanguage = synLanguage syntax
                                   , synStCurrentLine = ""
                                   , synStCharsParsedInLine = 0
+                                  , synStPrevChar = '\n'
                                   , synStCaseSensitive = synCaseSensitive syntax
-                                  , synStKeywordCaseSensitive = keywordCaseSensitive $ synKeywordAttr syntax
+                                  , synStKeywordCaseSensitive = keywordCaseSensitive (synKeywordAttr syntax)
                                   , synStCaptures = [] }
       initState = text $ "startingState = " ++ show startingState
       sourceLineParser = text "parseSourceLine = manyTill parseExpressionInternal pEndLine"
@@ -245,9 +249,13 @@ mkParser syntax =
                                           (text $ "_ -> return ()")) $$
                                 {- text "pushContext (fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$ -}
                                 text "lineContents <- lookAhead wholeLine" $$
-                                text "updateState $ \\st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0 }")
+                                text "updateState $ \\st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0, synStPrevChar = '\\n' }")
+      -- we use 'words "blah blah2 blah3"' to keep ghc from inlining the list, which makes compiling take a long time
+      listDef lists = text $ listToHash lists ++ " = Set.fromList $ words $ " ++
+                       show (if keywordCaseSensitive (synKeywordAttr syntax) then unwords lists else map toLower (unwords lists))
+      lists = vcat $ map (listDef . snd) $ synLists syntax
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser, 
-                                      endLineParser, withAttr, styles, parseExpressionInternal, 
+                                      endLineParser, withAttr, styles, parseExpressionInternal, lists, 
                                       defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
@@ -281,8 +289,10 @@ mkSyntaxParser syntax context parser =
             "RegExpr"          -> if parserDynamic parser
                                      then "pRegExprDynamic " ++ show (parserString parser)
                                      else "pRegExpr (compileRegex " ++ show (parserString parser) ++ ")"
-            "keyword"          -> "pKeyword " ++ show (keywordDelims $ synKeywordAttr syntax) ++ " " ++ 
-                                                 show (fromMaybe [] $ lookup (parserString parser) (synLists syntax))
+            "keyword"          -> "pKeyword " ++ show (keywordDelims $ synKeywordAttr syntax) ++ " " ++ list
+                                     where list = case lookup (parserString parser) (synLists syntax) of
+                                                   Just l   -> listToHash l
+                                                   Nothing  -> "Set.empty"
             "Int"              -> "pInt"
             "Float"            -> "pFloat"
             "HlCOct"           -> "pHlCOct"
@@ -343,6 +353,9 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
     "Javadoc" -> "Javadoc"
     "JavaScript" -> "Javascript"
     x -> x
+
+listToHash :: [String] -> String
+listToHash = ("list" ++) . showDigest . sha1 . fromString . concat
 
 capitalize :: String -> String
 capitalize (x:xs) = toUpper x : xs

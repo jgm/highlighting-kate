@@ -1,6 +1,7 @@
+{-# LANGUAGE CPP #-}
 module Main where
 import Text.Highlighting.Kate
-import System.IO
+import System.IO (hPutStrLn, stderr)
 import System.Environment
 import Text.XHtml.Transitional
 import System.Console.GetOpt

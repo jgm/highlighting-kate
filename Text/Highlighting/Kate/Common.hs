@@ -20,8 +20,9 @@ import Text.Regex.PCRE.String
 #endif
 import Text.Highlighting.Kate.Definitions
 import Text.ParserCombinators.Parsec
-import Data.Char (toUpper, isDigit, chr)
+import Data.Char (isDigit, chr, toLower)
 import qualified Data.Map as Map
+import qualified Data.Set as Set
 
 -- | Like >>, but returns the operation on the left.
 -- (Suggested by Tillmann Rendel on Haskell-cafe list.)
@@ -121,26 +122,20 @@ pDetect2Chars dynamic ch1 ch2 = try $ do
   [c2] <- pDetectChar dynamic ch2
   return [c1, c2]
 
-pKeyword :: [Char] -> [[Char]] -> GenParser Char SyntaxState [Char]
-pKeyword delims list = try $ do
+pKeyword :: [Char] -> Set.Set [Char] -> GenParser Char SyntaxState [Char]
+pKeyword delims kws = try $ do
   st <- getState
-  let caseSensitive = synStKeywordCaseSensitive st
-  let curLine = synStCurrentLine st
-  let charsParsed = synStCharsParsedInLine st
-  let prevChar = if charsParsed == 0
-                    then Nothing
-                    else if length curLine < charsParsed
-                            then Nothing
-                            else Just $ curLine !! (charsParsed - 1)
+  let prevChar = synStPrevChar st
   case prevChar of
-         Just x | not (x `elem` delims) -> fail "Not preceded by a delimiter"
+         x | not (x `elem` delims) -> fail "Not preceded by a delimiter"
          _ -> return ()
   word <- many1 (noneOf delims)
-  if word `elem` list
+  let word' = if synStKeywordCaseSensitive st
+                 then word
+                 else map toLower word
+  if word' `Set.member` kws
      then return word
-     else if not caseSensitive && (map toUpper word) `elem` (map (map toUpper) list)
-             then return word
-             else fail "Keyword not in list"
+     else fail "Keyword not in list"
 
 pString :: Bool -> [Char] -> GenParser Char SyntaxState String
 pString dynamic str =
