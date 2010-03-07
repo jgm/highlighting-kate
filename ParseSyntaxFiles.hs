@@ -35,6 +35,8 @@ import System.Environment
 import System.Exit
 import System.FilePath
 import Text.PrettyPrint
+import Text.Printf (printf)
+import Data.Char (ord)
 import Text.Highlighting.Kate.Definitions
 
 data SyntaxDefinition =
@@ -254,8 +256,11 @@ mkParser syntax =
                                         then unwords list
                                         else map toLower (unwords list))
       lists = vcat $ map listDef $ synLists syntax
+      regexDef re = text $ compiledRegexName re ++ " = compileRegex " ++ show re
+      regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
+                                                              parserType x == "RegExpr", parserDynamic x == False]
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser, 
-                                      endLineParser, withAttr, styles, parseExpressionInternal, lists, 
+                                      endLineParser, withAttr, styles, parseExpressionInternal, lists, regexes,
                                       defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
@@ -288,7 +293,7 @@ mkSyntaxParser syntax context parser =
             "StringDetect"     -> "pString " ++ show (parserDynamic parser) ++ " " ++ show (parserString parser) 
             "RegExpr"          -> if parserDynamic parser
                                      then "pRegExprDynamic " ++ show (parserString parser)
-                                     else "pRegExpr (compileRegex " ++ show (parserString parser) ++ ")"
+                                     else "pRegExpr " ++ compiledRegexName (parserString parser)
             "keyword"          -> "pKeyword " ++ show (keywordDelims $ synKeywordAttr syntax) ++ " " ++ list
                                      where list = case lookup string (synLists syntax) of
                                                    Just _   -> listName string
@@ -357,9 +362,15 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
 
 listName :: String -> String
 listName n = "list_" ++ normalize n
-  where normalize "" = ""
-        normalize (x:xs) | isAlphaNum x = x : normalize xs 
-        normalize (x:xs)                = '_':normalize xs
+
+compiledRegexName :: String -> String
+compiledRegexName n = "regex_" ++ normalize n
+
+normalize :: String -> String
+normalize "" = ""
+normalize (x:xs) | isAlphaNum x = x : normalize xs 
+normalize (' ':xs)              = '_':normalize xs
+normalize (x:xs)                = printf "'%2x" (ord x) ++ normalize xs
 
 capitalize :: String -> String
 capitalize (x:xs) = toUpper x : xs
