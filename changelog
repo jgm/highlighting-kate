@@ -1,3 +1,10 @@
+highlighting-kate 0.2.6.2 (06 March 2010)
+
+  * Use separate definitions for compiled regexes.
+    This speeds up compilation significantly.
+
+  * Replaced list_(hash) with list_(list_name) for readability.
+
 highlighting-kate 0.2.6.1 (06 March 2010)
 
   * Performance improvements suggested by Joachim Breitner.
