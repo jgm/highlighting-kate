@@ -108,7 +108,7 @@ Library
     cpp-options:     -D_PCRE_LIGHT
   else
     Build-depends:   regex-pcre-builtin
-  Build-Depends:     parsec < 3, xhtml
+  Build-Depends:     parsec, xhtml
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions
