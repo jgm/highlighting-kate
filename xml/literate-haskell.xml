@@ -30,15 +30,6 @@
     <item> type </item>
     <item> where </item>
   </list>
-    <list name="infix operators">
-    <item> quot </item>
-    <item> rem </item>
-    <item> div </item>
-    <item> mod </item>
-    <item> elem </item>
-    <item> notElem </item>
-    <item> seq </item>
-  </list>
   <list name="functions">
     <!--
     These operators are not handled yet.
