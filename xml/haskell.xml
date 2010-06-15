@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 <!-- Haskell syntax highlighting by Marcel Martin <mmar@freenet.de> -->
-<language name="Haskell" version="1.04" kateversion="2.3" section="Sources" extensions="*.hs" author="Marcel Martin (mmar@freenet.de)" license="">
+
+<!-- If you add or fix things here, change literate-haskell.xml too (if applicable) -->
+
+<language name="Haskell" version="1.9" kateversion="2.3" section="Sources" extensions="*.hs" mimetype="text/x-haskell" author="Marcel Martin (mmar@freenet.de)" license="" indenter="haskell">
 	<highlighting>
 	<list name="keywords">
 		<item> as </item>
@@ -11,14 +14,16 @@
 		<item> deriving </item>
 		<item> do </item>
 		<item> else </item>
+		<item> hiding </item>
 		<item> if </item>
-        <item> import </item>
-        <item> in </item>
+		<item> import </item>
+		<item> in </item>
 		<item> infixl </item>
 		<item> infixr </item>
 		<item> instance </item>
 		<item> let </item>
 		<item> module </item>
+		<item> newtype </item>
 		<item> of </item>
 		<item> primitive </item>
 		<item> qualified </item>
@@ -132,6 +137,7 @@
 		<item> getChar </item>
 		<item> getContents </item>
 		<item> getLine </item>
+		<item> group </item>
 		<item> head </item>
 		<item> id </item>
 		<item> inRange </item>
@@ -187,6 +193,7 @@
 		<item> or </item>
 		<item> ord </item>
 		<item> otherwise </item>
+		<item> pack </item>
 		<item> pi </item>
 		<item> pred </item>
 		<item> primExitWith </item>
@@ -246,6 +253,7 @@
 		<item> sin </item>
 		<item> sinh </item>
 		<item> snd </item>
+		<item> sort </item>
 		<item> span </item>
 		<item> splitAt </item>
 		<item> sqrt </item>
@@ -283,7 +291,7 @@
 	<list name="type constructors">
 		<item> Bool </item>
 		<item> Char </item>
-                <item> Double </item>
+		<item> Double </item>
 		<item> Either </item>
 		<item> Float </item>
 		<item> IO </item>
@@ -296,6 +304,7 @@
 		<item> ReadS </item>
 		<item> ShowS </item>
 		<item> String </item>
+		<item> ByteString </item>
 
 	</list>
 	<list name="classes">
@@ -329,15 +338,12 @@
 	</list>
 	<contexts>
 		<context attribute="Normal Text" lineEndContext="#stay" name="normal">
-			<Detect2Chars attribute="Comment" context="comment_multi_line" char="{" char1="-" />
-			<!--			
-			<Detect2Chars attribute="Comment" context="comment_single_line" char="-" char1="-" />
-			-->
+			<RegExpr attribute="Comment" context="comment_multi_line" String="\{-[^#]" />
 			<RegExpr attribute="Comment" context="comment_single_line" String="--$" />
-			<RegExpr attribute="Comment" context="comment_single_line" 
-				String="--[ A-Za-z0-9\-,;`].*$" />
-			<RegExpr attribute="Module Name" context="#stay" String="([A-Z][A-Za-z0-9]*\.)+[A-Z][A-Za-z0-9]*"/> 
-            <keyword attribute="Keyword" context="#stay" String="keywords" />
+			<RegExpr attribute="Comment" context="comment_single_line" String="--[ A-Za-z0-9\-,;`].*$" />
+			<RegExpr attribute="Module Name" context="#stay" String="([A-Z][A-Za-z0-9]*\.)+[A-Z][A-Za-z0-9]*"/>
+			<RegExpr attribute="Language Pragma" context="#stay" String="\{-#.*#-\}"/>
+			<keyword attribute="Keyword" context="#stay" String="keywords" />
 			<keyword attribute="Class" context="#stay" String="classes" />
 			<keyword attribute="Type Constructor" context="#stay" String="type constructors" />
 			<keyword attribute="Function" context="#stay" String="functions" />
@@ -347,8 +353,9 @@
 			<RegExpr attribute="Normal Text" context="#stay" String="\w[']+" />
 			<DetectChar attribute="Char" context="single_char" char="'" />
 			<RegExpr attribute="Function Definition" context="#stay" String="[a-z_]+\w*'*\s*::" />
-			<Float attribute="Float" context="#stay" />
+			<RegExpr attribute="Float" context="#stay" String="\d+\.\d+" />
 			<Int attribute="Decimal" context="#stay" />
+			<Detect2Chars attribute="EnumFromTo" context="#stay" char ="." char1="." />
 		</context>
 		<context attribute="Comment" lineEndContext="#pop" name="comment_single_line" />
 		<context attribute="Comment" lineEndContext="#stay" name="comment_multi_line">
@@ -370,27 +377,29 @@
 		</context>
 	</contexts>
 	<itemDatas>
-		<itemData name="Normal Text"		defStyleNum="dsNormal"/>
-		<itemData name="Module Name" 		defStyleNum="dsNormal"/>
-		<itemData name="Keyword" 		defStyleNum="dsKeyword"/>
-		<itemData name="Function"		defStyleNum="dsFunction"/>
-		<itemData name="Function Definition"	defStyleNum="dsFunction"/>
-		<itemData name="Class"			defStyleNum="dsKeyword"/>
-		<itemData name="Decimal"		defStyleNum="dsDecVal"/>
-		<itemData name="Float"			defStyleNum="dsFloat"/>
-		<itemData name="Char"			defStyleNum="dsChar"/>
-		<itemData name="String"			defStyleNum="dsString"/>
-		<itemData name="Constructor"		defStyleNum="dsOthers"/>
-		<itemData name="Comment"		defStyleNum="dsComment"/>
-		<itemData name="Data Constructor"	defStyleNum="dsKeyword"/>
-		<itemData name="Type Constructor"	defStyleNum="dsDataType"/>
-		<itemData name="Infix Operator"		defStyleNum="dsOthers"/>
+		<itemData name="Normal Text" defStyleNum="dsNormal" spellChecking="false" />
+		<itemData name="Module Name" defStyleNum="dsNormal" spellChecking="false" />
+		<itemData name="Keyword" defStyleNum="dsKeyword" spellChecking="false" />
+		<itemData name="Function" defStyleNum="dsFunction" spellChecking="false" />
+		<itemData name="Function Definition" defStyleNum="dsFunction" spellChecking="false" />
+		<itemData name="Class" defStyleNum="dsKeyword" spellChecking="false" />
+		<itemData name="Decimal" defStyleNum="dsDecVal" spellChecking="false" />
+		<itemData name="Float" defStyleNum="dsFloat" spellChecking="false" />
+		<itemData name="Char" defStyleNum="dsChar" spellChecking="false" />
+		<itemData name="String" defStyleNum="dsString" />
+		<itemData name="Constructor" defStyleNum="dsOthers" spellChecking="false" />
+		<itemData name="Language Pragma" defStyleNum="dsOthers" spellChecking="false" />
+		<itemData name="Comment" defStyleNum="dsComment" />
+		<itemData name="Data Constructor" defStyleNum="dsKeyword" spellChecking="false" />
+		<itemData name="Type Constructor" defStyleNum="dsDataType" spellChecking="false" />
+		<itemData name="Infix Operator" defStyleNum="dsOthers" spellChecking="false" />
+		<itemData name="EnumFromTo" defStyleNum="dsFunction" spellChecking="false" />
 	</itemDatas>
 	</highlighting>
 	<general>
+		<folding indentationsensitive="1" />
 		<comments>
-			<!---	<comment name="singleLine" start="-" /> -->
-			<comment name="multiLine" start="{-" end="-}" />
+			<comment name="singleLine" start="--" />
 		</comments>
 		<keywords casesensitive="1" />
 	</general>
