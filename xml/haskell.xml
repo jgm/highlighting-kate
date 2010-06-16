@@ -4,7 +4,7 @@
 
 <!-- If you add or fix things here, change literate-haskell.xml too (if applicable) -->
 
-<language name="Haskell" version="1.9" kateversion="2.3" section="Sources" extensions="*.hs" mimetype="text/x-haskell" author="Marcel Martin (mmar@freenet.de)" license="" indenter="haskell">
+<language name="Haskell" version="1.9.1" kateversion="2.3" section="Sources" extensions="*.hs" mimetype="text/x-haskell" author="Marcel Martin (mmar@freenet.de) and Nicolas Wu (zenzike@gmail.com)" license="" indenter="haskell">
   <highlighting>
   <list name="keywords">
     <item> as </item>
@@ -31,33 +31,7 @@
     <item> type </item>
     <item> where </item>
   </list>
-  <list name="functions">
-    <!--
-                These operators are not handled yet.
-    <item> !! </item>
-    <item> % </item>
-    <item> && </item>
-    <item> $! </item>
-    <item> $ </item>
-    <item> * </item>
-    <item> ** </item>
-    <item> - </item>
-    <item> . </item>
-    <item> /= </item>
-    <item> < </item>
-    <item> <= </item>
-    <item> =<< </item>
-    <item> == </item>
-    <item> > </item>
-    <item> >= </item>
-    <item> >> </item>
-    <item> >>= </item>
-    <item> ^ </item>
-    <item> ^^ </item>
-    <item> ++ </item>
-    <item> || </item>
-    //-->
-
+  <list name="prelude functions">
     <item> FilePath </item>
     <item> IOError </item>
     <item> abs </item>
@@ -336,13 +310,14 @@
       <keyword attribute="Keyword" context="#stay" String="keywords" />
       <keyword attribute="Class" context="#stay" String="classes" />
       <keyword attribute="Type Constructor" context="#stay" String="type constructors" />
-      <keyword attribute="Function" context="#stay" String="functions" />
+      <keyword attribute="Function Prelude" context="#stay" String="prelude functions" />
       <keyword attribute="Data Constructor" context="#stay" String="data constructors" />
       <DetectChar attribute="String" context="string" char="&quot;" />
       <DetectChar attribute="Infix Operator" context="infix" char="`"/>
-      <RegExpr attribute="Normal Text" context="#stay" String="\w[']+" />
       <DetectChar attribute="Char" context="single_char" char="'" />
-      <RegExpr attribute="Function Definition" context="#stay" String="[a-z_]+\w*'*\s*::" />
+      <RegExpr attribute="Operator" context="#stay" String="([A-Z][a-zA-Z0-0_']*\.)*[\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]+"/>
+      <RegExpr attribute="Function" context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[a-z][a-zA-Z0-9_']*"/>
+      <RegExpr attribute="Normal Text" context="#stay" String="\w[']+" />
       <RegExpr attribute="Float" context="#stay" String="\d+\.\d+" />
       <Int attribute="Decimal" context="#stay" />
       <Detect2Chars attribute="EnumFromTo" context="#stay" char ="." char1="." />
@@ -362,16 +337,14 @@
       <RegExpr attribute="Char" context="#stay" String="\\." />
       <DetectChar attribute="Char" context="#pop" char="'" />
     </context>
-    <context attribute="Function Definition" lineEndContext="#pop" name="function_definition">
-      <DetectChar attribute="Function Definition" context="#pop" char=";" />
-    </context>
   </contexts>
   <itemDatas>
+    <itemData name="Operator" defStyleNum="dsFunction" spellChecking="false" />
     <itemData name="Normal Text" defStyleNum="dsNormal" spellChecking="false" />
     <itemData name="Module Name" defStyleNum="dsNormal" spellChecking="false" />
     <itemData name="Keyword" defStyleNum="dsKeyword" spellChecking="false" />
-    <itemData name="Function" defStyleNum="dsFunction" spellChecking="false" />
-    <itemData name="Function Definition" defStyleNum="dsFunction" spellChecking="false" />
+    <itemData name="Function Prelude" defStyleNum="dsFunction" spellChecking="false" />
+    <itemData name="Function" defStyleNum="dsNormal" spellChecking="false" />
     <itemData name="Class" defStyleNum="dsKeyword" spellChecking="false" />
     <itemData name="Decimal" defStyleNum="dsDecVal" spellChecking="false" />
     <itemData name="Float" defStyleNum="dsFloat" spellChecking="false" />
@@ -383,7 +356,7 @@
     <itemData name="Data Constructor" defStyleNum="dsKeyword" spellChecking="false" />
     <itemData name="Type Constructor" defStyleNum="dsDataType" spellChecking="false" />
     <itemData name="Infix Operator" defStyleNum="dsOthers" spellChecking="false" />
-    <itemData name="EnumFromTo" defStyleNum="dsFunction" spellChecking="false" />
+    <itemData name="EnumFromTo" defStyleNum="dsOthers" spellChecking="false" />
   </itemDatas>
   </highlighting>
   <general>
