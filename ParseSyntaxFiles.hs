@@ -28,8 +28,6 @@ import Data.List
 import Data.Maybe
 import Data.Char (toUpper, toLower, isAlphaNum)
 import qualified Data.Map as Map
-import Prelude hiding (writeFile, putStrLn)
-import System.IO.UTF8 (writeFile, putStrLn)
 import System.Directory
 import System.Environment
 import System.Exit
@@ -38,6 +36,8 @@ import Text.PrettyPrint
 import Text.Printf (printf)
 import Data.Char (ord)
 import Text.Highlighting.Kate.Definitions
+import qualified Data.ByteString as B
+import Data.ByteString.UTF8 (fromString)
 
 data SyntaxDefinition =
   SyntaxDefinition { synLanguage      :: String
@@ -112,7 +112,7 @@ main = do
   let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
   let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
   let languageExtensions = concat $ intersperse ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names
-  writeFile syntaxFile $
+  B.writeFile syntaxFile $ fromString $
            "module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension ) where\n\
            \import Data.Char (toLower)\n\
            \import Data.Maybe (fromMaybe)\n\
@@ -161,7 +161,7 @@ processOneFile src = do
         concatMap contParsers $ synContexts syntax
   let includeImports = map (("import qualified " ++) . langNameToModule) includeLangs
   putStrLn $ "Writing " ++ outFile
-  writeFile outFile $ 
+  B.writeFile outFile $ fromString $
            "{- This module was generated from data in the Kate syntax highlighting file " ++ (takeFileName src) ++ ", version " ++ 
            synVersion syntax ++ ",\n" ++
            "   by  " ++ synAuthor syntax ++ " -}\n\n" ++ 
