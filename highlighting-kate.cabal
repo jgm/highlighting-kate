@@ -67,6 +67,7 @@ Extra-Source-Files:  README
                      xml/nasm.xml
                      xml/objectivec.xml
                      xml/ocaml.xml
+                     xml/octave.xml
                      xml/pascal.xml
                      xml/perl.xml
                      xml/perl.xml.bkp
@@ -149,6 +150,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Nasm
                      Text.Highlighting.Kate.Syntax.Objectivec
                      Text.Highlighting.Kate.Syntax.Ocaml
+                     Text.Highlighting.Kate.Syntax.Octave
                      Text.Highlighting.Kate.Syntax.Pascal
                      Text.Highlighting.Kate.Syntax.Perl
                      Text.Highlighting.Kate.Syntax.Php
