@@ -49,7 +49,10 @@ the parsers by doing:
 
     runghc ParseSyntaxFiles.hs xml
 
-Note that ParseSyntaxFiles.hs requires the HXT package.
+Note that ParseSyntaxFiles.hs requires the HXT package. If you
+added or removed a syntax definition, you will also need to
+update the Extra-Source-Files and Exposed-Modules sections of
+highlighting-kate.cabal before recompiling using 'cabal install'.
 
 You can browse the available Kate syntax highlighting files at
 
