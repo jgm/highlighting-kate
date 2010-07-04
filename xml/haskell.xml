@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
-<!-- Haskell syntax highlighting by Marcel Martin <mmar@freenet.de> -->
-
-<!-- If you add or fix things here, change literate-haskell.xml too (if applicable) -->
-
-<language name="Haskell" version="1.9.1" kateversion="2.3" section="Sources" extensions="*.hs" mimetype="text/x-haskell" author="Marcel Martin (mmar@freenet.de) and Nicolas Wu (zenzike@gmail.com)" license="" indenter="haskell">
+<language name="Haskell" version="2.0.1" kateversion="2.3" section="Sources" extensions="*.hs" mimetype="text/x-haskell" author="Nicolas Wu (zenzike@gmail.com)" license="" indenter="haskell">
   <highlighting>
   <list name="keywords">
     <item> as </item>
@@ -31,7 +27,7 @@
     <item> type </item>
     <item> where </item>
   </list>
-  <list name="prelude functions">
+  <list name="prelude function">
     <item> FilePath </item>
     <item> IOError </item>
     <item> abs </item>
@@ -253,25 +249,7 @@
     <item> zipWith </item>
     <item> zipWith3 </item>
   </list>
-  <list name="type constructors">
-    <item> Bool </item>
-    <item> Char </item>
-    <item> Double </item>
-    <item> Either </item>
-    <item> Float </item>
-    <item> IO </item>
-    <item> Integer </item>
-    <item> Int </item>
-    <item> Maybe </item>
-    <item> Ordering </item>
-    <item> Rational </item>
-    <item> Ratio </item>
-    <item> ReadS </item>
-    <item> ShowS </item>
-    <item> String </item>
-    <item> ByteString </item>
-  </list>
-  <list name="classes">
+  <list name="prelude class">
     <item> Bounded </item>
     <item> Enum </item>
     <item> Eq </item>
@@ -284,86 +262,117 @@
     <item> Num </item>
     <item> Ord </item>
     <item> Read </item>
+    <item> Real </item>
     <item> RealFloat </item>
     <item> RealFrac </item>
-    <item> Real </item>
     <item> Show </item>
   </list>
-  <list name="data constructors">
-    <item> EQ </item>
+  <list name="prelude type">
+    <item> Bool </item>
+    <item> Char </item>
+    <item> Double </item>
+    <item> Either </item>
+    <item> FilePath </item>
+    <item> Float </item>
+    <item> Int </item>
+    <item> Integer </item>
+    <item> IO </item>
+    <item> IOError </item>
+    <item> Maybe </item>
+    <item> Ordering </item>
+    <item> Ratio </item>
+    <item> Rational </item>
+    <item> ReadS </item>
+    <item> ShowS </item>
+    <item> String </item>
+    <item> ByteString </item>
+  </list>
+  <list name="prelude data">
     <item> False </item>
-    <item> GT </item>
-    <item> Just </item>
-    <item> LT </item>
-    <item> Left </item>
-    <item> Nothing </item>
-    <item> Right </item>
     <item> True </item>
+    <item> Left </item>
+    <item> Right </item>
+    <item> Just </item>
+    <item> Nothing </item>
+    <item> EQ </item>
+    <item> LT </item>
+    <item> GT </item>
   </list>
   <contexts>
-    <context attribute="Normal Text" lineEndContext="#stay" name="normal">
-      <RegExpr attribute="Comment" context="comment_multi_line" String="\{-[^#]" />
-      <RegExpr attribute="Comment" context="comment_single_line" String="--$" />
-      <RegExpr attribute="Comment" context="comment_single_line" String="--[ A-Za-z0-9\-,;`].*$" />
-      <RegExpr attribute="Module Name" context="#stay" String="([A-Z][A-Za-z0-9]*\.)+[A-Z][A-Za-z0-9]*"/>
-      <RegExpr attribute="Language Pragma" context="#stay" String="\{-#.*#-\}"/>
-      <keyword attribute="Keyword" context="#stay" String="keywords" />
-      <keyword attribute="Class" context="#stay" String="classes" />
-      <keyword attribute="Type Constructor" context="#stay" String="type constructors" />
-      <keyword attribute="Function Prelude" context="#stay" String="prelude functions" />
-      <keyword attribute="Data Constructor" context="#stay" String="data constructors" />
-      <DetectChar attribute="String" context="string" char="&quot;" />
-      <DetectChar attribute="Infix Operator" context="infix" char="`"/>
-      <DetectChar attribute="Char" context="single_char" char="'" />
-      <RegExpr attribute="Operator" context="#stay" String="([A-Z][a-zA-Z0-0_']*\.)*[\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]+"/>
-      <RegExpr attribute="Function" context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[a-z][a-zA-Z0-9_']*"/>
-      <RegExpr attribute="Normal Text" context="#stay" String="\w[']+" />
-      <RegExpr attribute="Float" context="#stay" String="\d+\.\d+" />
-      <Int attribute="Decimal" context="#stay" />
+    <context attribute="Normal" lineEndContext="#stay" name="code">
+      <RegExpr attribute="Comment" context="comments" String="\{-[^#]?" />
+      <RegExpr attribute="Comment" context="comment"  String="--[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:].*$" />
+      <RegExpr attribute="Pragma"  context="#stay" String="\{-#.*#-\}"/>
+
+      <keyword attribute="Keyword"          context="#stay" String="keywords" />
+      <keyword attribute="Type Prelude"     context="#stay" String="prelude type" />
+      <keyword attribute="Function Prelude" context="#stay" String="prelude function" />
+      <keyword attribute="Data Prelude"     context="#stay" String="prelude data" />
+      <keyword attribute="Class Prelude"    context="#stay" String="prelude class" />
+
+      <RegExpr attribute="Signature"        context="#stay" String="\s*[a-z][a-zA-Z0-9_']*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
+      <RegExpr attribute="Signature"        context="#stay" String="\s*(\([\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]*\))*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
+      <RegExpr attribute="Type"             context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[A-Z][a-zA-Z0-9_']*" />
+      <RegExpr attribute="Function"         context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[a-z][a-zA-Z0-9_']*" />
+      <RegExpr attribute="Special"          context="#stay" String="(::|=&gt;|\-&gt;|&lt;\-A)" />
+      <RegExpr attribute="Operator"         context="#stay" String="([A-Z][a-zA-Z0-0_']*\.)*[\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]+" />
+
+      <Int        attribute="Decimal" context="#stay" />
+      <RegExpr    attribute="Float"   context="#stay" String="\d+\.\d+" />
+      <DetectChar attribute="Char"    context="char" char="'" />
+      <DetectChar attribute="String"  context="string" char="&quot;" />
+
+      <DetectChar attribute="Function Infix" context="infix" char="`"/>
       <Detect2Chars attribute="EnumFromTo" context="#stay" char ="." char1="." />
     </context>
-    <context attribute="Comment" lineEndContext="#pop" name="comment_single_line" />
-    <context attribute="Comment" lineEndContext="#stay" name="comment_multi_line">
+    <context attribute="Comment" lineEndContext="#pop" name="comment" />
+    <context attribute="Comment" lineEndContext="#stay" name="comments">
       <Detect2Chars attribute="Comment" context="#pop" char="-" char1="}" />
+    </context>
+    <context attribute="Char" lineEndContext="#pop" name="char">
+      <RegExpr attribute="Char" context="#stay" String="\\." />
+      <DetectChar attribute="Char" context="#pop" char="'" />
     </context>
     <context attribute="String" lineEndContext="#stay" name="string">
       <RegExpr attribute="String" context="#stay" String="\\." />
       <DetectChar attribute="String" context="#pop" char="&quot;" />
     </context>
-    <context attribute="Infix Operator" lineEndContext="#stay" name="infix">
-      <DetectChar attribute="Infix Operator" context="#pop" char="`"/>
-    </context>
-    <context attribute="Char" lineEndContext="#pop" name="single_char">
-      <RegExpr attribute="Char" context="#stay" String="\\." />
-      <DetectChar attribute="Char" context="#pop" char="'" />
+    <context attribute="Function Infix" lineEndContext="#stay" name="infix">
+      <DetectChar attribute="Function Infix" context="#pop" char="`"/>
     </context>
   </contexts>
   <itemDatas>
-    <itemData name="Operator" defStyleNum="dsFunction" spellChecking="false" />
-    <itemData name="Normal Text" defStyleNum="dsNormal" spellChecking="false" />
-    <itemData name="Module Name" defStyleNum="dsNormal" spellChecking="false" />
-    <itemData name="Keyword" defStyleNum="dsKeyword" spellChecking="false" />
+    <itemData name="Normal"           defStyleNum="dsNormal"   spellChecking="false" />
+    <itemData name="Comment"          defStyleNum="dsComment" />
+    <itemData name="Pragma"           defStyleNum="dsOthers"   spellChecking="false" />
+
+    <itemData name="Keyword"          defStyleNum="dsKeyword"  spellChecking="false" />
+    <itemData name="Type Prelude"     defStyleNum="dsDataType" spellChecking="false" />
     <itemData name="Function Prelude" defStyleNum="dsFunction" spellChecking="false" />
-    <itemData name="Function" defStyleNum="dsNormal" spellChecking="false" />
-    <itemData name="Class" defStyleNum="dsKeyword" spellChecking="false" />
-    <itemData name="Decimal" defStyleNum="dsDecVal" spellChecking="false" />
-    <itemData name="Float" defStyleNum="dsFloat" spellChecking="false" />
-    <itemData name="Char" defStyleNum="dsChar" spellChecking="false" />
-    <itemData name="String" defStyleNum="dsString" />
-    <itemData name="Constructor" defStyleNum="dsOthers" spellChecking="false" />
-    <itemData name="Language Pragma" defStyleNum="dsOthers" spellChecking="false" />
-    <itemData name="Comment" defStyleNum="dsComment" />
-    <itemData name="Data Constructor" defStyleNum="dsKeyword" spellChecking="false" />
-    <itemData name="Type Constructor" defStyleNum="dsDataType" spellChecking="false" />
-    <itemData name="Infix Operator" defStyleNum="dsOthers" spellChecking="false" />
-    <itemData name="EnumFromTo" defStyleNum="dsOthers" spellChecking="false" />
+    <itemData name="Data Prelude"     defStyleNum="dsKeyword"  spellChecking="false" />
+    <itemData name="Class Prelude"    defStyleNum="dsKeyword"  spellChecking="false" />
+
+    <itemDate name="Signature"        defStyleNum="dsSpecial"  spellChecking="false" />
+    <itemData name="Type"             defStyleNum="dsDataType" spellChecking="false" />
+    <itemData name="Function"         defStyleNum="dsNormal"   spellChecking="false" />
+    <itemData name="Special"          defStyleNum="dsSpecial"  spellChecking="false" />
+    <itemData name="Operator"         defStyleNum="dsFunction" spellChecking="false" />
+
+    <itemData name="Decimal"          defStyleNum="dsDecVal"   spellChecking="false" />
+    <itemData name="Float"            defStyleNum="dsFloat"    spellChecking="false" />
+    <itemData name="Char"             defStyleNum="dsChar"     spellChecking="false" />
+    <itemData name="String"           defStyleNum="dsString" />
+
+    <itemData name="Function Infix"   defStyleNum="dsOthers"   spellChecking="false" />
+    <itemData name="EnumFromTo"       defStyleNum="dsOthers"   spellChecking="false" />
   </itemDatas>
   </highlighting>
   <general>
-    <folding indentationsensitive="1" />
+    <folding indentationsensitive="1"/>
     <comments>
       <comment name="singleLine" start="--" />
+      <comment name="multiLine" start="{-" end="-}" />
     </comments>
     <keywords casesensitive="1" />
-  </general>
+</general>
 </language>
