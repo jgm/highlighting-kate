@@ -170,7 +170,7 @@ compileRegex regexpStr = compile ('.' : escapeRegex regexpStr) [anchored]
 #else
 compileRegex regexpStr =
   case unsafePerformIO $ compile (compAnchored) (execNotEmpty) ('.' : escapeRegex regexpStr) of
-        Left _ -> error $ "Error compiling regex: " ++ regexpStr
+        Left _ -> error $ "Error compiling regex: " ++ show regexpStr
         Right r -> r
 #endif
 
