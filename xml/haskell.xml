@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
-<language name="Haskell" version="2.0.1" kateversion="2.3" section="Sources" extensions="*.hs" mimetype="text/x-haskell" author="Nicolas Wu (zenzike@gmail.com)" license="" indenter="haskell">
+<language name="Haskell" version="2.0.3" kateversion="2.3" section="Sources" extensions="*.hs" mimetype="text/x-haskell" author="Nicolas Wu (zenzike@gmail.com)" license="LGPL" indenter="haskell">
   <highlighting>
   <list name="keywords">
     <item> as </item>
@@ -300,22 +300,23 @@
   </list>
   <contexts>
     <context attribute="Normal" lineEndContext="#stay" name="code">
+      <RegExpr attribute="Pragma"  context="#stay" String="\{-#.*#-\}"/>
       <RegExpr attribute="Comment" context="comments" String="\{-[^#]?" />
       <RegExpr attribute="Comment" context="comment"  String="--[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:].*$" />
-      <RegExpr attribute="Pragma"  context="#stay" String="\{-#.*#-\}"/>
 
       <keyword attribute="Keyword"          context="#stay" String="keywords" />
-      <keyword attribute="Type Prelude"     context="#stay" String="prelude type" />
       <keyword attribute="Function Prelude" context="#stay" String="prelude function" />
+      <keyword attribute="Type Prelude"     context="#stay" String="prelude type" />
       <keyword attribute="Data Prelude"     context="#stay" String="prelude data" />
       <keyword attribute="Class Prelude"    context="#stay" String="prelude class" />
 
+      <RegExpr attribute="Special"          context="#stay" String="(::|=&gt;|\-&gt;|&lt;\-)" />
+      <AnyChar attribute="Special"          context="#stay" String="→←⇒∀∃" />
       <RegExpr attribute="Signature"        context="#stay" String="\s*[a-z][a-zA-Z0-9_']*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
       <RegExpr attribute="Signature"        context="#stay" String="\s*(\([\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]*\))*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
-      <RegExpr attribute="Type"             context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[A-Z][a-zA-Z0-9_']*" />
       <RegExpr attribute="Function"         context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[a-z][a-zA-Z0-9_']*" />
-      <RegExpr attribute="Special"          context="#stay" String="(::|=&gt;|\-&gt;|&lt;\-A)" />
       <RegExpr attribute="Operator"         context="#stay" String="([A-Z][a-zA-Z0-0_']*\.)*[\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]+" />
+      <RegExpr attribute="Type"             context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[A-Z][a-zA-Z0-9_']*" />
 
       <Int        attribute="Decimal" context="#stay" />
       <RegExpr    attribute="Float"   context="#stay" String="\d+\.\d+" />
@@ -353,10 +354,10 @@
     <itemData name="Class Prelude"    defStyleNum="dsKeyword"  spellChecking="false" />
 
     <itemDate name="Signature"        defStyleNum="dsSpecial"  spellChecking="false" />
-    <itemData name="Type"             defStyleNum="dsDataType" spellChecking="false" />
     <itemData name="Function"         defStyleNum="dsNormal"   spellChecking="false" />
-    <itemData name="Special"          defStyleNum="dsSpecial"  spellChecking="false" />
     <itemData name="Operator"         defStyleNum="dsFunction" spellChecking="false" />
+    <itemData name="Type"             defStyleNum="dsDataType" spellChecking="false" />
+    <itemData name="Special"          defStyleNum="dsSpecial"  spellChecking="false" />
 
     <itemData name="Decimal"          defStyleNum="dsDecVal"   spellChecking="false" />
     <itemData name="Float"            defStyleNum="dsFloat"    spellChecking="false" />
