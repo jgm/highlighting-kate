@@ -23,6 +23,7 @@ Extra-Source-Files:  README
                      changelog
                      Highlight.hs
                      ParseSyntaxFiles.hs
+                     Text/Highlighting/Kate/Syntax.hs.in
                      css/hk-espresso.css
                      css/hk-kate.css
                      css/hk-pyg.css

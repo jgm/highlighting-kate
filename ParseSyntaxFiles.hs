@@ -24,6 +24,7 @@ import Text.XML.HXT.Arrow
 import Text.XML.HXT.Arrow.Edit
 import Control.Arrow
 import Control.Arrow.ArrowList
+import Control.Monad (liftM)
 import Data.List
 import Data.Maybe
 import Data.Char (toUpper, toLower, isAlphaNum)
@@ -37,7 +38,7 @@ import Text.Printf (printf)
 import Data.Char (ord)
 import Text.Highlighting.Kate.Definitions
 import qualified Data.ByteString as B
-import Data.ByteString.UTF8 (fromString)
+import Data.ByteString.UTF8 (fromString, toString)
 
 data SyntaxDefinition =
   SyntaxDefinition { synLanguage      :: String
@@ -110,46 +111,15 @@ main = do
   -- Get all syntax files, not only the newly generated ones.
   names <- getDirectoryContents destDir >>= return . sort . map dropExtension . filter (isSuffixOf ".hs")
   let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
-  let cases = unlines $ map (\name -> "        " ++ show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
-  let languageExtensions = concat $ intersperse ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names
-  B.writeFile syntaxFile $ fromString $
-           "module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension ) where\n\
-           \import Data.Char (toLower)\n\
-           \import Data.Maybe (fromMaybe)\n\
-           \import Text.Highlighting.Kate.Definitions\n" ++
-           imports ++ "\n" ++
-           "-- | List of supported languages.\n\
-           \languages :: [String]\n\
-           \languages = " ++ show names ++ "\n\n\
-           \-- | List of language extensions.\n\
-           \languageExtensions :: [(String, String)]\n\
-           \languageExtensions = [" ++ languageExtensions ++ "]\n\n" ++
-           "-- | Returns a list of languages appropriate for the given file extension.\n\
-           \languagesByExtension :: String -> [String]\n\
-           \languagesByExtension ext = filter (hasExtension ext) languages\n\n\
-           \-- | True if extension belongs to language.\n\
-           \hasExtension ext lang =\n\
-           \  let exts = fromMaybe \"\" (lookup lang languageExtensions)\n\
-           \      matchExtension _ [] = False\n\
-           \      matchExtension ext ('.':xs) =\n\
-           \        let (next, rest) = span (/=';') xs\n\
-           \        in  if next == ext then True else matchExtension ext rest\n\
-           \      matchExtension ext (_:xs) = matchExtension ext xs\n\
-           \  in  matchExtension (dropWhile (=='.') ext) exts\n\n\
-           \-- | Highlight source code using a specified syntax definition.\n\
-           \highlightAs :: String                        -- ^ Language syntax\n\
-           \            -> String                        -- ^ Source code to highlight\n\
-           \            -> Either String [SourceLine]    -- ^ Either error message or result\n\
-           \highlightAs lang =\n\
-           \  let lang'  = map toLower lang\n\
-           \      lang'' = if lang' `elem` map (map toLower) languages\n\
-           \                  then lang'\n\
-           \                  else case languagesByExtension lang' of\n\
-           \                            [l]  -> map toLower l  -- go by extension if unambiguous\n\
-           \                            _    -> lang'\n\
-           \  in  case lang'' of\n" ++
-           cases ++
-           "        _ -> (\\_ -> Left (\"Unknown language: \" ++ lang))\n"
+  let cases = unlines $ map (\name -> show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
+  let languageExtensions = '[' :
+        (intercalate ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names) ++ "]"
+  syntaxFileTemplate <- liftM toString $ B.readFile (syntaxFile <.> "in")
+  let filledTemplate = fillTemplate 0 [("imports",imports),
+                                       ("languages",show names),
+                                       ("languageExtensions",languageExtensions),
+                                       ("cases",cases)] syntaxFileTemplate
+  B.writeFile syntaxFile $ fromString filledTemplate
 
 processOneFile :: FilePath -> IO ()
 processOneFile src = do
@@ -521,4 +491,20 @@ vBool defaultVal value = case value of
                            z | z `elem` ["true","yes","1"] -> True
                            z | z `elem` ["false","no","0"] -> False
                            _ -> defaultVal
+
+-- | Fill template.  The template variables in the source text are
+-- surrounded by @'s: e.g., @myvar@.
+fillTemplate :: Int -> [(String,String)] -> String -> String
+fillTemplate _ _ [] = []
+fillTemplate _ [] lst = lst
+fillTemplate n subs ('\n':xs) = '\n' : fillTemplate 0 subs xs
+fillTemplate n subs ('@':xs) =
+  let (pref, suff) = break (=='@') xs
+  in  if length pref > 0 && all isAlphaNum pref && length suff > 0
+         then case lookup pref subs of
+                    Just v  -> intercalate ('\n':replicate n ' ') (lines v) ++
+                                 fillTemplate (n + length v) subs (tail suff)
+                    Nothing -> '@' : fillTemplate (n+1) subs xs
+         else '@' : fillTemplate (n+1) subs xs
+fillTemplate n subs (x:xs) = x : fillTemplate (n+1) subs xs
 
