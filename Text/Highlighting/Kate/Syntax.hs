@@ -76,8 +76,7 @@ languagesByExtension ext       = languagesByFilename ("*." ++ ext)
 
 -- | Returns a list of languages appropriate for the given filename.
 languagesByFilename :: FilePath -> [String]
-languagesByFilename fn = map fst $ filter (\(_lang, globs) -> matchGlobs fn globs)
-                                    languageExtensions
+languagesByFilename fn = [lang | (lang, globs) <- languageExtensions, matchGlobs fn globs]
 
 -- | Highlight source code using a specified syntax definition.
 highlightAs :: String                        -- ^ Language syntax
