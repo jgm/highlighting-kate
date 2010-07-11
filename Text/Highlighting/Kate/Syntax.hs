@@ -1,7 +1,8 @@
-module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension ) where
+module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension,
+                                       languagesByFilename ) where
 import Data.Char (toLower)
-import Data.Maybe (fromMaybe)
 import Text.Highlighting.Kate.Definitions
+import Text.Highlighting.Kate.Common (matchGlobs)
 import qualified Text.Highlighting.Kate.Syntax.Ada as Ada
 import qualified Text.Highlighting.Kate.Syntax.Alert as Alert
 import qualified Text.Highlighting.Kate.Syntax.Asp as Asp
@@ -70,17 +71,13 @@ languageExtensions = [("Ada", Ada.syntaxExtensions), ("Alert", Alert.syntaxExten
 
 -- | Returns a list of languages appropriate for the given file extension.
 languagesByExtension :: String -> [String]
-languagesByExtension ext = filter (hasExtension ext) languages
+languagesByExtension ('.':ext) = languagesByFilename ("*." ++ ext)
+languagesByExtension ext       = languagesByFilename ("*." ++ ext)
 
--- | True if extension belongs to language.
-hasExtension ext lang =
-  let exts = fromMaybe "" (lookup lang languageExtensions)
-      matchExtension _ [] = False
-      matchExtension ext ('.':xs) =
-        let (next, rest) = span (/=';') xs
-        in  if next == ext then True else matchExtension ext rest
-      matchExtension ext (_:xs) = matchExtension ext xs
-  in  matchExtension (dropWhile (=='.') ext) exts
+-- | Returns a list of languages appropriate for the given filename.
+languagesByFilename :: FilePath -> [String]
+languagesByFilename fn = map fst $ filter (\(_lang, globs) -> matchGlobs fn globs)
+                                    languageExtensions
 
 -- | Highlight source code using a specified syntax definition.
 highlightAs :: String                        -- ^ Language syntax

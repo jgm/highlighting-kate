@@ -24,6 +24,7 @@ A typical application will combine a highlighter and a formatter:
 module Text.Highlighting.Kate ( highlightAs
                               , languages
                               , languagesByExtension
+                              , languagesByFilename
                               , formatAsXHtml
                               , FormatOption (..)
                               , defaultHighlightingCss
@@ -32,7 +33,7 @@ module Text.Highlighting.Kate ( highlightAs
                               , highlightingKateVersion
                               ) where
 import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..), defaultHighlightingCss )
-import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension )
+import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension, languagesByFilename )
 import Text.Highlighting.Kate.Definitions ( SourceLine, LabeledSource )
 import Data.Version (showVersion)
 import Paths_highlighting_kate (version)

@@ -21,8 +21,31 @@ import Text.Regex.PCRE.String
 import Text.Highlighting.Kate.Definitions
 import Text.ParserCombinators.Parsec
 import Data.Char (isDigit, chr, toLower)
+import Data.List (tails)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
+
+-- | Match filename against a list of globs contained in a semicolon-separated
+-- string.
+matchGlobs :: String -> String -> Bool
+matchGlobs fn globs = any (flip matchGlob fn) (splitBySemi $ filter (/=' ') globs)
+
+-- | Match filename against a glob pattern with asterisks.
+matchGlob :: String -> String -> Bool
+matchGlob ('*':xs) fn = any (matchGlob xs) (tails fn)
+matchGlob (x:xs) (y:ys) = x == y && matchGlob xs ys
+matchGlob "" "" = True
+matchGlob _ _   = False
+
+-- | Splits semicolon-separated list
+splitBySemi :: String -> [String]
+splitBySemi "" = []
+splitBySemi xs =
+  let (pref, suff) = break (==';') xs
+  in  case suff of
+         []       -> [pref]
+         (';':ys) -> pref : splitBySemi ys
+         _        -> error $ "The impossible happened (splitBySemi)"
 
 -- | Like >>, but returns the operation on the left.
 -- (Suggested by Tillmann Rendel on Haskell-cafe list.)
