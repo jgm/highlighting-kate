@@ -1,3 +1,40 @@
+highlighting-kate 0.2.7 (11 July 2010)
+
+  * New, compressed format for classes. Two-letter class names are now
+    used for default styles, and detailed lexical information is omitted
+    unless the new OptDetailed option is specified. Also, the "Normal"
+    style is no longer used, and spans are not used for "normal" markup.
+    The result is significant compression of the highlighted source (in
+    one test, 191K -> 72K).
+
+  * Updated the css files in css/ to use the new two-letter class names.
+    Users should update their css files, or highlighting will no longer
+    work.
+
+  * New OptDetailed option (see above).
+
+  * Added languagesByFilename function.  Unlike the old
+    languagesByExtension (now deprecated), this properly
+    handles things like "Makefile" and "CMake.txt."
+
+  * A new -d/--detailed option has been provided in the Highlight
+    executable. This selects OptDetailed.
+
+  * Improvements to haskell.xml and literate-haskell.xml,
+    due to Nicholas Wu.
+
+  * Added octave syntax definition.
+
+  * Changed ParseSyntaxFiles to work with GHC 6.12.
+
+  * ParseSyntaxFiles now uses Text/Highlighting/Kate/Syntax.hs.in
+    as a template for construction of Text.Highlighting.Kate.Syntax
+    module.
+
+  * Removed parsec < 3 restriction.
+
+  * Minor code cleanup and improvement.
+
 highlighting-kate 0.2.6.2 (06 March 2010)
 
   * Use separate definitions for compiled regexes.
