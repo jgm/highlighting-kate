@@ -6,7 +6,7 @@ import System.Environment
 import Text.XHtml.Transitional
 import System.Console.GetOpt
 import System.Exit
-import System.FilePath (takeFileName, takeExtension)
+import System.FilePath (takeFileName)
 import Data.Maybe (listToMaybe)
 import Data.Char (toLower)
 
@@ -83,10 +83,9 @@ main = do
              else mapM readFile fnames >>= return . filterNewlines . concat
   let lang' = case syntaxOf opts of
                     Just e   -> Just e
-                    Nothing  -> if null fnames
-                                   then Nothing
-                                   else let firstExt = drop 1 $ takeExtension $ head fnames
-                                        in  listToMaybe $ languagesByExtension firstExt
+                    Nothing  -> case fnames of
+                                     []     -> Nothing
+                                     (x:_)  -> listToMaybe $ languagesByFilename $ takeFileName x
   lang <- if lang' == Nothing
              then hPutStrLn stderr "No syntax specified." >>
                   hPutStrLn stderr (usageInfo usageHeader options) >>
