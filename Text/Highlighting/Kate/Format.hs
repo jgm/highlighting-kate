@@ -20,6 +20,9 @@ data FormatOption = OptNumberLines     -- ^ Number lines
                   | OptNumberFrom Int  -- ^ Number of first line
                   | OptLineAnchors     -- ^ Anchors on each line number 
                   | OptTitleAttributes -- ^ Include title attributes
+                  | OptDetailed        -- ^ Include detailed lexical information in classes.
+                                       --   (By default, only the default style is included. This
+                                       --   option causes output to be more verbose.)
                   deriving (Eq, Show, Read)
 
 -- | Format a list of highlighted @SourceLine@s as XHtml.
@@ -34,26 +37,28 @@ formatAsXHtml opts lang lines =
   in  if OptNumberLines `elem` opts
          then let lnTitle = title "Click to toggle line numbers"
                   lnOnClick = strAttr "onclick" "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
-                  lineNumbers = td ! [theclass "lineNumbers", lnTitle, lnOnClick] $ pre <<
+                  nums = td ! [theclass "nums", lnTitle, lnOnClick] $ pre <<
                                      (intersperse br $ map lineNum [startNum..(startNum + numberOfLines - 1)])
                   lineNum n = if OptLineAnchors `elem` opts
                                  then anchor ! [identifier $ show n] << show n
                                  else stringToHtml $ show n
                   sourceCode = td ! [theclass "sourceCode"] $ 
                                     pre ! [theclass $ unwords ["sourceCode", lang]] $ code
-              in  table ! [theclass "sourceCode"] $ tr << [lineNumbers, sourceCode]
+              in  table ! [theclass "sourceCode"] $ tr << [nums, sourceCode]
          else pre ! [theclass $ unwords ["sourceCode", lang]] $ code
 
 labeledSourceToHtml :: [FormatOption] -> LabeledSource -> Html
-labeledSourceToHtml opts (syntaxType, txt) =
-  let classes = unwords $ filter (/= "") $ map removeSpaces syntaxType
-  in if null classes 
-        then toHtml txt
-        else let attribs = [theclass classes] ++ 
-                           if OptTitleAttributes `elem` opts
-                              then [title classes] 
-                              else []
-             in  thespan ! attribs << txt 
+labeledSourceToHtml _ ([], txt)    = toHtml txt
+labeledSourceToHtml opts (labs, txt)  =
+  if null attribs
+     then toHtml txt
+     else thespan ! attribs << txt
+   where classes = unwords $
+                   if OptDetailed `elem` opts
+                      then map removeSpaces labs
+                      else drop 1 labs  -- first is specific
+         attribs = [theclass classes | not (null classes)] ++
+                   [title classes | OptTitleAttributes `elem` opts]
 
 sourceLineToHtml :: [FormatOption] -> SourceLine -> Html
 sourceLineToHtml opts contents =
@@ -73,18 +78,16 @@ defaultHighlightingCss =
   \   { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }\n\ 
   \td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; padding-left: 5px; }\n\  
   \td.sourceCode { padding-left: 5px; }\n\ 
-  \pre.sourceCode { }\n\ 
-  \pre.sourceCode span.Normal { }\n\ 
-  \pre.sourceCode span.Keyword { color: #007020; font-weight: bold; } \n\ 
-  \pre.sourceCode span.DataType { color: #902000; }\n\ 
-  \pre.sourceCode span.DecVal { color: #40a070; }\n\ 
-  \pre.sourceCode span.BaseN { color: #40a070; }\n\ 
-  \pre.sourceCode span.Float { color: #40a070; }\n\ 
-  \pre.sourceCode span.Char { color: #4070a0; }\n\ 
-  \pre.sourceCode span.String { color: #4070a0; }\n\ 
-  \pre.sourceCode span.Comment { color: #60a0b0; font-style: italic; }\n\ 
-  \pre.sourceCode span.Others { color: #007020; }\n\ 
-  \pre.sourceCode span.Alert { color: red; font-weight: bold; }\n\ 
-  \pre.sourceCode span.Function { color: #06287e; }\n\ 
-  \pre.sourceCode span.RegionMarker { }\n\ 
-  \pre.sourceCode span.Error { color: red; font-weight: bold; }"
+  \pre.sourceCode span.kw { color: #007020; font-weight: bold; } \n\ 
+  \pre.sourceCode span.dt { color: #902000; }\n\ 
+  \pre.sourceCode span.dv { color: #40a070; }\n\ 
+  \pre.sourceCode span.bn { color: #40a070; }\n\ 
+  \pre.sourceCode span.fl { color: #40a070; }\n\ 
+  \pre.sourceCode span.ch { color: #4070a0; }\n\ 
+  \pre.sourceCode span.st { color: #4070a0; }\n\ 
+  \pre.sourceCode span.co { color: #60a0b0; font-style: italic; }\n\ 
+  \pre.sourceCode span.ot { color: #007020; }\n\ 
+  \pre.sourceCode span.al { color: red; font-weight: bold; }\n\ 
+  \pre.sourceCode span.fu { color: #06287e; }\n\ 
+  \pre.sourceCode span.re { }\n\ 
+  \pre.sourceCode span.er { color: red; font-weight: bold; }"

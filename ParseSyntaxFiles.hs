@@ -140,10 +140,10 @@ processOneFile src = do
            \import Text.Highlighting.Kate.Common\n" ++
            unlines includeImports ++ 
            "import Text.ParserCombinators.Parsec\n\
-           \import Data.List (nub)\n\
+           \import Control.Monad (when)\n\
            \import qualified Data.Set as Set\n\
            \import Data.Map (fromList)\n\
-           \import Data.Maybe (fromMaybe)\n\n" ++
+           \import Data.Maybe (fromMaybe, maybeToList)\n\n" ++
            render (mkParser syntax) ++ "\n"
 
 mkParser :: SyntaxDefinition -> Doc
@@ -154,17 +154,29 @@ mkParser syntax =
       exts = text "-- | Filename extensions for this language." $$
              text "syntaxExtensions :: String" $$
              text ("syntaxExtensions = " ++ show (synExtensions syntax))
-      styles = text ("styles = " ++ (show $ map (\(typ, sty) -> (typ, drop 2 sty)) $ synItemDatas syntax))
+      shortFormOf "dsKeyword" = ["kw"]
+      shortFormOf "dsDataType" = ["dt"] 
+      shortFormOf "dsDecVal" = ["dv"]
+      shortFormOf "dsBaseN" = ["bn"]
+      shortFormOf "dsFloat" = ["fl"]
+      shortFormOf "dsChar" = ["ch"]
+      shortFormOf "dsString" = ["st"]
+      shortFormOf "dsComment" = ["co"]
+      shortFormOf "dsOthers" = ["ot"]
+      shortFormOf "dsAlert" = ["al"]
+      shortFormOf "dsFunction" = ["fu"]
+      shortFormOf "dsRegionMarker" = ["re"]
+      shortFormOf "dsError" = ["er"]
+      shortFormOf _ = []
+      styles = text ("styles = " ++ (show [(typ, shortsty) | (typ, sty) <- synItemDatas syntax, shortsty <- shortFormOf sty]))
       withAttr = text "withAttribute attr txt = do" $$ (nest 2 $
-                   text "if null txt" $$
-                   text "   then fail \"Parser matched no text\"" $$
-                   text "   else return ()" $$
-                   text "let style = fromMaybe \"\" $ lookup attr styles" $$
+                   text "when (null txt) $ fail \"Parser matched no text\"" $$
+                   text "let labs = attr : maybeToList (lookup attr styles)" $$
                    text "st <- getState" $$
                    text "let oldCharsParsed = synStCharsParsedInLine st" $$
                    text "let prevchar = if null txt then '\\n' else last txt" $$
                    text "updateState $ \\st -> st { synStCharsParsedInLine = oldCharsParsed + length txt, synStPrevChar = prevchar } " $$
-                   text "return (nub [style, attr], txt)")
+                   text "return (labs, txt)")
       parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $ 
                                   text "context <- currentContext" $$
                                   text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe \"\" $ lookup context defaultAttributes))")

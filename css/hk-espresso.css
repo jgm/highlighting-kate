@@ -4,17 +4,16 @@ table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode
 td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; padding-left: 5px; } 
 pre.sourceCode, table.sourceCode { background-color: #2A211C; color: #BDAE9D; }
 td.sourceCode { padding-left: 5px; }
-pre.sourceCode span.Normal { }
-pre.sourceCode span.Keyword { color: #43A8ED; font-weight: bold; } 
-pre.sourceCode span.DataType { text-decoration: underline; }
-pre.sourceCode span.DecVal { color: #44AA43; }
-pre.sourceCode span.BaseN { color: #44AA43; }
-pre.sourceCode span.Float { color: #44AA43; }
-pre.sourceCode span.Char { color: #049B0A; }
-pre.sourceCode span.String { color: #049B0A; }
-pre.sourceCode span.Comment { color: #0066FF; font-style: italic; }
-pre.sourceCode span.Others { }
-pre.sourceCode span.Alert { color: yellow; font-weight: bold; }
-pre.sourceCode span.Function { color: #FF9358; font-weight: bold; }
-pre.sourceCode span.RegionMarker { }
-pre.sourceCode span.Error { color: yellow; font-weight: bold; }
+pre.sourceCode span.kw { color: #43A8ED; font-weight: bold; } 
+pre.sourceCode span.dt { text-decoration: underline; }
+pre.sourceCode span.dv { color: #44AA43; }
+pre.sourceCode span.bn { color: #44AA43; }
+pre.sourceCode span.fl { color: #44AA43; }
+pre.sourceCode span.ch { color: #049B0A; }
+pre.sourceCode span.st { color: #049B0A; }
+pre.sourceCode span.co { color: #0066FF; font-style: italic; }
+pre.sourceCode span.ot { }
+pre.sourceCode span.al { color: yellow; font-weight: bold; }
+pre.sourceCode span.fu { color: #FF9358; font-weight: bold; }
+pre.sourceCode span.re { }
+pre.sourceCode span.er { color: yellow; font-weight: bold; }

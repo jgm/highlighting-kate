@@ -5,10 +5,10 @@ module Text.Highlighting.Kate.Syntax.Octave ( highlight, parseExpression, syntax
 import Text.Highlighting.Kate.Definitions
 import Text.Highlighting.Kate.Common
 import Text.ParserCombinators.Parsec
-import Data.List (nub)
+import Control.Monad (when)
 import qualified Data.Set as Set
 import Data.Map (fromList)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 
 -- | Full name of language.
 syntaxName :: String
@@ -57,17 +57,15 @@ pEndLine = do
   updateState $ \st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0, synStPrevChar = '\n' }
 
 withAttribute attr txt = do
-  if null txt
-     then fail "Parser matched no text"
-     else return ()
-  let style = fromMaybe "" $ lookup attr styles
+  when (null txt) $ fail "Parser matched no text"
+  let labs = attr : maybeToList (lookup attr styles)
   st <- getState
   let oldCharsParsed = synStCharsParsedInLine st
   let prevchar = if null txt then '\n' else last txt
   updateState $ \st -> st { synStCharsParsedInLine = oldCharsParsed + length txt, synStPrevChar = prevchar } 
-  return (nub [style, attr], txt)
+  return (labs, txt)
 
-styles = [("Normal Text","Normal"),("Variable","Normal"),("Operator","Normal"),("Number","Float"),("Delimiter","Normal"),("String","String"),("String Char","Char"),("Incomplete String","Char"),("Keyword","Normal"),("Comment","Comment"),("Functions","Function"),("Forge","Function"),("Builtin","BaseN"),("Commands","Function")]
+styles = [("Number","fl"),("String","st"),("String Char","ch"),("Incomplete String","ch"),("Comment","co"),("Functions","fu"),("Forge","fu"),("Builtin","bn"),("Commands","fu")]
 
 parseExpressionInternal = do
   context <- currentContext

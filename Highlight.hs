@@ -16,6 +16,7 @@ data Flag = CssPath String
           | List
           | NumberLines
           | Syntax String
+          | Detailed
           | TitleAttributes
           | Version
           deriving (Eq, Show)
@@ -28,6 +29,7 @@ options =
   , Option ['l'] ["list"] (NoArg List)   "list available language syntaxes"
   , Option ['n'] ["number-lines"] (NoArg NumberLines)  "number lines"
   , Option ['s'] ["syntax"] (ReqArg Syntax "SYNTAX")  "specify language syntax to use"
+  , Option ['d'] ["details"] (NoArg Detailed) "include detailed lexical information in classes"
   , Option ['t'] ["title-attributes"] (NoArg TitleAttributes)  "include structure in title attributes"
   , Option ['v'] ["version"] (NoArg Version)   "print version"
   ]
@@ -94,8 +96,10 @@ main = do
   if not (lang `elem` (map (map toLower) languages))
      then hPutStrLn stderr ("Unknown syntax: " ++ lang) >> exitWith (ExitFailure 4)
      else return ()
-  let highlightOpts = (if TitleAttributes `elem` opts then [OptTitleAttributes] else []) ++
-                      (if NumberLines `elem` opts then [OptNumberLines, OptLineAnchors] else [])
+  let highlightOpts = [OptTitleAttributes | TitleAttributes `elem` opts] ++
+                      [OptDetailed | Detailed `elem` opts] ++
+                      [OptNumberLines | NumberLines `elem` opts] ++
+                      [OptLineAnchors | NumberLines `elem` opts]
   let css = case cssPathOf opts of
                    Nothing      -> style ! [thetype "text/css"] $ primHtml defaultHighlightingCss 
                    Just cssPath -> thelink ! [thetype "text/css", href cssPath, rel "stylesheet"] << noHtml
