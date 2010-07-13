@@ -14,8 +14,8 @@ highlighting-kate 0.2.7 (11 July 2010)
   * New OptDetailed option (see above).
 
   * Added languagesByFilename function.  Unlike the old
-    languagesByExtension (now deprecated), this properly
-    handles things like "Makefile" and "CMake.txt."
+    languagesByExtension, this properly handles things like
+    "Makefile" and "CMake.txt."
 
   * A new -d/--detailed option has been provided in the Highlight
     executable. This selects OptDetailed.
