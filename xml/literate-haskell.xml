@@ -11,12 +11,12 @@
     </context>
     <context attribute="Normal" lineEndContext="#pop" name="normal">
       <RegExpr attribute="Comment" context="comments'" String="\{-[^#]" />
-      <IncludeRules context="##Haskell" />
+      <IncludeRules context="##Haskell" includeAttrib="true" />
     </context>
     <context attribute="Normal" lineEndContext="#stay" name="normals">
       <StringDetect attribute="Normal" context="#pop" String="&#92;end&#123;code&#125;"/>
       <StringDetect attribute="Normal" context="#pop" String="&#92;end&#123;spec&#125;"/>
-      <IncludeRules context="##Haskell" />
+      <IncludeRules context="##Haskell" includeAttrib="true" />
     </context>
     <context attribute="Comment" lineEndContext="uncomments" name="comments'" >
       <Detect2Chars attribute="Comment" context="#pop" char="-" char1="}" />
