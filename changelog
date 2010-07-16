@@ -1,4 +1,4 @@
-highlighting-kate 0.2.7 (11 July 2010)
+highlighting-kate 0.2.7 (15 July 2010)
 
   * New, compressed format for classes. Two-letter class names are now
     used for default styles, and detailed lexical information is omitted
@@ -21,7 +21,7 @@ highlighting-kate 0.2.7 (11 July 2010)
     executable. This selects OptDetailed.
 
   * Improvements to haskell.xml and literate-haskell.xml,
-    due to Nicholas Wu.
+    due to Nicolas Wu.
 
   * Added octave syntax definition.
 
