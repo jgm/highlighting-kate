@@ -6,10 +6,10 @@ import Text.Highlighting.Kate.Definitions
 import Text.Highlighting.Kate.Common
 import Text.ParserCombinators.Parsec
 import Control.Monad (when)
-import qualified Data.Set as Set
 import Data.Map (fromList)
 import Data.Maybe (fromMaybe, maybeToList)
 
+import qualified Data.Set as Set
 -- | Full name of language.
 syntaxName :: String
 syntaxName = "Octave"

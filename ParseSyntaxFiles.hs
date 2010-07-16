@@ -141,9 +141,11 @@ processOneFile src = do
            unlines includeImports ++ 
            "import Text.ParserCombinators.Parsec\n\
            \import Control.Monad (when)\n\
-           \import qualified Data.Set as Set\n\
            \import Data.Map (fromList)\n\
            \import Data.Maybe (fromMaybe, maybeToList)\n\n" ++
+           (if null (synLists syntax)
+               then ""
+               else "import qualified Data.Set as Set\n") ++
            render (mkParser syntax) ++ "\n"
 
 mkParser :: SyntaxDefinition -> Doc
