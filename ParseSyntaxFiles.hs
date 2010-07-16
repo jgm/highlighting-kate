@@ -293,7 +293,7 @@ mkSyntaxParser syntax context parser =
             "LineContinue"     -> "pLineContinue"
             "IncludeRules"     -> case parserContext parser of
                                       ('#':'#':xs) -> langNameToModule xs ++ ".parseExpression" ++
-                                                      if parserIncludeAttrib parser
+                                                      if parserIncludeAttrib parser || null (parserAttribute parser)
                                                          then ""
                                                          else " >>= ((withAttribute " ++ show (parserAttribute parser) ++ ") . snd)" 
                                       xs           -> "parseRules " ++ show xs
