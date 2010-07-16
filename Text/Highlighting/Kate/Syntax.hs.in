@@ -1,0 +1,38 @@
+module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension,
+                                       languagesByFilename ) where
+import Data.Char (toLower)
+import Text.Highlighting.Kate.Definitions
+import Text.Highlighting.Kate.Common (matchGlobs)
+@imports@
+
+-- | List of supported languages.
+languages :: [String]
+languages = @languages@
+
+-- | List of language extensions.
+languageExtensions :: [(String, String)]
+languageExtensions = @languageExtensions@
+
+-- | Returns a list of languages appropriate for the given file extension.
+languagesByExtension :: String -> [String]
+languagesByExtension ('.':ext) = languagesByFilename ("*." ++ ext)
+languagesByExtension ext       = languagesByFilename ("*." ++ ext)
+
+-- | Returns a list of languages appropriate for the given filename.
+languagesByFilename :: FilePath -> [String]
+languagesByFilename fn = [lang | (lang, globs) <- languageExtensions, matchGlobs fn globs]
+
+-- | Highlight source code using a specified syntax definition.
+highlightAs :: String                        -- ^ Language syntax
+            -> String                        -- ^ Source code to highlight
+            -> Either String [SourceLine]    -- ^ Either error message or result
+highlightAs lang =
+  let lang'  = map toLower lang
+      lang'' = if lang' `elem` map (map toLower) languages
+                  then lang'
+                  else case languagesByExtension lang' of
+                            [l]  -> map toLower l  -- go by extension if unambiguous
+                            _    -> lang'
+  in  case lang'' of
+        @cases@
+        _ -> (\_ -> Left ("Unknown language: " ++ lang))
