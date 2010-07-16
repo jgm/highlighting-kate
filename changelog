@@ -1,3 +1,9 @@
+highlighting-kate 0.2.7.1 (15 July 2010)
+
+  * Don't use the withAttribute combinator with null attribute.
+
+  * Fixed literate-haskell.xml to include attributes.
+
 highlighting-kate 0.2.7 (15 July 2010)
 
   * New, compressed format for classes. Two-letter class names are now
