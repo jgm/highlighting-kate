@@ -20,8 +20,7 @@ Requires HXT.
 
 module Main where
 
-import Text.XML.HXT.Arrow
-import Text.XML.HXT.Arrow.Edit
+import Text.XML.HXT.Core
 import Control.Arrow
 import Control.Arrow.ArrowList
 import Control.Monad (liftM)
@@ -367,7 +366,7 @@ nameFromPath = concat . map capitalize . words .
 
 application :: String -> IOSArrow b SyntaxDefinition
 application src
-    = readDocument [(a_validate, v_0)] src
+    = readDocument [withValidate no, withInputEncoding utf8] src
       >>>
       multi (hasName "language")
       >>>
