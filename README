@@ -11,18 +11,27 @@ Perl, Php, Postscript, Prolog, Python, RelaxNG compact, Rhtml, Ruby,
 Scala, Scheme, Sgml, Sql, SqlMysql, SqlPostgresql, Tcl, Texinfo, Xml,
 Xslt, Yacc
 
-To install:
+To install, use the cabal tool:
 
-    runghc Setup.lhs configure
-    runghc Setup.lhs build 
-    runghc Setup.lhs haddock    # optional, if you want library documentation
-    runghc Setup.lhs install    # as root, or specify --user 
+    cabal install
+
+Note:  If you have checked out the source from the darcs repository,
+you will first need to do:
+
+    make prep
+
+which generates some of the needed source files from xml syntax
+definitions.
+
+To generate the documentation:
+
+    cabal haddock
 
 For an example of the use of the library, see Highlight.hs.
 To compile this program along with the library, specify the 'executable'
 flag in the configure step above:
 
-    runghc Setup.lhs configure -fexecutable
+    cabal install -fexecutable
 
 To run Highlight, specify the language name using -s:
 
@@ -46,6 +55,10 @@ The parsers in Text/Highlighting/Kate/Syntax were automatically generated
 from the Kate syntax definitions in the xml directory. You may modify
 the xml files in this directory, or add new ones, and then regenerate
 the parsers by doing:
+
+    make prep
+
+or
 
     runghc ParseSyntaxFiles.hs xml
 
