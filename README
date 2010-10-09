@@ -90,7 +90,6 @@ been left in the directory, with .bkp extensions):
 - bash.xml: Changed "\\" to "\" in two Detect2Char rules in FindString
 - literate-haskell.xml:  Fixed single line comments and growing context stack
 
-NOTE:  This software is largely untested.  Known bugs are recorded in the file
-BUGS. Please send bug reports (or better, patches) to the author (jgm at
-berkeley dot edu).
+NOTE: Known bugs are recorded in the file BUGS. Please send bug reports (or
+better, patches) to the author (jgm at berkeley dot edu).
 
