@@ -125,7 +125,7 @@ processOneFile src = do
   [syntax] <- runX $ application src
   let name = nameFromPath src
   let outFile = joinPath [libraryPath, "Syntax", addExtension name "hs"]
-  let includeLangs = nub $ map (drop 2 . parserContext) $
+  let includeLangs = nub $ filter (/= name) $ map (drop 2 . parserContext) $
         filter (\p -> (parserType p) == "IncludeRules" && "##" `isPrefixOf` (parserContext p)) $ 
         concatMap contParsers $ synContexts syntax
   let includeImports = map (("import qualified " ++) . langNameToModule) includeLangs
@@ -335,12 +335,15 @@ switchContext next =
 langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
   case str of
     "Alerts" -> "Alert"
+    "Alerts_indent" -> "Alert_indent"
     "C++" -> "Cpp"
     "CSS" -> "Css"
     "Doxygen" -> "Doxygen"
     "HTML" -> "Html"
     "Javadoc" -> "Javadoc"
     "JavaScript" -> "Javascript"
+    "SQL (MySQL)" -> "SqlMysql"
+    "DoxygenLua" -> "Doxygenlua"
     x -> x
 
 listName :: String -> String

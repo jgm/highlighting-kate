@@ -26,7 +26,7 @@
  This file is included in every file that highlights the "alerts" keywords.
  That's why extensions and mimetype are empty.
 -->
-<language version="1.08" kateversion="2.3" name="Alerts" section="Other" extensions="" mimetype="" author="Dominik Haumann (dhdev@gmx.de)" license="LGPL" hidden="true">
+<language version="1.08" kateversion="2.3" name="Alerts_indent" section="Other" extensions="" mimetype="" author="Dominik Haumann (dhdev@gmx.de)" license="LGPL" hidden="true">
   <highlighting>
     <list name="alerts">
       <item> ### </item>
@@ -56,6 +56,7 @@
     </itemDatas>
   </highlighting>
   <general>
+    <folding indentationsensitive="1" />
     <keywords casesensitive="1"/>
   </general>
 </language>

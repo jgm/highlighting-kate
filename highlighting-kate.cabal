@@ -1,5 +1,5 @@
 Name:                highlighting-kate
-Version:             0.2.7.1
+Version:             0.2.7.2
 Cabal-Version:       >= 1.2
 Build-Type:          Simple
 Category:            Text
@@ -28,6 +28,7 @@ Extra-Source-Files:  README
                      css/hk-kate.css
                      css/hk-pyg.css
                      xml/ada.xml
+                     xml/alert_indent.xml
                      xml/alert.xml
                      xml/asp.xml
                      xml/awk.xml
@@ -41,6 +42,7 @@ Extra-Source-Files:  README
                      xml/css.xml
                      xml/c.xml
                      xml/djangotemplate.xml
+                     xml/doxygenlua.xml
                      xml/doxygen.xml
                      xml/dtd.xml
                      xml/d.xml
@@ -116,6 +118,7 @@ Library
                      Text.Highlighting.Kate.Definitions
                      Text.Highlighting.Kate.Format
                      Text.Highlighting.Kate.Syntax.Alert
+                     Text.Highlighting.Kate.Syntax.Alert_indent
                      Text.Highlighting.Kate.Syntax.Ada
                      Text.Highlighting.Kate.Syntax.Asp
                      Text.Highlighting.Kate.Syntax.Awk
@@ -130,6 +133,7 @@ Library
                      Text.Highlighting.Kate.Syntax.D
                      Text.Highlighting.Kate.Syntax.Djangotemplate
                      Text.Highlighting.Kate.Syntax.Doxygen
+                     Text.Highlighting.Kate.Syntax.Doxygenlua
                      Text.Highlighting.Kate.Syntax.Dtd
                      Text.Highlighting.Kate.Syntax.Eiffel
                      Text.Highlighting.Kate.Syntax.Erlang
