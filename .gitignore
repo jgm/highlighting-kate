@@ -1,0 +1,6 @@
+*.hi
+*.o
+ParseSyntaxFiles
+Text/Highlighting/Kate/Syntax.hs
+Text/Highlighting/Kate/Syntax/
+dist/
