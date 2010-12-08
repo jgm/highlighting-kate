@@ -1,5 +1,5 @@
 Name:                highlighting-kate
-Version:             0.2.7.2
+Version:             0.2.8.0
 Cabal-Version:       >= 1.2
 Build-Type:          Simple
 Category:            Text
@@ -27,69 +27,114 @@ Extra-Source-Files:  README
                      css/hk-espresso.css
                      css/hk-kate.css
                      css/hk-pyg.css
+                     xml/actionscript.xml
                      xml/ada.xml
-                     xml/alert_indent.xml
                      xml/alert.xml
+                     xml/alert_indent.xml
+                     xml/ansys.xml
+                     xml/apache.xml
+                     xml/asn1.xml
                      xml/asp.xml
                      xml/awk.xml
                      xml/bash.xml
                      xml/bash.xml.bkp
                      xml/bibtex.xml
+                     xml/boo.xml
+                     xml/c.xml
+                     xml/changelog.xml
+                     xml/cisco.xml
                      xml/cmake.xml
                      xml/coldfusion.xml
                      xml/commonlisp.xml
                      xml/cpp.xml
+                     xml/cs.xml
                      xml/css.xml
-                     xml/c.xml
-                     xml/djangotemplate.xml
-                     xml/doxygenlua.xml
-                     xml/doxygen.xml
-                     xml/dtd.xml
+                     xml/cue.xml
                      xml/d.xml
+                     xml/desktop.xml
+                     xml/diff.xml
+                     xml/djangotemplate.xml
+                     xml/doxygen.xml
+                     xml/doxygenlua.xml
+                     xml/dtd.xml
                      xml/eiffel.xml
+                     xml/email.xml
                      xml/erlang.xml
                      xml/fortran.xml
+                     xml/fstab.xml
+                     xml/gap.xml
+                     xml/gdb.xml
+                     xml/gettext.xml
+                     xml/gnuassembler.xml
+                     xml/go.xml
                      xml/haskell.xml
+                     xml/haxe.xml
                      xml/html.xml
+                     xml/idl.xml
+                     xml/ilerpg.xml
+                     xml/ini.xml
+                     xml/java.xml
                      xml/javadoc.xml
                      xml/javascript.xml
                      xml/javascript.xml.bkp
-                     xml/java.xml
                      xml/json.xml
+                     xml/jsp.xml
                      xml/language.dtd
                      xml/latex.xml
                      xml/lex.xml
                      xml/literate-haskell.xml
                      xml/lua.xml
+                     xml/m3u.xml
                      xml/makefile.xml
+                     xml/mandoc.xml
                      xml/matlab.xml
+                     xml/maxima.xml
                      xml/mediawiki.xml
+                     xml/metafont.xml
+                     xml/mips.xml
+                     xml/modula-2.xml
                      xml/modula-3.xml
+                     xml/monobasic.xml
                      xml/nasm.xml
+                     xml/noweb.xml
                      xml/objectivec.xml
+                     xml/objectivecpp.xml
                      xml/ocaml.xml
                      xml/octave.xml
+                     xml/pango.xml
                      xml/pascal.xml
                      xml/perl.xml
                      xml/perl.xml.bkp
                      xml/php.xml
+                     xml/pike.xml
                      xml/postscript.xml
                      xml/prolog.xml
                      xml/python.xml
+                     xml/r.xml
                      xml/relaxngcompact.xml
                      xml/rhtml.xml
                      xml/ruby.xml
                      xml/scala.xml
                      xml/scheme.xml
+                     xml/sci.xml
+                     xml/sed.xml
                      xml/sgml.xml
                      xml/sql-mysql.xml
                      xml/sql-postgresql.xml
                      xml/sql.xml
                      xml/tcl.xml
                      xml/texinfo.xml
+                     xml/verilog.xml
+                     xml/vhdl.xml
+                     xml/winehq.xml
+                     xml/wml.xml
+                     xml/xharbour.xml
                      xml/xml.xml
+                     xml/xorg.xml
                      xml/xslt.xml
+                     xml/xul.xml
                      xml/yacc.xml
+                     xml/yaml.xml
 Flag splitBase
   Description:       Choose the new, smaller, split-up base package.
   Default:           True
@@ -115,65 +160,110 @@ Library
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions
                      Text.Highlighting.Kate.Format
+                     Text.Highlighting.Kate.Syntax.Actionscript
+                     Text.Highlighting.Kate.Syntax.Ada
                      Text.Highlighting.Kate.Syntax.Alert
                      Text.Highlighting.Kate.Syntax.Alert_indent
-                     Text.Highlighting.Kate.Syntax.Ada
+                     Text.Highlighting.Kate.Syntax.Ansys
+                     Text.Highlighting.Kate.Syntax.Apache
+                     Text.Highlighting.Kate.Syntax.Asn1
                      Text.Highlighting.Kate.Syntax.Asp
                      Text.Highlighting.Kate.Syntax.Awk
                      Text.Highlighting.Kate.Syntax.Bash
                      Text.Highlighting.Kate.Syntax.Bibtex
+                     Text.Highlighting.Kate.Syntax.Boo
                      Text.Highlighting.Kate.Syntax.C
+                     Text.Highlighting.Kate.Syntax.Changelog
+                     Text.Highlighting.Kate.Syntax.Cisco
                      Text.Highlighting.Kate.Syntax.Cmake
                      Text.Highlighting.Kate.Syntax.Coldfusion
                      Text.Highlighting.Kate.Syntax.Commonlisp
                      Text.Highlighting.Kate.Syntax.Cpp
+                     Text.Highlighting.Kate.Syntax.Cs
                      Text.Highlighting.Kate.Syntax.Css
+                     Text.Highlighting.Kate.Syntax.Cue
                      Text.Highlighting.Kate.Syntax.D
+                     Text.Highlighting.Kate.Syntax.Desktop
+                     Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
                      Text.Highlighting.Kate.Syntax.Doxygen
                      Text.Highlighting.Kate.Syntax.Doxygenlua
                      Text.Highlighting.Kate.Syntax.Dtd
                      Text.Highlighting.Kate.Syntax.Eiffel
+                     Text.Highlighting.Kate.Syntax.Email
                      Text.Highlighting.Kate.Syntax.Erlang
                      Text.Highlighting.Kate.Syntax.Fortran
+                     Text.Highlighting.Kate.Syntax.Fstab
+                     Text.Highlighting.Kate.Syntax.Gap
+                     Text.Highlighting.Kate.Syntax.Gdb
+                     Text.Highlighting.Kate.Syntax.Gettext
+                     Text.Highlighting.Kate.Syntax.Gnuassembler
+                     Text.Highlighting.Kate.Syntax.Go
                      Text.Highlighting.Kate.Syntax.Haskell
+                     Text.Highlighting.Kate.Syntax.Haxe
                      Text.Highlighting.Kate.Syntax.Html
+                     Text.Highlighting.Kate.Syntax.Idl
+                     Text.Highlighting.Kate.Syntax.Ilerpg
+                     Text.Highlighting.Kate.Syntax.Ini
                      Text.Highlighting.Kate.Syntax.Java
                      Text.Highlighting.Kate.Syntax.Javadoc
                      Text.Highlighting.Kate.Syntax.Javascript
                      Text.Highlighting.Kate.Syntax.Json
+                     Text.Highlighting.Kate.Syntax.Jsp
                      Text.Highlighting.Kate.Syntax.Latex
                      Text.Highlighting.Kate.Syntax.Lex
                      Text.Highlighting.Kate.Syntax.LiterateHaskell
                      Text.Highlighting.Kate.Syntax.Lua
+                     Text.Highlighting.Kate.Syntax.M3u
                      Text.Highlighting.Kate.Syntax.Makefile
+                     Text.Highlighting.Kate.Syntax.Mandoc
                      Text.Highlighting.Kate.Syntax.Matlab
+                     Text.Highlighting.Kate.Syntax.Maxima
                      Text.Highlighting.Kate.Syntax.Mediawiki
+                     Text.Highlighting.Kate.Syntax.Metafont
+                     Text.Highlighting.Kate.Syntax.Mips
+                     Text.Highlighting.Kate.Syntax.Modula2
                      Text.Highlighting.Kate.Syntax.Modula3
+                     Text.Highlighting.Kate.Syntax.Monobasic
                      Text.Highlighting.Kate.Syntax.Nasm
+                     Text.Highlighting.Kate.Syntax.Noweb
                      Text.Highlighting.Kate.Syntax.Objectivec
+                     Text.Highlighting.Kate.Syntax.Objectivecpp
                      Text.Highlighting.Kate.Syntax.Ocaml
                      Text.Highlighting.Kate.Syntax.Octave
+                     Text.Highlighting.Kate.Syntax.Pango
                      Text.Highlighting.Kate.Syntax.Pascal
                      Text.Highlighting.Kate.Syntax.Perl
                      Text.Highlighting.Kate.Syntax.Php
+                     Text.Highlighting.Kate.Syntax.Pike
                      Text.Highlighting.Kate.Syntax.Postscript
                      Text.Highlighting.Kate.Syntax.Prolog
                      Text.Highlighting.Kate.Syntax.Python
+                     Text.Highlighting.Kate.Syntax.R
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
                      Text.Highlighting.Kate.Syntax.Rhtml
                      Text.Highlighting.Kate.Syntax.Ruby
                      Text.Highlighting.Kate.Syntax.Scala
                      Text.Highlighting.Kate.Syntax.Scheme
+                     Text.Highlighting.Kate.Syntax.Sci
+                     Text.Highlighting.Kate.Syntax.Sed
                      Text.Highlighting.Kate.Syntax.Sgml
+                     Text.Highlighting.Kate.Syntax.Sql
                      Text.Highlighting.Kate.Syntax.SqlMysql
                      Text.Highlighting.Kate.Syntax.SqlPostgresql
-                     Text.Highlighting.Kate.Syntax.Sql
                      Text.Highlighting.Kate.Syntax.Tcl
                      Text.Highlighting.Kate.Syntax.Texinfo
+                     Text.Highlighting.Kate.Syntax.Verilog
+                     Text.Highlighting.Kate.Syntax.Vhdl
+                     Text.Highlighting.Kate.Syntax.Winehq
+                     Text.Highlighting.Kate.Syntax.Wml
+                     Text.Highlighting.Kate.Syntax.Xharbour
                      Text.Highlighting.Kate.Syntax.Xml
+                     Text.Highlighting.Kate.Syntax.Xorg
                      Text.Highlighting.Kate.Syntax.Xslt
+                     Text.Highlighting.Kate.Syntax.Xul
                      Text.Highlighting.Kate.Syntax.Yacc
+                     Text.Highlighting.Kate.Syntax.Yaml
   Other-Modules:     Text.Highlighting.Kate.Common
                      Paths_highlighting_kate
   Ghc-Options:       -W
