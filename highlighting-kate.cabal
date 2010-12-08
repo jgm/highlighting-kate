@@ -17,7 +17,7 @@ License:             GPL
 License-file:        LICENSE
 Author:              John MacFarlane
 Maintainer:          jgm@berkeley.edu
-Homepage:            http://johnmacfarlane.net/highlighting-kate
+Homepage:            http://github.com/jgm/highlighting-kate
 Extra-Source-Files:  README
                      BUGS
                      changelog
