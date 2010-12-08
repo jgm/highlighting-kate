@@ -50,7 +50,6 @@ Extra-Source-Files:  README
                      xml/erlang.xml
                      xml/fortran.xml
                      xml/haskell.xml
-                     xml/haskell.xml.bkp
                      xml/html.xml
                      xml/javadoc.xml
                      xml/javascript.xml
@@ -61,7 +60,6 @@ Extra-Source-Files:  README
                      xml/latex.xml
                      xml/lex.xml
                      xml/literate-haskell.xml
-                     xml/literate-haskell.xml.bkp
                      xml/lua.xml
                      xml/makefile.xml
                      xml/matlab.xml

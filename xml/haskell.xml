@@ -311,7 +311,7 @@
       <keyword attribute="Class Prelude"    context="#stay" String="prelude class" />
 
       <RegExpr attribute="Special"          context="#stay" String="(::|=&gt;|\-&gt;|&lt;\-)" />
-      <AnyChar attribute="Special"          context="#stay" String="→←⇒∀∃" />
+      <AnyChar attribute="Special"          context="#stay" String="∷⇒→←∀∃" />
       <RegExpr attribute="Signature"        context="#stay" String="\s*[a-z][a-zA-Z0-9_']*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
       <RegExpr attribute="Signature"        context="#stay" String="\s*(\([\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]*\))*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
       <RegExpr attribute="Function"         context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[a-z][a-zA-Z0-9_']*" />
@@ -325,6 +325,7 @@
 
       <DetectChar attribute="Function Infix" context="infix" char="`"/>
       <Detect2Chars attribute="EnumFromTo" context="#stay" char ="." char1="." />
+      <AnyChar      attribute="EnumFromTo" context="#stay" String="‥" />
     </context>
     <context attribute="Comment" lineEndContext="#pop" name="comment" />
     <context attribute="Comment" lineEndContext="#stay" name="comments">
@@ -353,11 +354,11 @@
     <itemData name="Data Prelude"     defStyleNum="dsKeyword"  spellChecking="false" />
     <itemData name="Class Prelude"    defStyleNum="dsKeyword"  spellChecking="false" />
 
-    <itemDate name="Signature"        defStyleNum="dsSpecial"  spellChecking="false" />
+    <itemData name="Signature"        defStyleNum="dsOthers"  spellChecking="false" />
     <itemData name="Function"         defStyleNum="dsNormal"   spellChecking="false" />
     <itemData name="Operator"         defStyleNum="dsFunction" spellChecking="false" />
     <itemData name="Type"             defStyleNum="dsDataType" spellChecking="false" />
-    <itemData name="Special"          defStyleNum="dsSpecial"  spellChecking="false" />
+    <itemData name="Special"          defStyleNum="dsOthers"  spellChecking="false" />
 
     <itemData name="Decimal"          defStyleNum="dsDecVal"   spellChecking="false" />
     <itemData name="Float"            defStyleNum="dsFloat"    spellChecking="false" />
