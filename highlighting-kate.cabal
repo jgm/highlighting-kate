@@ -52,165 +52,101 @@ Library
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions
                      Text.Highlighting.Kate.Format
-                     Text.Highlighting.Kate.Syntax.Abap
-                     Text.Highlighting.Kate.Syntax.Abc
                      Text.Highlighting.Kate.Syntax.Actionscript
                      Text.Highlighting.Kate.Syntax.Ada
-                     Text.Highlighting.Kate.Syntax.Ahdl
                      Text.Highlighting.Kate.Syntax.Alert
                      Text.Highlighting.Kate.Syntax.Alert_indent
-                     Text.Highlighting.Kate.Syntax.Ample
-                     Text.Highlighting.Kate.Syntax.Ansic89
                      Text.Highlighting.Kate.Syntax.Ansys
                      Text.Highlighting.Kate.Syntax.Apache
-                     Text.Highlighting.Kate.Syntax.Asm6502
-                     Text.Highlighting.Kate.Syntax.AsmAvr
-                     Text.Highlighting.Kate.Syntax.AsmDsp56k
-                     Text.Highlighting.Kate.Syntax.AsmM68k
                      Text.Highlighting.Kate.Syntax.Asn1
                      Text.Highlighting.Kate.Syntax.Asp
-                     Text.Highlighting.Kate.Syntax.Asterisk
                      Text.Highlighting.Kate.Syntax.Awk
                      Text.Highlighting.Kate.Syntax.Bash
                      Text.Highlighting.Kate.Syntax.Bibtex
-                     Text.Highlighting.Kate.Syntax.Bmethod
                      Text.Highlighting.Kate.Syntax.Boo
                      Text.Highlighting.Kate.Syntax.C
-                     Text.Highlighting.Kate.Syntax.Cg
-                     Text.Highlighting.Kate.Syntax.Cgis
                      Text.Highlighting.Kate.Syntax.Changelog
                      Text.Highlighting.Kate.Syntax.Cisco
-                     Text.Highlighting.Kate.Syntax.Clipper
                      Text.Highlighting.Kate.Syntax.Cmake
                      Text.Highlighting.Kate.Syntax.Coldfusion
                      Text.Highlighting.Kate.Syntax.Commonlisp
-                     Text.Highlighting.Kate.Syntax.ComponentPascal
                      Text.Highlighting.Kate.Syntax.Cpp
                      Text.Highlighting.Kate.Syntax.Cs
                      Text.Highlighting.Kate.Syntax.Css
                      Text.Highlighting.Kate.Syntax.Cue
                      Text.Highlighting.Kate.Syntax.D
-                     Text.Highlighting.Kate.Syntax.Debianchangelog
-                     Text.Highlighting.Kate.Syntax.Debiancontrol
                      Text.Highlighting.Kate.Syntax.Desktop
                      Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
                      Text.Highlighting.Kate.Syntax.Doxygen
                      Text.Highlighting.Kate.Syntax.Doxygenlua
                      Text.Highlighting.Kate.Syntax.Dtd
-                     Text.Highlighting.Kate.Syntax.E
                      Text.Highlighting.Kate.Syntax.Eiffel
                      Text.Highlighting.Kate.Syntax.Email
                      Text.Highlighting.Kate.Syntax.Erlang
-                     Text.Highlighting.Kate.Syntax.Euphoria
-                     Text.Highlighting.Kate.Syntax.Ferite
-                     Text.Highlighting.Kate.Syntax.Fgl4gl
-                     Text.Highlighting.Kate.Syntax.FglPer
                      Text.Highlighting.Kate.Syntax.Fortran
-                     Text.Highlighting.Kate.Syntax.Freebasic
                      Text.Highlighting.Kate.Syntax.Fstab
                      Text.Highlighting.Kate.Syntax.Gap
                      Text.Highlighting.Kate.Syntax.Gdb
-                     Text.Highlighting.Kate.Syntax.Gdl
                      Text.Highlighting.Kate.Syntax.Gettext
-                     Text.Highlighting.Kate.Syntax.Glsl
                      Text.Highlighting.Kate.Syntax.Gnuassembler
                      Text.Highlighting.Kate.Syntax.Go
-                     Text.Highlighting.Kate.Syntax.Grammar
                      Text.Highlighting.Kate.Syntax.Haskell
                      Text.Highlighting.Kate.Syntax.Haxe
                      Text.Highlighting.Kate.Syntax.Html
-                     Text.Highlighting.Kate.Syntax.Idconsole
                      Text.Highlighting.Kate.Syntax.Idl
                      Text.Highlighting.Kate.Syntax.Ilerpg
-                     Text.Highlighting.Kate.Syntax.Inform
                      Text.Highlighting.Kate.Syntax.Ini
                      Text.Highlighting.Kate.Syntax.Java
                      Text.Highlighting.Kate.Syntax.Javadoc
                      Text.Highlighting.Kate.Syntax.Javascript
                      Text.Highlighting.Kate.Syntax.Json
                      Text.Highlighting.Kate.Syntax.Jsp
-                     Text.Highlighting.Kate.Syntax.Kbasic
                      Text.Highlighting.Kate.Syntax.Latex
-                     Text.Highlighting.Kate.Syntax.Ldif
                      Text.Highlighting.Kate.Syntax.Lex
-                     Text.Highlighting.Kate.Syntax.Lilypond
                      Text.Highlighting.Kate.Syntax.LiterateHaskell
-                     Text.Highlighting.Kate.Syntax.Logtalk
-                     Text.Highlighting.Kate.Syntax.Lpc
-                     Text.Highlighting.Kate.Syntax.Lsl
                      Text.Highlighting.Kate.Syntax.Lua
                      Text.Highlighting.Kate.Syntax.M3u
-                     Text.Highlighting.Kate.Syntax.Mab
                      Text.Highlighting.Kate.Syntax.Makefile
                      Text.Highlighting.Kate.Syntax.Mandoc
-                     Text.Highlighting.Kate.Syntax.Mason
                      Text.Highlighting.Kate.Syntax.Matlab
                      Text.Highlighting.Kate.Syntax.Maxima
                      Text.Highlighting.Kate.Syntax.Mediawiki
-                     Text.Highlighting.Kate.Syntax.Mergetagtext
                      Text.Highlighting.Kate.Syntax.Metafont
                      Text.Highlighting.Kate.Syntax.Mips
-                     Text.Highlighting.Kate.Syntax.Modelica
                      Text.Highlighting.Kate.Syntax.Modula2
                      Text.Highlighting.Kate.Syntax.Modula3
                      Text.Highlighting.Kate.Syntax.Monobasic
-                     Text.Highlighting.Kate.Syntax.Mup
                      Text.Highlighting.Kate.Syntax.Nasm
-                     Text.Highlighting.Kate.Syntax.Nemerle
                      Text.Highlighting.Kate.Syntax.Noweb
                      Text.Highlighting.Kate.Syntax.Objectivec
                      Text.Highlighting.Kate.Syntax.Objectivecpp
                      Text.Highlighting.Kate.Syntax.Ocaml
                      Text.Highlighting.Kate.Syntax.Octave
-                     Text.Highlighting.Kate.Syntax.Opal
                      Text.Highlighting.Kate.Syntax.Pango
                      Text.Highlighting.Kate.Syntax.Pascal
                      Text.Highlighting.Kate.Syntax.Perl
-                     Text.Highlighting.Kate.Syntax.Pgn
                      Text.Highlighting.Kate.Syntax.Php
-                     Text.Highlighting.Kate.Syntax.Picsrc
                      Text.Highlighting.Kate.Syntax.Pike
                      Text.Highlighting.Kate.Syntax.Postscript
-                     Text.Highlighting.Kate.Syntax.Povray
-                     Text.Highlighting.Kate.Syntax.Progress
                      Text.Highlighting.Kate.Syntax.Prolog
-                     Text.Highlighting.Kate.Syntax.Purebasic
                      Text.Highlighting.Kate.Syntax.Python
                      Text.Highlighting.Kate.Syntax.R
-                     Text.Highlighting.Kate.Syntax.Rapidq
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
-                     Text.Highlighting.Kate.Syntax.Rexx
                      Text.Highlighting.Kate.Syntax.Rhtml
-                     Text.Highlighting.Kate.Syntax.Rib
-                     Text.Highlighting.Kate.Syntax.Roff
-                     Text.Highlighting.Kate.Syntax.Rpmspec
-                     Text.Highlighting.Kate.Syntax.Rsiidl
                      Text.Highlighting.Kate.Syntax.Ruby
-                     Text.Highlighting.Kate.Syntax.Sather
                      Text.Highlighting.Kate.Syntax.Scala
                      Text.Highlighting.Kate.Syntax.Scheme
                      Text.Highlighting.Kate.Syntax.Sci
                      Text.Highlighting.Kate.Syntax.Sed
                      Text.Highlighting.Kate.Syntax.Sgml
-                     Text.Highlighting.Kate.Syntax.Sieve
-                     Text.Highlighting.Kate.Syntax.Sisu
-                     Text.Highlighting.Kate.Syntax.Sml
-                     Text.Highlighting.Kate.Syntax.Spice
                      Text.Highlighting.Kate.Syntax.Sql
                      Text.Highlighting.Kate.Syntax.SqlMysql
                      Text.Highlighting.Kate.Syntax.SqlPostgresql
-                     Text.Highlighting.Kate.Syntax.Stata
-                     Text.Highlighting.Kate.Syntax.Systemc
                      Text.Highlighting.Kate.Syntax.Tcl
                      Text.Highlighting.Kate.Syntax.Texinfo
-                     Text.Highlighting.Kate.Syntax.Tibasic
-                     Text.Highlighting.Kate.Syntax.Txt2tags
-                     Text.Highlighting.Kate.Syntax.Uscript
-                     Text.Highlighting.Kate.Syntax.Velocity
                      Text.Highlighting.Kate.Syntax.Verilog
                      Text.Highlighting.Kate.Syntax.Vhdl
-                     Text.Highlighting.Kate.Syntax.Vrml
                      Text.Highlighting.Kate.Syntax.Winehq
                      Text.Highlighting.Kate.Syntax.Wml
                      Text.Highlighting.Kate.Syntax.Xharbour
@@ -218,10 +154,8 @@ Library
                      Text.Highlighting.Kate.Syntax.Xorg
                      Text.Highlighting.Kate.Syntax.Xslt
                      Text.Highlighting.Kate.Syntax.Xul
-                     Text.Highlighting.Kate.Syntax.Yacas
                      Text.Highlighting.Kate.Syntax.Yacc
                      Text.Highlighting.Kate.Syntax.Yaml
-                     Text.Highlighting.Kate.Syntax.Zonnon
   Other-Modules:     Text.Highlighting.Kate.Common
                      Paths_highlighting_kate
   Ghc-Options:       -W
