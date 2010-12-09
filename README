@@ -3,24 +3,17 @@ on Kate's syntax description files (http://kate-editor.org/).
 
 Currently, the following languages/formats are supported:
 
-Abap, Abc, Actionscript, Ada, Ahdl, Alert, Alert_indent, Ample, Ansic89,
-Ansys, Apache, Asm6502, AsmAvr, AsmDsp56k, AsmM68k, Asn1, Asp, Asterisk,
-Awk, Bash, BibTeX, Bmethod, Boo, C, Cg, Cgis, Changelog, Cisco, Clipper,
-Cmake, ColdFusion, Common Lisp, Component Pascal, C++, C#, Css, Cue, D,
-Debian Changelog, Debian Control, Desktop, Diff, Django Template, Doxygen,
-Doxygen Lua, Dtd, E, Eiffel, Email, Erlang, Euphoria, Ferite, Fgl4gl, FglPer,
-Fortran, FreeBASIC, Fstab, Gap, GDB, Gdl, Gettext, Glsl, GNU Assembler,
-Go, Grammar, Haskell, Haxe, HTML, Idconsole, Idl, Ilerpg, Inform, Ini, Java,
-Javadoc, Javascript, Json, JSP, Kbasic, LaTeX, Ldif, Lex, Lilypond, Literate 
-Haskell, Logtalk, Lpc, Lsl, Lua, M3u, Mab, Makefile, Mandoc, Mason, Matlab,
-Maxima, MediaWiki, Mergetagtext, Metafont, Mips, Modelica, Modula2, Modula3,
-Monobasic, Mup, Nasm, Nemerle, Noweb, Objective-C, Objective-C++, Ocaml,
-Octave, Opal, Pango, Pascal, Perl, Pgn, PHP, Picsrc, Pike, Postscript, Povray,
-Progress, Prolog, Purebasic, Python, R, Rapidq, Relaxngcompact, Rexx, RHTML,
-Rib, Roff, Rpmspec, Rsiidl, Ruby, Sather, Scala, Scheme, Sci, Sed, Sgml, Sieve,
-Sisu, Sml, Spice, SQL, SQL (MySQL), SQL (PostgreSQL), Stata, Systemc, Tcl,
-Texinfo, Tibasic, Txt2tags, Uscript, Velocity, Verilog, VHDL, Vrml, Winehq,
-Wml, Xharbour, XML, Xorg, XSLT, XUL, Yacas, Yacc, YAML, Zonnon
+Actionscript, Ada, Alert, Alert_indent, Ansys, Apache, Asn1, Asp, Awk,
+Bash, Bibtex, Boo, C, Changelog, Cisco, Cmake, Coldfusion, Commonlisp,
+Cpp, Cs, Css, Cue, D, Desktop, Diff, Djangotemplate, Doxygen, Doxygenlua,
+Dtd, Eiffel, Email, Erlang, Fortran, Fstab, Gap, Gdb, Gettext, Gnuassembler,
+Go, Haskell, Haxe, Html, Idl, Ilerpg, Ini, Java, Javadoc, Javascript,
+Json, Jsp, Latex, Lex, LiterateHaskell, Lua, M3u, Makefile, Mandoc,
+Matlab, Maxima, Mediawiki, Metafont, Mips, Modula2, Modula3, Monobasic,
+Nasm, Noweb, Objectivec, Objectivecpp, Ocaml, Octave, Pango, Pascal, Perl,
+Php, Pike, Postscript, Prolog, Python, R, Relaxngcompact, Rhtml, Ruby,
+Scala, Scheme, Sci, Sed, Sgml, Sql, SqlMysql, SqlPostgresql, Tcl, Texinfo,
+Verilog, Vhdl, Winehq, Wml, Xharbour, Xml, Xorg, Xslt, Xul, Yacc, Yaml
 
 To install, use the cabal tool:
 
