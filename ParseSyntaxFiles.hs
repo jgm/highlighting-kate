@@ -328,8 +328,8 @@ mkSyntaxParser syntax context parser =
 
 switchContext next =
   case next of
-     x | "#pop" `isPrefixOf` x -> char '(' <> text (concat $ intersperse " >> " $ replicate (length (filter (=='#') x)) "popContext") <> 
-                                  text " >> return ())"
+     x | "#pop" `isPrefixOf` x -> char '(' <>
+          text (concat $ intersperse " >> " $ replicate (length (filter (=='#') x)) "popContext") <> char ')'
      "#stay" -> text "return ()"
      x -> text ("pushContext " ++ show x) 
 

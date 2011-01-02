@@ -70,17 +70,16 @@ pushContext context = if context == "#stay"
                                  let newContexts = Map.alter (addContext context) lang contexts 
                                  updateState $ \st -> st { synStContexts = newContexts }
 
-popContext :: GenParser tok SyntaxState String
+popContext :: GenParser tok SyntaxState ()
 popContext = do st <- getState
                 let contexts = synStContexts st
                 let lang = synStLanguage st
                 case Map.lookup lang contexts of
                     Just conts -> case length conts of
                                         0 -> fail $ "Stack empty for language " ++ lang
-                                        1 -> return (head conts) -- don't remove last member of stack
+                                        1 -> return ()  -- don't remove last member of stack
                                         _ -> do let newContexts = Map.adjust tail lang contexts
                                                 updateState $ \st -> st { synStContexts = newContexts }
-                                                return (head conts)
                     Nothing    -> fail $ "No context stack for language " ++ lang 
 
 currentContext :: GenParser tok SyntaxState String
