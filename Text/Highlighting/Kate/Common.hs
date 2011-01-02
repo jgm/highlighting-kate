@@ -297,3 +297,11 @@ pDetectIdentifier = do
   rest <- many alphaNum
   return (first:rest)
 
+pHandleEndLine :: GenParser Char SyntaxState ()
+pHandleEndLine = do
+  newline <|> (eof >> return '\n')
+  lineContents <- lookAhead wholeLine
+  updateState $ \st -> st { synStCurrentLine = lineContents
+                          , synStCharsParsedInLine = 0
+                          , synStPrevChar = '\n' }
+

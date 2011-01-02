@@ -224,15 +224,16 @@ mkParser syntax =
                             \    Left err     -> Left $ show err\n\
                             \    Right result -> Right result"
       endLineParser = text "pEndLine = do" $$
-                      (nest 2 $ text "newline <|> (eof >> return '\\n')" $$
+                      (nest 2 $ text "lookAhead $ newline <|> (eof >> return '\\n')" $$
                                 text "context <- currentContext" $$
                                 text "case context of" $$
                                 (nest 2 $ (vcat $ map (\cont -> text (show $ contName cont) <> text " -> " <> 
-                                            switchContext (contLineEndContext cont)) $ synContexts syntax) $$
-                                          (text $ "_ -> return ()")) $$
+                                            switchContext (contLineEndContext cont) <>
+                                            if "#pop" `isPrefixOf` (contLineEndContext cont)
+                                               then text " >> pEndLine"
+                                               else text " >> pHandleEndLine") $ synContexts syntax) $$
+                                          (text $ "_ -> pHandleEndLine")))
                                 {- text "pushContext (fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$ -}
-                                text "lineContents <- lookAhead wholeLine" $$
-                                text "updateState $ \\st -> st { synStCurrentLine = lineContents, synStCharsParsedInLine = 0, synStPrevChar = '\\n' }")
       -- we use 'words "blah blah2 blah3"' to keep ghc from inlining the list, which makes compiling take a long time
       listDef (n, list) = text $ listName n ++ " = Set.fromList $ words $ " ++
                                show (if keywordCaseSensitive (synKeywordAttr syntax)
