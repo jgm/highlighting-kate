@@ -239,7 +239,6 @@ Library
                      Text.Highlighting.Kate.Syntax.Php
                      Text.Highlighting.Kate.Syntax.Pike
                      Text.Highlighting.Kate.Syntax.Postscript
-                     Text.Highlighting.Kate.Syntax.Powershell
                      Text.Highlighting.Kate.Syntax.Prolog
                      Text.Highlighting.Kate.Syntax.Python
                      Text.Highlighting.Kate.Syntax.R
