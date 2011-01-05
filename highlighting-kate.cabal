@@ -61,6 +61,7 @@ Extra-Source-Files:  README
                      xml/email.xml
                      xml/erlang.xml
                      xml/fortran.xml
+                     xml/fsharp.xml
                      xml/fstab.xml
                      xml/gap.xml
                      xml/gdb.xml
@@ -110,6 +111,7 @@ Extra-Source-Files:  README
                      xml/postscript.xml
                      xml/prolog.xml
                      xml/python.xml
+                     xml/powershell.xml
                      xml/r.xml
                      xml/relaxngcompact.xml
                      xml/rhtml.xml
@@ -237,6 +239,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Php
                      Text.Highlighting.Kate.Syntax.Pike
                      Text.Highlighting.Kate.Syntax.Postscript
+                     Text.Highlighting.Kate.Syntax.Powershell
                      Text.Highlighting.Kate.Syntax.Prolog
                      Text.Highlighting.Kate.Syntax.Python
                      Text.Highlighting.Kate.Syntax.R
