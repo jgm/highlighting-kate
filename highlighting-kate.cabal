@@ -111,7 +111,6 @@ Extra-Source-Files:  README
                      xml/postscript.xml
                      xml/prolog.xml
                      xml/python.xml
-                     xml/powershell.xml
                      xml/r.xml
                      xml/relaxngcompact.xml
                      xml/rhtml.xml
@@ -196,6 +195,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Erlang
                      Text.Highlighting.Kate.Syntax.Fortran
                      Text.Highlighting.Kate.Syntax.Fstab
+                     Text.Highlighting.Kate.Syntax.Fsharp
                      Text.Highlighting.Kate.Syntax.Gap
                      Text.Highlighting.Kate.Syntax.Gdb
                      Text.Highlighting.Kate.Syntax.Gettext
