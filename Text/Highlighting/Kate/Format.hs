@@ -33,7 +33,7 @@ formatAsXHtml :: [FormatOption]  -- ^ Options
 formatAsXHtml opts lang lines =
   let startNum = getStartNum opts
       numberOfLines = length lines
-      code = thecode << map (sourceLineToHtml opts) lines
+      code = thecode << intersperse br (map (sourceLineToHtml opts) lines)
   in  if OptNumberLines `elem` opts
          then let lnTitle = title "Click to toggle line numbers"
                   lnOnClick = strAttr "onclick" "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
@@ -62,7 +62,7 @@ labeledSourceToHtml opts (labs, txt)  =
 
 sourceLineToHtml :: [FormatOption] -> SourceLine -> Html
 sourceLineToHtml opts contents =
-  concatHtml $ (map (labeledSourceToHtml opts) contents) ++ [br]
+  concatHtml $ map (labeledSourceToHtml opts) contents
 
 removeSpaces :: String -> String
 removeSpaces = filter (/= ' ')
