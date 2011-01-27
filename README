@@ -27,6 +27,10 @@ you will first need to do:
 which generates some of the needed source files from xml syntax
 definitions.
 
+If you get a linking error with GHC 7 on Mac OS X, "scattered reloc r_address
+too large for inferred architecture i386," the workaround is to use the flag
+`--disable-library-for-ghci` when you `cabal install`.
+
 To generate the documentation:
 
     cabal haddock
