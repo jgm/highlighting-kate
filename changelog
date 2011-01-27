@@ -1,3 +1,45 @@
+highlighting-kate 0.2.8.2 (28 Jan 2011)
+
+  * formatAsXHtml: Don't put `<br/>` after last line.
+  * Added F# highlighting based on the present ocaml definitions
+    (Bas Bossink).
+
+highlighting-kate 0.2.8.1 (02 Jan 2011)
+
+  * Updated parseSyntaxFiles.hs to use HXT 9.0.0.
+
+  * Added Makefile to help developers.
+    When you check out the source from the repository, you can now
+    do 'make prep' to generate the syntax parsers from the xml
+    definitions.
+
+  * Improved installation instructions.
+
+  * Updated grammar files from Kate (Tianyi Cui).
+
+  * Fixed bug in endline parsing (pointed out by Samuel Hym).
+    + The bug occurs when you're nested two contexts in, and you hit
+      the end of a line. Even if both contexts were set up to
+      popContext at the end of line, previously only the first
+      context was popped.  Example: in bash,
+      export A=a
+      export B=b
+      The second 'export' was being highlighted as VarName.
+    + Common: Added pHandleEndline.
+    + ParseSyntaxFiles:  don't consume newline if you pop context at end
+      of line; instead, fall back to next context and try the newline
+      again.
+
+  * Changed type of pPopContext. Now returns () instead of String.
+
+  * Use doxygen instead of doxygenlua in lua parser.
+    Using doxygenlua causes many lines to be erroneously
+    interpreted as comments.  Reverting to doxygen as before
+    fixes things.  Not sure if this is a bug in the lua.xml
+    file or in highlighting-kate.
+
+  * Added css based on Pygment’s tango style theme (Samuel Hym).
+
 highlighting-kate 0.2.7.1 (15 July 2010)
 
   * Don't use the withAttribute combinator with null attribute.
@@ -57,7 +99,7 @@ highlighting-kate 0.2.6.1 (06 March 2010)
     + Put keyword sets in separate definitions.
     + Use words and unwords to trick GHC into not inlining the
       lists of keywords, which slows compilation considerably.
-  
+
   * Changed ghc-prof-options to include -caf-all and -O0.
 
 highlighting-kate 0.2.6 (22 Jan 2010)
