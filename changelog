@@ -1,3 +1,11 @@
+highlighting-kate 0.2.9 (29 Jan 2011)
+
+  * Added OptInline to FormatOptions.  Inline code is formatted
+    with a "code" tag but no "pre" tag.
+  * Put language class on "code" instead of "pre".
+    Put "sourceCode" class on "pre" in addition to "code".
+  * Fixed a bug in tango style with numbering.
+
 highlighting-kate 0.2.8.2 (28 Jan 2011)
 
   * formatAsXHtml: Don't put `<br/>` after last line.
