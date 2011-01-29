@@ -23,6 +23,7 @@ data FormatOption = OptNumberLines     -- ^ Number lines
                   | OptDetailed        -- ^ Include detailed lexical information in classes.
                                        --   (By default, only the default style is included. This
                                        --   option causes output to be more verbose.)
+                  | OptInline          -- ^ Format as span-level, not block-level element
                   deriving (Eq, Show, Read)
 
 -- | Format a list of highlighted @SourceLine@s as XHtml.
@@ -33,19 +34,20 @@ formatAsXHtml :: [FormatOption]  -- ^ Options
 formatAsXHtml opts lang lines =
   let startNum = getStartNum opts
       numberOfLines = length lines
-      code = thecode << intersperse br (map (sourceLineToHtml opts) lines)
-  in  if OptNumberLines `elem` opts
-         then let lnTitle = title "Click to toggle line numbers"
-                  lnOnClick = strAttr "onclick" "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
-                  nums = td ! [theclass "nums", lnTitle, lnOnClick] $ pre <<
-                                     (intersperse br $ map lineNum [startNum..(startNum + numberOfLines - 1)])
-                  lineNum n = if OptLineAnchors `elem` opts
-                                 then anchor ! [identifier $ show n] << show n
-                                 else stringToHtml $ show n
-                  sourceCode = td ! [theclass "sourceCode"] $ 
-                                    pre ! [theclass $ unwords ["sourceCode", lang]] $ code
-              in  table ! [theclass "sourceCode"] $ tr << [nums, sourceCode]
-         else pre ! [theclass $ unwords ["sourceCode", lang]] $ code
+      code = thecode ! [theclass $ unwords ["sourceCode", lang]] << intersperse br (map (sourceLineToHtml opts) lines)
+  in  if OptInline `elem` opts
+         then code
+         else if OptNumberLines `elem` opts
+                 then let lnTitle = title "Click to toggle line numbers"
+                          lnOnClick = strAttr "onclick" "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
+                          nums = td ! [theclass "nums", lnTitle, lnOnClick] $ pre <<
+                                             (intersperse br $ map lineNum [startNum..(startNum + numberOfLines - 1)])
+                          lineNum n = if OptLineAnchors `elem` opts
+                                         then anchor ! [identifier $ show n] << show n
+                                         else stringToHtml $ show n
+                          sourceCode = td ! [theclass "sourceCode"] $ pre ! [theclass "sourceCode"] << code
+                      in  table ! [theclass "sourceCode"] $ tr << [nums, sourceCode]
+                 else pre ! [theclass "sourceCode"] << code
 
 labeledSourceToHtml :: [FormatOption] -> LabeledSource -> Html
 labeledSourceToHtml _ ([], txt)    = toHtml txt
@@ -78,16 +80,16 @@ defaultHighlightingCss =
   \   { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }\n\ 
   \td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; padding-left: 5px; }\n\  
   \td.sourceCode { padding-left: 5px; }\n\ 
-  \pre.sourceCode span.kw { color: #007020; font-weight: bold; } \n\ 
-  \pre.sourceCode span.dt { color: #902000; }\n\ 
-  \pre.sourceCode span.dv { color: #40a070; }\n\ 
-  \pre.sourceCode span.bn { color: #40a070; }\n\ 
-  \pre.sourceCode span.fl { color: #40a070; }\n\ 
-  \pre.sourceCode span.ch { color: #4070a0; }\n\ 
-  \pre.sourceCode span.st { color: #4070a0; }\n\ 
-  \pre.sourceCode span.co { color: #60a0b0; font-style: italic; }\n\ 
-  \pre.sourceCode span.ot { color: #007020; }\n\ 
-  \pre.sourceCode span.al { color: red; font-weight: bold; }\n\ 
-  \pre.sourceCode span.fu { color: #06287e; }\n\ 
-  \pre.sourceCode span.re { }\n\ 
-  \pre.sourceCode span.er { color: red; font-weight: bold; }"
+  \code.sourceCode span.kw { color: #007020; font-weight: bold; } \n\ 
+  \code.sourceCode span.dt { color: #902000; }\n\ 
+  \code.sourceCode span.dv { color: #40a070; }\n\ 
+  \code.sourceCode span.bn { color: #40a070; }\n\ 
+  \code.sourceCode span.fl { color: #40a070; }\n\ 
+  \code.sourceCode span.ch { color: #4070a0; }\n\ 
+  \code.sourceCode span.st { color: #4070a0; }\n\ 
+  \code.sourceCode span.co { color: #60a0b0; font-style: italic; }\n\ 
+  \code.sourceCode span.ot { color: #007020; }\n\ 
+  \code.sourceCode span.al { color: red; font-weight: bold; }\n\ 
+  \code.sourceCode span.fu { color: #06287e; }\n\ 
+  \code.sourceCode span.re { }\n\ 
+  \code.sourceCode span.er { color: red; font-weight: bold; }"
