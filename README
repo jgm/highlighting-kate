@@ -75,17 +75,18 @@ added or removed a syntax definition, you will also need to
 update the Extra-Source-Files and Exposed-Modules sections of
 highlighting-kate.cabal before recompiling using 'cabal install'.
 
-You can browse the available Kate syntax highlighting files at
+To get the current Kate syntax highlighting files, clone the kate
+repository:
 
-    http://kate-editor.org/downloads/syntax_highlighting
+    git clone git://anongit.kde.org/kate
 
-or retrieve them all using Subversion:
+The syntax definitions can then be found in
 
-    svn co svn://anonsvn.kde.org/home/kde/trunk/KDE/kdelibs/kate/syntax/data kate-data 
+    kate/part/syntax/data
 
 There is information on the syntax highlighting definitions at
 
-    http://kate-editor.org/article/writing_a_kate_highlighting_xml_file
+    http://docs.kde.org/stable/en/kdesdk/kate/highlight.html
 
 Thanks are due to all the authors of these syntax definitions.
 
