@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 
+<!-- Taken from here: https://github.com/max99x/kate-coffeescript -->
 <language name="CoffeeScript"
           version="1.0"
           kateversion="2.4"
