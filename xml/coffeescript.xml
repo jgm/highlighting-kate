@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+
+<language name="CoffeeScript"
+          version="1.0"
+          kateversion="2.4"
+          section="Scripts"
+          extensions="Cakefile;*.coffee"
+          mimetype="text/x-cofeescript;application/x-cofeescript"
+          indenter="python"
+          casesensitive="1"
+          author="Max Shawabkeh (max99x@gmail.com)"
+          license="MIT">
+  <highlighting>
+    <list name="globals">
+      <item>undefined</item>
+      <item>null</item>
+      <item>window</item>
+    </list>
+    <list name="booleans">
+      <item>false</item>
+      <item>true</item>
+      <item>yes</item>
+      <item>no</item>
+      <item>on</item>
+      <item>off</item>
+    </list>
+    <list name="keywords">
+      <item>return</item>
+      <item>break</item>
+      <item>continue</item>
+      <item>throw</item>
+      <item>for</item>
+      <item>while</item>
+      <item>until</item>
+      <item>loop</item>
+      <item>if</item>
+      <item>else</item>
+      <item>unless</item>
+      <item>switch</item>
+      <item>when</item>
+      <item>then</item>
+      <item>and</item>
+      <item>or</item>
+      <item>in</item>
+      <item>of</item>
+      <item>by</item>
+      <item>is</item>
+      <item>isnt</item>
+      <item>not</item>
+      <item>typeof</item>
+      <item>delete</item>
+      <item>where</item>
+      <item>super</item>
+      <item>try</item>
+      <item>catch</item>
+      <item>finally</item>
+      <item>try</item>
+      <item>catch</item>
+      <item>finally</item>
+      <item>constructor</item>
+    </list>
+    <list name="class_keywords">
+      <item>class</item>
+      <item>extends</item>
+      <item>new</item>
+      <item>instanceof</item>
+    </list>
+    <contexts>
+      <context name="Normal" attribute="Normal" lineEndContext="#stay">
+        <DetectSpaces/>
+        <Float attribute="Float" context="#stay" />
+        <Int attribute="Decimal" context="#stay" />
+        <HlCOct attribute="Oct" context="#stay" />
+        <HlCHex attribute="Hex" context="#stay" />
+
+        <keyword attribute="Keyword" context="#stay" String="keywords" />
+        <keyword attribute="Keyword" context="Class" String="class_keywords" />
+        <keyword attribute="Global" context="#stay" String="globals" />
+        <keyword attribute="Boolean" context="#stay" String="booleans" />
+
+        <RegExpr attribute="Accessor" context="#stay" String="(@[_$a-zA-Z][$\w]+|\bthis)\b" insensitive="false" />
+
+        <!-- Matches an optional argument list followed by a function arrow (normal or fat). -->
+        <RegExpr attribute="Function" context="#stay" String="(\((\'[^']*'|&quot;[^&quot;]*&quot;|[^()])*\))?\s*(-|=)&gt;" insensitive="true" />
+
+        <RegExpr attribute="Identifier" context="#stay" String="[_$a-z][$\w]+\b" insensitive="true" />
+
+        <StringDetect attribute="String" context="Heredoc" String="'''"/>
+        <StringDetect attribute="String" context="Rich Heredoc" String="&quot;&quot;&quot;"/>
+        <DetectChar attribute="String" context="String" char="'"/>
+        <DetectChar attribute="String" context="Rich String" char="&quot;"/>
+
+        <DetectChar attribute="Javascript" context="Javascript" char="`"/>
+
+        <StringDetect attribute="Comment" context="Multiline Comment" String="###" beginRegion="Comment"/>
+        <DetectChar attribute="Comment" context="Comment" char="#"/>
+
+        <RegExpr attribute="Regex" context="Multiline Regex" String="///" />
+        <RegExpr attribute="Regex" context="#stay" String="/([^\r\n]|\\/)*/" />
+
+        <AnyChar attribute="Symbol" context="#stay" String="():!%&amp;+,-/.*&lt;=&gt;?[]|~^&#59;{}"/>
+      </context>
+
+      <context name="Multiline Regex" attribute="Regex" lineEndContext="#stay">
+        <HlCStringChar attribute="Regex" context="#stay"/>
+        <DetectChar attribute="Comment" context="Comment" char="#"/>
+        <StringDetect attribute="Regex" context="#pop" String="///"/>
+      </context>
+
+      <context name="Class" attribute="Normal" lineEndContext="#stay">
+        <DetectSpaces/>
+        <RegExpr attribute="Class" context="#pop" String="[@$:.\w]+" />
+      </context>
+
+      <context name="Comment" attribute="Comment" lineEndContext="#pop">
+        <IncludeRules context="##Alerts" />
+      </context>
+      <context name="Multiline Comment" attribute="Comment" lineEndContext="#stay">
+        <StringDetect attribute="Comment" context="#pop" String="###" endRegion="Comment"/>
+        <IncludeRules context="##Alerts" />
+      </context>
+
+      <context name="String" attribute="String" lineEndContext="#stay">
+        <HlCStringChar attribute="String" context="#stay"/>
+        <DetectChar attribute="String" context="#pop" char="'"/>
+      </context>
+
+      <context name="Rich String" attribute="String" lineEndContext="#stay">
+        <HlCStringChar attribute="String" context="#stay"/>
+        <Detect2Chars attribute="Embedding" context="Embedding" char="#" char1="{"/>
+        <DetectChar attribute="String" context="#pop" char="&quot;"/>
+      </context>
+
+      <context name="Heredoc" attribute="String" lineEndContext="#stay">
+        <HlCStringChar attribute="String" context="#stay"/>
+        <StringDetect attribute="String" context="#pop" String="'''"/>
+      </context>
+
+      <context name="Rich Heredoc" attribute="String" lineEndContext="#stay">
+        <HlCStringChar attribute="String" context="#stay"/>
+        <Detect2Chars attribute="Embedding" context="Embedding" char="#" char1="{"/>
+        <StringDetect attribute="String" context="#pop" String="&quot;&quot;&quot;"/>
+      </context>
+
+      <context name="Embedding" attribute="Embedding" lineEndContext="#stay">
+        <DetectChar attribute="Embedding" context="#pop" char="}"/>
+      </context>
+
+      <context name="Javascript" attribute="Javascript" lineEndContext="#stay">
+        <DetectChar attribute="Javascript" context="#pop" char="`"/>
+      </context>
+    </contexts>
+    <itemDatas>
+      <itemData name="Normal" defStyleNum="dsNormal" spellChecking="false"/>
+      <itemData name="Identifier" defStyleNum="dsNormal" spellChecking="false"/>
+      <itemData name="Keyword" defStyleNum="dsKeyword" spellChecking="false"/>
+      <itemData name="Function" defStyleNum="dsFunction" spellChecking="false"/>
+      <itemData name="Decimal" defStyleNum="dsDecVal" spellChecking="false"/>
+      <itemData name="Float" defStyleNum="dsFloat" spellChecking="false"/>
+      <itemData name="Oct" defStyleNum="dsBaseN" spellChecking="false"/>
+      <itemData name="Hex" defStyleNum="dsBaseN" spellChecking="false"/>
+      <itemData name="String" defStyleNum="dsString" spellChecking="false"/>
+      <itemData name="Comment" defStyleNum="dsComment" spellChecking="true"/>
+      <itemData name="Symbol" defStyleNum="dsKeyword" spellChecking="false"/>
+      <itemData name="Global" defStyleNum="dsOthers" spellChecking="false"/>
+      <itemData name="Boolean" defStyleNum="dsOthers" spellChecking="false"/>
+      <itemData name="Embedding" defStyleNum="dsChar" spellChecking="false"/>
+      <itemData name="Accessor" defStyleNum="dsDataType" spellChecking="false"/>
+      <itemData name="Class" defStyleNum="dsDataType" spellChecking="false" bold="1"/>
+      <itemData name="Javascript" defStyleNum="dsAlert" spellChecking="false" italic="1"/>
+      <itemData name="Regex" defStyleNum="dsString" spellChecking="false" />
+    </itemDatas>
+  </highlighting>
+  <general>
+    <folding indentationsensitive="1" />
+    <comments>
+      <comment name="singleLine" start="#" />
+      <comment name="multiLine" start="###" end="###" region="Comment" />
+    </comments>
+    <keywords casesensitive="1" additionalDeliminator="#'"/>
+    <emptyLines>
+        <emptyLine regexpr="(?:\s+|\s*#.*)"/>
+    </emptyLines>
+    <indentation mode="python" />
+  </general>
+</language>
