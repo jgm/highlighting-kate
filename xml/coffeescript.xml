@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 
-<!-- Taken from here: https://github.com/max99x/kate-coffeescript -->
-<language name="CoffeeScript"
-          version="1.0"
+<language name="CofeeScript"
+          version="1.1"
           kateversion="2.4"
           section="Scripts"
-          extensions="Cakefile;*.coffee"
+          extensions="Cakefile;*.coffee;*.coco"
           mimetype="text/x-cofeescript;application/x-cofeescript"
           indenter="python"
           casesensitive="1"
           author="Max Shawabkeh (max99x@gmail.com)"
           license="MIT">
   <highlighting>
-    <list name="globals">
-      <item>undefined</item>
-      <item>null</item>
-      <item>window</item>
-    </list>
-    <list name="booleans">
+    <!-- Built-in constants. -->
+    <list name="value_keywords">
       <item>false</item>
       <item>true</item>
       <item>yes</item>
       <item>no</item>
       <item>on</item>
       <item>off</item>
+      <item>undefined</item>
+      <item>null</item>
+      <item>NaN</item>
+      <item>Infinity</item>
     </list>
+    <!-- Generic keywords. -->
     <list name="keywords">
       <item>return</item>
       <item>break</item>
@@ -61,97 +61,171 @@
       <item>finally</item>
       <item>constructor</item>
     </list>
+    <!-- Keywords which are always followed by a class name. -->
     <list name="class_keywords">
       <item>class</item>
       <item>extends</item>
       <item>new</item>
       <item>instanceof</item>
     </list>
+    <!-- Reserved words. -->
+    <list name="reserved">
+      <item>case</item>
+      <item>default</item>
+      <item>function</item>
+      <item>var</item>
+      <item>void</item>
+      <item>with</item>
+      <item>const</item>
+      <item>let</item>
+      <item>enum</item>
+      <item>export</item>
+      <item>import</item>
+      <item>native</item>
+      <item>__hasProp</item>
+      <item>__extends</item>
+      <item>__slice</item>
+      <item>__bind</item>
+      <item>__indexOf</item>
+    </list>
+    <!-- Built-in globals provided in most contexts. -->
+    <list name="globals">
+      <item>Object</item>
+      <item>Number</item>
+      <item>Boolean</item>
+      <item>Array</item>
+      <item>String</item>
+      <item>RegExp</item>
+      <item>Function</item>
+      <item>Date</item>
+      <item>Math</item>
+      <item>eval</item>
+      <item>setInterval</item>
+      <item>clearInterval</item>
+      <item>setTimeout</item>
+      <item>clearTimeout</item>
+      <item>isFinite</item>
+      <item>isNaN</item>
+      <item>parseFloat</item>
+      <item>parseInt</item>
+      <item>escape</item>
+      <item>unescape</item>
+      <item>console</item>
+      <item>encodeURI</item>
+      <item>encodeURIComponent</item>
+      <item>decodeURI</item>
+      <item>decodeURIComponent</item>
+    </list>
+    <!-- Built-in globals provided in browser context. -->
+    <list name="browser_globals">
+      <item>window</item>
+      <item>document</item>
+      <item>navigator</item>
+      <item>location</item>
+      <item>history</item>
+      <item>screen</item>
+      <item>alert</item>
+      <item>prompt</item>
+    </list>
+    <!-- Built-in globals provided in Node.js context. -->
+    <list name="nodejs_globals">
+      <item>process</item>
+      <item>GLOBAL</item>
+      <item>require</item>
+      <item>exports</item>
+    </list>
+    <!-- Context-sensitive highlighting rules. -->
     <contexts>
+      <!-- Generic code. -->
       <context name="Normal" attribute="Normal" lineEndContext="#stay">
         <DetectSpaces/>
-        <Float attribute="Float" context="#stay" />
-        <Int attribute="Decimal" context="#stay" />
-        <HlCOct attribute="Oct" context="#stay" />
-        <HlCHex attribute="Hex" context="#stay" />
-
-        <keyword attribute="Keyword" context="#stay" String="keywords" />
-        <keyword attribute="Keyword" context="Class" String="class_keywords" />
-        <keyword attribute="Global" context="#stay" String="globals" />
-        <keyword attribute="Boolean" context="#stay" String="booleans" />
-
-        <RegExpr attribute="Accessor" context="#stay" String="(@[_$a-zA-Z][$\w]+|\bthis)\b" insensitive="false" />
-
-        <!-- Matches an optional argument list followed by a function arrow (normal or fat). -->
-        <RegExpr attribute="Function" context="#stay" String="(\((\'[^']*'|&quot;[^&quot;]*&quot;|[^()])*\))?\s*(-|=)&gt;" insensitive="true" />
-
-        <RegExpr attribute="Identifier" context="#stay" String="[_$a-z][$\w]+\b" insensitive="true" />
-
-        <StringDetect attribute="String" context="Heredoc" String="'''"/>
-        <StringDetect attribute="String" context="Rich Heredoc" String="&quot;&quot;&quot;"/>
+        <!-- Numbers. -->
+        <Float attribute="Float" context="#stay"/>
+        <Int attribute="Decimal" context="#stay"/>
+        <HlCOct attribute="Oct" context="#stay"/>
+        <HlCHex attribute="Hex" context="#stay"/>
+        <!-- Keywords. -->
+        <keyword attribute="Keyword" context="#stay" String="keywords"/>
+        <keyword attribute="Keyword" context="Class" String="class_keywords"/>
+        <keyword attribute="Value Keywords" context="#stay" String="value_keywords"/>
+        <keyword attribute="Reserved" context="#stay" String="reserved"/>
+        <!-- Globals. -->
+        <keyword attribute="Globals" context="#stay" String="globals"/>
+        <keyword attribute="Browser Globals" context="#stay" String="browser_globals"/>
+        <keyword attribute="Node.js Globals" context="#stay" String="nodejs_globals"/>
+        <!-- Member accessors. -->
+        <RegExpr attribute="Accessor" context="#stay" String="(@[_$a-zA-Z][$\w]+|\bthis)\b" insensitive="false"/>
+        <!-- Function definitions. Matches an optional argument list followed by a function arrow (normal or fat). -->
+        <RegExpr attribute="Function" context="#stay" String="(\((\'[^']*'|&quot;[^&quot;]*&quot;|[^()])*\))?\s*(-|=)&gt;" insensitive="true"/>
+        <!-- Generic identifiers. -->
+        <RegExpr attribute="Identifier" context="#stay" String="[_$a-z][$\w]+\b" insensitive="true"/>
+        <!-- Strings. -->
+        <StringDetect attribute="String" context="Heredoc" String="'''" beginRegion="Heredoc"/>
+        <StringDetect attribute="String" context="Rich Heredoc" String="&quot;&quot;&quot;" beginRegion="Rich Heredoc"/>
         <DetectChar attribute="String" context="String" char="'"/>
         <DetectChar attribute="String" context="Rich String" char="&quot;"/>
-
-        <DetectChar attribute="Javascript" context="Javascript" char="`"/>
-
+        <!-- Embedded JavaScript. -->
+        <DetectChar attribute="Javascript" context="Javascript" char="`" beginRegion="Javascript"/>
+        <!-- Comments. -->
         <StringDetect attribute="Comment" context="Multiline Comment" String="###" beginRegion="Comment"/>
         <DetectChar attribute="Comment" context="Comment" char="#"/>
-
-        <RegExpr attribute="Regex" context="Multiline Regex" String="///" />
-        <RegExpr attribute="Regex" context="#stay" String="/([^\r\n]|\\/)*/" />
-
+        <!-- Regular expressions. -->
+        <RegExpr attribute="Regex" context="Multiline Regex" String="///" beginRegion="Multiline Regex"/>
+        <RegExpr attribute="Regex" context="#stay" String="/([^/\\\r\n]|\\.)*/[mig]{0,3}"/>
+        <!-- Operators and other non-alphanumeric symbols. -->
         <AnyChar attribute="Symbol" context="#stay" String="():!%&amp;+,-/.*&lt;=&gt;?[]|~^&#59;{}"/>
       </context>
-
-      <context name="Multiline Regex" attribute="Regex" lineEndContext="#stay">
+      <!-- Multiline regular expressions. -->
+      <context name="Multiline Regex" attribute="Regex" lineEndContext="#stay" noIndentationBasedFolding="1">
         <HlCStringChar attribute="Regex" context="#stay"/>
         <DetectChar attribute="Comment" context="Comment" char="#"/>
-        <StringDetect attribute="Regex" context="#pop" String="///"/>
+        <RegExpr attribute="Regex" context="#pop" String="///[mig]{0,3}" endRegion="Multiline Regex"/>
       </context>
-
+      <!-- Class names. -->
       <context name="Class" attribute="Normal" lineEndContext="#stay">
         <DetectSpaces/>
-        <RegExpr attribute="Class" context="#pop" String="[@$:.\w]+" />
+        <RegExpr attribute="Class" context="#pop" String="[@$:.\w\[\]]+"/>
       </context>
-
+      <!-- Comments. -->
       <context name="Comment" attribute="Comment" lineEndContext="#pop">
-        <IncludeRules context="##Alerts" />
+        <IncludeRules context="##Alerts_indent"/>
       </context>
-      <context name="Multiline Comment" attribute="Comment" lineEndContext="#stay">
+      <context name="Multiline Comment" attribute="Comment" lineEndContext="#stay" noIndentationBasedFolding="1">
         <StringDetect attribute="Comment" context="#pop" String="###" endRegion="Comment"/>
-        <IncludeRules context="##Alerts" />
+        <IncludeRules context="##Alerts_indent"/>
       </context>
-
+      <!-- Single-line strings. -->
       <context name="String" attribute="String" lineEndContext="#stay">
         <HlCStringChar attribute="String" context="#stay"/>
         <DetectChar attribute="String" context="#pop" char="'"/>
       </context>
-
       <context name="Rich String" attribute="String" lineEndContext="#stay">
         <HlCStringChar attribute="String" context="#stay"/>
         <Detect2Chars attribute="Embedding" context="Embedding" char="#" char1="{"/>
         <DetectChar attribute="String" context="#pop" char="&quot;"/>
       </context>
-
-      <context name="Heredoc" attribute="String" lineEndContext="#stay">
+      <!-- Multi-line strings. -->
+      <context name="Heredoc" attribute="String" lineEndContext="#stay" noIndentationBasedFolding="1">
         <HlCStringChar attribute="String" context="#stay"/>
-        <StringDetect attribute="String" context="#pop" String="'''"/>
+        <StringDetect attribute="String" context="#pop" String="'''" endRegion="Heredoc"/>
       </context>
-
-      <context name="Rich Heredoc" attribute="String" lineEndContext="#stay">
+      <context name="Rich Heredoc" attribute="String" lineEndContext="#stay" noIndentationBasedFolding="1">
         <HlCStringChar attribute="String" context="#stay"/>
         <Detect2Chars attribute="Embedding" context="Embedding" char="#" char1="{"/>
-        <StringDetect attribute="String" context="#pop" String="&quot;&quot;&quot;"/>
+        <StringDetect attribute="String" context="#pop" String="&quot;&quot;&quot;" endRegion="Rich Heredoc"/>
       </context>
-
-      <context name="Embedding" attribute="Embedding" lineEndContext="#stay">
+      <!-- Expressions embedded in strings. -->
+      <context name="Embedding" attribute="Normal" lineEndContext="#stay">
         <DetectChar attribute="Embedding" context="#pop" char="}"/>
       </context>
-
-      <context name="Javascript" attribute="Javascript" lineEndContext="#stay">
-        <DetectChar attribute="Javascript" context="#pop" char="`"/>
+      <!-- Embedded Javascript. -->
+      <context name="Javascript" attribute="Javascript" lineEndContext="#stay" noIndentationBasedFolding="1">
+        <DetectChar attribute="Javascript" context="#pop" char="`" endRegion="Javascript"/>
+        <!-- NOTE: This hides errors where a backtick is embedded in a JS string. -->
+        <IncludeRules context="##JavaScript" includeAttrib="true"/>
       </context>
     </contexts>
+    <!-- Style mappings. -->
     <itemDatas>
       <itemData name="Normal" defStyleNum="dsNormal" spellChecking="false"/>
       <itemData name="Identifier" defStyleNum="dsNormal" spellChecking="false"/>
@@ -164,25 +238,30 @@
       <itemData name="String" defStyleNum="dsString" spellChecking="false"/>
       <itemData name="Comment" defStyleNum="dsComment" spellChecking="true"/>
       <itemData name="Symbol" defStyleNum="dsKeyword" spellChecking="false"/>
-      <itemData name="Global" defStyleNum="dsOthers" spellChecking="false"/>
-      <itemData name="Boolean" defStyleNum="dsOthers" spellChecking="false"/>
       <itemData name="Embedding" defStyleNum="dsChar" spellChecking="false"/>
       <itemData name="Accessor" defStyleNum="dsDataType" spellChecking="false"/>
       <itemData name="Class" defStyleNum="dsDataType" spellChecking="false" bold="1"/>
       <itemData name="Javascript" defStyleNum="dsAlert" spellChecking="false" italic="1"/>
-      <itemData name="Regex" defStyleNum="dsString" spellChecking="false" />
+      <itemData name="Regex" defStyleNum="dsString" spellChecking="false"/>
+      <itemData name="Reserved" defStyleNum="dsAlert" spellChecking="false"/>
+      <itemData name="Value Keywords" defStyleNum="dsOthers" spellChecking="false"/>
+      <itemData name="Globals" defStyleNum="dsOthers" spellChecking="false"/>
+      <!-- Context-sensitive globals - not styled by default. -->
+      <itemData name="Browser Globals" defStyleNum="dsNormal" spellChecking="false"/>
+      <itemData name="Node.js Globals" defStyleNum="dsNormal" spellChecking="false"/>
     </itemDatas>
   </highlighting>
+  <!-- Global settings. -->
   <general>
-    <folding indentationsensitive="1" />
+    <indentation mode="python"/>
+    <folding indentationsensitive="1"/>
     <comments>
-      <comment name="singleLine" start="#" />
-      <comment name="multiLine" start="###" end="###" region="Comment" />
+      <comment name="singleLine" start="#"/>
+      <comment name="multiLine" start="###" end="###" region="Comment"/>
     </comments>
     <keywords casesensitive="1" additionalDeliminator="#'"/>
     <emptyLines>
-        <emptyLine regexpr="(?:\s+|\s*#.*)"/>
+      <emptyLine regexpr="(?:\s+|\s*#.*)"/>
     </emptyLines>
-    <indentation mode="python" />
   </general>
 </language>
