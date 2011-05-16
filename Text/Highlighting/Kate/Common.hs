@@ -75,11 +75,9 @@ popContext = do st <- getState
                 let contexts = synStContexts st
                 let lang = synStLanguage st
                 case Map.lookup lang contexts of
-                    Just conts -> case length conts of
-                                        0 -> fail $ "Stack empty for language " ++ lang
-                                        1 -> return ()  -- don't remove last member of stack
-                                        _ -> do let newContexts = Map.adjust tail lang contexts
-                                                updateState $ \st -> st { synStContexts = newContexts }
+                    Just (_:_) -> updateState $ \st ->
+                                    st{ synStContexts = Map.adjust tail lang contexts }
+                    Just []    -> fail $ "Stack empty for language " ++ lang
                     Nothing    -> fail $ "No context stack for language " ++ lang 
 
 currentContext :: GenParser tok SyntaxState String
@@ -87,9 +85,8 @@ currentContext = do st <- getState
                     let contexts = synStContexts st
                     let lang = synStLanguage st
                     case Map.lookup lang contexts of
-                         Just conts -> if length conts < 1
-                                          then fail $ "Stack empty for language " ++ lang
-                                          else return (head conts)
+                         Just []    -> return ""
+                         Just (c:_) -> return c
                          Nothing    -> fail $ "No context stack for language " ++ lang
 
 withChildren :: GenParser tok SyntaxState LabeledSource

@@ -197,6 +197,7 @@ mkParser syntax =
       -- lineBeginContexts = 
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
       startingContext = head (synContexts syntax)
+      contextNull = text $ "parseRules \"\" = parseRules " ++ show (contName startingContext)
       contextCatchAll = text $ "parseRules x = fail $ \"Unknown context\" ++ x"
       contexts = map (mkRules syntax) $ synContexts syntax
       initialContextStack = Map.fromList [(synLanguage syntax, [contName startingContext])]
@@ -245,7 +246,7 @@ mkParser syntax =
                                                               parserType x == "RegExpr", parserDynamic x == False]
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser, 
                                       endLineParser, withAttr, styles, parseExpressionInternal, lists, regexes,
-                                      defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextCatchAll]
+                                      defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextNull, contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
 mkAlternatives docs = 
