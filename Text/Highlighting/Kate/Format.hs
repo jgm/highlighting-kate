@@ -40,7 +40,7 @@ formatAsXHtml opts lang lines =
          else if OptNumberLines `elem` opts
                  then let lnTitle = title "Click to toggle line numbers"
                           lnOnClick = strAttr "onclick" "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
-                          nums = td ! [theclass "nums", lnTitle, lnOnClick] $ pre <<
+                          nums = td ! [theclass "lineNumbers", lnTitle, lnOnClick] $ pre <<
                                              (intersperse br $ map lineNum [startNum..(startNum + numberOfLines - 1)])
                           lineNum n = if OptLineAnchors `elem` opts
                                          then anchor ! [identifier $ show n] << show n
