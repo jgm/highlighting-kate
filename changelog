@@ -1,3 +1,15 @@
+highlighting-kate 0.2.10 (16 Jul 2011)
+
+  * Fixed class on line numbers td.  (Thanks to tantignac)
+  * Allow empty context stack.
+    `currentContext` returns "" if stack is empty, and this is
+    treated as the first context in the list by `parseRules`.
+    This fixes a problem with syntax definitions like erlang.xml,
+    which has `#pop` as `lineEndContext` in the first context,
+    leading to an infinite loop with the old code.
+  * Syntax highlighting for CoffeeScript (thanks to igstan).
+  * Fixed links in README (thanks to John Gabriele).
+
 highlighting-kate 0.2.9 (29 Jan 2011)
 
   * Added OptInline to FormatOptions.  Inline code is formatted
