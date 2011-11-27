@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 <!--
-
-    Modified for highlighting-kate by JM:
-    replaced doxygenlua w/ doxygen, as in the old version.
-    doxygenlua was causing everything to be interpreted as comments...
-
     LUA (www.lua.org) syntax highlighting for Kate
 
     CHANGES
@@ -40,7 +35,7 @@
     - improved highlighting
 
     -->
-<language name="Lua" version="1.03" indenter="lua" kateversion="2.4" section="Scripts" extensions="*.lua" mimetype="text/x-lua">
+<language name="Lua" version="1.04" indenter="lua" kateversion="2.4" section="Scripts" extensions="*.lua" mimetype="text/x-lua">
   <highlighting>
     <list name="keywords">
       <item> and </item>
@@ -218,8 +213,12 @@
     </list>
 
     <contexts>
+      <context name="Base" attribute="Comment" lineEndContext="Normal">
+        <RegExpr attribute="Comment" context="Normal" String="#!.*$" column="0" />
+        <RegExpr attribute="Comment" context="Normal" String="^.*$" lookAhead="true" />
+      </context>
       <context name="Normal"        attribute="Normal Text" lineEndContext="#stay">
-        <IncludeRules context="##Doxygen" />
+        <IncludeRules context="##DoxygenLua" />
         <keyword      attribute="Error"  context="#stay" String="deprecated" />
         <DetectSpaces />
         <RegExpr      attribute="Comment"  context="Block Comment" beginRegion="block comment"  String="--\[(=*)\[" dynamic="true" />
