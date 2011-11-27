@@ -1,10 +1,5 @@
 highlighting-kate 0.3 (26 Nov 2011)
 
-  * Make `--disable-library-for-ghci` the default for OSX.
-    This prevents a linking error with some versions of GHC 7:
-    "scattered reloc r_address too large for inferred architecture i386."
-    Perhaps later this default can be changed.
-
   * Use -O0 by default to speed compiling.  This vastly improves compilation
     speed and reduces memory requirements.  In some rough tests, it does not
     seem to hurt performance much, but those who need maximum performance

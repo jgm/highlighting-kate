@@ -1,6 +1,6 @@
 Name:                highlighting-kate
 Version:             0.3
-Cabal-Version:       >= 1.2
+Cabal-Version:       >= 1.6
 Build-Type:          Simple
 Category:            Text
 Synopsis:            Syntax highlighting
@@ -134,6 +134,10 @@ Flag pcre-light
   Description:       Use the pcre-light library instead of regex-pcre-builtin
   Default:           False
 
+Source-repository head
+  type:          git
+  location:      git://github.com/jgm/highlighting-kate.git
+
 Library
   if flag(splitBase)
     Build-Depends:   base >= 3 && < 5, containers
@@ -244,24 +248,21 @@ Library
                      Text.Highlighting.Kate.Syntax.Yaml
   Other-Modules:     Text.Highlighting.Kate.Common
                      Paths_highlighting_kate
-  -- this works around a problem with ghc 7.03 on mac osx
-  -- we should be able to remove it later
-  if os(macosx)
-    Ghc-Options:     -W --disable-optimization --disable-library-for-ghci
-  else
-    Ghc-Options:       -W --disable-optimization
-  Ghc-Prof-Options:  -auto-all -caf-all --disable-optimization
+  -- disable optimizations; it doesn't hurt performance much and
+  -- massively improves compilation speed and memory usage
+  Ghc-Options:       -W -O0
+  Ghc-Prof-Options:  -auto-all -caf-all
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
-  Cc-Options:        -O0
+  Cc-Options:       -O0
 
 Executable Highlight
   Main-Is:          Highlight.hs
   Build-Depends:    base, containers, xhtml, filepath
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
-  Ghc-Options:      -W --disable-optimization
-  Ghc-Prof-Options: -auto-all -caf-all --disable-optimization
+  Ghc-Options:      -W -O0
+  Ghc-Prof-Options: -auto-all -caf-all
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
   Cc-Options:       -O0
