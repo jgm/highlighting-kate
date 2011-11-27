@@ -247,10 +247,10 @@ Library
   -- this works around a problem with ghc 7.03 on mac osx
   -- we should be able to remove it later
   if os(macosx)
-    Ghc-Options:     -W -O0 --disable-library-for-ghci
+    Ghc-Options:     -W --disable-optimization --disable-library-for-ghci
   else
-    Ghc-Options:       -W -O0
-  Ghc-Prof-Options:  -auto-all -caf-all -O0
+    Ghc-Options:       -W --disable-optimization
+  Ghc-Prof-Options:  -auto-all -caf-all --disable-optimization
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
   Cc-Options:        -O0
@@ -260,8 +260,8 @@ Executable Highlight
   Build-Depends:    base, containers, xhtml, filepath
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
-  Ghc-Options:      -W -O0
-  Ghc-Prof-Options: -auto-all -caf-all -O0
+  Ghc-Options:      -W --disable-optimization
+  Ghc-Prof-Options: -auto-all -caf-all --disable-optimization
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
   Cc-Options:       -O0
