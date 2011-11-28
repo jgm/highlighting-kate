@@ -1,3 +1,8 @@
+highlighting-kate 0.3.1 (27 Nov 2011)
+
+  * Fixed a release bug in 0.3.  The Clojure module was not included
+    in the cabal file.
+
 highlighting-kate 0.3 (26 Nov 2011)
 
   * Use -O0 by default to speed compiling.  This vastly improves compilation
