@@ -146,7 +146,7 @@ Library
     cpp-options:     -D_PCRE_LIGHT
   else
     Build-depends:   regex-pcre-builtin
-  Build-Depends:     parsec, xhtml
+  Build-Depends:     parsec, blaze-html
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions
@@ -254,7 +254,7 @@ Library
 
 Executable Highlight
   Main-Is:          Highlight.hs
-  Build-Depends:    base, containers, xhtml, filepath
+  Build-Depends:    base, containers, blaze-html, filepath
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
   Ghc-Options:      -W -O0

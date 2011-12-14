@@ -1,14 +1,17 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 module Main where
 import Text.Highlighting.Kate
 import System.IO (hPutStrLn, stderr)
 import System.Environment
-import Text.XHtml.Transitional
 import System.Console.GetOpt
 import System.Exit
 import System.FilePath (takeFileName)
 import Data.Maybe (listToMaybe)
 import Data.Char (toLower)
+import Text.Blaze.Renderer.String
+import Text.Blaze
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
 
 data Flag = CssPath String
           | Help
@@ -56,7 +59,7 @@ xhtmlHighlight :: [FormatOption] -- ^ Options
 xhtmlHighlight opts lang code =
   case highlightAs lang code of
        Right result -> formatAsXHtml opts lang result
-       Left  _      -> pre $ thecode << code
+       Left  _      -> H.pre $ H.code $ toHtml code
 
 main = do
   (opts, fnames, errs) <- getArgs >>= return . getOpt Permute options
@@ -97,12 +100,12 @@ main = do
                       [OptNumberLines | NumberLines `elem` opts] ++
                       [OptLineAnchors | NumberLines `elem` opts]
   let css = case cssPathOf opts of
-                   Nothing      -> style ! [thetype "text/css"] $ primHtml defaultHighlightingCss 
-                   Just cssPath -> thelink ! [thetype "text/css", href cssPath, rel "stylesheet"] << noHtml
+                   Nothing      -> H.style ! A.type_ "text/css" $ toHtml defaultHighlightingCss
+                   Just cssPath -> H.link ! A.type_ "text/css" ! A.href (toValue cssPath) ! A.rel "stylesheet"
   let hcode = xhtmlHighlight highlightOpts lang code
-  let pageTitle = if null fnames then noHtml else thetitle << (takeFileName $ head fnames)
-  let metadata = meta ! [httpequiv "Content-Type", content "text/html; charset=UTF-8"] +++
-                 meta ! [name "generator", content "highlight-kate"]
+  let pageTitle = if null fnames then return () else H.title $ (toHtml $ takeFileName $ head fnames)
+  let metadata = H.meta ! A.httpEquiv "Content-Type" ! A.content "text/html; charset=UTF-8" >>
+                 H.meta ! A.name "generator" ! A.content "highlight-kate"
   if Fragment `elem` opts
-     then putStrLn $ renderHtmlFragment hcode
-     else putStrLn $ renderHtml $ header << [pageTitle, metadata, css] +++ body << hcode
+     then putStrLn $ renderHtml hcode
+     else putStrLn $ renderHtml $ H.head (pageTitle >> metadata >> css) >> H.body (toHtml hcode)

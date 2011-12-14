@@ -1,6 +1,6 @@
 {-# LANGUAGE Arrows #-}
 
-{- 
+{-
 ParseSyntaxFiles.hs processes a directory containing Kate
 XML syntax highlighting definitions.  For each xml file in
 the directory, it creates a syntax highlighting parser
@@ -57,7 +57,7 @@ data SyntaxKeywordAttr =
                      , keywordDelims          :: [Char]
                      } deriving (Read, Show)
 
-data SyntaxContext = 
+data SyntaxContext =
   SyntaxContext { contName               :: String
                 , contAttribute          :: String
                 , contLineEndContext     :: String
@@ -65,7 +65,7 @@ data SyntaxContext =
                 , contFallthrough        :: Bool
                 , contFallthroughContext :: String
                 , contDynamic            :: Bool
-                , contParsers            :: [SyntaxParser] 
+                , contParsers            :: [SyntaxParser]
                 } deriving (Read, Show)
 
 data SyntaxParser =
@@ -103,13 +103,13 @@ main = do
   destDirExists <- doesDirectoryExist destDir
   if destDirExists
      then return ()
-     else createDirectory destDir 
+     else createDirectory destDir
   mapM_ processOneFile files
   let syntaxFile = combine libraryPath (addExtension "Syntax" "hs")
   putStrLn $ "Writing " ++ syntaxFile
   -- Get all syntax files, not only the newly generated ones.
   names <- getDirectoryContents destDir >>= return . sort . map dropExtension . filter (isSuffixOf ".hs")
-  let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names 
+  let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names
   let cases = unlines $ map (\name -> show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
   let languageExtensions = '[' :
         (intercalate ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names) ++ "]"
@@ -126,18 +126,18 @@ processOneFile src = do
   let name = nameFromPath src
   let outFile = joinPath [libraryPath, "Syntax", addExtension name "hs"]
   let includeLangs = nub $ filter (/= name) $ map (drop 2 . parserContext) $
-        filter (\p -> (parserType p) == "IncludeRules" && "##" `isPrefixOf` (parserContext p)) $ 
+        filter (\p -> (parserType p) == "IncludeRules" && "##" `isPrefixOf` (parserContext p)) $
         concatMap contParsers $ synContexts syntax
   let includeImports = map (("import qualified " ++) . langNameToModule) includeLangs
   putStrLn $ "Writing " ++ outFile
   B.writeFile outFile $ fromString $
-           "{- This module was generated from data in the Kate syntax highlighting file " ++ (takeFileName src) ++ ", version " ++ 
+           "{- This module was generated from data in the Kate syntax highlighting file " ++ (takeFileName src) ++ ", version " ++
            synVersion syntax ++ ",\n" ++
-           "   by  " ++ synAuthor syntax ++ " -}\n\n" ++ 
+           "   by  " ++ synAuthor syntax ++ " -}\n\n" ++
            "module Text.Highlighting.Kate.Syntax." ++ name ++ " ( highlight, parseExpression, syntaxName, syntaxExtensions ) where\n\
            \import Text.Highlighting.Kate.Definitions\n\
            \import Text.Highlighting.Kate.Common\n" ++
-           unlines includeImports ++ 
+           unlines includeImports ++
            "import Text.ParserCombinators.Parsec\n\
            \import Control.Monad (when)\n\
            \import Data.Map (fromList)\n\
@@ -180,12 +180,12 @@ mkParser syntax =
                    text "let prevchar = if null txt then '\\n' else last txt" $$
                    text "updateState $ \\st -> st { synStCharsParsedInLine = oldCharsParsed + length txt, synStPrevChar = prevchar } " $$
                    text "return (attr, txt)")
-      parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $ 
+      parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $
                                   text "context <- currentContext" $$
                                   text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe \"\" $ lookup context defaultAttributes))")
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
                         text "parseExpression :: GenParser Char SyntaxState Token" $$
-                        text "parseExpression = do" $$ (nest 2 $ 
+                        text "parseExpression = do" $$ (nest 2 $
                           text "st <- getState" $$
                           text "let oldLang = synStLanguage st" $$
                           text ("setState $ st { synStLanguage = " ++ show (synLanguage syntax) ++ " }") $$
@@ -194,9 +194,9 @@ mkParser syntax =
                           text "result <- parseRules context" $$
                           text "updateState $ \\st -> st { synStLanguage = oldLang }" $$
                           text "return result")
-      defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> (contName cont, contAttribute cont)) $ synContexts syntax)
+      defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> (contName cont, labelFor syntax $ contAttribute cont)) $ synContexts syntax)
       -- Note: lineBeginContexts seems not to be used in any of the xml files
-      -- lineBeginContexts = 
+      -- lineBeginContexts =
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
       startingContext = head (synContexts syntax)
       contextNull = text $ "parseRules \"\" = parseRules " ++ show (contName startingContext)
@@ -213,7 +213,7 @@ mkParser syntax =
                                   , synStCaptures = [] }
       initState = text $ "startingState = " ++ show startingState
       sourceLineParser = text "parseSourceLine = manyTill parseExpressionInternal pEndLine"
-      mainParser = text "parseSource = do " $$  
+      mainParser = text "parseSource = do " $$
                    (nest 2 $ text "lineContents <- lookAhead wholeLine" $$
                              text "updateState $ \\st -> st { synStCurrentLine = lineContents }" $$
                              -- text "context <- currentContext" $$
@@ -230,7 +230,7 @@ mkParser syntax =
                       (nest 2 $ text "lookAhead $ newline <|> (eof >> return '\\n')" $$
                                 text "context <- currentContext" $$
                                 text "case context of" $$
-                                (nest 2 $ (vcat $ map (\cont -> text (show $ contName cont) <> text " -> " <> 
+                                (nest 2 $ (vcat $ map (\cont -> text (show $ contName cont) <> text " -> " <>
                                             switchContext (contLineEndContext cont) <>
                                             if "#pop" `isPrefixOf` (contLineEndContext cont)
                                                then text " >> pEndLine"
@@ -246,12 +246,12 @@ mkParser syntax =
       regexDef re = text $ compiledRegexName re ++ " = compileRegex " ++ show re
       regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
                                                               parserType x == "RegExpr", parserDynamic x == False]
-  in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser, 
+  in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser,
                                       endLineParser, withAttr, parseExpressionInternal, lists, regexes,
                                       defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextNull, contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
-mkAlternatives docs = 
+mkAlternatives docs =
   let contents = vcat $ intersperse (text "<|>") docs
   in  if length docs > 1
          then char '(' <> contents <> char ')'
@@ -260,13 +260,13 @@ mkAlternatives docs =
 mkRules :: SyntaxDefinition -> SyntaxContext -> Doc
 mkRules syntax context =
   let fallthroughParser = if contFallthrough context
-                             then [parens (switchContext (contFallthroughContext context) <> 
+                             then [parens (switchContext (contFallthroughContext context) <>
                                    text " >> return ([], \"\")")]
                              else []
-  in  text ("parseRules " ++ show (contName context) ++ " = ") $$ 
+  in  text ("parseRules " ++ show (contName context) ++ " = ") $$
       if null (contParsers context) && null fallthroughParser
          then nest 2 (text "pzero")
-         else nest 2 $ (text "do (attr, result) <- " <> 
+         else nest 2 $ (text "do (attr, result) <- " <>
                        (mkAlternatives $ (map (mkSyntaxParser syntax context) $ contParsers context) ++ fallthroughParser)) $$
                        text ("   return (attr, result)")
 
@@ -277,10 +277,10 @@ mkSyntaxParser syntax context parser =
                    x  -> labelFor syntax x
       mainParser = text $ case parserType parser of
             "DetectChar"       -> "pDetectChar " ++ show (parserDynamic parser) ++ " " ++ show (parserChar parser)
-            "Detect2Chars"     -> "pDetect2Chars " ++ show (parserDynamic parser) ++ " " ++ 
+            "Detect2Chars"     -> "pDetect2Chars " ++ show (parserDynamic parser) ++ " " ++
                                     show (parserChar parser) ++ " " ++ show (parserChar1 parser)
             "AnyChar"          -> "pAnyChar " ++ show (parserString parser)
-            "StringDetect"     -> "pString " ++ show (parserDynamic parser) ++ " " ++ show (parserString parser) 
+            "StringDetect"     -> "pString " ++ show (parserDynamic parser) ++ " " ++ show (parserString parser)
             "RegExpr"          -> if parserDynamic parser
                                      then "pRegExprDynamic " ++ show (parserString parser)
                                      else "pRegExpr " ++ compiledRegexName (parserString parser)
@@ -301,7 +301,7 @@ mkSyntaxParser syntax context parser =
                                       ('#':'#':xs) -> langNameToModule xs ++ ".parseExpression" ++
                                                       if parserIncludeAttrib parser || null attr
                                                          then ""
-                                                         else " >>= ((withAttribute " ++ show attr ++ ") . snd)" 
+                                                         else " >>= ((withAttribute " ++ show attr ++ ") . snd)"
                                       xs           -> "parseRules " ++ show xs
             "DetectSpaces"     -> "pDetectSpaces"
             "DetectIdentifier" -> "pDetectIdentifier"
@@ -316,11 +316,11 @@ mkSyntaxParser syntax context parser =
                   if parserType parser == "IncludeRules"
                      then mainParser <> char ')'
                      else (if parserLookAhead parser
-                             then text "lookAhead (" <> mainParser <> text ") >> return ([],\"\") " 
+                             then text "lookAhead (" <> mainParser <> text ") >> return ([],\"\") "
                              else mainParser <> text " >>= withAttribute " <> text (show attr)) <>
                           char ')' <>
                           (if parserContext parser `elem` ["", "#stay"]
-                              then empty 
+                              then empty
                               else text " >>~ " <> switchContext (parserContext parser))
       childParsers = parserChildren parser
   in  char '(' <>
@@ -334,7 +334,7 @@ switchContext next =
      x | "#pop" `isPrefixOf` x -> char '(' <>
           text (concat $ intersperse " >> " $ replicate (length (filter (=='#') x)) "popContext") <> char ')'
      "#stay" -> text "return ()"
-     x -> text ("pushContext " ++ show x) 
+     x -> text ("pushContext " ++ show x)
 
 langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
   case str of
@@ -358,7 +358,7 @@ compiledRegexName n = "regex_" ++ normalize n
 
 normalize :: String -> String
 normalize "" = ""
-normalize (x:xs) | isAlphaNum x = x : normalize xs 
+normalize (x:xs) | isAlphaNum x = x : normalize xs
 normalize (' ':xs)              = '_':normalize xs
 normalize (x:xs)                = printf "'%2x" (ord x) ++ normalize xs
 
@@ -367,8 +367,8 @@ capitalize (x:xs) = toUpper x : xs
 capitalize [] = []
 
 nameFromPath :: FilePath -> String
-nameFromPath = concat . map capitalize . words . 
-               (map (\c -> if c == '-' then ' ' else c)) . takeFileName . 
+nameFromPath = concat . map capitalize . words .
+               (map (\c -> if c == '-' then ' ' else c)) . takeFileName .
                dropExtension
 
 application :: String -> IOSArrow b SyntaxDefinition
@@ -391,14 +391,14 @@ extractSyntaxDefinition =  proc x -> do
                              lists <- getLists -< x
                              contexts <- getContexts -< x
                              keywordAttr <- getKeywordAttrs -< x
-                             returnA -< SyntaxDefinition { synLanguage      = lang 
+                             returnA -< SyntaxDefinition { synLanguage      = lang
                                                          , synAuthor        = author
                                                          , synVersion       = version
-                                                         , synLicense       = license 
+                                                         , synLicense       = license
                                                          , synExtensions    = sources
                                                          , synCaseSensitive = vBool True caseSensitive
                                                          , synLists         = lists
-                                                         , synContexts      = contexts 
+                                                         , synContexts      = contexts
                                                          , synItemDatas     = itemdatas
                                                          , synKeywordAttr   = if null keywordAttr
                                                                                  then defaultKeywordAttr
@@ -415,12 +415,12 @@ getItemDatas = multi (hasName "itemDatas")
 
 getLists :: IOSArrow XmlTree [(String, [String])]
 getLists = listA $ multi (hasName "list")
-                   >>> 
+                   >>>
                    getAttrValue "name" &&& getListContents
 
 getListContents :: IOSArrow XmlTree [String]
 getListContents = listA $ getChildren
-                          >>> 
+                          >>>
                           hasName "item"
                           >>>
                           getChildren
@@ -441,7 +441,7 @@ getContexts = listA $   multi (hasName "context")
                           fallthroughContext <- getAttrValue "fallthroughContext" -< x
                           dynamic <- getAttrValue "dynamic" -< x
                           parsers <- getParsers -< x
-                          returnA -< SyntaxContext 
+                          returnA -< SyntaxContext
                                            { contName = name
                                            , contAttribute = attribute
                                            , contLineEndContext = if null lineEndContext then "#stay" else lineEndContext
@@ -452,7 +452,7 @@ getContexts = listA $   multi (hasName "context")
                                            , contParsers = parsers }
 
 getParsers :: IOSArrow XmlTree [SyntaxParser]
-getParsers = listA $ getChildren 
+getParsers = listA $ getChildren
                      >>>
                      proc x -> do
                        name <- getName -< x
@@ -468,7 +468,7 @@ getParsers = listA $ getChildren
                        dynamic <- getAttrValue "dynamic" -< x
                        children <- getParsers -< x
                        let tildeRegex = name == "RegExpr" && length str > 0 && head str == '^'
-                       returnA -< SyntaxParser 
+                       returnA -< SyntaxParser
                                     { parserType = name
                                     , parserAttribute = attribute
                                     , parserContext = context
@@ -477,8 +477,8 @@ getParsers = listA $ getChildren
                                     , parserFirstNonSpace = vBool False firstNonSpace
                                     , parserColumn = if tildeRegex
                                                         then Just 0
-                                                        else if null column 
-                                                                then Nothing 
+                                                        else if null column
+                                                                then Nothing
                                                                 else Just (read column)
                                     , parserDynamic = vBool False dynamic
                                     , parserString = if tildeRegex then drop 1 str else str
@@ -493,16 +493,16 @@ getKeywordAttrs = listA $ multi $ hasName "keywords"
                                     caseSensitive <- getAttrValue "casesensitive" -< x
                                     weakDelim <- getAttrValue "weakDeliminator" -< x
                                     additionalDelim <- getAttrValue "additionalDeliminator" -< x
-                                    returnA -< SyntaxKeywordAttr 
+                                    returnA -< SyntaxKeywordAttr
                                                       { keywordCaseSensitive = vBool True caseSensitive
                                                       , keywordDelims = (standardDelims ++ additionalDelim) \\ weakDelim }
 
-standardDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\" 
+standardDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\"
 
 defaultKeywordAttr = SyntaxKeywordAttr { keywordCaseSensitive = True
                                        , keywordDelims = standardDelims }
 
-stripWhitespaceLeft = dropWhile isWhitespace 
+stripWhitespaceLeft = dropWhile isWhitespace
 isWhitespace x = elem x [' ', '\t', '\n']
 stripWhitespace = reverse . stripWhitespaceLeft . reverse . stripWhitespaceLeft
 
