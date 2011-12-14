@@ -184,7 +184,7 @@ mkParser syntax =
                                   text "context <- currentContext" $$
                                   text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe \"\" $ lookup context defaultAttributes))")
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
-                        text "parseExpression :: GenParser Char SyntaxState Token" $$
+                        text "parseExpression :: KateParser Token" $$
                         text "parseExpression = do" $$ (nest 2 $
                           text "st <- getState" $$
                           text "let oldLang = synStLanguage st" $$

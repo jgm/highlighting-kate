@@ -12,6 +12,7 @@ Definitions for data structures needed by highlighting-kate.
 
 module Text.Highlighting.Kate.Definitions where
 import qualified Data.Map as Map
+import Text.ParserCombinators.Parsec
 
 -- | A stack of context names for each language.  (Language-specific context
 -- stacks must be maintained because of IncludeRules.)
@@ -35,3 +36,5 @@ type Token = (String, String)
 
 -- | A line of source, list of labeled source items.
 type SourceLine = [Token]
+
+type KateParser = GenParser Char SyntaxState
