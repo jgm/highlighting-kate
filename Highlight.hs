@@ -16,7 +16,6 @@ data Flag = CssPath String
           | List
           | NumberLines
           | Syntax String
-          | Detailed
           | TitleAttributes
           | Version
           deriving (Eq, Show)
@@ -29,7 +28,6 @@ options =
   , Option ['l'] ["list"] (NoArg List)   "list available language syntaxes"
   , Option ['n'] ["number-lines"] (NoArg NumberLines)  "number lines"
   , Option ['s'] ["syntax"] (ReqArg Syntax "SYNTAX")  "specify language syntax to use"
-  , Option ['d'] ["details"] (NoArg Detailed) "include detailed lexical information in classes"
   , Option ['t'] ["title-attributes"] (NoArg TitleAttributes)  "include structure in title attributes"
   , Option ['v'] ["version"] (NoArg Version)   "print version"
   ]
@@ -96,7 +94,6 @@ main = do
      then hPutStrLn stderr ("Unknown syntax: " ++ lang) >> exitWith (ExitFailure 4)
      else return ()
   let highlightOpts = [OptTitleAttributes | TitleAttributes `elem` opts] ++
-                      [OptDetailed | Detailed `elem` opts] ++
                       [OptNumberLines | NumberLines `elem` opts] ++
                       [OptLineAnchors | NumberLines `elem` opts]
   let css = case cssPathOf opts of

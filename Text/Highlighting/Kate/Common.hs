@@ -52,7 +52,7 @@ splitBySemi xs =
 (>>~) :: (Monad m) => m a -> m b -> m a
 a >>~ b = a >>= \x -> b >> return x
 
-normalizeHighlighting :: [LabeledSource] -> [LabeledSource]
+normalizeHighlighting :: [Token] -> [Token]
 normalizeHighlighting [] = []
 normalizeHighlighting ((_,""):xs) = normalizeHighlighting xs
 normalizeHighlighting ((a,x):(b,y):xs) | a == b = normalizeHighlighting ((a, x++y):xs)
@@ -89,9 +89,9 @@ currentContext = do st <- getState
                          Just (c:_) -> return c
                          Nothing    -> fail $ "No context stack for language " ++ lang
 
-withChildren :: GenParser tok SyntaxState LabeledSource
-             -> GenParser tok SyntaxState LabeledSource
-             -> GenParser tok SyntaxState LabeledSource
+withChildren :: GenParser tok SyntaxState Token
+             -> GenParser tok SyntaxState Token
+             -> GenParser tok SyntaxState Token
 withChildren parent child = do
   (pAttr, pResult) <- parent
   (_, cResult) <- option ([],"") child

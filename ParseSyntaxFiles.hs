@@ -141,48 +141,50 @@ processOneFile src = do
            "import Text.ParserCombinators.Parsec\n\
            \import Control.Monad (when)\n\
            \import Data.Map (fromList)\n\
-           \import Data.Maybe (fromMaybe, maybeToList)\n\n" ++
+           \import Data.Maybe (fromMaybe)\n\n" ++
            (if null (synLists syntax)
                then ""
                else "import qualified Data.Set as Set\n") ++
            render (mkParser syntax) ++ "\n"
 
+labelFor :: SyntaxDefinition -> String -> String
+labelFor syntax attr =
+  case lookup attr (synItemDatas syntax) of
+       Just "dsKeyword" -> "kw"
+       Just "dsDataType" -> "dt"
+       Just "dsDecVal" -> "dv"
+       Just "dsBaseN" -> "bn"
+       Just "dsFloat" -> "fl"
+       Just "dsChar" -> "ch"
+       Just "dsString" -> "st"
+       Just "dsComment" -> "co"
+       Just "dsOthers" -> "ot"
+       Just "dsAlert" -> "al"
+       Just "dsFunction" -> "fu"
+       Just "dsRegionMarker" -> "re"
+       Just "dsError" -> "er"
+       _ -> ""
+
 mkParser :: SyntaxDefinition -> Doc
-mkParser syntax = 
+mkParser syntax =
   let name = text "-- | Full name of language." $$
              text "syntaxName :: String" $$
              text ("syntaxName = " ++ show (synLanguage syntax))
       exts = text "-- | Filename extensions for this language." $$
              text "syntaxExtensions :: String" $$
              text ("syntaxExtensions = " ++ show (synExtensions syntax))
-      shortFormOf "dsKeyword" = ["kw"]
-      shortFormOf "dsDataType" = ["dt"] 
-      shortFormOf "dsDecVal" = ["dv"]
-      shortFormOf "dsBaseN" = ["bn"]
-      shortFormOf "dsFloat" = ["fl"]
-      shortFormOf "dsChar" = ["ch"]
-      shortFormOf "dsString" = ["st"]
-      shortFormOf "dsComment" = ["co"]
-      shortFormOf "dsOthers" = ["ot"]
-      shortFormOf "dsAlert" = ["al"]
-      shortFormOf "dsFunction" = ["fu"]
-      shortFormOf "dsRegionMarker" = ["re"]
-      shortFormOf "dsError" = ["er"]
-      shortFormOf _ = []
-      styles = text ("styles = " ++ (show [(typ, shortsty) | (typ, sty) <- synItemDatas syntax, shortsty <- shortFormOf sty]))
       withAttr = text "withAttribute attr txt = do" $$ (nest 2 $
                    text "when (null txt) $ fail \"Parser matched no text\"" $$
-                   text "let labs = attr : maybeToList (lookup attr styles)" $$
                    text "st <- getState" $$
                    text "let oldCharsParsed = synStCharsParsedInLine st" $$
                    text "let prevchar = if null txt then '\\n' else last txt" $$
                    text "updateState $ \\st -> st { synStCharsParsedInLine = oldCharsParsed + length txt, synStPrevChar = prevchar } " $$
-                   text "return (labs, txt)")
+                   text "return (attr, txt)")
       parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $ 
                                   text "context <- currentContext" $$
                                   text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe \"\" $ lookup context defaultAttributes))")
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
-                        text "parseExpression :: GenParser Char SyntaxState LabeledSource" $$
+                        text "parseExpression :: GenParser Char SyntaxState Token" $$
                         text "parseExpression = do" $$ (nest 2 $ 
                           text "st <- getState" $$
                           text "let oldLang = synStLanguage st" $$
@@ -245,7 +247,7 @@ mkParser syntax =
       regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
                                                               parserType x == "RegExpr", parserDynamic x == False]
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser, 
-                                      endLineParser, withAttr, styles, parseExpressionInternal, lists, regexes,
+                                      endLineParser, withAttr, parseExpressionInternal, lists, regexes,
                                       defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextNull, contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
@@ -269,8 +271,11 @@ mkRules syntax context =
                        text ("   return (attr, result)")
 
 mkSyntaxParser :: SyntaxDefinition -> SyntaxContext -> SyntaxParser -> Doc
-mkSyntaxParser syntax context parser = 
-  let mainParser = text $ case parserType parser of
+mkSyntaxParser syntax context parser =
+  let attr  = case parserAttribute parser of
+                   "" -> labelFor syntax $ contAttribute context
+                   x  -> labelFor syntax x
+      mainParser = text $ case parserType parser of
             "DetectChar"       -> "pDetectChar " ++ show (parserDynamic parser) ++ " " ++ show (parserChar parser)
             "Detect2Chars"     -> "pDetect2Chars " ++ show (parserDynamic parser) ++ " " ++ 
                                     show (parserChar parser) ++ " " ++ show (parserChar1 parser)
@@ -294,9 +299,9 @@ mkSyntaxParser syntax context parser =
             "LineContinue"     -> "pLineContinue"
             "IncludeRules"     -> case parserContext parser of
                                       ('#':'#':xs) -> langNameToModule xs ++ ".parseExpression" ++
-                                                      if parserIncludeAttrib parser || null (parserAttribute parser)
+                                                      if parserIncludeAttrib parser || null attr
                                                          then ""
-                                                         else " >>= ((withAttribute " ++ show (parserAttribute parser) ++ ") . snd)" 
+                                                         else " >>= ((withAttribute " ++ show attr ++ ") . snd)" 
                                       xs           -> "parseRules " ++ show xs
             "DetectSpaces"     -> "pDetectSpaces"
             "DetectIdentifier" -> "pDetectIdentifier"
@@ -312,10 +317,7 @@ mkSyntaxParser syntax context parser =
                      then mainParser <> char ')'
                      else (if parserLookAhead parser
                              then text "lookAhead (" <> mainParser <> text ") >> return ([],\"\") " 
-                             else mainParser <> text " >>= withAttribute " <> 
-                                  text (if null (parserAttribute parser)
-                                           then show (contAttribute context)
-                                           else show (parserAttribute parser))) <> 
+                             else mainParser <> text " >>= withAttribute " <> text (show attr)) <>
                           char ')' <>
                           (if parserContext parser `elem` ["", "#stay"]
                               then empty 

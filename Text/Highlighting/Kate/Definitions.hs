@@ -31,7 +31,7 @@ data SyntaxState = SyntaxState
   } deriving (Read, Show)
 
 -- | A pair consisting of a list of attributes and some text.
-type LabeledSource = ([String], String)
+type Token = (String, String)
 
 -- | A line of source, list of labeled source items.
-type SourceLine = [LabeledSource]
+type SourceLine = [Token]

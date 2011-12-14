@@ -20,9 +20,6 @@ data FormatOption = OptNumberLines     -- ^ Number lines
                   | OptNumberFrom Int  -- ^ Number of first line
                   | OptLineAnchors     -- ^ Anchors on each line number 
                   | OptTitleAttributes -- ^ Include title attributes
-                  | OptDetailed        -- ^ Include detailed lexical information in classes.
-                                       --   (By default, only the default style is included. This
-                                       --   option causes output to be more verbose.)
                   | OptInline          -- ^ Format as span-level, not block-level element
                   deriving (Eq, Show, Read)
 
@@ -49,25 +46,18 @@ formatAsXHtml opts lang lines =
                       in  table ! [theclass "sourceCode"] $ tr << [nums, sourceCode]
                  else pre ! [theclass "sourceCode"] << code
 
-labeledSourceToHtml :: [FormatOption] -> LabeledSource -> Html
-labeledSourceToHtml _ ([], txt)    = toHtml txt
-labeledSourceToHtml opts (labs, txt)  =
+tokenToHtml :: [FormatOption] -> Token -> Html
+tokenToHtml _ ([], txt)    = toHtml txt
+tokenToHtml opts (lab, txt)  =
   if null attribs
      then toHtml txt
      else thespan ! attribs << txt
-   where classes = unwords $
-                   if OptDetailed `elem` opts
-                      then map removeSpaces labs
-                      else drop 1 labs  -- first is specific
-         attribs = [theclass classes | not (null classes)] ++
-                   [title classes | OptTitleAttributes `elem` opts]
+   where attribs = [theclass lab | not (null lab)] ++
+                   [title lab | OptTitleAttributes `elem` opts]
 
 sourceLineToHtml :: [FormatOption] -> SourceLine -> Html
 sourceLineToHtml opts contents =
-  concatHtml $ map (labeledSourceToHtml opts) contents
-
-removeSpaces :: String -> String
-removeSpaces = filter (/= ' ')
+  concatHtml $ map (tokenToHtml opts) contents
 
 getStartNum :: [FormatOption] -> Int
 getStartNum [] = 1

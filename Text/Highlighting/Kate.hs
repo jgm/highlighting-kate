@@ -29,12 +29,12 @@ module Text.Highlighting.Kate ( highlightAs
                               , FormatOption (..)
                               , defaultHighlightingCss
                               , SourceLine
-                              , LabeledSource
+                              , Token
                               , highlightingKateVersion
                               ) where
 import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..), defaultHighlightingCss )
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension, languagesByFilename )
-import Text.Highlighting.Kate.Definitions ( SourceLine, LabeledSource )
+import Text.Highlighting.Kate.Definitions ( SourceLine, Token )
 import Data.Version (showVersion)
 import Paths_highlighting_kate (version)
 
