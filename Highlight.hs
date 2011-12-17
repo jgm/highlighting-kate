@@ -51,14 +51,14 @@ filterNewlines ('\r':xs) = '\n' : filterNewlines xs
 filterNewlines (x:xs) = x : filterNewlines xs
 filterNewlines [] = []
 
--- | Highlight source code in XHTML using specified syntax.
+-- | Highlight source code in HTML using specified syntax.
 xhtmlHighlight :: [FormatOption] -- ^ Options
                -> String         -- ^ Name of syntax to use
                -> String         -- ^ Source code to highlight
                -> Html
 xhtmlHighlight opts lang code =
   case highlightAs lang code of
-       Right result -> formatAsXHtml opts lang result
+       Right result -> formatAsHtml opts lang result
        Left  _      -> H.pre $ H.code $ toHtml code
 
 main = do

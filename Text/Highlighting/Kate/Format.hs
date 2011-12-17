@@ -10,11 +10,13 @@
 Formatters that convert a list of annotated source lines to various output formats.
 -}
 
-module Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..), defaultHighlightingCss ) where
+module Text.Highlighting.Kate.Format ( formatAsHtml, FormatOption (..), defaultHighlightingCss ) where
 import Text.Highlighting.Kate.Definitions
 import Text.Blaze
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import Data.Monoid
+import Data.List (intersperse)
 
 -- | Options for formatters.
 data FormatOption = OptNumberLines     -- ^ Number lines
@@ -24,26 +26,31 @@ data FormatOption = OptNumberLines     -- ^ Number lines
                   | OptInline          -- ^ Format as span-level, not block-level element
                   deriving (Eq, Show, Read)
 
--- | Format a list of highlighted @SourceLine@s as XHtml.
-formatAsXHtml :: [FormatOption]  -- ^ Options
+-- | Format a list of highlighted @SourceLine@s as Html.
+formatAsHtml :: [FormatOption]  -- ^ Options
               -> String          -- ^ Language
               -> [SourceLine]    -- ^ Source lines to format
               -> Html
-formatAsXHtml opts lang lines =
+formatAsHtml opts lang lines =
   let startNum = getStartNum opts
       numberOfLines = length lines
-      code = H.code ! A.class_ (toValue $ unwords ["sourceCode", lang]) $ mapM_ (sourceLineToHtml opts) lines
+      code = H.code ! A.class_ (toValue $ unwords ["sourceCode", lang])
+                    $ mconcat $ intersperse (toHtml "\n") $ map (sourceLineToHtml opts) lines
   in  if OptInline `elem` opts
          then code
          else if OptNumberLines `elem` opts
                  then let lnTitle = A.title (toValue "Click to toggle line numbers")
-                          lnOnClick = A.onclick (toValue "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }")
-                          nums = H.td ! A.class_ (toValue "lineNumbers") ! lnTitle ! lnOnClick $ H.pre $
-                                             mapM_ lineNum [startNum..(startNum + numberOfLines - 1)]
+                          lnOnClick = A.onclick $ toValue
+                                                $ "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
+                          nums = H.td ! A.class_ (toValue "lineNumbers") ! lnTitle ! lnOnClick
+                                      $ H.pre
+                                      $ mapM_ lineNum [startNum..(startNum + numberOfLines - 1)]
                           lineNum n = if OptLineAnchors `elem` opts
-                                         then (H.a ! A.id (toValue $ show n) $ toHtml $ show n) >> toHtml "\n"
+                                         then (H.a ! A.id (toValue $ show n) $ toHtml $ show n)
+                                               >> toHtml "\n"
                                          else toHtml $ show n ++ "\n"
-                          sourceCode = H.td ! A.class_ (toValue "sourceCode") $ H.pre ! A.class_ (toValue "sourceCode") $ code
+                          sourceCode = H.td ! A.class_ (toValue "sourceCode")
+                                            $ H.pre ! A.class_ (toValue "sourceCode") $ code
                       in  H.table ! A.class_ (toValue "sourceCode") $ H.tr $ nums >> sourceCode
                  else H.pre ! A.class_ (toValue "sourceCode") $ code
 
@@ -58,9 +65,7 @@ tokenToHtml opts (lab, txt)  =
                          else x
 
 sourceLineToHtml :: [FormatOption] -> SourceLine -> Html
-sourceLineToHtml opts contents = do
-  mapM_ (tokenToHtml opts) contents
-  toHtml "\n"
+sourceLineToHtml opts contents = mapM_ (tokenToHtml opts) contents
 
 getStartNum :: [FormatOption] -> Int
 getStartNum [] = 1

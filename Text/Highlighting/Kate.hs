@@ -16,7 +16,7 @@ A typical application will combine a highlighter and a formatter:
 >   code <- getContents
 >   case highlightAs "ruby" code of
 >         Right result -> putStrLn $ renderHtmlFragment $ 
->                         formatAsXHtml [OptNumberLines] "ruby" result
+>                         formatAsHtml [OptNumberLines] "ruby" result
 >         Left  err    -> error $ "Could not parse input: " ++ err
 
 -}
@@ -25,14 +25,14 @@ module Text.Highlighting.Kate ( highlightAs
                               , languages
                               , languagesByExtension
                               , languagesByFilename
-                              , formatAsXHtml
+                              , formatAsHtml
                               , FormatOption (..)
                               , defaultHighlightingCss
                               , SourceLine
                               , Token
                               , highlightingKateVersion
                               ) where
-import Text.Highlighting.Kate.Format ( formatAsXHtml, FormatOption (..), defaultHighlightingCss )
+import Text.Highlighting.Kate.Format ( formatAsHtml, FormatOption (..), defaultHighlightingCss )
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension, languagesByFilename )
 import Text.Highlighting.Kate.Definitions ( SourceLine, Token )
 import Data.Version (showVersion)
