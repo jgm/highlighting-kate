@@ -51,7 +51,7 @@ formatAsHtml opts lang lines =
                                          else toHtml $ show n ++ "\n"
                           sourceCode = H.td ! A.class_ (toValue "sourceCode")
                                             $ H.pre ! A.class_ (toValue "sourceCode") $ code
-                      in  H.table ! A.class_ (toValue "sourceCode") $ H.tr $ nums >> sourceCode
+                      in  H.table ! A.class_ (toValue "sourceCode") $ H.tr ! A.class_ (toValue "sourceCode") $ nums >> sourceCode
                  else H.pre ! A.class_ (toValue "sourceCode") $ code
 
 tokenToHtml :: [FormatOption] -> Token -> Html
