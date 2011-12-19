@@ -10,7 +10,7 @@
 Formatters that convert a list of annotated source lines to various output formats.
 -}
 
-module Text.Highlighting.Kate.Format ( formatAsHtml, FormatOption (..), defaultHighlightingCss ) where
+module Text.Highlighting.Kate.Format ( formatAsHtml, formatAsLaTeX, FormatOption (..), defaultHighlightingCss, defaultLaTeXMacros ) where
 import Text.Highlighting.Kate.Definitions
 import Text.Blaze
 import qualified Text.Blaze.Html5 as H
@@ -25,6 +25,78 @@ data FormatOption = OptNumberLines     -- ^ Number lines
                   | OptTitleAttributes -- ^ Include title attributes
                   | OptInline          -- ^ Format as span-level, not block-level element
                   deriving (Eq, Show, Read)
+
+
+--
+-- LaTeX
+--
+
+-- | Format a list of highlighted @SourceLine@s as LaTeX.
+formatAsLaTeX :: [FormatOption]  -- ^ Options
+              -> [SourceLine]    -- ^ Source lines to format
+              -> String
+formatAsLaTeX opts lines =
+  let startNum = getStartNum opts
+      code = unlines $ map sourceLineToLaTeX lines
+      commandchars = "commandchars=\\\\\\{\\}"
+  in  if OptInline `elem` opts
+         then "\\Verb[" ++ commandchars ++ "]{" ++ code ++ "}"
+         else "\\begin{Verbatim}[" ++
+              (if OptNumberLines `elem` opts
+                  then "numbers=left," ++
+                       (if startNum == 1
+                           then ""
+                           else ",firstnumber=" ++ show startNum) ++ ","
+                  else ""
+              ) ++ commandchars ++ "]\n" ++ code ++ "\\end{Verbatim}"
+
+tokenToLaTeX :: Token -> String
+tokenToLaTeX ("", txt)      = escapeLaTeX txt
+tokenToLaTeX (lab, txt)  = '\\':(lab ++ "{" ++ escapeLaTeX txt ++ "}")
+
+escapeLaTeX :: String -> String
+escapeLaTeX = concatMap escapeLaTeXChar
+  where escapeLaTeXChar '\\' = "\\textbackslash{}"
+        escapeLaTeXChar '{'  = "\\{"
+        escapeLaTeXChar '}'  = "\\}"
+        escapeLaTeXChar x    = [x]
+
+sourceLineToLaTeX :: SourceLine -> String
+sourceLineToLaTeX contents = concatMap tokenToLaTeX contents
+
+defaultLaTeXMacros :: String
+defaultLaTeXMacros =
+  "\\usepackage{color}\n\
+  \\\usepackage{fancyvrb}\n\
+  \\\definecolor{kwcolor}{RGB}{0,112,32}\n\
+  \\\definecolor{dtcolor}{RGB}{144,32,0}\n\
+  \\\definecolor{dvcolor}{RGB}{64,160,112}\n\
+  \\\definecolor{bncolor}{RGB}{64,160,112}\n\
+  \\\definecolor{flcolor}{RGB}{64,160,112}\n\
+  \\\definecolor{chcolor}{RGB}{64,112,160}\n\
+  \\\definecolor{stcolor}{RGB}{64,112,160}\n\
+  \\\definecolor{cocolor}{RGB}{96,160,176}\n\
+  \\\definecolor{otcolor}{RGB}{0,112,32}\n\
+  \\\definecolor{alcolor}{RGB}{255,0,0}\n\
+  \\\definecolor{fucolor}{RGB}{6,40,126}\n\
+  \\\definecolor{ercolor}{RGB}{255,0,0}\n\
+  \\\newcommand{\\kw}[1]{\\textcolor{kwcolor}{#1}}\n\
+  \\\newcommand{\\dt}[1]{\\textcolor{dtcolor}{#1}}\n\
+  \\\newcommand{\\dv}[1]{\\textcolor{dvcolor}{#1}}\n\
+  \\\newcommand{\\bn}[1]{\\textcolor{bncolor}{#1}}\n\
+  \\\newcommand{\\fl}[1]{\\textcolor{flcolor}{#1}}\n\
+  \\\newcommand{\\ch}[1]{\\textcolor{chcolor}{#1}}\n\
+  \\\newcommand{\\st}[1]{\\textcolor{stcolor}{#1}}\n\
+  \\\newcommand{\\co}[1]{\\textcolor{cocolor}{\\textit{#1}}}\n\
+  \\\newcommand{\\ot}[1]{\\textcolor{otcolor}{#1}}\n\
+  \\\newcommand{\\al}[1]{\\textcolor{cocolor}{\\textbf{#1}}}\n\
+  \\\newcommand{\\fu}[1]{\\textcolor{fucolor}{#1}}\n\
+  \\\newcommand{\\re}[1]{#1}\n\
+  \\\newcommand{\\er}[1]{\\textcolor{ercolor}{\\textbf{#1}}}\n"
+
+--
+-- HTML
+--
 
 -- | Format a list of highlighted @SourceLine@s as Html.
 formatAsHtml :: [FormatOption]  -- ^ Options
@@ -55,11 +127,8 @@ formatAsHtml opts lang lines =
                  else H.pre ! A.class_ (toValue "sourceCode") $ code
 
 tokenToHtml :: [FormatOption] -> Token -> Html
-tokenToHtml _ ([], txt)    = toHtml txt
-tokenToHtml opts (lab, txt)  =
-  if null lab
-     then toHtml txt
-     else titleize $ H.span ! A.class_ (toValue lab) $ toHtml txt
+tokenToHtml _ ("", txt)    = toHtml txt
+tokenToHtml opts (lab, txt)  = titleize $ H.span ! A.class_ (toValue lab) $ toHtml txt
    where titleize x = if OptTitleAttributes `elem` opts
                          then x ! A.title (toValue lab)
                          else x

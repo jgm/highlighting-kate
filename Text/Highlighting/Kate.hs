@@ -26,13 +26,15 @@ module Text.Highlighting.Kate ( highlightAs
                               , languagesByExtension
                               , languagesByFilename
                               , formatAsHtml
+                              , formatAsLaTeX
                               , FormatOption (..)
                               , defaultHighlightingCss
+                              , defaultLaTeXMacros
                               , SourceLine
                               , Token
                               , highlightingKateVersion
                               ) where
-import Text.Highlighting.Kate.Format ( formatAsHtml, FormatOption (..), defaultHighlightingCss )
+import Text.Highlighting.Kate.Format ( formatAsHtml, formatAsLaTeX, FormatOption (..), defaultHighlightingCss, defaultLaTeXMacros )
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension, languagesByFilename )
 import Text.Highlighting.Kate.Definitions ( SourceLine, Token )
 import Data.Version (showVersion)
