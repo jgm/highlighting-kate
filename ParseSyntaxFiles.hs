@@ -231,10 +231,10 @@ mkParser syntax =
                                 text "context <- currentContext" $$
                                 text "case context of" $$
                                 (nest 2 $ (vcat $ map (\cont -> text (show $ contName cont) <> text " -> " <>
-                                            switchContext (contLineEndContext cont) <>
+                                            switchContext (contLineEndContext cont) (<> text " >> ") <>
                                             if "#pop" `isPrefixOf` (contLineEndContext cont)
-                                               then text " >> pEndLine"
-                                               else text " >> pHandleEndLine") $ synContexts syntax) $$
+                                               then text "pEndLine"
+                                               else text "pHandleEndLine") $ synContexts syntax) $$
                                           (text $ "_ -> pHandleEndLine")))
                                 {- text "pushContext (fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$ -}
       -- we use 'words "blah blah2 blah3"' to keep ghc from inlining the list, which makes compiling take a long time
@@ -260,8 +260,8 @@ mkAlternatives docs =
 mkRules :: SyntaxDefinition -> SyntaxContext -> Doc
 mkRules syntax context =
   let fallthroughParser = if contFallthrough context
-                             then [parens (switchContext (contFallthroughContext context) <>
-                                   text " >> return (NormalTok, \"\")")]
+                             then [parens (switchContext (contFallthroughContext context) (<> text " >> ") <>
+                                   text "return (NormalTok, \"\")")]
                              else []
   in  text ("parseRules " ++ show (contName context) ++ " = ") $$
       if null (contParsers context) && null fallthroughParser
@@ -318,10 +318,7 @@ mkSyntaxParser syntax context parser =
                      else (if parserLookAhead parser
                              then text "lookAhead (" <> mainParser <> text ") >> return (NormalTok,\"\") "
                              else mainParser <> text " >>= withAttribute " <> text (show attr)) <>
-                          char ')' <>
-                          (if parserContext parser `elem` ["", "#stay"]
-                              then empty
-                              else text " >>~ " <> switchContext (parserContext parser))
+                          char ')' <> switchContext (parserContext parser) (text " >>~ " <>)
       childParsers = parserChildren parser
   in  char '(' <>
       (if null childParsers
@@ -329,12 +326,15 @@ mkSyntaxParser syntax context parser =
           else text "withChildren " <> parserDoc <> char ' ' <> (mkAlternatives $ map (mkSyntaxParser syntax context) childParsers)) <>
       char ')'
 
-switchContext next =
+switchContext :: String -> (Doc -> Doc) -> Doc
+switchContext next finalizer =
   case next of
-     x | "#pop" `isPrefixOf` x -> char '(' <>
-          text (concat $ intersperse " >> " $ replicate (length (filter (=='#') x)) "popContext") <> char ')'
-     "#stay" -> text "return ()"
-     x -> text ("pushContext " ++ show x)
+     x | "#pop" `isPrefixOf` x -> finalizer $
+          char '(' <> text (concat $ intersperse " >> "
+                                   $ replicate (length (filter (=='#') x)) "popContext") <> char ')'
+     "#stay" -> empty
+     ""      -> empty
+     x       -> finalizer $ text ("pushContext " ++ show x)
 
 langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
   case str of
