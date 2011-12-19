@@ -147,23 +147,23 @@ processOneFile src = do
                else "import qualified Data.Set as Set\n") ++
            render (mkParser syntax) ++ "\n"
 
-labelFor :: SyntaxDefinition -> String -> String
+labelFor :: SyntaxDefinition -> String -> TokenType
 labelFor syntax attr =
   case lookup attr (synItemDatas syntax) of
-       Just "dsKeyword" -> "kw"
-       Just "dsDataType" -> "dt"
-       Just "dsDecVal" -> "dv"
-       Just "dsBaseN" -> "bn"
-       Just "dsFloat" -> "fl"
-       Just "dsChar" -> "ch"
-       Just "dsString" -> "st"
-       Just "dsComment" -> "co"
-       Just "dsOthers" -> "ot"
-       Just "dsAlert" -> "al"
-       Just "dsFunction" -> "fu"
-       Just "dsRegionMarker" -> "re"
-       Just "dsError" -> "er"
-       _ -> ""
+       Just "dsKeyword" -> KeywordTok
+       Just "dsDataType" -> DataTypeTok
+       Just "dsDecVal" -> DecValTok
+       Just "dsBaseN" -> BaseNTok
+       Just "dsFloat" -> FloatTok
+       Just "dsChar" -> CharTok
+       Just "dsString" -> StringTok
+       Just "dsComment" -> CommentTok
+       Just "dsOthers" -> OtherTok
+       Just "dsAlert" -> AlertTok
+       Just "dsFunction" -> FunctionTok
+       Just "dsRegionMarker" -> RegionMarkerTok
+       Just "dsError" -> ErrorTok
+       _ -> NormalTok
 
 mkParser :: SyntaxDefinition -> Doc
 mkParser syntax =
@@ -182,7 +182,7 @@ mkParser syntax =
                    text "return (attr, txt)")
       parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $
                                   text "context <- currentContext" $$
-                                  text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe \"\" $ lookup context defaultAttributes))")
+                                  text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe NormalTok $ lookup context defaultAttributes))")
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
                         text "parseExpression :: KateParser Token" $$
                         text "parseExpression = do" $$ (nest 2 $
@@ -261,7 +261,7 @@ mkRules :: SyntaxDefinition -> SyntaxContext -> Doc
 mkRules syntax context =
   let fallthroughParser = if contFallthrough context
                              then [parens (switchContext (contFallthroughContext context) <>
-                                   text " >> return ([], \"\")")]
+                                   text " >> return (NormalTok, \"\")")]
                              else []
   in  text ("parseRules " ++ show (contName context) ++ " = ") $$
       if null (contParsers context) && null fallthroughParser
@@ -299,7 +299,7 @@ mkSyntaxParser syntax context parser =
             "LineContinue"     -> "pLineContinue"
             "IncludeRules"     -> case parserContext parser of
                                       ('#':'#':xs) -> langNameToModule xs ++ ".parseExpression" ++
-                                                      if parserIncludeAttrib parser || null attr
+                                                      if parserIncludeAttrib parser || attr == NormalTok
                                                          then ""
                                                          else " >>= ((withAttribute " ++ show attr ++ ") . snd)"
                                       xs           -> "parseRules " ++ show xs
@@ -316,7 +316,7 @@ mkSyntaxParser syntax context parser =
                   if parserType parser == "IncludeRules"
                      then mainParser <> char ')'
                      else (if parserLookAhead parser
-                             then text "lookAhead (" <> mainParser <> text ") >> return ([],\"\") "
+                             then text "lookAhead (" <> mainParser <> text ") >> return (NormalTok,\"\") "
                              else mainParser <> text " >>= withAttribute " <> text (show attr)) <>
                           char ')' <>
                           (if parserContext parser `elem` ["", "#stay"]

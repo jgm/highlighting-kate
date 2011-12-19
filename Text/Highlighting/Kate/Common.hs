@@ -94,7 +94,7 @@ withChildren :: KateParser Token
              -> KateParser Token
 withChildren parent child = do
   (pAttr, pResult) <- parent
-  (_, cResult) <- option ([],"") child
+  (_, cResult) <- option (NormalTok,"") child
   return (pAttr, pResult ++ cResult)
 
 wholeLine :: KateParser [Char]

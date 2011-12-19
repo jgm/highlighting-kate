@@ -51,8 +51,8 @@ formatAsLaTeX opts lines =
               ) ++ commandchars ++ "]\n" ++ code ++ "\\end{Verbatim}"
 
 tokenToLaTeX :: Token -> String
-tokenToLaTeX ("", txt)      = escapeLaTeX txt
-tokenToLaTeX (lab, txt)  = '\\':(lab ++ "{" ++ escapeLaTeX txt ++ "}")
+tokenToLaTeX (NormalTok, txt) = escapeLaTeX txt
+tokenToLaTeX (toktype, txt)   = '\\':(short toktype ++ "{" ++ escapeLaTeX txt ++ "}")
 
 escapeLaTeX :: String -> String
 escapeLaTeX = concatMap escapeLaTeXChar
@@ -127,11 +127,28 @@ formatAsHtml opts lang lines =
                  else H.pre ! A.class_ (toValue "sourceCode") $ code
 
 tokenToHtml :: [FormatOption] -> Token -> Html
-tokenToHtml _ ("", txt)    = toHtml txt
-tokenToHtml opts (lab, txt)  = titleize $ H.span ! A.class_ (toValue lab) $ toHtml txt
-   where titleize x = if OptTitleAttributes `elem` opts
-                         then x ! A.title (toValue lab)
-                         else x
+tokenToHtml _ (NormalTok, txt)    = toHtml txt
+tokenToHtml opts (toktype, txt)  =
+  titleize $ H.span ! A.class_ (toValue $ short toktype) $ toHtml txt
+    where titleize x = if OptTitleAttributes `elem` opts
+                          then x ! A.title (toValue $ show toktype)
+                          else x
+
+short :: TokenType -> String
+short KeywordTok        = "kw"
+short DataTypeTok       = "dt"
+short DecValTok         = "dv"
+short BaseNTok          = "bn"
+short FloatTok          = "fl"
+short CharTok           = "ch"
+short StringTok         = "st"
+short CommentTok        = "co"
+short OtherTok          = "ot"
+short AlertTok          = "al"
+short FunctionTok       = "fu"
+short RegionMarkerTok   = "re"
+short ErrorTok          = "er"
+short NormalTok         = ""
 
 sourceLineToHtml :: [FormatOption] -> SourceLine -> Html
 sourceLineToHtml opts contents = mapM_ (tokenToHtml opts) contents
@@ -140,6 +157,7 @@ getStartNum :: [FormatOption] -> Int
 getStartNum [] = 1
 getStartNum (OptNumberFrom n : _) = n
 getStartNum (_:xs) = getStartNum xs
+
 
 defaultHighlightingCss :: String
 defaultHighlightingCss =

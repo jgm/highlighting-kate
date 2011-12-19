@@ -32,7 +32,23 @@ data SyntaxState = SyntaxState
   } deriving (Read, Show)
 
 -- | A pair consisting of a list of attributes and some text.
-type Token = (String, String)
+type Token = (TokenType, String)
+
+data TokenType = KeywordTok
+               | DataTypeTok
+               | DecValTok
+               | BaseNTok
+               | FloatTok
+               | CharTok
+               | StringTok
+               | CommentTok
+               | OtherTok
+               | AlertTok
+               | FunctionTok
+               | RegionMarkerTok
+               | ErrorTok
+               | NormalTok
+               deriving (Read, Show, Eq)
 
 -- | A line of source, list of labeled source items.
 type SourceLine = [Token]
