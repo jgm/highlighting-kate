@@ -33,9 +33,10 @@ data FormatOption = OptNumberLines     -- ^ Number lines
 
 -- | Format a list of highlighted @SourceLine@s as LaTeX.
 formatAsLaTeX :: [FormatOption]  -- ^ Options
+              -> String          -- ^ Language (not used, but here for parallelism with formatasHtml)
               -> [SourceLine]    -- ^ Source lines to format
               -> String
-formatAsLaTeX opts lines =
+formatAsLaTeX opts _ lines =
   let startNum = getStartNum opts
       code = unlines $ map sourceLineToLaTeX lines
       commandchars = "commandchars=\\\\\\{\\}"
