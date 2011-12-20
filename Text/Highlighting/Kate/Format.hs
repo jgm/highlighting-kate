@@ -20,6 +20,7 @@ import Text.Printf
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Data.Monoid
+import Control.Monad (mplus)
 import Data.List (intersperse)
 
 -- | Options for formatters.
@@ -258,10 +259,10 @@ highlightingLaTeXMacros f = unlines $
   (case backgroundColor f of
         Nothing          -> []
         Just (RGB r g b) -> [printf "\\definecolor{shadecolor}{RGB}{%d,%d,%d}" r g b]) ++
-  map (macrodef $ tokenStyles f) (enumFromTo KeywordTok ErrorTok)
+  map (macrodef (defaultColor f) (tokenStyles f)) (enumFromTo KeywordTok ErrorTok)
 
-macrodef :: [(TokenType, TokenStyle)] -> TokenType -> String
-macrodef tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
+macrodef :: Maybe Color -> [(TokenType, TokenStyle)] -> TokenType -> String
+macrodef defcolor tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
                      "}[1]{" ++ (ul . bf . it . bg . co $ "{#1}") ++ "}"
   where tokf = case lookup tokt tokstyles of
                      Nothing -> defStyle
@@ -279,7 +280,8 @@ macrodef tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
         bg x = case bcol of
                     Nothing          -> x
                     Just (r, g, b) -> printf "\\colorbox[rgb]{%0.2f,%0.2f,%0.2f}{%s}" r g b x
-        col  = fromColor `fmap` tokenColor tokf :: Maybe (Double, Double, Double)
+        col  = fromColor `fmap`
+                 (tokenColor tokf `mplus` defcolor) :: Maybe (Double, Double, Double)
         co x = case col of
                     Nothing          -> x
                     Just (r, g, b) -> printf "\\textcolor[rgb]{%0.2f,%0.2f,%0.2f}{%s}" r g b x
