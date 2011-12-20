@@ -33,14 +33,14 @@ module Text.Highlighting.Kate ( highlightAs
                               , SourceLine
                               , Token
                               , TokenType (..)
-                              , TokenFormat (..)
+                              , TokenStyle (..)
                               , Color (..)
-                              , Format (..)
+                              , Style (..)
                               , highlightingKateVersion
                               ) where
 import Text.Highlighting.Kate.Format ( formatAsHtml, formatAsLaTeX, FormatOption (..), defaultHighlightingCss, defaultLaTeXMacros )
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension, languagesByFilename )
-import Text.Highlighting.Kate.Definitions ( SourceLine, Token, TokenType(..), TokenFormat(..), Format(..), Color(..) )
+import Text.Highlighting.Kate.Definitions ( SourceLine, Token, TokenType(..), TokenStyle(..), Style(..), Color(..) )
 import Data.Version (showVersion)
 import Paths_highlighting_kate (version)
 

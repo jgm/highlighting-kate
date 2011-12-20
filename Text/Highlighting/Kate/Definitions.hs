@@ -58,7 +58,7 @@ type SourceLine = [Token]
 
 type KateParser = GenParser Char SyntaxState
 
-data TokenFormat = TokenFormat {
+data TokenStyle = TokenStyle {
     tokenColor      :: Maybe Color
   , tokenBackground :: Maybe Color
   , tokenBold       :: Bool
@@ -66,8 +66,8 @@ data TokenFormat = TokenFormat {
   , tokenUnderline  :: Bool
   } deriving (Show, Read)
 
-format :: TokenFormat
-format = TokenFormat {
+format :: TokenStyle
+format = TokenStyle {
     tokenColor      = Nothing
   , tokenBackground = Nothing
   , tokenBold       = False
@@ -107,8 +107,8 @@ instance FromColor (Double, Double, Double) where
 instance FromColor (Word8, Word8, Word8) where
   fromColor (RGB r g b) = (r, g, b)
 
-data Format = Format {
-    tokenFormats    :: [(TokenType, TokenFormat)]
+data Style = Style {
+    tokenStyles     :: [(TokenType, TokenStyle)]
   , defaultColor    :: Maybe Color
   , backgroundColor :: Maybe Color
   }

@@ -143,15 +143,15 @@ defaultHighlightingCss = highlightingCss pygments
 --  \td.sourceCode { padding-left: 5px; }\n\
 
 --
--- FORMATS
+-- Styles
 --
 
--- | Format loosely based on pygments's default colors
-pygments :: Format
-pygments = Format{
+-- | Style loosely based on pygments's default colors
+pygments :: Style
+pygments = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
-  , tokenFormats =
+  , tokenStyles =
     [ (KeywordTok, format{ tokenColor = toColor "#007020", tokenBold = True })
     , (DataTypeTok, format{ tokenColor = toColor "#902000" })
     , (DecValTok, format{ tokenColor = toColor "#40a070" })
@@ -167,12 +167,12 @@ pygments = Format{
     ]
   }
 
--- | Format loosely based on kate's default colors
-kate :: Format
-kate = Format{
+-- | Style loosely based on kate's default colors
+kate :: Style
+kate = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
-  , tokenFormats =
+  , tokenStyles =
     [ (KeywordTok, format{ tokenBold = True })
     , (DataTypeTok, format{ tokenColor = toColor "#800000" })
     , (DecValTok, format{ tokenColor = toColor "#0000FF" })
@@ -187,12 +187,12 @@ kate = Format{
     ]
   }
 
--- | Format loosely based on pygments's tango colors
-tango :: Format
-tango = Format{
+-- | Style loosely based on pygments's tango colors
+tango :: Style
+tango = Style{
     backgroundColor = toColor "#f8f8f8"
   , defaultColor = Nothing
-  , tokenFormats =
+  , tokenStyles =
     [ (KeywordTok, format{ tokenColor = toColor "#204a87", tokenBold = True })
     , (DataTypeTok, format{ tokenColor = toColor "#204a87" })
     , (DecValTok, format{ tokenColor = toColor "#0000cf" })
@@ -208,12 +208,12 @@ tango = Format{
     ]
   }
 
--- | Format loosely based on ultraviolet's espresso_libre.css
-espresso :: Format
-espresso = Format{
+-- | Style loosely based on ultraviolet's espresso_libre.css
+espresso :: Style
+espresso = Style{
     backgroundColor = toColor "#2A211C"
   , defaultColor = toColor "#BDAE9D"
-  , tokenFormats =
+  , tokenStyles =
     [ (KeywordTok, format{ tokenColor = toColor "#43A8ED", tokenBold = True })
     , (DataTypeTok, format{ tokenUnderline = True })
     , (DecValTok, format{ tokenColor = toColor "#44AA43" })
@@ -228,8 +228,8 @@ espresso = Format{
     ]
   }
 
-highlightingCss :: Format -> String
-highlightingCss f = unlines $ colorspec ++ map toCss (tokenFormats f)
+highlightingCss :: Style -> String
+highlightingCss f = unlines $ colorspec ++ map toCss (tokenStyles f)
   where colorspec = case (defaultColor f, backgroundColor f) of
                          (Nothing, Nothing) -> []
                          (Just c, Nothing)  -> ["pre > code { color: " ++ fromColor c ++ "; }"]
@@ -237,7 +237,7 @@ highlightingCss f = unlines $ colorspec ++ map toCss (tokenFormats f)
                          (Just c1, Just c2) -> ["pre > code { color: " ++ fromColor c1 ++ "; background-color: " ++
                                                  fromColor c2 ++ "; }"]
 
-toCss :: (TokenType, TokenFormat) -> String
+toCss :: (TokenType, TokenStyle) -> String
 toCss (t,tf) = "code > span." ++ short t ++ " { "
                 ++ colorspec ++ backgroundspec ++ weightspec ++ stylespec
                 ++ decorationspec ++ "}"
@@ -248,7 +248,7 @@ toCss (t,tf) = "code > span." ++ short t ++ " { "
         decorationspec = if tokenUnderline tf then "font-decoration: underline; " else ""
 
 -- TODO
-highlightingLaTeXMacros :: Format -> String
+highlightingLaTeXMacros :: Style -> String
 highlightingLaTeXMacros f = unlines $
   [ "\\usepackage{color}"
   , "\\usepackage{framed}"
@@ -257,9 +257,9 @@ highlightingLaTeXMacros f = unlines $
   (case backgroundColor f of
         Nothing          -> []
         Just (RGB r g b) -> [printf "\\definecolor{shadecolor}{RGB}{%d,%d,%d}" r g b]) ++
-  map macrodef (tokenFormats f)
+  map macrodef (tokenStyles f)
 
-macrodef :: (TokenType, TokenFormat) -> String
+macrodef :: (TokenType, TokenStyle) -> String
 macrodef (tokt, tokf) = "\\newcommand{\\" ++ show tokt ++
                      "}[1]{" ++ (ul . bf . it . bg . co $ "{#1}") ++ "}"
   where ul x = if tokenUnderline tokf
