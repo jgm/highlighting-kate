@@ -40,7 +40,7 @@ module Text.Highlighting.Kate ( highlightAs
                               ) where
 import Text.Highlighting.Kate.Format ( formatAsHtml, formatAsLaTeX, FormatOption (..), defaultHighlightingCss, defaultLaTeXMacros )
 import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension, languagesByFilename )
-import Text.Highlighting.Kate.Definitions ( SourceLine, Token, TokenType(..) )
+import Text.Highlighting.Kate.Definitions ( SourceLine, Token, TokenType(..), TokenFormat(..), Format(..), Color(..) )
 import Data.Version (showVersion)
 import Paths_highlighting_kate (version)
 
