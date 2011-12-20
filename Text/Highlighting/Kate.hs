@@ -33,6 +33,9 @@ module Text.Highlighting.Kate ( highlightAs
                               , SourceLine
                               , Token
                               , TokenType (..)
+                              , TokenFormat (..)
+                              , Color (..)
+                              , Format (..)
                               , highlightingKateVersion
                               ) where
 import Text.Highlighting.Kate.Format ( formatAsHtml, formatAsLaTeX, FormatOption (..), defaultHighlightingCss, defaultLaTeXMacros )

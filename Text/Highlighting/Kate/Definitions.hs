@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 {- |
    Module      : Text.Highlighting.Kate.Definitions
    Copyright   : Copyright (C) 2008 John MacFarlane
@@ -13,6 +14,8 @@ Definitions for data structures needed by highlighting-kate.
 module Text.Highlighting.Kate.Definitions where
 import qualified Data.Map as Map
 import Text.ParserCombinators.Parsec
+import Data.Word
+import Text.Printf
 
 -- | A stack of context names for each language.  (Language-specific context
 -- stacks must be maintained because of IncludeRules.)
@@ -54,3 +57,59 @@ data TokenType = KeywordTok
 type SourceLine = [Token]
 
 type KateParser = GenParser Char SyntaxState
+
+data TokenFormat = TokenFormat {
+    tokenColor      :: Maybe Color
+  , tokenBackground :: Maybe Color
+  , tokenBold       :: Bool
+  , tokenItalic     :: Bool
+  , tokenUnderline  :: Bool
+  } deriving (Show, Read)
+
+format :: TokenFormat
+format = TokenFormat {
+    tokenColor      = Nothing
+  , tokenBackground = Nothing
+  , tokenBold       = False
+  , tokenItalic     = False
+  , tokenUnderline  = False
+  }
+
+data Color = RGB Word8 Word8 Word8 deriving (Show, Read)
+
+class ToColor a where
+  toColor :: a -> Maybe Color
+
+instance ToColor String where
+  toColor ['#',r1,r2,g1,g2,b1,b2] =
+     case reads ['(','0','x',r1,r2,',','0','x',g1,g2,',','0','x',b1,b2,')'] of
+           ((r,g,b),_) : _ -> Just $ RGB r g b
+           _                                         -> Nothing
+  toColor _        = Nothing
+
+instance ToColor (Word8, Word8, Word8) where
+  toColor (r,g,b) = Just $ RGB r g b
+
+instance ToColor (Double, Double, Double) where
+  toColor (r,g,b) | r >= 0 && g >= 0 && b >= 0 && r <= 1 && g <= 1 && b <= 1 =
+          Just $ RGB (floor $ r * 255) (floor $ g * 255) (floor $ b * 255)
+  toColor _ = Nothing
+
+class FromColor a where
+  fromColor :: Color -> a
+
+instance FromColor String where
+  fromColor (RGB r g b) = printf "#%02x%02x%02x" r g b
+
+instance FromColor (Double, Double, Double) where
+  fromColor (RGB r g b) = (fromIntegral r / 255, fromIntegral g / 255, fromIntegral b / 255)
+
+instance FromColor (Word8, Word8, Word8) where
+  fromColor (RGB r g b) = (r, g, b)
+
+data Format = Format {
+    tokenFormats    :: [(TokenType, TokenFormat)]
+  , defaultColor    :: Maybe Color
+  , backgroundColor :: Maybe Color
+  }
+
