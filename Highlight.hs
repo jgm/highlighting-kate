@@ -1,7 +1,7 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
 module Main where
 import Text.Highlighting.Kate
-import Text.Highlighting.Kate.Format (espresso, tango, kate, pygments, highlightingCss)
+import Text.Highlighting.Kate.Format
 import System.IO (hPutStrLn, stderr)
 import System.Environment
 import System.Console.GetOpt
@@ -15,6 +15,7 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
 data Flag = Sty String
+          | Format String
           | Help
           | Fragment
           | List
@@ -27,6 +28,7 @@ data Flag = Sty String
 options :: [OptDescr Flag]
 options =
   [ Option ['S'] ["style"] (ReqArg Sty "STYLE") "specify style"
+  , Option ['F'] ["format"] (ReqArg Format "FORMAT")  "output format (html|latex)"
   , Option ['f'] ["fragment"] (NoArg Fragment)  "fragment, without document header"
   , Option ['h'] ["help"] (NoArg Help)   "show usage message"
   , Option ['l'] ["list"] (NoArg List)   "list available language syntaxes"
@@ -51,21 +53,19 @@ styleOf (Sty s : _) = case map toLower s of
                             _           -> error $ "Unknown style: " ++ s
 styleOf (_ : xs) = styleOf xs
 
+formatOf :: [Flag] -> String
+formatOf [] = "html" -- default
+formatOf (Format s : _) = case map toLower s of
+                            "html"   -> "html"
+                            "latex"  -> "latex"
+                            _        -> error $ "Unknown format: " ++ s
+formatOf (_ : xs) = formatOf xs
+
 filterNewlines :: String -> String
 filterNewlines ('\r':'\n':xs) = '\n' : filterNewlines xs
 filterNewlines ('\r':xs) = '\n' : filterNewlines xs
 filterNewlines (x:xs) = x : filterNewlines xs
 filterNewlines [] = []
-
--- | Highlight source code in HTML using specified syntax.
-xhtmlHighlight :: [FormatOption] -- ^ Options
-               -> String         -- ^ Name of syntax to use
-               -> String         -- ^ Source code to highlight
-               -> Html
-xhtmlHighlight opts lang code =
-  case highlightAs lang code of
-       Right result -> formatAsHtml opts lang result
-       Left  _      -> H.pre $ H.code $ toHtml code
 
 main = do
   (opts, fnames, errs) <- getArgs >>= return . getOpt Permute options
@@ -105,14 +105,54 @@ main = do
   let highlightOpts = [OptTitleAttributes | TitleAttributes `elem` opts] ++
                       [OptNumberLines | NumberLines `elem` opts] ++
                       [OptLineAnchors | NumberLines `elem` opts]
-  let css' = case styleOf opts of
-                  Nothing  -> defaultHighlightingCss
-                  Just s   -> highlightingCss s
-  let css = H.style ! A.type_ "text/css" $ toHtml css'
-  let hcode = xhtmlHighlight highlightOpts lang code
-  let pageTitle = if null fnames then return () else H.title $ (toHtml $ takeFileName $ head fnames)
-  let metadata = H.meta ! A.httpEquiv "Content-Type" ! A.content "text/html; charset=UTF-8" >>
-                 H.meta ! A.name "generator" ! A.content "highlight-kate"
-  if Fragment `elem` opts
-     then putStrLn $ renderHtml hcode
-     else putStrLn $ renderHtml $ H.head (pageTitle >> metadata >> css) >> H.body (toHtml hcode)
+  let fragment = Fragment `elem` opts
+  let fname = case fnames of
+                    []    -> ""
+                    (x:_) -> x
+  case formatOf opts of
+       "html"  -> hlHtml fragment fname highlightOpts (maybe pygments id $ styleOf opts)
+                       lang code
+       "latex" -> hlLaTeX fragment fname highlightOpts (maybe pygments id $ styleOf opts) lang code
+       x       -> error $ "Uknown format " ++  x
+
+hlHtml :: Bool               -- ^ Fragment
+      -> FilePath            -- ^ Filename
+      -> [FormatOption]
+      -> Style
+      -> String              -- ^ language
+      -> String              -- ^ code
+      -> IO ()
+hlHtml frag fname opts sty lang code =
+ if frag
+    then putStrLn $ renderHtml fragment
+    else putStrLn $ renderHtml $ H.head (pageTitle >> metadata >> css) >> H.body (toHtml fragment)
+  where fragment = case highlightAs lang code of
+                    Right result -> formatAsHtml opts lang result
+                    Left  e      -> error $ show e
+        css' = highlightingCss sty
+        css = H.style ! A.type_ "text/css" $ toHtml css'
+        pageTitle = H.title $ toHtml fname
+        metadata = H.meta ! A.httpEquiv "Content-Type" ! A.content "text/html; charset=UTF-8" >>
+                    H.meta ! A.name "generator" ! A.content "highlight-kate"
+
+hlLaTeX :: Bool               -- ^ Fragment
+        -> FilePath            -- ^ Filename
+        -> [FormatOption]
+        -> Style
+        -> String              -- ^ language
+        -> String              -- ^ code
+        -> IO ()
+hlLaTeX frag fname opts sty lang code =
+ if frag
+    then putStrLn fragment
+    else putStrLn $ "\\documentclass{article}\n\\usepackage[margin=1in]{geometry}\n" ++
+                    macros ++ pageTitle ++
+                    "\n\\begin{document}\n\\maketitle\n" ++  fragment ++ "\n\\end{document}"
+  where fragment = case highlightAs lang code of
+                    Right result -> formatAsLaTeX opts lang result
+                    Left  e      -> error $ show e
+        macros = highlightingLaTeXMacros sty
+        pageTitle = "\\title{" ++ fname ++ "}\n"
+
+
+
