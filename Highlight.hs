@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
 module Main where
 import Text.Highlighting.Kate
+import Text.Highlighting.Kate.Format (espresso, tango, kate, pygments, highlightingCss)
 import System.IO (hPutStrLn, stderr)
 import System.Environment
 import System.Console.GetOpt
@@ -13,7 +14,7 @@ import Text.Blaze
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
-data Flag = CssPath String
+data Flag = Sty String
           | Help
           | Fragment
           | List
@@ -25,7 +26,7 @@ data Flag = CssPath String
 
 options :: [OptDescr Flag]
 options =
-  [ Option ['c'] ["css"] (ReqArg CssPath "PATH") "link CSS file"
+  [ Option ['S'] ["style"] (ReqArg Sty "STYLE") "specify style"
   , Option ['f'] ["fragment"] (NoArg Fragment)  "fragment, without document header"
   , Option ['h'] ["help"] (NoArg Help)   "show usage message"
   , Option ['l'] ["list"] (NoArg List)   "list available language syntaxes"
@@ -35,15 +36,20 @@ options =
   , Option ['v'] ["version"] (NoArg Version)   "print version"
   ]
 
-cssPathOf :: [Flag] -> Maybe String
-cssPathOf [] = Nothing
-cssPathOf (CssPath s : _) = Just s
-cssPathOf (_:xs) = cssPathOf xs
-
 syntaxOf :: [Flag] -> Maybe String
 syntaxOf [] = Nothing
 syntaxOf (Syntax s : _) = Just s
 syntaxOf (_:xs) = syntaxOf xs
+
+styleOf :: [Flag] -> Maybe Style
+styleOf [] = Nothing
+styleOf (Sty s : _) = case map toLower s of
+                            "pygments"  -> Just pygments
+                            "espresso"  -> Just espresso
+                            "kate"      -> Just kate
+                            "tango"     -> Just tango
+                            _           -> error $ "Unknown style: " ++ s
+styleOf (_ : xs) = styleOf xs
 
 filterNewlines :: String -> String
 filterNewlines ('\r':'\n':xs) = '\n' : filterNewlines xs
@@ -99,9 +105,10 @@ main = do
   let highlightOpts = [OptTitleAttributes | TitleAttributes `elem` opts] ++
                       [OptNumberLines | NumberLines `elem` opts] ++
                       [OptLineAnchors | NumberLines `elem` opts]
-  let css = case cssPathOf opts of
-                   Nothing      -> H.style ! A.type_ "text/css" $ toHtml defaultHighlightingCss
-                   Just cssPath -> H.link ! A.type_ "text/css" ! A.href (toValue cssPath) ! A.rel "stylesheet"
+  let css' = case styleOf opts of
+                  Nothing  -> defaultHighlightingCss
+                  Just s   -> highlightingCss s
+  let css = H.style ! A.type_ "text/css" $ toHtml css'
   let hcode = xhtmlHighlight highlightOpts lang code
   let pageTitle = if null fnames then return () else H.title $ (toHtml $ takeFileName $ head fnames)
   let metadata = H.meta ! A.httpEquiv "Content-Type" ! A.content "text/html; charset=UTF-8" >>
