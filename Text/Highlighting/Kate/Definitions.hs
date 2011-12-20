@@ -51,7 +51,7 @@ data TokenType = KeywordTok
                | RegionMarkerTok
                | ErrorTok
                | NormalTok
-               deriving (Read, Show, Eq)
+               deriving (Read, Show, Eq, Enum)
 
 -- | A line of source, list of labeled source items.
 type SourceLine = [Token]
@@ -66,8 +66,8 @@ data TokenStyle = TokenStyle {
   , tokenUnderline  :: Bool
   } deriving (Show, Read)
 
-format :: TokenStyle
-format = TokenStyle {
+defStyle :: TokenStyle
+defStyle = TokenStyle {
     tokenColor      = Nothing
   , tokenBackground = Nothing
   , tokenBold       = False

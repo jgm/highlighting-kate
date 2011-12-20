@@ -11,7 +11,8 @@ Formatters that convert a list of annotated source lines to various output forma
 -}
 
 module Text.Highlighting.Kate.Format ( formatAsHtml, formatAsLaTeX, FormatOption (..),
-                                       highlightingCss, pygments, kate, espresso, tango,
+                                       highlightingCss, highlightingLaTeXMacros,
+                                       pygments, kate, espresso, tango, defStyle,
                                        defaultHighlightingCss, defaultLaTeXMacros ) where
 import Text.Highlighting.Kate.Definitions
 import Text.Blaze
@@ -152,18 +153,18 @@ pygments = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
   , tokenStyles =
-    [ (KeywordTok, format{ tokenColor = toColor "#007020", tokenBold = True })
-    , (DataTypeTok, format{ tokenColor = toColor "#902000" })
-    , (DecValTok, format{ tokenColor = toColor "#40a070" })
-    , (BaseNTok, format{ tokenColor = toColor "#40a070" })
-    , (FloatTok, format{ tokenColor = toColor "#40a070" })
-    , (CharTok, format{ tokenColor = toColor "#4070a0" })
-    , (StringTok, format{ tokenColor = toColor "#4070a0" })
-    , (CommentTok, format{ tokenColor = toColor "#60a0b0", tokenItalic = True })
-    , (OtherTok, format{ tokenColor = toColor "#007020" })
-    , (AlertTok, format{ tokenColor = toColor "#ff0000", tokenBold = True })
-    , (FunctionTok, format{ tokenColor = toColor "#06287e" })
-    , (ErrorTok, format{ tokenColor = toColor "#ff0000", tokenBold = True })
+    [ (KeywordTok, defStyle{ tokenColor = toColor "#007020", tokenBold = True })
+    , (DataTypeTok, defStyle{ tokenColor = toColor "#902000" })
+    , (DecValTok, defStyle{ tokenColor = toColor "#40a070" })
+    , (BaseNTok, defStyle{ tokenColor = toColor "#40a070" })
+    , (FloatTok, defStyle{ tokenColor = toColor "#40a070" })
+    , (CharTok, defStyle{ tokenColor = toColor "#4070a0" })
+    , (StringTok, defStyle{ tokenColor = toColor "#4070a0" })
+    , (CommentTok, defStyle{ tokenColor = toColor "#60a0b0", tokenItalic = True })
+    , (OtherTok, defStyle{ tokenColor = toColor "#007020" })
+    , (AlertTok, defStyle{ tokenColor = toColor "#ff0000", tokenBold = True })
+    , (FunctionTok, defStyle{ tokenColor = toColor "#06287e" })
+    , (ErrorTok, defStyle{ tokenColor = toColor "#ff0000", tokenBold = True })
     ]
   }
 
@@ -173,17 +174,17 @@ kate = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
   , tokenStyles =
-    [ (KeywordTok, format{ tokenBold = True })
-    , (DataTypeTok, format{ tokenColor = toColor "#800000" })
-    , (DecValTok, format{ tokenColor = toColor "#0000FF" })
-    , (BaseNTok, format{ tokenColor = toColor "#0000FF" })
-    , (FloatTok, format{ tokenColor = toColor "#800080" })
-    , (CharTok, format{ tokenColor = toColor "#FF00FF" })
-    , (StringTok, format{ tokenColor = toColor "#DD0000" })
-    , (CommentTok, format{ tokenColor = toColor "#808080", tokenItalic = True })
-    , (AlertTok, format{ tokenColor = toColor "#00ff00", tokenBold = True })
-    , (FunctionTok, format{ tokenColor = toColor "#000080" })
-    , (ErrorTok, format{ tokenColor = toColor "#ff0000", tokenBold = True })
+    [ (KeywordTok, defStyle{ tokenBold = True })
+    , (DataTypeTok, defStyle{ tokenColor = toColor "#800000" })
+    , (DecValTok, defStyle{ tokenColor = toColor "#0000FF" })
+    , (BaseNTok, defStyle{ tokenColor = toColor "#0000FF" })
+    , (FloatTok, defStyle{ tokenColor = toColor "#800080" })
+    , (CharTok, defStyle{ tokenColor = toColor "#FF00FF" })
+    , (StringTok, defStyle{ tokenColor = toColor "#DD0000" })
+    , (CommentTok, defStyle{ tokenColor = toColor "#808080", tokenItalic = True })
+    , (AlertTok, defStyle{ tokenColor = toColor "#00ff00", tokenBold = True })
+    , (FunctionTok, defStyle{ tokenColor = toColor "#000080" })
+    , (ErrorTok, defStyle{ tokenColor = toColor "#ff0000", tokenBold = True })
     ]
   }
 
@@ -193,18 +194,18 @@ tango = Style{
     backgroundColor = toColor "#f8f8f8"
   , defaultColor = Nothing
   , tokenStyles =
-    [ (KeywordTok, format{ tokenColor = toColor "#204a87", tokenBold = True })
-    , (DataTypeTok, format{ tokenColor = toColor "#204a87" })
-    , (DecValTok, format{ tokenColor = toColor "#0000cf" })
-    , (BaseNTok, format{ tokenColor = toColor "#0000cf" })
-    , (FloatTok, format{ tokenColor = toColor "#0000cf" })
-    , (CharTok, format{ tokenColor = toColor "#4e9a06" })
-    , (StringTok, format{ tokenColor = toColor "#4e9a06" })
-    , (CommentTok, format{ tokenColor = toColor "#8f5902", tokenItalic = True })
-    , (OtherTok, format{ tokenColor = toColor "#8f5902" })
-    , (AlertTok, format{ tokenColor = toColor "#ef2929" })
-    , (FunctionTok, format{ tokenColor = toColor "#000000" })
-    , (ErrorTok, format{ tokenColor = toColor "a40000", tokenBold = True })
+    [ (KeywordTok, defStyle{ tokenColor = toColor "#204a87", tokenBold = True })
+    , (DataTypeTok, defStyle{ tokenColor = toColor "#204a87" })
+    , (DecValTok, defStyle{ tokenColor = toColor "#0000cf" })
+    , (BaseNTok, defStyle{ tokenColor = toColor "#0000cf" })
+    , (FloatTok, defStyle{ tokenColor = toColor "#0000cf" })
+    , (CharTok, defStyle{ tokenColor = toColor "#4e9a06" })
+    , (StringTok, defStyle{ tokenColor = toColor "#4e9a06" })
+    , (CommentTok, defStyle{ tokenColor = toColor "#8f5902", tokenItalic = True })
+    , (OtherTok, defStyle{ tokenColor = toColor "#8f5902" })
+    , (AlertTok, defStyle{ tokenColor = toColor "#ef2929" })
+    , (FunctionTok, defStyle{ tokenColor = toColor "#000000" })
+    , (ErrorTok, defStyle{ tokenColor = toColor "a40000", tokenBold = True })
     ]
   }
 
@@ -214,17 +215,17 @@ espresso = Style{
     backgroundColor = toColor "#2A211C"
   , defaultColor = toColor "#BDAE9D"
   , tokenStyles =
-    [ (KeywordTok, format{ tokenColor = toColor "#43A8ED", tokenBold = True })
-    , (DataTypeTok, format{ tokenUnderline = True })
-    , (DecValTok, format{ tokenColor = toColor "#44AA43" })
-    , (BaseNTok, format{ tokenColor = toColor "#44AA43" })
-    , (FloatTok, format{ tokenColor = toColor "#44AA43" })
-    , (CharTok, format{ tokenColor = toColor "#049B0A" })
-    , (StringTok, format{ tokenColor = toColor "#049B0A" })
-    , (CommentTok, format{ tokenColor = toColor "#0066FF", tokenItalic = True })
-    , (AlertTok, format{ tokenColor = toColor "#ffff00" })
-    , (FunctionTok, format{ tokenColor = toColor "#FF9358", tokenBold = True })
-    , (ErrorTok, format{ tokenColor = toColor "ffff00", tokenBold = True })
+    [ (KeywordTok, defStyle{ tokenColor = toColor "#43A8ED", tokenBold = True })
+    , (DataTypeTok, defStyle{ tokenUnderline = True })
+    , (DecValTok, defStyle{ tokenColor = toColor "#44AA43" })
+    , (BaseNTok, defStyle{ tokenColor = toColor "#44AA43" })
+    , (FloatTok, defStyle{ tokenColor = toColor "#44AA43" })
+    , (CharTok, defStyle{ tokenColor = toColor "#049B0A" })
+    , (StringTok, defStyle{ tokenColor = toColor "#049B0A" })
+    , (CommentTok, defStyle{ tokenColor = toColor "#0066FF", tokenItalic = True })
+    , (AlertTok, defStyle{ tokenColor = toColor "#ffff00" })
+    , (FunctionTok, defStyle{ tokenColor = toColor "#FF9358", tokenBold = True })
+    , (ErrorTok, defStyle{ tokenColor = toColor "ffff00", tokenBold = True })
     ]
   }
 
@@ -257,12 +258,15 @@ highlightingLaTeXMacros f = unlines $
   (case backgroundColor f of
         Nothing          -> []
         Just (RGB r g b) -> [printf "\\definecolor{shadecolor}{RGB}{%d,%d,%d}" r g b]) ++
-  map macrodef (tokenStyles f)
+  map (macrodef $ tokenStyles f) (enumFromTo KeywordTok ErrorTok)
 
-macrodef :: (TokenType, TokenStyle) -> String
-macrodef (tokt, tokf) = "\\newcommand{\\" ++ show tokt ++
+macrodef :: [(TokenType, TokenStyle)] -> TokenType -> String
+macrodef tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
                      "}[1]{" ++ (ul . bf . it . bg . co $ "{#1}") ++ "}"
-  where ul x = if tokenUnderline tokf
+  where tokf = case lookup tokt tokstyles of
+                     Nothing -> defStyle
+                     Just x  -> x
+        ul x = if tokenUnderline tokf
                   then "\\underline{" ++ x ++ "}"
                   else x
         it x = if tokenItalic tokf
