@@ -56,12 +56,11 @@ a >>~ b = a >>= \x -> b >> return x
 normalizeHighlighting :: [Token] -> [Token]
 normalizeHighlighting [] = []
 normalizeHighlighting ((_,""):xs) = normalizeHighlighting xs
-normalizeHighlighting ((a,x):(b,y):xs) | a == b && (all isSpace x `iff` all isSpace y) =
-  normalizeHighlighting ((a, x++y):xs)
+normalizeHighlighting ((NormalTok,x):xs)
+  | all isSpace x = (NormalTok,x) : normalizeHighlighting xs
+normalizeHighlighting ((a,x):(b,y):xs)
+  | a == b = normalizeHighlighting ((a, x++y):xs)
 normalizeHighlighting (x:xs) = x : normalizeHighlighting xs
-
-iff :: Bool -> Bool -> Bool
-iff x y = (x && y) || (not x && not y)
 
 pushContext :: [Char] -> KateParser ()
 pushContext context = if context == "#stay"
