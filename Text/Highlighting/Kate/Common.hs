@@ -19,10 +19,11 @@ import System.IO.Unsafe (unsafePerformIO)
 import Text.Regex.PCRE.String
 #endif
 import Text.Highlighting.Kate.Definitions
-import Text.ParserCombinators.Parsec
+import Text.ParserCombinators.Parsec hiding (State)
 import Data.Char (isDigit, chr, toLower, isSpace)
 import Data.List (tails)
 import Control.Monad (mzero)
+import Control.Monad.State
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
@@ -297,3 +298,21 @@ pDetectIdentifier = do
 
 fromState :: (SyntaxState -> a) -> KateParser a
 fromState f = f `fmap` getState
+
+mkParseSourceLine :: KateParser Token    -- ^ parseExpressionInternal
+                  -> KateParser ()       -- ^ pEndline
+                  -> String
+                  -> State SyntaxState SourceLine
+mkParseSourceLine parseExpressionInternal pEndLine ln = do
+  modify $ \st -> st{ synStLineNumber = synStLineNumber st + 1 }
+  st <- get
+  let lineName = "line " ++ show (synStLineNumber st)
+  let pline = do ts <- many parseExpressionInternal
+                 pEndLine
+                 s  <- getState
+                 return (s, ts)
+  let (newst, result) = case runParser pline st lineName ln of
+                              Left e      -> (st, [(ErrorTok,ln)])
+                              Right (s,r) -> (s,r)
+  put newst
+  return $ normalizeHighlighting result
