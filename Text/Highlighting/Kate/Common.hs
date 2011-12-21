@@ -22,6 +22,7 @@ import Text.Highlighting.Kate.Definitions
 import Text.ParserCombinators.Parsec
 import Data.Char (isDigit, chr, toLower, isSpace)
 import Data.List (tails)
+import Control.Monad (mzero)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
@@ -106,18 +107,16 @@ wholeLine = manyTill anyChar (newline <|> (eof >> return '\n'))
 
 pFirstNonSpace :: KateParser ()
 pFirstNonSpace = do
-  curLine <- currentLine
-  charsParsedInLine <- getState >>= return . synStCharsParsedInLine
-  let (sps, nonSps) = span (`elem` " \t") curLine
-  if length sps == charsParsedInLine && length nonSps > 0 
-     then return ()
-     else fail "Not first nonspace"
+  rest <- getInput
+  prevNonspace <- fromState synStPrevNonspace
+  if prevNonspace
+     then mzero
+     else case rest of
+                (c:_) | not (isSpace c) -> return ()
+                _                       -> mzero
 
 currentColumn :: GenParser tok st Column
 currentColumn = getPosition >>= return . sourceColumn
-
-currentLine :: KateParser String
-currentLine = getState >>= return . synStCurrentLine
 
 pColumn :: Column -> GenParser tok st ()
 pColumn col = do
@@ -147,13 +146,13 @@ pDetect2Chars dynamic ch1 ch2 = try $ do
 
 pKeyword :: [Char] -> Set.Set [Char] -> KateParser [Char]
 pKeyword delims kws = try $ do
-  st <- getState
-  let prevChar = synStPrevChar st
+  prevChar <- fromState synStPrevChar
+  caseSensitive <- fromState synStKeywordCaseSensitive
   case prevChar of
          x | not (x `elem` delims) -> fail "Not preceded by a delimiter"
          _ -> return ()
   word <- many1 (noneOf delims)
-  let word' = if synStKeywordCaseSensitive st
+  let word' = if caseSensitive
                  then word
                  else map toLower word
   if word' `Set.member` kws
@@ -209,25 +208,24 @@ matchRegex r s = case unsafePerformIO (regexec r s) of
 
 pRegExpr :: Regex -> KateParser String
 pRegExpr compiledRegex = do
-  st <- getState
-  let curLine = synStCurrentLine st
-  let charsParsedInLine = synStCharsParsedInLine st
+  rest <- getInput
+  prevChar <- fromState synStPrevChar
   -- Note: we keep one preceding character, so initial \b can match or not...
-  let remaining = if charsParsedInLine == 0
-                     then ' ':curLine
-                     else drop (charsParsedInLine - 1) curLine 
-  case matchRegex compiledRegex remaining of
+  let target = if prevChar == '\n'
+                  then ' ':rest
+                  else prevChar:rest
+  case matchRegex compiledRegex target of
         Just (x:xs) -> do if null xs
                              then return ()
                              else updateState (\st -> st {synStCaptures = xs})
-                          string (drop 1 x) 
+                          string (drop 1 x)
         _           -> pzero
 
 pRegExprDynamic :: [Char] -> KateParser String
 pRegExprDynamic regexpStr = do
   regexpStr' <- subDynamic regexpStr
   let compiledRegex = compileRegex regexpStr'
-  pRegExpr compiledRegex 
+  pRegExpr compiledRegex
 
 escapeRegex :: String -> String
 escapeRegex [] = ""
@@ -297,11 +295,5 @@ pDetectIdentifier = do
   rest <- many alphaNum
   return (first:rest)
 
-pHandleEndLine :: KateParser ()
-pHandleEndLine = do
-  newline <|> (eof >> return '\n')
-  lineContents <- lookAhead wholeLine
-  updateState $ \st -> st { synStCurrentLine = lineContents
-                          , synStCharsParsedInLine = 0
-                          , synStPrevChar = '\n' }
-
+fromState :: (SyntaxState -> a) -> KateParser a
+fromState f = f `fmap` getState
