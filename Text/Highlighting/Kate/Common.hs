@@ -142,11 +142,10 @@ pDetect2Chars dynamic ch1 ch2 = try $ do
 
 pKeyword :: [Char] -> Set.Set [Char] -> KateParser [Char]
 pKeyword delims kws = try $ do
+  notFollowedBy (oneOf delims)
   prevChar <- fromState synStPrevChar
   caseSensitive <- fromState synStKeywordCaseSensitive
-  case prevChar of
-         x | not (x `elem` delims) -> fail "Not preceded by a delimiter"
-         _ -> return ()
+  guard $ prevChar `elem` delims
   word <- many1 (noneOf delims)
   let word' = if caseSensitive
                  then word
