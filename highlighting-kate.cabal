@@ -258,7 +258,7 @@ Executable Highlight
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
   Ghc-Options:      -W -O0 -rtsopts
-  Ghc-Prof-Options: -auto-all -caf-all
+  Ghc-Prof-Options: -auto-all -caf-all -rtsopts
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
   Cc-Options:       -O0
