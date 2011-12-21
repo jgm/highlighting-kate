@@ -177,7 +177,7 @@ mkParser syntax =
       withAttr = text "withAttribute attr txt = do" $$ (nest 2 $
                    text "when (null txt) $ fail \"Parser matched no text\"" $$
                    text "updateState $ \\st -> st { synStPrevChar = last txt" $$
-                   text "                         , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
+                   text "                          , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
                    text "return (attr, txt)")
       parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $
                                   text "context <- currentContext" $$
@@ -253,7 +253,7 @@ mkRules syntax context =
                              then [parens (switchContext (contFallthroughContext context) (<> text " >> ") <>
                                    text "return (NormalTok, \"\")")]
                              else []
-  in  text ("parseRules " ++ show (contName context) ++ " = ") $$
+  in  text ("parseRules " ++ show (contName context) ++ " =") $$
       if null (contParsers context) && null fallthroughParser
          then nest 2 (text "pzero")
          else nest 2 $ mkAlternatives $ (map (mkSyntaxParser syntax context) $ contParsers context) ++ fallthroughParser
