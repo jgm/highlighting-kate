@@ -266,9 +266,7 @@ mkRules syntax context =
   in  text ("parseRules " ++ show (contName context) ++ " = ") $$
       if null (contParsers context) && null fallthroughParser
          then nest 2 (text "pzero")
-         else nest 2 $ (text "do (attr, result) <- " <>
-                       (mkAlternatives $ (map (mkSyntaxParser syntax context) $ contParsers context) ++ fallthroughParser)) $$
-                       text ("   return (attr, result)")
+         else nest 2 $ mkAlternatives $ (map (mkSyntaxParser syntax context) $ contParsers context) ++ fallthroughParser
 
 mkSyntaxParser :: SyntaxDefinition -> SyntaxContext -> SyntaxParser -> Doc
 mkSyntaxParser syntax context parser =
