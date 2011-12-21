@@ -24,10 +24,10 @@ type ContextStack = Map.Map String [String]
 -- | State for syntax parser.
 data SyntaxState = SyntaxState
   { synStContexts             :: ContextStack -- ^ Stack of contexts
-  , synStLanguage             :: String       -- ^ Language being parsed 
-  , synStCurrentLine          :: String       -- ^ Contents of current line
-  , synStCharsParsedInLine    :: Int          -- ^ Num characters parsed in line
+  , synStLanguage             :: String       -- ^ Language being parsed
+  , synStLineNumber           :: Int          -- ^ Number of current line
   , synStPrevChar             :: Char         -- ^ Last character parsed
+  , synStPrevNonspace         :: Bool         -- ^ True if we've parsed a nonspace
   , synStCaseSensitive        :: Bool         -- ^ Language is case-sensitive
   , synStKeywordCaseSensitive :: Bool         -- ^ Keywords are case-sensitive
   , synStCaptures             :: [String]     -- ^ List of regex captures from
