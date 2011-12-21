@@ -143,11 +143,6 @@ getStartNum (_:xs) = getStartNum xs
 
 defaultHighlightingCss :: String
 defaultHighlightingCss = highlightingCss pygments
--- TODO
---  "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre \n\
---  \   { margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }\n\
---  \td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; padding-left: 5px; }\n\
---  \td.sourceCode { padding-left: 5px; }\n\
 
 --
 -- Styles
@@ -236,13 +231,20 @@ espresso = Style{
   }
 
 highlightingCss :: Style -> String
-highlightingCss f = unlines $ colorspec ++ map toCss (tokenStyles f)
+highlightingCss f = unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
   where colorspec = case (defaultColor f, backgroundColor f) of
                          (Nothing, Nothing) -> []
-                         (Just c, Nothing)  -> ["pre > code { color: " ++ fromColor c ++ "; }"]
-                         (Nothing, Just c)  -> ["pre > code { background-color: " ++ fromColor c ++ "; }"]
-                         (Just c1, Just c2) -> ["pre > code { color: " ++ fromColor c1 ++ "; background-color: " ++
+                         (Just c, Nothing)  -> ["pre, code, table.sourceCode { color: " ++ fromColor c ++ "; }"]
+                         (Nothing, Just c)  -> ["pre, code, table.sourceCode { background-color: " ++ fromColor c ++ "; }"]
+                         (Just c1, Just c2) -> ["pre, code, table.sourceCode { color: " ++ fromColor c1 ++ "; background-color: " ++
                                                  fromColor c2 ++ "; }"]
+        tablespec = [
+          "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, pre.sourceCode {"
+         ,"  margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }"
+         ,"td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA;"
+         ,"  padding-right: 4px; padding-left: 4px; }"
+         ,"td.sourceCode { padding-left: 5px; }"
+         ]
 
 toCss :: (TokenType, TokenStyle) -> String
 toCss (t,tf) = "code > span." ++ short t ++ " { "
