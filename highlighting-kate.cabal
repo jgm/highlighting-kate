@@ -257,7 +257,7 @@ Executable Highlight
   Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.5, filepath
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
-  Ghc-Options:      -W -O0
+  Ghc-Options:      -W -O0 -rtsopts
   Ghc-Prof-Options: -auto-all -caf-all
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
