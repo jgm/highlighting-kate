@@ -22,7 +22,6 @@ import Text.Highlighting.Kate.Definitions
 import Text.ParserCombinators.Parsec hiding (State)
 import Data.Char (isDigit, chr, toLower, isSpace)
 import Data.List (tails)
-import Control.Monad (mzero)
 import Control.Monad.State
 import qualified Data.Map as Map
 import qualified Data.Set as Set
@@ -103,9 +102,6 @@ withChildren parent child = do
   (_, cResult) <- option (NormalTok,"") child
   return (pAttr, pResult ++ cResult)
 
-wholeLine :: KateParser [Char]
-wholeLine = manyTill anyChar (newline <|> (eof >> return '\n'))
-
 pFirstNonSpace :: KateParser ()
 pFirstNonSpace = do
   rest <- getInput
@@ -170,11 +166,7 @@ pAnyChar :: [Char] -> KateParser [Char]
 pAnyChar chars = oneOf chars >>= return . (:[])
 
 pDefault :: KateParser [Char]
-pDefault = (:[]) `fmap` anyChar -- satisfy (/= '\n') >>= return . (:[])
-
--- The following alternative gives a 25% speed improvement, but it's possible
--- that it won't work for all syntaxes:
--- pDefault = (many1 alphaNum) <|> (noneOf "\n" >>= return . (:[]))
+pDefault = (:[]) `fmap` anyChar
 
 subDynamic :: [Char] -> KateParser [Char]
 subDynamic ('%':x:xs) | isDigit x = do
@@ -281,11 +273,11 @@ pHlCChar = try $ do
 pRangeDetect :: Char -> Char -> KateParser [Char]
 pRangeDetect startChar endChar = try $ do
   char startChar
-  body <- manyTill (satisfy $ \c -> c /= '\n' && c /= endChar) (char endChar)
+  body <- manyTill (satisfy (/= endChar)) (char endChar)
   return $ startChar : (body ++ [endChar])
 
 pLineContinue :: KateParser String
-pLineContinue = try $ string "\\\n"
+pLineContinue = try $ char '\\' >> eof >> return "\\"
 
 pDetectSpaces :: KateParser [Char]
 pDetectSpaces = many1 (satisfy $ \c -> c == ' ' || c == '\t')
@@ -312,7 +304,7 @@ mkParseSourceLine parseExpressionInternal pEndLine ln = do
                  s  <- getState
                  return (s, ts)
   let (newst, result) = case runParser pline st lineName ln of
-                              Left e      -> (st, [(ErrorTok,ln)])
+                              Left _      -> (st, [(ErrorTok,ln)])
                               Right (s,r) -> (s,r)
-  put newst
-  return $ normalizeHighlighting result
+  put $! newst
+  return $! normalizeHighlighting result
