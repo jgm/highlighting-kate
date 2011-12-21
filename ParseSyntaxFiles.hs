@@ -142,10 +142,10 @@ processOneFile src = do
            \import Data.Map (fromList)\n\
            \import Control.Monad.State\n\
            \import Data.Char (isSpace)\n\
-           \import Data.Maybe (fromMaybe)\n\n" ++
+           \import Data.Maybe (fromMaybe)\n" ++
            (if null (synLists syntax)
-               then ""
-               else "import qualified Data.Set as Set\n") ++
+               then "\n"
+               else "import qualified Data.Set as Set\n\n") ++
            render (mkParser syntax) ++ "\n"
 
 labelFor :: SyntaxDefinition -> String -> TokenType
