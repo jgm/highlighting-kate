@@ -20,8 +20,9 @@ import Text.Printf
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Data.Monoid
-import Control.Monad (mplus)
 import Data.List (intersperse)
+import Control.Monad (mplus)
+import Data.Char (isSpace)
 
 -- | Options for formatters.
 data FormatOption = OptNumberLines     -- ^ Number lines
@@ -41,23 +42,26 @@ formatAsLaTeX :: [FormatOption]  -- ^ Options
               -> String          -- ^ Language (not used, but here for parallelism with formatasHtml)
               -> [SourceLine]    -- ^ Source lines to format
               -> String
-formatAsLaTeX opts _ lines =
+formatAsLaTeX opts _ lines' =
   let startNum = getStartNum opts
-      code = unlines $ map sourceLineToLaTeX lines
-      commandchars = "commandchars=\\\\\\{\\}"
+      code = unlines $ map sourceLineToLaTeX lines'
   in  if OptInline `elem` opts
-         then "\\Verb[" ++ commandchars ++ "]{" ++ code ++ "}"
-         else "\\begin{Verbatim}[" ++
-              (if OptNumberLines `elem` opts
-                  then "numbers=left," ++
-                       (if startNum == 1
-                           then ""
-                           else ",firstnumber=" ++ show startNum) ++ ","
-                  else ""
-              ) ++ commandchars ++ "]\n" ++ code ++ "\\end{Verbatim}"
+         then "|" ++ code ++ "|"
+         else unlines $
+              ["\\begin{Shaded}"
+              ,"\\begin{Highlighting}[" ++
+               (if OptNumberLines `elem` opts
+                   then "numbers=left," ++
+                        (if startNum == 1
+                            then ""
+                            else ",firstnumber=" ++ show startNum) ++ ","
+                   else "") ++ "]"
+              ,code
+              ,"\\end{Highlighting}"
+              ,"\\end{Shaded}"]
 
 tokenToLaTeX :: Token -> String
-tokenToLaTeX (NormalTok, txt) = escapeLaTeX txt
+tokenToLaTeX (NormalTok, txt) | all isSpace txt = escapeLaTeX txt
 tokenToLaTeX (toktype, txt)   = '\\':(show toktype ++ "{" ++ escapeLaTeX txt ++ "}")
 
 escapeLaTeX :: String -> String
@@ -65,6 +69,7 @@ escapeLaTeX = concatMap escapeLaTeXChar
   where escapeLaTeXChar '\\' = "\\textbackslash{}"
         escapeLaTeXChar '{'  = "\\{"
         escapeLaTeXChar '}'  = "\\}"
+        escapeLaTeXChar '|'  = "\\textbar{}" -- used in inline verbatim
         escapeLaTeXChar x    = [x]
 
 sourceLineToLaTeX :: SourceLine -> String
@@ -249,20 +254,32 @@ toCss (t,tf) = "code > span." ++ short t ++ " { "
         stylespec  = if tokenItalic tf then "font-style: italic; " else ""
         decorationspec = if tokenUnderline tf then "font-decoration: underline; " else ""
 
--- TODO
+-- Note: default LaTeX setup doesn't allow boldface typewriter font.
+-- To make boldface work in styles, you need to use a different typewriter
+-- font. This will work for computer modern:
+-- \DeclareFontShape{OT1}{cmtt}{bx}{n}{<5><6><7><8><9><10><10.95><12><14.4><17.28><20.74><24.88>cmttb10}{}
+-- Or, with xelatex:
+-- \usepackage{fontspec}
+-- \setmainfont[SmallCapsFont={* Caps}]{Latin Modern Roman}
+-- \setsansfont{Latin Modern Sans}
+-- \setmonofont[SmallCapsFont={Latin Modern Mono Caps}]{Latin Modern Mono Light}
 highlightingLaTeXMacros :: Style -> String
 highlightingLaTeXMacros f = unlines $
   [ "\\usepackage{color}"
-  , "\\usepackage{framed}"
   , "\\usepackage{fancyvrb}"
+  , "\\DefineShortVerb[commandchars=\\\\\\{\\}]{\\|}"
+  , "\\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\\\\{\\}}"
+  , "% Add ',fontsize=\\small' for more characters per line"
   ] ++
   (case backgroundColor f of
-        Nothing          -> []
-        Just (RGB r g b) -> [printf "\\definecolor{shadecolor}{RGB}{%d,%d,%d}" r g b]) ++
-  map (macrodef (defaultColor f) (tokenStyles f)) (enumFromTo KeywordTok ErrorTok)
+        Nothing          -> ["\\newenvironment{Shaded}{}{}"]
+        Just (RGB r g b) -> ["\\usepackage{framed}"
+                            ,printf "\\definecolor{shadecolor}{RGB}{%d,%d,%d}" r g b
+                            ,"\\newenvironment{Shaded}{\\begin{snugshade}}{\\end{snugshade}}"])
+  ++ map (macrodef (defaultColor f) (tokenStyles f)) (enumFromTo KeywordTok NormalTok)
 
 macrodef :: Maybe Color -> [(TokenType, TokenStyle)] -> TokenType -> String
-macrodef defcolor tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
+macrodef defaultcol tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
                      "}[1]{" ++ (ul . bf . it . bg . co $ "{#1}") ++ "}"
   where tokf = case lookup tokt tokstyles of
                      Nothing -> defStyle
@@ -281,44 +298,10 @@ macrodef defcolor tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
                     Nothing          -> x
                     Just (r, g, b) -> printf "\\colorbox[rgb]{%0.2f,%0.2f,%0.2f}{%s}" r g b x
         col  = fromColor `fmap`
-                 (tokenColor tokf `mplus` defcolor) :: Maybe (Double, Double, Double)
+                 (tokenColor tokf `mplus` defaultcol) :: Maybe (Double, Double, Double)
         co x = case col of
-                    Nothing          -> x
+                    Nothing        -> x
                     Just (r, g, b) -> printf "\\textcolor[rgb]{%0.2f,%0.2f,%0.2f}{%s}" r g b x
 
 defaultLaTeXMacros :: String
 defaultLaTeXMacros = highlightingLaTeXMacros pygments
-
--- see test.tex
-{-
-\documentclass{article}
-\usepackage{framed}
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\kw}[1]{\textcolor[rgb]{0,0.44,0.12}{#1}}
-\newcommand{\dt}[1]{\textcolor[rgb]{0.56,0.12,0}{#1}}
-\newcommand{\dv}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
-\newcommand{\bn}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
-\newcommand{\fl}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
-\newcommand{\ch}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
-\newcommand{\st}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
-\newcommand{\co}[1]{\textcolor[rgb]{96,0.63,0.69}{\textit{#1}}}
-\newcommand{\ot}[1]{\textcolor[rgb]{0,0.44,0.12}{#1}}
-\newcommand{\al}[1]{\textcolor[rgb]{1,0,0}{\textbf{#1}}}
-\newcommand{\fu}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
-\newcommand{\re}[1]{#1}
-\newcommand{\er}[1]{\textcolor[rgb]{1,0,0}{\textbf{#1}}}
-\definecolor{shadecolor}{RGB}{222,167,130}
-%\setlength{\FrameSep}{0pt}
-
-\begin{document}
-
-Hi:
-\begin{snugshade}
-\begin{Verbatim}[numbers=left,,commandchars=\\\{\}]
-main  \fu{=} \fu{interact} (\fu{reverse})
-\end{Verbatim}
-\end{snugshade}
-ok then.
-\end{document}
--}
