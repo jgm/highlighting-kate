@@ -105,21 +105,15 @@ pFirstNonSpace :: KateParser ()
 pFirstNonSpace = do
   rest <- getInput
   prevNonspace <- fromState synStPrevNonspace
-  if prevNonspace
-     then mzero
-     else case rest of
-                (c:_) | not (isSpace c) -> return ()
-                _                       -> mzero
+  guard $ not $ prevNonspace || null rest || isSpace (head rest)
 
 currentColumn :: GenParser tok st Column
-currentColumn = getPosition >>= return . sourceColumn
+currentColumn = sourceColumn `fmap` getPosition
 
 pColumn :: Column -> GenParser tok st ()
 pColumn col = do
   curCol <- currentColumn
-  if col == (curCol - 1) -- parsec's columns start with 1
-     then return ()
-     else fail $ "Not column " ++ show col
+  guard $ col == (curCol - 1) -- parsec's columns start with 1
 
 pGetCapture :: Int -> KateParser String
 pGetCapture capNum = do
