@@ -282,7 +282,7 @@ highlightingLaTeXMacros f = unlines $
 
 macrodef :: Maybe Color -> [(TokenType, TokenStyle)] -> TokenType -> String
 macrodef defaultcol tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
-                     "}[1]{" ++ (ul . bf . it . bg . co $ "{#1}") ++ "}"
+                     "}[1]{" ++ (co . ul . bf . it . bg $ "{#1}") ++ "}"
   where tokf = case lookup tokt tokstyles of
                      Nothing -> defStyle
                      Just x  -> x
