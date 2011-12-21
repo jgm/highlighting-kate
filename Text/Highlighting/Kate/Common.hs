@@ -273,6 +273,12 @@ pLineContinue = try $ char '\\' >> eof >> return "\\"
 pDetectSpaces :: KateParser [Char]
 pDetectSpaces = many1 (satisfy $ \c -> c == ' ' || c == '\t')
 
+pDetectIdentifier :: KateParser [Char]
+pDetectIdentifier = do
+  first <- letter
+  rest <- many alphaNum
+  return (first:rest)
+
 fromState :: (SyntaxState -> a) -> KateParser a
 fromState f = f `fmap` getState
 
