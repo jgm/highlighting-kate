@@ -170,7 +170,7 @@ pAnyChar :: [Char] -> KateParser [Char]
 pAnyChar chars = oneOf chars >>= return . (:[])
 
 pDefault :: KateParser [Char]
-pDefault = satisfy (/= '\n') >>= return . (:[])
+pDefault = (:[]) `fmap` anyChar -- satisfy (/= '\n') >>= return . (:[])
 
 -- The following alternative gives a 25% speed improvement, but it's possible
 -- that it won't work for all syntaxes:
