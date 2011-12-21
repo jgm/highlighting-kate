@@ -2,10 +2,10 @@
 {- |
    Module      : Text.Highlighting.Kate.Common
    Copyright   : Copyright (C) 2008 John MacFarlane
-   License     : GNU GPL, version 2 or above 
+   License     : GNU GPL, version 2 or above
 
    Maintainer  : John MacFarlane <jgm@berkeley.edu>
-   Stability   : alpha 
+   Stability   : alpha
    Portability : portable
 
 Parsers used in all the individual syntax parsers.
@@ -71,7 +71,7 @@ pushContext context = if context == "#stay"
                                  let addContext c x = case x of
                                                        Nothing -> Just [c]
                                                        Just cs -> Just (c:cs)
-                                 let newContexts = Map.alter (addContext context) lang contexts 
+                                 let newContexts = Map.alter (addContext context) lang contexts
                                  updateState $ \st -> st { synStContexts = newContexts }
 
 popContext :: KateParser ()
@@ -82,7 +82,7 @@ popContext = do st <- getState
                     Just (_:_) -> updateState $ \st ->
                                     st{ synStContexts = Map.adjust tail lang contexts }
                     Just []    -> fail $ "Stack empty for language " ++ lang
-                    Nothing    -> fail $ "No context stack for language " ++ lang 
+                    Nothing    -> fail $ "No context stack for language " ++ lang
 
 currentContext :: KateParser String
 currentContext = do st <- getState
@@ -129,7 +129,7 @@ pGetCapture capNum = do
      else return $ captures !! (capNum - 1)
 
 pDetectChar :: Bool -> Char -> KateParser String
-pDetectChar dynamic ch = do 
+pDetectChar dynamic ch = do
   if dynamic && isDigit ch
      then pGetCapture (read [ch]) >>= try . string
      else char ch >>= return . (:[])
@@ -189,9 +189,9 @@ compileRegex regexpStr =
 
 matchRegex :: Regex -> String -> Maybe [String]
 #ifdef _PCRE_LIGHT
-matchRegex r s = match r s [exec_notempty] 
+matchRegex r s = match r s [exec_notempty]
 #else
-matchRegex r s = case unsafePerformIO (regexec r s) of 
+matchRegex r s = case unsafePerformIO (regexec r s) of
                       Right (Just (_, mat, _ , capts)) -> Just (mat : capts)
                       Right Nothing -> Nothing
                       Left matchError -> error $ show matchError
@@ -223,7 +223,7 @@ integerRegex :: Regex
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
 pInt :: KateParser String
-pInt = pRegExpr integerRegex 
+pInt = pRegExpr integerRegex
 
 floatRegex :: Regex
 floatRegex = compileRegex "\\b[-+]?(([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)([Ee][-+]?[0-9]+)?|[0-9]+[Ee][-+]?[0-9]+)\\b"
@@ -244,7 +244,7 @@ pHlCHex :: KateParser String
 pHlCHex = pRegExpr hexRegex
 
 pHlCStringChar :: KateParser [Char]
-pHlCStringChar = try $ do 
+pHlCStringChar = try $ do
   char '\\'
   (oneOf "abefnrtv\"'?\\" >>= return  . (\x -> ['\\',x]))
     <|> (do a <- satisfy (\c -> c == 'x' || c == 'X')
