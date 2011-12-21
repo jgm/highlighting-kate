@@ -20,7 +20,7 @@ import Text.Regex.PCRE.String
 #endif
 import Text.Highlighting.Kate.Definitions
 import Text.ParserCombinators.Parsec hiding (State)
-import Data.Char (isDigit, chr, toLower, isSpace)
+import Data.Char (isDigit, toLower, isSpace)
 import Data.List (tails)
 import Control.Monad.State
 import qualified Data.Map as Map
@@ -181,10 +181,10 @@ subDynamic "" = return ""
 
 compileRegex :: String -> Regex
 #ifdef _PCRE_LIGHT
-compileRegex regexpStr = compile ('.' : escapeRegex regexpStr) [anchored]
+compileRegex regexpStr = compile ('.' : regexpStr) [anchored]
 #else
 compileRegex regexpStr =
-  case unsafePerformIO $ compile (compAnchored) (execNotEmpty) ('.' : escapeRegex regexpStr) of
+  case unsafePerformIO $ compile (compAnchored) (execNotEmpty) ('.' : regexpStr) of
         Left _ -> error $ "Error compiling regex: " ++ show regexpStr
         Right r -> r
 #endif
@@ -220,14 +220,6 @@ pRegExprDynamic regexpStr = do
   regexpStr' <- subDynamic regexpStr
   let compiledRegex = compileRegex regexpStr'
   pRegExpr compiledRegex
-
-escapeRegex :: String -> String
-escapeRegex [] = ""
-escapeRegex ('\\':'0':x:y:z:rest) | isDigit x && isDigit y && isDigit z =
-  chr (read ['0','o',x,y,z]) : escapeRegex rest
-escapeRegex ('\\':x:y:z:rest) | isDigit x && isDigit y && isDigit z =
-  chr (read ['0','o',x,y,z]) : escapeRegex rest
-escapeRegex (x:xs) = x : escapeRegex xs 
 
 integerRegex :: Regex
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
