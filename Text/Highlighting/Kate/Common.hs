@@ -208,10 +208,11 @@ pRegExpr compiledRegex = do
                   then ' ':rest
                   else prevChar:rest
   case matchRegex compiledRegex target of
-        Just (x:xs) -> do if null xs
-                             then return ()
-                             else updateState (\st -> st {synStCaptures = xs})
-                          string (drop 1 x)
+        Just (x:xs) | null x -> error "Regex matched null string!"
+                    | otherwise -> do
+                          unless (null xs) $
+                            updateState (\st -> st {synStCaptures = xs})
+                          count (length x - 1) anyChar
         _           -> pzero
 
 pRegExprDynamic :: [Char] -> KateParser String
