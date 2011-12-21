@@ -146,7 +146,7 @@ Library
     cpp-options:     -D_PCRE_LIGHT
   else
     Build-depends:   regex-pcre-builtin
-  Build-Depends:     parsec, blaze-html >= 0.4.2 && < 0.5
+  Build-Depends:     parsec, mtl, blaze-html >= 0.4.2 && < 0.5
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions

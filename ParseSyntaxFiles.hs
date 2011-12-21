@@ -138,9 +138,10 @@ processOneFile src = do
            \import Text.Highlighting.Kate.Definitions\n\
            \import Text.Highlighting.Kate.Common\n" ++
            unlines includeImports ++
-           "import Text.ParserCombinators.Parsec\n\
-           \import Control.Monad (when)\n\
+           "import Text.ParserCombinators.Parsec hiding (State)\n\
            \import Data.Map (fromList)\n\
+           \import Control.Monad.State\n\
+           \import Data.Char (isSpace)\n\
            \import Data.Maybe (fromMaybe)\n\n" ++
            (if null (synLists syntax)
                then ""
@@ -175,10 +176,8 @@ mkParser syntax =
              text ("syntaxExtensions = " ++ show (synExtensions syntax))
       withAttr = text "withAttribute attr txt = do" $$ (nest 2 $
                    text "when (null txt) $ fail \"Parser matched no text\"" $$
-                   text "st <- getState" $$
-                   text "let oldCharsParsed = synStCharsParsedInLine st" $$
-                   text "let prevchar = if null txt then '\\n' else last txt" $$
-                   text "updateState $ \\st -> st { synStCharsParsedInLine = oldCharsParsed + length txt, synStPrevChar = prevchar } " $$
+                   text "updateState $ \\st -> st { synStPrevChar = last txt" $$
+                   text "                         , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
                    text "return (attr, txt)")
       parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $
                                   text "context <- currentContext" $$
@@ -205,27 +204,18 @@ mkParser syntax =
       initialContextStack = Map.fromList [(synLanguage syntax, [contName startingContext])]
       startingState = SyntaxState { synStContexts = initialContextStack
                                   , synStLanguage = synLanguage syntax
-                                  , synStCurrentLine = ""
-                                  , synStCharsParsedInLine = 0
+                                  , synStLineNumber = 0
+                                  , synStPrevNonspace = False
                                   , synStPrevChar = '\n'
                                   , synStCaseSensitive = synCaseSensitive syntax
                                   , synStKeywordCaseSensitive = keywordCaseSensitive (synKeywordAttr syntax)
                                   , synStCaptures = [] }
       initState = text $ "startingState = " ++ show startingState
-      sourceLineParser = text "parseSourceLine = manyTill parseExpressionInternal pEndLine"
-      mainParser = text "parseSource = do " $$
-                   (nest 2 $ text "lineContents <- lookAhead wholeLine" $$
-                             text "updateState $ \\st -> st { synStCurrentLine = lineContents }" $$
-                             -- text "context <- currentContext" $$
-                             -- text "pushContext (fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$
-                             text "result <- manyTill parseSourceLine eof" $$
-                             text "return $ map normalizeHighlighting result")
       mainFunction = text $ "-- | Highlight source code using this syntax definition.\n\
-                            \highlight :: String -> Either String [SourceLine]\n\
-                            \highlight input =\n\
-                            \  case runParser parseSource startingState \"source\" input of\n\
-                            \    Left err     -> Left $ show err\n\
-                            \    Right result -> Right result"
+                            \highlight :: String -> [SourceLine]\n\
+                            \highlight input = evalState (mapM parseSourceLine $ lines input) startingState"
+      lineParser = text   $ "parseSourceLine :: String -> State SyntaxState SourceLine\n\
+                            \parseSourceLine = mkParseSourceLine parseExpressionInternal pEndLine"
       endLineParser = text "pEndLine = do" $$
                       (nest 2 $ text "lookAhead $ newline <|> (eof >> return '\\n')" $$
                                 text "context <- currentContext" $$
@@ -234,8 +224,8 @@ mkParser syntax =
                                             switchContext (contLineEndContext cont) (<> text " >> ") <>
                                             if "#pop" `isPrefixOf` (contLineEndContext cont)
                                                then text "pEndLine"
-                                               else text "pHandleEndLine") $ synContexts syntax) $$
-                                          (text $ "_ -> pHandleEndLine")))
+                                               else text "return ()") $ synContexts syntax) $$
+                                          (text $ "_ -> return ()")))
                                 {- text "pushContext (fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$ -}
       -- we use 'words "blah blah2 blah3"' to keep ghc from inlining the list, which makes compiling take a long time
       listDef (n, list) = text $ listName n ++ " = Set.fromList $ words $ " ++
@@ -246,7 +236,7 @@ mkParser syntax =
       regexDef re = text $ compiledRegexName re ++ " = compileRegex " ++ show re
       regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
                                                               parserType x == "RegExpr", parserDynamic x == False]
-  in  vcat $ intersperse (text "") $ [name, exts, mainFunction, parseExpression, mainParser, initState, sourceLineParser,
+  in  vcat $ intersperse (text "") $ [name, exts, mainFunction, lineParser, parseExpression, initState,
                                       endLineParser, withAttr, parseExpressionInternal, lists, regexes,
                                       defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextNull, contextCatchAll]
 

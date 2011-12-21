@@ -23,9 +23,9 @@ languagesByFilename :: FilePath -> [String]
 languagesByFilename fn = [lang | (lang, globs) <- languageExtensions, matchGlobs fn globs]
 
 -- | Highlight source code using a specified syntax definition.
-highlightAs :: String                        -- ^ Language syntax
-            -> String                        -- ^ Source code to highlight
-            -> Either String [SourceLine]    -- ^ Either error message or result
+highlightAs :: String         -- ^ Language syntax
+            -> String         -- ^ Source code to highlight
+            -> [SourceLine]   -- ^ List of highlighted source lines
 highlightAs lang =
   let lang'  = map toLower lang
       lang'' = if lang' `elem` map (map toLower) languages
@@ -35,4 +35,4 @@ highlightAs lang =
                             _    -> lang'
   in  case lang'' of
         @cases@
-        _ -> (\_ -> Left ("Unknown language: " ++ lang))
+        _ -> map (\l -> [(NormalTok, l)]) . lines

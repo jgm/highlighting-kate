@@ -126,9 +126,7 @@ hlHtml frag fname opts sty lang code =
  if frag
     then putStrLn $ renderHtml fragment
     else putStrLn $ renderHtml $ H.head (pageTitle >> metadata >> css) >> H.body (toHtml fragment)
-  where fragment = case highlightAs lang code of
-                    Right result -> formatAsHtml opts lang result
-                    Left  e      -> error $ show e
+  where fragment = formatAsHtml opts lang $ highlightAs lang code
         css' = highlightingCss sty
         css = H.style ! A.type_ "text/css" $ toHtml css'
         pageTitle = H.title $ toHtml fname
@@ -148,9 +146,7 @@ hlLaTeX frag fname opts sty lang code =
     else putStrLn $ "\\documentclass{article}\n\\usepackage[margin=1in]{geometry}\n" ++
                     macros ++ pageTitle ++
                     "\n\\begin{document}\n\\maketitle\n" ++  fragment ++ "\n\\end{document}"
-  where fragment = case highlightAs lang code of
-                    Right result -> formatAsLaTeX opts lang result
-                    Left  e      -> error $ show e
+  where fragment = formatAsLaTeX opts lang $ highlightAs lang code
         macros = highlightingLaTeXMacros sty
         pageTitle = "\\title{" ++ fname ++ "}\n"
 
