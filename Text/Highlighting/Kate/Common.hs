@@ -170,7 +170,7 @@ pAnyChar :: [Char] -> KateParser [Char]
 pAnyChar chars = oneOf chars >>= return . (:[])
 
 pDefault :: KateParser [Char]
-pDefault = noneOf "\n" >>= return . (:[])
+pDefault = satisfy (/= '\n') >>= return . (:[])
 
 -- The following alternative gives a 25% speed improvement, but it's possible
 -- that it won't work for all syntaxes:
@@ -265,7 +265,7 @@ pHlCStringChar :: KateParser [Char]
 pHlCStringChar = try $ do 
   char '\\'
   (oneOf "abefnrtv\"'?\\" >>= return  . (\x -> ['\\',x]))
-    <|> (do a <- oneOf "xX"
+    <|> (do a <- satisfy (\c -> c == 'x' || c == 'X')
             b <- many1 hexDigit
             return ('\\':a:b))
     <|> (do a <- char '0'
@@ -282,14 +282,14 @@ pHlCChar = try $ do
 pRangeDetect :: Char -> Char -> KateParser [Char]
 pRangeDetect startChar endChar = try $ do
   char startChar
-  body <- manyTill (noneOf ['\n', endChar]) (char endChar)
+  body <- manyTill (satisfy $ \c -> c /= '\n' && c /= endChar) (char endChar)
   return $ startChar : (body ++ [endChar])
 
 pLineContinue :: KateParser String
 pLineContinue = try $ string "\\\n"
 
 pDetectSpaces :: KateParser [Char]
-pDetectSpaces = many1 (oneOf "\t ")
+pDetectSpaces = many1 (satisfy $ \c -> c == ' ' || c == '\t')
 
 pDetectIdentifier :: KateParser [Char]
 pDetectIdentifier = do
