@@ -30,6 +30,8 @@ module Text.Highlighting.Kate ( highlightAs
                               , FormatOption (..)
                               , defaultHighlightingCss
                               , defaultLaTeXMacros
+                              , highlightingCss
+                              , highlightingLaTeXMacros
                               , SourceLine
                               , Token
                               , TokenType (..)
@@ -37,10 +39,15 @@ module Text.Highlighting.Kate ( highlightAs
                               , Color (..)
                               , Style (..)
                               , highlightingKateVersion
+                              , pygments
+                              , espresso
+                              , tango
+                              , kate
                               ) where
-import Text.Highlighting.Kate.Format ( formatAsHtml, formatAsLaTeX, FormatOption (..), defaultHighlightingCss, defaultLaTeXMacros )
-import Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension, languagesByFilename )
-import Text.Highlighting.Kate.Definitions ( SourceLine, Token, TokenType(..), TokenStyle(..), Style(..), Color(..) )
+import Text.Highlighting.Kate.Format
+import Text.Highlighting.Kate.Styles
+import Text.Highlighting.Kate.Syntax
+import Text.Highlighting.Kate.Definitions
 import Data.Version (showVersion)
 import Paths_highlighting_kate (version)
 

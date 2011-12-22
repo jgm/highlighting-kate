@@ -150,6 +150,7 @@ Library
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Definitions
+                     Text.Highlighting.Kate.Styles
                      Text.Highlighting.Kate.Format
                      Text.Highlighting.Kate.Syntax.Actionscript
                      Text.Highlighting.Kate.Syntax.Ada
