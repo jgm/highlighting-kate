@@ -116,6 +116,9 @@ main = do
   syntaxFileTemplate <- liftM toString $ B.readFile (syntaxFile <.> "in")
   let filledTemplate = fillTemplate 0 [("imports",imports),
                                        ("languages",show names),
+                                       ("supportedlanguages",
+                                         intercalate ", " $ map (\x ->
+                                          "@" ++ map toLower x ++ "@") names),
                                        ("languageExtensions",languageExtensions),
                                        ("cases",cases)] syntaxFileTemplate
   B.writeFile syntaxFile $ fromString filledTemplate

@@ -1,3 +1,15 @@
+{- |
+   Module      : Text.Highlighting.Kate.Syntax
+   Copyright   : Copyright (C) 2008-2011 John MacFarlane
+   License     : GNU GPL, version 2 or above
+
+   Maintainer  : John MacFarlane <jgm@berkeley.edu>
+   Stability   : alpha
+   Portability : portable
+
+Token lexer for various languages.
+-}
+
 module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension,
                                        languagesByFilename ) where
 import Data.Char (toLower)
@@ -23,6 +35,7 @@ languagesByFilename :: FilePath -> [String]
 languagesByFilename fn = [lang | (lang, globs) <- languageExtensions, matchGlobs fn globs]
 
 -- | Highlight source code using a specified syntax definition.
+-- Supported languages: @supportedlanguages@.
 highlightAs :: String         -- ^ Language syntax
             -> String         -- ^ Source code to highlight
             -> [SourceLine]   -- ^ List of highlighted source lines
