@@ -15,6 +15,7 @@ all: prep
 	@echo "You may now use cabal to build the package."
 
 prep: ParseSyntaxFiles $(XMLS)
+	rm -r Text/Highlighting/Kate/Syntax/*
 	./ParseSyntaxFiles xml
 
 ParseSyntaxFiles: ParseSyntaxFiles.hs
