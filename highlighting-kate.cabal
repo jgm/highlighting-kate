@@ -152,6 +152,8 @@ Library
                      Text.Highlighting.Kate.Definitions
                      Text.Highlighting.Kate.Styles
                      Text.Highlighting.Kate.Format
+  Other-Modules:     Text.Highlighting.Kate.Common
+                     Paths_highlighting_kate
                      Text.Highlighting.Kate.Syntax.Actionscript
                      Text.Highlighting.Kate.Syntax.Ada
                      Text.Highlighting.Kate.Syntax.Alert
@@ -243,8 +245,6 @@ Library
                      Text.Highlighting.Kate.Syntax.Xul
                      Text.Highlighting.Kate.Syntax.Yacc
                      Text.Highlighting.Kate.Syntax.Yaml
-  Other-Modules:     Text.Highlighting.Kate.Common
-                     Paths_highlighting_kate
   -- disable optimizations; it doesn't hurt performance much and
   -- massively improves compilation speed and memory usage
   Ghc-Options:       -W -O0
