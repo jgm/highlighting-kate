@@ -87,7 +87,6 @@ Currently, the following languages/formats are supported:
 - Texinfo
 - Verilog
 - Vhdl
-- Xharbour
 - Xml
 - Xorg
 - Xslt
@@ -150,10 +149,7 @@ or
 
     runghc ParseSyntaxFiles.hs xml
 
-Note that ParseSyntaxFiles.hs requires the HXT package (>= 9.0.0). If you
-added or removed a syntax definition, you will also need to
-update the Extra-Source-Files and Exposed-Modules sections of
-highlighting-kate.cabal before recompiling using 'cabal install'.
+Note that ParseSyntaxFiles.hs requires the HXT package (>= 9.0.0).
 
 To get the current Kate syntax highlighting files, clone the kate
 repository:

@@ -38,6 +38,7 @@ import Data.Char (ord)
 import Text.Highlighting.Kate.Definitions
 import qualified Data.ByteString as B
 import Data.ByteString.UTF8 (fromString, toString)
+import Text.Regex.Posix ((=~))
 
 data SyntaxDefinition =
   SyntaxDefinition { synLanguage      :: String
@@ -122,6 +123,15 @@ main = do
                                        ("languageExtensions",languageExtensions),
                                        ("cases",cases)] syntaxFileTemplate
   B.writeFile syntaxFile $ fromString filledTemplate
+  -- now put modules in cabal file
+  copyFile "highlighting-kate.cabal" "highlighting-kate.cabal.orig"
+  cabalLines <- lines `fmap` readFile "highlighting-kate.cabal.orig"
+  let (front,rest) = break (=~ "Text\\.Highlighting\\.Kate\\.Syntax\\.") cabalLines
+  let end = dropWhile (=~ "Text\\.Highlighting\\.Kate\\.Syntax\\.") rest
+  let toMod n = replicate 21 ' ' ++ "Text.Highlighting.Kate.Syntax." ++ n
+  let newCabalLines = front ++ (map toMod names) ++ end
+  writeFile "highlighting-kate.cabal" $ unlines newCabalLines
+  putStrLn "Modified highlighting-kate.cabal (original -> highlighting-kate.cabal.orig)"
 
 processOneFile :: FilePath -> IO ()
 processOneFile src = do
