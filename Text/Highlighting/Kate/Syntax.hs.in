@@ -35,6 +35,8 @@ languagesByFilename :: FilePath -> [String]
 languagesByFilename fn = [lang | (lang, globs) <- languageExtensions, matchGlobs fn globs]
 
 -- | Highlight source code using a specified syntax definition.
+-- The parsers read the input lazily and parse line by line;
+-- results are returned immediately.
 -- Supported languages: @supportedlanguages@.
 highlightAs :: String         -- ^ Language syntax
             -> String         -- ^ Source code to highlight
