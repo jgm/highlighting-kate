@@ -164,10 +164,13 @@ subDynamic :: [Char] -> KateParser [Char]
 subDynamic ('%':x:xs) | isDigit x = do
   captures <- getState >>= return . synStCaptures
   let capNum = read [x]
+  let escapeRegexChar c | c `elem` "^$\\[](){}*+.?" = ['\\',c]
+                        | otherwise = [c]
+  let escapeRegex = concatMap escapeRegexChar
   let replacement = if length captures < capNum
                        then ['%',x]
                        else captures !! (capNum - 1)
-  subDynamic xs >>= return . (replacement ++)
+  subDynamic xs >>= return . (escapeRegex replacement ++)
 subDynamic (x:xs) = subDynamic xs >>= return . (x:)
 subDynamic "" = return ""
 
