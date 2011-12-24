@@ -21,7 +21,7 @@ import Text.Printf
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Data.Monoid
-import Data.List (intersperse)
+import Data.List (intersperse, intercalate)
 import Control.Monad (mplus)
 import Data.Char (isSpace)
 
@@ -45,7 +45,7 @@ formatAsLaTeX :: [FormatOption]  -- ^ Options
               -> String
 formatAsLaTeX opts _ lines' =
   let startNum = getStartNum opts
-      code = unlines $ map sourceLineToLaTeX lines'
+      code = intercalate "\n" $ map sourceLineToLaTeX lines'
   in  if OptInline `elem` opts
          then "|" ++ code ++ "|"
          else unlines $
