@@ -264,7 +264,7 @@ mkRules :: SyntaxDefinition -> SyntaxContext -> Doc
 mkRules syntax context =
   let fallthroughParser = if contFallthrough context
                              then [parens (switchContext (contFallthroughContext context) (<> text " >> ") <>
-                                   text "return (NormalTok, \"\")")]
+                                   text "currentContext >>= parseRules")]
                              else []
   in  text ("parseRules " ++ show (contName context) ++ " =") $$
       if null (contParsers context) && null fallthroughParser
