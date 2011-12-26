@@ -101,9 +101,10 @@ main = do
   if not (lang `elem` (map (map toLower) languages))
      then hPutStrLn stderr ("Unknown syntax: " ++ lang) >> exitWith (ExitFailure 4)
      else return ()
-  let highlightOpts = [OptTitleAttributes | TitleAttributes `elem` opts] ++
-                      [OptNumberLines | NumberLines `elem` opts] ++
-                      [OptLineAnchors | NumberLines `elem` opts]
+  let highlightOpts = defaultFormatOpts{ titleAttributes = TitleAttributes `elem` opts
+                                       , numberLines = NumberLines `elem` opts
+                                       , lineAnchors = NumberLines `elem` opts
+                                       }
   let fragment = Fragment `elem` opts
   let fname = case fnames of
                     []    -> ""
@@ -116,7 +117,7 @@ main = do
 
 hlHtml :: Bool               -- ^ Fragment
       -> FilePath            -- ^ Filename
-      -> [FormatOption]
+      -> FormatOptions
       -> Style
       -> String              -- ^ language
       -> String              -- ^ code
@@ -125,16 +126,15 @@ hlHtml frag fname opts sty lang code =
  if frag
     then putStrLn $ renderHtml fragment
     else putStrLn $ renderHtml $ H.head (pageTitle >> metadata >> css) >> H.body (toHtml fragment)
-  where fragment = formatAsHtml opts lang $ highlightAs lang code
-        css' = highlightingCss sty
-        css = H.style ! A.type_ "text/css" $ toHtml css'
+  where fragment = formatHtmlBlock opts $ highlightAs lang code
+        css = styleToHtml sty
         pageTitle = H.title $ toHtml fname
         metadata = H.meta ! A.httpEquiv "Content-Type" ! A.content "text/html; charset=UTF-8" >>
                     H.meta ! A.name "generator" ! A.content "highlight-kate"
 
 hlLaTeX :: Bool               -- ^ Fragment
         -> FilePath            -- ^ Filename
-        -> [FormatOption]
+        -> FormatOptions
         -> Style
         -> String              -- ^ language
         -> String              -- ^ code
@@ -145,8 +145,8 @@ hlLaTeX frag fname opts sty lang code =
     else putStrLn $ "\\documentclass{article}\n\\usepackage[margin=1in]{geometry}\n" ++
                     macros ++ pageTitle ++
                     "\n\\begin{document}\n\\maketitle\n" ++  fragment ++ "\n\\end{document}"
-  where fragment = formatAsLaTeX opts lang $ highlightAs lang code
-        macros = highlightingLaTeXMacros sty
+  where fragment = formatLaTeXBlock opts $ highlightAs lang code
+        macros = styleToLaTeX sty
         pageTitle = "\\title{" ++ fname ++ "}\n"
 
 

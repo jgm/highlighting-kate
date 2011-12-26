@@ -10,16 +10,21 @@
 This helper module exports the main highlighting and formatting
 functions.
 
-A typical application will combine a highlighter and a formatter:
+A typical application will combine a highlighter and a formatter.
+This one reads ruby code from stdin and writes HTML:
 
 > import Text.Highlighting.Kate
-> import Text.Blaze.Renderer.String
+> import Text.Blaze.Renderer.String (renderHtml)
+> import Text.Blaze (toHtml)
+> import Text.Blaze.Html5 as H
 >
 > main = do
 >   code <- getContents
 >   putStrLn $ renderHtml
->            $ formatAsHtml [OptNumberLines] "ruby"
->            $ highlightAs "ruby" code
+>            $ do H.head (styleToHtml tango)
+>                 H.body $ toHtml
+>                        $ formatHtmlBlock defaultFormatOpts
+>                        $ highlightAs "ruby" code
 
 -}
 
@@ -27,20 +32,24 @@ module Text.Highlighting.Kate ( highlightAs
                               , languages
                               , languagesByExtension
                               , languagesByFilename
-                              , formatAsHtml
-                              , formatAsLaTeX
-                              , FormatOption (..)
-                              , defaultHighlightingCss
-                              , defaultLaTeXMacros
-                              , highlightingCss
-                              , highlightingLaTeXMacros
+                              , highlightingKateVersion
+                              -- * Basic types
                               , SourceLine
                               , Token
                               , TokenType (..)
                               , TokenStyle (..)
                               , Color (..)
+                              -- * Formatting
+                              , FormatOptions (..)
+                              , formatHtmlInline
+                              , formatHtmlBlock
+                              , styleToHtml
+                              , formatLaTeXInline
+                              , formatLaTeXBlock
+                              , styleToLaTeX
+                              , defaultFormatOpts
+                              -- * Styles
                               , Style (..)
-                              , highlightingKateVersion
                               , pygments
                               , espresso
                               , tango

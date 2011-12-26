@@ -7,15 +7,16 @@
    Stability   : alpha
    Portability : portable
 
-Formatters that convert a list of annotated source lines to various output formats.
+Formatters that convert a list of annotated source lines to various output
+formats.
 -}
 
 module Text.Highlighting.Kate.Format (
-           formatAsHtml, formatAsLaTeX, FormatOption (..),
-           highlightingCss, highlightingLaTeXMacros, defStyle,
-           defaultHighlightingCss, defaultLaTeXMacros ) where
+         FormatOptions(..), defaultFormatOpts,
+         formatHtmlInline, formatHtmlBlock, styleToHtml,
+         formatLaTeXInline, formatLaTeXBlock, styleToLaTeX
+         ) where
 import Text.Highlighting.Kate.Definitions
-import Text.Highlighting.Kate.Styles ( pygments )
 import Text.Blaze
 import Text.Printf
 import qualified Text.Blaze.Html5 as H
@@ -25,97 +26,43 @@ import Data.List (intersperse, intercalate)
 import Control.Monad (mplus)
 import Data.Char (isSpace)
 
--- | Options for formatters.
-data FormatOption = OptNumberLines     -- ^ Number lines
-                  | OptNumberFrom Int  -- ^ Number of first line
-                  | OptLineAnchors     -- ^ Anchors on each line number
-                  | OptTitleAttributes -- ^ Include title attributes
-                  | OptInline          -- ^ Format as span-level, not block-level element
-                  deriving (Eq, Show, Read)
+-- | Options for formatting source code.
+data FormatOptions = FormatOptions{
+         numberLines     :: Bool    -- ^ Number lines
+       , startNumber     :: Int     -- ^ Number of first line
+       , lineAnchors     :: Bool    -- ^ Anchors on each line number
+       , titleAttributes :: Bool    -- ^ Html titles with token types
+       } deriving (Eq, Show, Read)
 
+defaultFormatOpts :: FormatOptions
+defaultFormatOpts = FormatOptions{
+                      numberLines = False
+                    , startNumber = 1
+                    , lineAnchors = False
+                    , titleAttributes = False
+                    }
 
---
--- LaTeX
---
+-- | Format tokens using HTML spans inside @code@ tags. For example,
+-- A @KeywordTok@ is rendered as a span with class @kw@.
+-- Short class names correspond to 'TokenType's as follows:
+-- 'KeywordTok' = @kw@, 'DataTypeTok' = @dt@,
+-- 'DecValTok' = @dv@, 'BaseNTok' = @bn@, 'FloatTok' = @fl@,
+-- 'CharTok' = @ch@, 'StringTok' = @st@, 'CommontTok' = @co@,
+-- 'OtherTok' = @ot@, 'AlertTok' = @al@, 'FunctionTok' = @fu@,
+-- 'RegionMarkerTok' = @re@, 'ErrorTok' = @er@. A 'NormalTok'
+-- is not marked up at all.
+formatHtmlInline :: FormatOptions -> [SourceLine] -> Html
+formatHtmlInline opts = (H.code ! A.class_ (toValue "sourceCode"))
+                                . mconcat . intersperse (toHtml "\n")
+                                . map (sourceLineToHtml opts)
 
--- | Format a list of highlighted @SourceLine@s as LaTeX.
-formatAsLaTeX :: [FormatOption]  -- ^ Options
-              -> String          -- ^ Language (not used, but here for parallelism with formatasHtml)
-              -> [SourceLine]    -- ^ Source lines to format
-              -> String
-formatAsLaTeX opts _ lines' =
-  let startNum = getStartNum opts
-      code = intercalate "\n" $ map sourceLineToLaTeX lines'
-  in  if OptInline `elem` opts
-         then "|" ++ code ++ "|"
-         else unlines $
-              ["\\begin{Shaded}"
-              ,"\\begin{Highlighting}[" ++
-               (if OptNumberLines `elem` opts
-                   then "numbers=left," ++
-                        (if startNum == 1
-                            then ""
-                            else ",firstnumber=" ++ show startNum) ++ ","
-                   else "") ++ "]"
-              ,code
-              ,"\\end{Highlighting}"
-              ,"\\end{Shaded}"]
-
-tokenToLaTeX :: Token -> String
-tokenToLaTeX (NormalTok, txt) | all isSpace txt = escapeLaTeX txt
-tokenToLaTeX (toktype, txt)   = '\\':(show toktype ++ "{" ++ escapeLaTeX txt ++ "}")
-
-escapeLaTeX :: String -> String
-escapeLaTeX = concatMap escapeLaTeXChar
-  where escapeLaTeXChar '\\' = "\\textbackslash{}"
-        escapeLaTeXChar '{'  = "\\{"
-        escapeLaTeXChar '}'  = "\\}"
-        escapeLaTeXChar '|'  = "\\textbar{}" -- used in inline verbatim
-        escapeLaTeXChar x    = [x]
-
-sourceLineToLaTeX :: SourceLine -> String
-sourceLineToLaTeX contents = concatMap tokenToLaTeX contents
-
-
---
--- HTML
---
-
--- | Format a list of highlighted @SourceLine@s as Html.
-formatAsHtml :: [FormatOption]  -- ^ Options
-              -> String          -- ^ Language
-              -> [SourceLine]    -- ^ Source lines to format
-              -> Html
-formatAsHtml opts lang lines =
-  let startNum = getStartNum opts
-      numberOfLines = length lines
-      code = H.code ! A.class_ (toValue $ unwords ["sourceCode", lang])
-                    $ mconcat $ intersperse (toHtml "\n") $ map (sourceLineToHtml opts) lines
-  in  if OptInline `elem` opts
-         then code
-         else if OptNumberLines `elem` opts
-                 then let lnTitle = A.title (toValue "Click to toggle line numbers")
-                          lnOnClick = A.onclick $ toValue
-                                                $ "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
-                          nums = H.td ! A.class_ (toValue "lineNumbers") ! lnTitle ! lnOnClick
-                                      $ H.pre
-                                      $ mapM_ lineNum [startNum..(startNum + numberOfLines - 1)]
-                          lineNum n = if OptLineAnchors `elem` opts
-                                         then (H.a ! A.id (toValue $ show n) $ toHtml $ show n)
-                                               >> toHtml "\n"
-                                         else toHtml $ show n ++ "\n"
-                          sourceCode = H.td ! A.class_ (toValue "sourceCode")
-                                            $ H.pre ! A.class_ (toValue "sourceCode") $ code
-                      in  H.table ! A.class_ (toValue "sourceCode") $ H.tr ! A.class_ (toValue "sourceCode") $ nums >> sourceCode
-                 else H.pre ! A.class_ (toValue "sourceCode") $ code
-
-tokenToHtml :: [FormatOption] -> Token -> Html
-tokenToHtml _ (NormalTok, txt)    = toHtml txt
-tokenToHtml opts (toktype, txt)  =
-  titleize $ H.span ! A.class_ (toValue $ short toktype) $ toHtml txt
-    where titleize x = if OptTitleAttributes `elem` opts
-                          then x ! A.title (toValue $ show toktype)
-                          else x
+tokenToHtml :: FormatOptions -> Token -> Html
+tokenToHtml _ (NormalTok, txt)  = toHtml txt
+tokenToHtml opts (toktype, txt) =
+  if titleAttributes opts
+     then sp ! A.title (toValue $ show toktype)
+     else sp
+   where sp = H.span ! A.class_ (toValue $ short toktype) $ toHtml txt
 
 short :: TokenType -> String
 short KeywordTok        = "kw"
@@ -133,33 +80,56 @@ short RegionMarkerTok   = "re"
 short ErrorTok          = "er"
 short NormalTok         = ""
 
-sourceLineToHtml :: [FormatOption] -> SourceLine -> Html
+sourceLineToHtml :: FormatOptions -> SourceLine -> Html
 sourceLineToHtml opts contents = mapM_ (tokenToHtml opts) contents
 
-getStartNum :: [FormatOption] -> Int
-getStartNum [] = 1
-getStartNum (OptNumberFrom n : _) = n
-getStartNum (_:xs) = getStartNum xs
+formatHtmlBlockPre :: FormatOptions -> [SourceLine] -> Html
+formatHtmlBlockPre opts =
+  (H.pre ! A.class_ (toValue "sourceCode")) . formatHtmlInline opts
 
+-- | Format tokens as an HTML @pre@ block. If line numbering is
+-- selected, this is put into a table row with line numbers in the
+-- left cell.
+formatHtmlBlock :: FormatOptions -> [SourceLine] -> Html
+formatHtmlBlock opts ls =
+  if numberLines opts
+     then H.table ! A.class_ sourceCode
+                  $ H.tr ! A.class_ sourceCode
+                  $ nums >> source
+     else pre
+   where sourceCode = toValue "sourceCode"
+         pre = formatHtmlBlockPre opts ls
+         source = H.td ! A.class_ sourceCode $ pre
+         lnTitle = A.title (toValue "Click to toggle line numbers")
+         lnOnClick = A.onclick $ toValue
+                               $ "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
+         startNum = startNumber opts
+         nums = H.td ! A.class_ (toValue "lineNumbers") ! lnTitle ! lnOnClick
+                     $ H.pre
+                     $ mapM_ lineNum [startNum..(startNum + length ls - 1)]
+         lineNum n = if lineAnchors opts
+                        then (H.a ! A.id (toValue $ show n) $ toHtml $ show n)
+                              >> toHtml "\n"
+                        else toHtml $ show n ++ "\n"
 
-defaultHighlightingCss :: String
-defaultHighlightingCss = highlightingCss pygments
-
-highlightingCss :: Style -> String
-highlightingCss f = unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
-  where colorspec = case (defaultColor f, backgroundColor f) of
-                         (Nothing, Nothing) -> []
-                         (Just c, Nothing)  -> ["pre, code, table.sourceCode { color: " ++ fromColor c ++ "; }"]
-                         (Nothing, Just c)  -> ["pre, code, table.sourceCode { background-color: " ++ fromColor c ++ "; }"]
-                         (Just c1, Just c2) -> ["pre, code, table.sourceCode { color: " ++ fromColor c1 ++ "; background-color: " ++
-                                                 fromColor c2 ++ "; }"]
-        tablespec = [
-          "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, pre.sourceCode {"
-         ,"  margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }"
-         ,"td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA;"
-         ,"  padding-right: 4px; padding-left: 4px; }"
-         ,"td.sourceCode { padding-left: 5px; }"
-         ]
+-- | Returns an HTML @style@ block with definitions for
+-- formatting highlighted code according to the given style.
+styleToHtml :: Style -> Html
+styleToHtml f = H.style ! A.type_ (toValue "text/css") $ toHtml
+  $ unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
+   where colorspec = case (defaultColor f, backgroundColor f) of
+                          (Nothing, Nothing) -> []
+                          (Just c, Nothing)  -> ["pre, code, table.sourceCode { color: " ++ fromColor c ++ "; }"]
+                          (Nothing, Just c)  -> ["pre, code, table.sourceCode { background-color: " ++ fromColor c ++ "; }"]
+                          (Just c1, Just c2) -> ["pre, code, table.sourceCode { color: " ++ fromColor c1 ++ "; background-color: " ++
+                                                  fromColor c2 ++ "; }"]
+         tablespec = [
+           "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, pre.sourceCode {"
+          ,"  margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }"
+          ,"td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA;"
+          ,"  padding-right: 4px; padding-left: 4px; }"
+          ,"td.sourceCode { padding-left: 5px; }"
+          ]
 
 toCss :: (TokenType, TokenStyle) -> String
 toCss (t,tf) = "code > span." ++ short t ++ " { "
@@ -171,17 +141,72 @@ toCss (t,tf) = "code > span." ++ short t ++ " { "
         stylespec  = if tokenItalic tf then "font-style: italic; " else ""
         decorationspec = if tokenUnderline tf then "font-decoration: underline; " else ""
 
+formatLaTeX :: FormatOptions -> [SourceLine] -> String
+formatLaTeX _ = intercalate "\n" . map sourceLineToLaTeX
+
+-- | Formats tokens as LaTeX using custom commands inside
+-- a @\\Highlight@ command.  A @KeywordTok@ is rendered
+-- using @\\KeywordTok{..}@, and so on.
+formatLaTeXInline :: FormatOptions -> [SourceLine] -> String
+formatLaTeXInline opts ls = "\\Verb{" ++ formatLaTeX opts ls ++ "}"
+
+sourceLineToLaTeX :: SourceLine -> String
+sourceLineToLaTeX contents = concatMap tokenToLaTeX contents
+
+tokenToLaTeX :: Token -> String
+tokenToLaTeX (NormalTok, txt) | all isSpace txt = escapeLaTeX txt
+tokenToLaTeX (toktype, txt)   = '\\':(show toktype ++ "{" ++ escapeLaTeX txt ++ "}")
+
+escapeLaTeX :: String -> String
+escapeLaTeX = concatMap escapeLaTeXChar
+  where escapeLaTeXChar '\\' = "\\textbackslash{}"
+        escapeLaTeXChar '{'  = "\\{"
+        escapeLaTeXChar '}'  = "\\}"
+        escapeLaTeXChar '|'  = "\\textbar{}" -- used in inline verbatim
+        escapeLaTeXChar x    = [x]
+
+-- LaTeX
+
+-- | Format tokens as a LaTeX @Highlighting@ environment inside a
+-- @Shaded@ environment.  @Highlighting@ and @Shaded@ are
+-- defined by the macros produced by 'styleToLaTeX'.  @Highlighting@
+-- is a verbatim environment using @fancyvrb@; @\\@, @{@, and @}@
+-- have their normal meanings inside this environment, so that
+-- formatting commands work.  @Shaded@ is either nothing
+-- (if the style's background color is default) or a @snugshade@
+-- environment from @framed@, providing a background color
+-- for the whole code block, even if it spans multiple pages.
+formatLaTeXBlock :: FormatOptions -> [SourceLine] -> String
+formatLaTeXBlock opts ls = unlines
+  ["\\begin{Shaded}"
+  ,"\\begin{Highlighting}[" ++
+   (if numberLines opts
+       then "numbers=left," ++
+            (if startNumber opts == 1
+                then ""
+                else ",firstnumber=" ++ show (startNumber opts)) ++ ","
+       else "") ++ "]"
+  ,formatLaTeX opts ls
+  ,"\\end{Highlighting}"
+  ,"\\end{Shaded}"]
+
+-- | Converts a 'Style' to a set of LaTeX macro definitions,
+-- which should be placed in the document's preamble.
 -- Note: default LaTeX setup doesn't allow boldface typewriter font.
 -- To make boldface work in styles, you need to use a different typewriter
 -- font. This will work for computer modern:
--- \DeclareFontShape{OT1}{cmtt}{bx}{n}{<5><6><7><8><9><10><10.95><12><14.4><17.28><20.74><24.88>cmttb10}{}
+--
+-- > \DeclareFontShape{OT1}{cmtt}{bx}{n}{<5><6><7><8><9><10><10.95><12><14.4><17.28><20.74><24.88>cmttb10}{}
+--
 -- Or, with xelatex:
--- \usepackage{fontspec}
--- \setmainfont[SmallCapsFont={* Caps}]{Latin Modern Roman}
--- \setsansfont{Latin Modern Sans}
--- \setmonofont[SmallCapsFont={Latin Modern Mono Caps}]{Latin Modern Mono Light}
-highlightingLaTeXMacros :: Style -> String
-highlightingLaTeXMacros f = unlines $
+--
+-- > \usepackage{fontspec}
+-- > \setmainfont[SmallCapsFont={* Caps}]{Latin Modern Roman}
+-- > \setsansfont{Latin Modern Sans}
+-- > \setmonofont[SmallCapsFont={Latin Modern Mono Caps}]{Latin Modern Mono Light}
+--
+styleToLaTeX :: Style -> String
+styleToLaTeX f = unlines $
   [ "\\usepackage{color}"
   , "\\usepackage{fancyvrb}"
   , "\\DefineShortVerb[commandchars=\\\\\\{\\}]{\\|}"
@@ -220,5 +245,8 @@ macrodef defaultcol tokstyles tokt = "\\newcommand{\\" ++ show tokt ++
                     Nothing        -> x
                     Just (r, g, b) -> printf "\\textcolor[rgb]{%0.2f,%0.2f,%0.2f}{%s}" r g b x
 
-defaultLaTeXMacros :: String
-defaultLaTeXMacros = highlightingLaTeXMacros pygments
+-- formatConTeXtBlock :: FormatOptions -> String -> String
+-- formatConTeXtBlock = undefined
+
+-- styleToConTeXt :: Style -> String
+-- styleToConTeXt = undefined

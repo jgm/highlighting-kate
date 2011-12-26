@@ -34,11 +34,13 @@ languagesByExtension ext       = languagesByFilename ("*." ++ ext)
 languagesByFilename :: FilePath -> [String]
 languagesByFilename fn = [lang | (lang, globs) <- languageExtensions, matchGlobs fn globs]
 
--- | Highlight source code using a specified syntax definition.
+-- | Highlight source code. The source language may be specified
+-- by its canonical name (case-insensitive) or by a canonical
+-- extension (if unique).
 -- The parsers read the input lazily and parse line by line;
 -- results are returned immediately.
 -- Supported languages: @supportedlanguages@.
-highlightAs :: String         -- ^ Language syntax
+highlightAs :: String         -- ^ Language syntax (e.g. "haskell") or extension (e.g. "hs").
             -> String         -- ^ Source code to highlight
             -> [SourceLine]   -- ^ List of highlighted source lines
 highlightAs lang =
