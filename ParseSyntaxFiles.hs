@@ -103,36 +103,48 @@ main :: IO ()
 main = do
   files <- getArgs >>= argFiles
   destDirExists <- doesDirectoryExist destDir
-  if destDirExists
-     then return ()
-     else createDirectory destDir
+  unless destDirExists $ createDirectory destDir
   mapM_ processOneFile files
+  names <- (sort . map dropExtension . filter (isSuffixOf ".hs"))
+          `fmap` (getDirectoryContents destDir)
+  writeSyntaxFile names
+  writeCabalFile names
+
+writeSyntaxFile :: [String] -> IO ()
+writeSyntaxFile names = do
   let syntaxFile = combine libraryPath (addExtension "Syntax" "hs")
   putStrLn $ "Writing " ++ syntaxFile
   -- Get all syntax files, not only the newly generated ones.
-  names <- getDirectoryContents destDir >>= return . sort . map dropExtension . filter (isSuffixOf ".hs")
-  let imports = unlines $ map (\name -> "import qualified Text.Highlighting.Kate.Syntax." ++ name ++ " as " ++ name) names
-  let cases = unlines $ map (\name -> show (map toLower name) ++ " -> " ++ name ++ ".highlight") names
-  let languageExtensions = '[' :
-        (intercalate ", " $ map (\name -> "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names) ++ "]"
+  let imports = unlines $ map (\name ->
+                 "import qualified Text.Highlighting.Kate.Syntax." ++ name ++
+                 " as " ++ name) names
+  let cases = unlines $ map (\name ->
+                 show (map toLower name) ++ " -> " ++ name ++ ".highlight")
+                 names
+  let languageExtensions = "[" ++ (intercalate ", " $ map (\name ->
+        "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names) ++ "]"
   syntaxFileTemplate <- liftM toString $ B.readFile (syntaxFile <.> "in")
-  let filledTemplate = fillTemplate 0 [("imports",imports),
-                                       ("languages",show names),
-                                       ("supportedlanguages",
-                                         intercalate ", " $ map (\x ->
-                                          "@" ++ map toLower x ++ "@") names),
-                                       ("languageExtensions",languageExtensions),
-                                       ("cases",cases)] syntaxFileTemplate
+  let filledTemplate = fillTemplate 0
+                          [("imports",imports),
+                           ("languages",show names),
+                           ("supportedlanguages", intercalate ", " $ map (\x ->
+                                "@" ++ map toLower x ++ "@") names),
+                           ("languageExtensions",languageExtensions),
+                           ("cases",cases)] syntaxFileTemplate
   B.writeFile syntaxFile $ fromString filledTemplate
-  -- now put modules in cabal file
+
+writeCabalFile :: [String] -> IO ()
+writeCabalFile names = do
   copyFile "highlighting-kate.cabal" "highlighting-kate.cabal.orig"
   cabalLines <- lines `fmap` readFile "highlighting-kate.cabal.orig"
-  let (front,rest) = break (=~ "Text\\.Highlighting\\.Kate\\.Syntax\\.") cabalLines
+  let (front,rest) = break (=~ "Text\\.Highlighting\\.Kate\\.Syntax\\.")
+                     cabalLines
   let end = dropWhile (=~ "Text\\.Highlighting\\.Kate\\.Syntax\\.") rest
   let toMod n = replicate 21 ' ' ++ "Text.Highlighting.Kate.Syntax." ++ n
   let newCabalLines = front ++ (map toMod names) ++ end
   writeFile "highlighting-kate.cabal" $ unlines newCabalLines
-  putStrLn "Modified highlighting-kate.cabal (original -> highlighting-kate.cabal.orig)"
+  putStrLn "Modified highlighting-kate.cabal."
+  putStrLn "Backed up original as highlighting-kate.cabal.orig."
 
 processOneFile :: FilePath -> IO ()
 processOneFile src = do
