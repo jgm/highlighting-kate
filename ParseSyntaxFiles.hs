@@ -151,16 +151,20 @@ processOneFile src = do
   [syntax] <- runX $ application src
   let name = nameFromPath src
   let outFile = joinPath [libraryPath, "Syntax", addExtension name "hs"]
+  let isIncludeRules p = parserType p == "IncludeRules" && "##" `isPrefixOf`
+                              parserContext p
   let includeLangs = nub $ filter (/= name) $ map (drop 2 . parserContext) $
-        filter (\p -> (parserType p) == "IncludeRules" && "##" `isPrefixOf` (parserContext p)) $
-        concatMap contParsers $ synContexts syntax
-  let includeImports = map (("import qualified " ++) . langNameToModule) includeLangs
+        filter isIncludeRules $ concatMap contParsers $ synContexts syntax
+  let includeImports = map (("import qualified " ++) . langNameToModule)
+                        includeLangs
   putStrLn $ "Writing " ++ outFile
   B.writeFile outFile $ fromString $
-           "{- This module was generated from data in the Kate syntax highlighting file " ++ (takeFileName src) ++ ", version " ++
-           synVersion syntax ++ ",\n" ++
-           "   by  " ++ synAuthor syntax ++ " -}\n\n" ++
-           "module Text.Highlighting.Kate.Syntax." ++ name ++ " ( highlight, parseExpression, syntaxName, syntaxExtensions ) where\n\
+           "{- This module was generated from data in the Kate syntax\n\
+           \   highlighting file " ++ (takeFileName src) ++ ", version " ++
+           synVersion syntax ++ ", by " ++ synAuthor syntax ++ " -}\n\n" ++
+           "module Text.Highlighting.Kate.Syntax." ++ name ++ "\n          " ++
+           "(highlight, parseExpression, syntaxName, syntaxExtensions)" ++
+           "\nwhere\n\
            \import Text.Highlighting.Kate.Definitions\n\
            \import Text.Highlighting.Kate.Common\n" ++
            unlines includeImports ++
