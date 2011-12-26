@@ -23,7 +23,7 @@ module Main where
 import Text.XML.HXT.Core
 import Control.Arrow
 import Control.Arrow.ArrowList
-import Control.Monad (liftM)
+import Control.Monad
 import Data.List
 import Data.Maybe
 import Data.Char (toUpper, toLower, isAlphaNum)
@@ -84,16 +84,17 @@ data SyntaxParser =
                , parserChildren          :: [SyntaxParser]
                } deriving (Read, Show)
 
--- | Converts a list of files (ending in .xml) and directories containing .xml files
--- into a list of .xml files.
+-- | Converts a list of files (ending in .xml) and directories containing
+-- .xml files into a list of .xml files.
 argFiles :: [String] -> IO [String]
-argFiles [] = error "Specify paths of xml files and/or directories containing xml syntax files."
+argFiles [] = error "Specify paths of xml files and/or directories."
 argFiles args = do
   let isXmlFile x = isSuffixOf ".xml" x
   let (files, dirs) = partition isXmlFile args
-  dirContents <- mapM (\dir -> getDirectoryContents dir >>= return . map (combine dir) . filter isXmlFile) dirs
+  dirContents <- forM dirs $ \dir -> do
+                   dc <- getDirectoryContents dir
+                   return $ map (combine dir) $ filter isXmlFile dc
   return $ nub (files ++ concat dirContents)
-
 
 libraryPath = joinPath ["Text", "Highlighting", "Kate"]
 destDir = joinPath [libraryPath, "Syntax"]
