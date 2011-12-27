@@ -207,7 +207,7 @@ mkParser syntax =
       withAttr = text "withAttribute attr txt = do" $$ (nest 2 $
                    text "when (null txt) $ fail \"Parser matched no text\"" $$
                    text "updateState $ \\st -> st { synStPrevChar = last txt" $$
-                   text "                          , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
+                   text "                        , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
                    text "return (attr, txt)")
       parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $
                                   text "context <- currentContext" $$
