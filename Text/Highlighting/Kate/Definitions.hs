@@ -108,8 +108,10 @@ instance FromColor (Word8, Word8, Word8) where
   fromColor (RGB r g b) = (r, g, b)
 
 data Style = Style {
-    tokenStyles     :: [(TokenType, TokenStyle)]
-  , defaultColor    :: Maybe Color
-  , backgroundColor :: Maybe Color
+    tokenStyles               :: [(TokenType, TokenStyle)]
+  , defaultColor              :: Maybe Color
+  , backgroundColor           :: Maybe Color
+  , lineNumberColor           :: Maybe Color
+  , lineNumberBackgroundColor :: Maybe Color
   }
 

@@ -100,11 +100,8 @@ formatHtmlBlock opts ls =
    where sourceCode = toValue "sourceCode"
          pre = formatHtmlBlockPre opts ls
          source = H.td ! A.class_ sourceCode $ pre
-         lnTitle = A.title (toValue "Click to toggle line numbers")
-         lnOnClick = A.onclick $ toValue
-                               $ "with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"
          startNum = startNumber opts
-         nums = H.td ! A.class_ (toValue "lineNumbers") ! lnTitle ! lnOnClick
+         nums = H.td ! A.class_ (toValue "lineNumbers")
                      $ H.pre
                      $ mapM_ lineNum [startNum..(startNum + length ls - 1)]
          lineNum n = if lineAnchors opts
@@ -119,15 +116,22 @@ styleToHtml f = H.style ! A.type_ (toValue "text/css") $ toHtml
   $ unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
    where colorspec = case (defaultColor f, backgroundColor f) of
                           (Nothing, Nothing) -> []
-                          (Just c, Nothing)  -> ["pre, code, table.sourceCode { color: " ++ fromColor c ++ "; }"]
-                          (Nothing, Just c)  -> ["pre, code, table.sourceCode { background-color: " ++ fromColor c ++ "; }"]
-                          (Just c1, Just c2) -> ["pre, code, table.sourceCode { color: " ++ fromColor c1 ++ "; background-color: " ++
+                          (Just c, Nothing)  -> ["pre, code { color: " ++ fromColor c ++ "; }"]
+                          (Nothing, Just c)  -> ["pre, code { background-color: " ++ fromColor c ++ "; }"]
+                          (Just c1, Just c2) -> ["pre, code { color: " ++ fromColor c1 ++ "; background-color: " ++
                                                   fromColor c2 ++ "; }"]
          tablespec = [
-           "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, pre.sourceCode {"
-          ,"  margin: 0; padding: 0; border: 0; vertical-align: baseline; border: none; }"
-          ,"td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA;"
-          ,"  padding-right: 4px; padding-left: 4px; }"
+           "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {"
+          ,"  margin: 0; padding: 0; vertical-align: baseline; border: none; }"
+          ,"table.sourceCode { " ++
+             maybe "" (\c -> "background-color: " ++ fromColor c ++ "; ") (backgroundColor f) ++
+             maybe "" (\c -> "color: " ++ fromColor c ++ "; ") (defaultColor f) ++
+             "}"
+          ,"td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; " ++
+             maybe "" (\c -> "background-color: " ++ fromColor c ++ "; ") (lineNumberBackgroundColor f) ++
+             maybe "" (\c -> "color: " ++ fromColor c ++ "; ") (lineNumberColor f) ++
+             maybe "" (\c -> "border-right: 1px solid " ++ fromColor c ++ "; ") (lineNumberColor f) ++
+             "}"
           ,"td.sourceCode { padding-left: 5px; }"
           ]
 
@@ -139,7 +143,7 @@ toCss (t,tf) = "code > span." ++ short t ++ " { "
         backgroundspec = maybe "" (\col -> "background-color: " ++ fromColor col ++ "; ") $ tokenBackground tf
         weightspec = if tokenBold tf then "font-weight: bold; " else ""
         stylespec  = if tokenItalic tf then "font-style: italic; " else ""
-        decorationspec = if tokenUnderline tf then "font-decoration: underline; " else ""
+        decorationspec = if tokenUnderline tf then "text-decoration: underline; " else ""
 
 formatLaTeX :: FormatOptions -> [SourceLine] -> String
 formatLaTeX _ = intercalate "\n" . map sourceLineToLaTeX

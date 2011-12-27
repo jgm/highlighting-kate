@@ -20,6 +20,8 @@ pygments :: Style
 pygments = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
+  , lineNumberColor = toColor "#aaaaaa"
+  , lineNumberBackgroundColor = Nothing
   , tokenStyles =
     [ (KeywordTok, defStyle{ tokenColor = toColor "#007020", tokenBold = True })
     , (DataTypeTok, defStyle{ tokenColor = toColor "#902000" })
@@ -41,6 +43,8 @@ kate :: Style
 kate = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
+  , lineNumberColor = Nothing
+  , lineNumberBackgroundColor = toColor "#dddddd"
   , tokenStyles =
     [ (KeywordTok, defStyle{ tokenBold = True })
     , (DataTypeTok, defStyle{ tokenColor = toColor "#800000" })
@@ -61,6 +65,8 @@ tango :: Style
 tango = Style{
     backgroundColor = toColor "#f8f8f8"
   , defaultColor = Nothing
+  , lineNumberColor = toColor "#aaaaaa"
+  , lineNumberBackgroundColor = Nothing
   , tokenStyles =
     [ (KeywordTok, defStyle{ tokenColor = toColor "#204a87", tokenBold = True })
     , (DataTypeTok, defStyle{ tokenColor = toColor "#204a87" })
@@ -82,6 +88,8 @@ espresso :: Style
 espresso = Style{
     backgroundColor = toColor "#2A211C"
   , defaultColor = toColor "#BDAE9D"
+  , lineNumberColor = toColor "#BDAE9D"
+  , lineNumberBackgroundColor = toColor "#2A211C"
   , tokenStyles =
     [ (KeywordTok, defStyle{ tokenColor = toColor "#43A8ED", tokenBold = True })
     , (DataTypeTok, defStyle{ tokenUnderline = True })
@@ -102,6 +110,8 @@ haddock :: Style
 haddock = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
+  , lineNumberColor = toColor "#aaaaaa"
+  , lineNumberBackgroundColor = Nothing
   , tokenStyles =
     [ (KeywordTok, defStyle{ tokenColor = toColor "#0000FF" })
     , (CharTok, defStyle{ tokenColor = toColor "#008080" })
@@ -118,6 +128,8 @@ monochrome :: Style
 monochrome = Style{
     backgroundColor = Nothing
   , defaultColor = Nothing
+  , lineNumberColor = Nothing
+  , lineNumberBackgroundColor = Nothing
   , tokenStyles =
     [ (KeywordTok, defStyle{ tokenBold = True })
     , (DataTypeTok, defStyle{ tokenUnderline = True })
