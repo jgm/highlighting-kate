@@ -54,6 +54,8 @@ module Text.Highlighting.Kate ( highlightAs
                               , espresso
                               , tango
                               , kate
+                              , haddock
+                              , monochrome
                               ) where
 import Text.Highlighting.Kate.Format
 import Text.Highlighting.Kate.Styles

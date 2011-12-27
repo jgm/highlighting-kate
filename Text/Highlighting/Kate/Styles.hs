@@ -10,11 +10,12 @@
 Styles for rendering annotated source lines.
 -}
 
-module Text.Highlighting.Kate.Styles ( pygments, kate, espresso, tango )
+module Text.Highlighting.Kate.Styles ( pygments, kate, espresso, tango,
+                                       haddock, monochrome )
 where
 import Text.Highlighting.Kate.Definitions
 
--- | Style loosely based on pygments's default colors
+-- | Style based on pygments's default colors.
 pygments :: Style
 pygments = Style{
     backgroundColor = Nothing
@@ -35,7 +36,7 @@ pygments = Style{
     ]
   }
 
--- | Style loosely based on kate's default colors
+-- | Style based on kate's default colors.
 kate :: Style
 kate = Style{
     backgroundColor = Nothing
@@ -55,7 +56,7 @@ kate = Style{
     ]
   }
 
--- | Style loosely based on pygments's tango colors
+-- | Style based on pygments's tango colors.
 tango :: Style
 tango = Style{
     backgroundColor = toColor "#f8f8f8"
@@ -76,7 +77,7 @@ tango = Style{
     ]
   }
 
--- | Style loosely based on ultraviolet's espresso_libre.css
+-- | Style based on ultraviolet's espresso_libre.css (dark background).
 espresso :: Style
 espresso = Style{
     backgroundColor = toColor "#2A211C"
@@ -96,3 +97,32 @@ espresso = Style{
     ]
   }
 
+-- | Style based on haddock's source highlighting.
+haddock :: Style
+haddock = Style{
+    backgroundColor = Nothing
+  , defaultColor = Nothing
+  , tokenStyles =
+    [ (KeywordTok, defStyle{ tokenColor = toColor "#0000FF" })
+    , (CharTok, defStyle{ tokenColor = toColor "#008080" })
+    , (StringTok, defStyle{ tokenColor = toColor "#008080" })
+    , (CommentTok, defStyle{ tokenColor = toColor "#008000" })
+    , (OtherTok, defStyle{ tokenColor = toColor "#ff4000" })
+    , (AlertTok, defStyle{ tokenColor = toColor "#ff0000" })
+    , (ErrorTok, defStyle{ tokenColor = toColor "ff0000", tokenBold = True })
+    ]
+  }
+
+-- | Style with no colors.
+monochrome :: Style
+monochrome = Style{
+    backgroundColor = Nothing
+  , defaultColor = Nothing
+  , tokenStyles =
+    [ (KeywordTok, defStyle{ tokenBold = True })
+    , (DataTypeTok, defStyle{ tokenUnderline = True })
+    , (CommentTok, defStyle{ tokenItalic = True })
+    , (AlertTok, defStyle{ tokenBold = True })
+    , (ErrorTok, defStyle{ tokenBold = True })
+    ]
+  }

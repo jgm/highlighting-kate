@@ -45,11 +45,13 @@ syntaxOf (_:xs) = syntaxOf xs
 styleOf :: [Flag] -> Maybe Style
 styleOf [] = Nothing
 styleOf (Sty s : _) = case map toLower s of
-                            "pygments"  -> Just pygments
-                            "espresso"  -> Just espresso
-                            "kate"      -> Just kate
-                            "tango"     -> Just tango
-                            _           -> error $ "Unknown style: " ++ s
+                            "pygments"   -> Just pygments
+                            "espresso"   -> Just espresso
+                            "kate"       -> Just kate
+                            "tango"      -> Just tango
+                            "haddock"    -> Just haddock
+                            "monochrome" -> Just monochrome
+                            _            -> error $ "Unknown style: " ++ s
 styleOf (_ : xs) = styleOf xs
 
 formatOf :: [Flag] -> String
