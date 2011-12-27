@@ -288,6 +288,7 @@ mkParseSourceLine parseExpressionInternal pEndLine ln = do
   st <- get
   let lineName = "line " ++ show (synStLineNumber st)
   let pline = do ts <- many parseExpressionInternal
+                 updateState $ \st -> st{ synStPrevChar = '\n' }
                  pEndLine
                  s  <- getState
                  return (s, ts)
