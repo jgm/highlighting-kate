@@ -113,5 +113,5 @@ data Style = Style {
   , backgroundColor           :: Maybe Color
   , lineNumberColor           :: Maybe Color
   , lineNumberBackgroundColor :: Maybe Color
-  }
+  } deriving (Read, Show)
 
