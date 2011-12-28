@@ -221,6 +221,7 @@ mkParser syntax =
                           text ("context <- currentContext <|> (pushContext " ++ show (contName $ head $ synContexts syntax) ++
                                 " >> currentContext)") $$
                           text "result <- parseRules context" $$
+                          text "optional $ eof >> pEndLine" $$
                           text "updateState $ \\st -> st { synStLanguage = oldLang }" $$
                           text "return result")
       defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> (contName cont, labelFor syntax $ contAttribute cont)) $ synContexts syntax)
