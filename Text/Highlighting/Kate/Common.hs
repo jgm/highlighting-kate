@@ -174,12 +174,29 @@ subDynamic ('%':x:xs) | isDigit x = do
 subDynamic (x:xs) = subDynamic xs >>= return . (x:)
 subDynamic "" = return ""
 
+convertOctal :: String -> String
+convertOctal [] = ""
+convertOctal ('\\':'0':x:y:z:rest) | isOctalDigit x && isOctalDigit y && isOctalDigit z =
+  case reads ['\\','o',x,y,z] of
+        ((x,rest):_) -> x : convertOctal rest
+        _            -> '\\':'o':x:y:z: convertOctal rest
+convertOctal ('\\':x:y:z:rest) | isOctalDigit x && isOctalDigit y && isOctalDigit z =
+  case reads ['\\','o',x,y,z] of
+        ((x,rest):_) -> x : convertOctal rest
+        _            -> '\\':'o':x:y:z: convertOctal rest
+convertOctal (x:xs) = x : convertOctal xs
+
+isOctalDigit :: Char -> Bool
+isOctalDigit c = c == '0' || c == '1' || c == '2' || c == '3'
+              || c == '4' || c == '5' || c == '6' || c == '7'
+
 compileRegex :: String -> Regex
 #ifdef _PCRE_LIGHT
-compileRegex regexpStr = compile ('.' : regexpStr) [anchored]
+compileRegex regexpStr = compile ('.' : convertOctal regexpStr) [anchored]
 #else
 compileRegex regexpStr =
-  case unsafePerformIO $ compile (compAnchored) (execNotEmpty) ('.' : regexpStr) of
+  case unsafePerformIO $ compile (compAnchored) (execNotEmpty)
+       ('.' : convertOctal regexpStr) of
         Left _ -> error $ "Error compiling regex: " ++ show regexpStr
         Right r -> r
 #endif
