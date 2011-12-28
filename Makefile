@@ -14,7 +14,7 @@ all: prep
 	cabal install -fexecutable
 
 prep: ParseSyntaxFiles $(XMLS)
-	rm -r Text/Highlighting/Kate/Syntax/*
+	rm -rf Text/Highlighting/Kate/Syntax/*
 	./ParseSyntaxFiles xml
 	@echo "Syntax parsers have been generated."
 	@echo "You may now use cabal to build the package."
