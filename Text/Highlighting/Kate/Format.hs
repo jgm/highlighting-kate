@@ -28,10 +28,11 @@ import Data.Char (isSpace)
 
 -- | Options for formatting source code.
 data FormatOptions = FormatOptions{
-         numberLines     :: Bool    -- ^ Number lines
-       , startNumber     :: Int     -- ^ Number of first line
-       , lineAnchors     :: Bool    -- ^ Anchors on each line number
-       , titleAttributes :: Bool    -- ^ Html titles with token types
+         numberLines     :: Bool     -- ^ Number lines
+       , startNumber     :: Int      -- ^ Number of first line
+       , lineAnchors     :: Bool     -- ^ Anchors on each line number
+       , titleAttributes :: Bool     -- ^ Html titles with token types
+       , codeClasses     :: [String] -- ^ Additional classes for Html code tag
        } deriving (Eq, Show, Read)
 
 defaultFormatOpts :: FormatOptions
@@ -40,6 +41,7 @@ defaultFormatOpts = FormatOptions{
                     , startNumber = 1
                     , lineAnchors = False
                     , titleAttributes = False
+                    , codeClasses = []
                     }
 
 -- | Format tokens using HTML spans inside @code@ tags. For example,
@@ -52,7 +54,8 @@ defaultFormatOpts = FormatOptions{
 -- 'RegionMarkerTok' = @re@, 'ErrorTok' = @er@. A 'NormalTok'
 -- is not marked up at all.
 formatHtmlInline :: FormatOptions -> [SourceLine] -> Html
-formatHtmlInline opts = (H.code ! A.class_ (toValue "sourceCode"))
+formatHtmlInline opts = (H.code ! A.class_ (toValue $ unwords
+                                                    $ "sourceCode" : codeClasses opts))
                                 . mconcat . intersperse (toHtml "\n")
                                 . map (sourceLineToHtml opts)
 
