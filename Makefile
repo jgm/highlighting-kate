@@ -13,12 +13,16 @@ XMLS=$(glob xml/*.xml)
 all: prep
 	cabal install -fexecutable
 
-prep: ParseSyntaxFiles $(XMLS)
-	rm -rf Text/Highlighting/Kate/Syntax/*
+prep: clean ParseSyntaxFiles $(XMLS)
 	./ParseSyntaxFiles xml
 	@echo "Syntax parsers have been generated."
 	@echo "You may now use cabal to build the package."
 
 ParseSyntaxFiles: ParseSyntaxFiles.hs
-	ghc --make ParseSyntaxFiles.hs  # requires HXT >= 9.0.0
+	ghc --make -Wall ParseSyntaxFiles.hs  # requires HXT >= 9.0.0
 
+clean:
+	rm -rf Text/Highlighting/Kate/Syntax/*
+
+distclean:
+	rm -rf ParseSyntaxFiles.o ParseSyntaxFiles.hi ParseSyntaxFiles
