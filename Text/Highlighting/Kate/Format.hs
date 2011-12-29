@@ -28,11 +28,13 @@ import Data.Char (isSpace)
 
 -- | Options for formatting source code.
 data FormatOptions = FormatOptions{
-         numberLines     :: Bool     -- ^ Number lines
-       , startNumber     :: Int      -- ^ Number of first line
-       , lineAnchors     :: Bool     -- ^ Anchors on each line number
-       , titleAttributes :: Bool     -- ^ Html titles with token types
-       , codeClasses     :: [String] -- ^ Additional classes for Html code tag
+         numberLines      :: Bool     -- ^ Number lines
+       , startNumber      :: Int      -- ^ Number of first line
+       , lineAnchors      :: Bool     -- ^ Anchors on each line number
+       , titleAttributes  :: Bool     -- ^ Html titles with token types
+       , codeClasses      :: [String] -- ^ Additional classes for Html code tag
+       , containerClasses :: [String] -- ^ Additional classes for Html container tag
+                                      --   (pre or table depending on numberLines)
        } deriving (Eq, Show, Read)
 
 defaultFormatOpts :: FormatOptions
@@ -42,6 +44,7 @@ defaultFormatOpts = FormatOptions{
                     , lineAnchors = False
                     , titleAttributes = False
                     , codeClasses = []
+                    , containerClasses = []
                     }
 
 -- | Format tokens using HTML spans inside @code@ tags. For example,
@@ -87,20 +90,20 @@ sourceLineToHtml :: FormatOptions -> SourceLine -> Html
 sourceLineToHtml opts contents = mapM_ (tokenToHtml opts) contents
 
 formatHtmlBlockPre :: FormatOptions -> [SourceLine] -> Html
-formatHtmlBlockPre opts =
-  (H.pre ! A.class_ (toValue "sourceCode")) . formatHtmlInline opts
+formatHtmlBlockPre opts = H.pre . formatHtmlInline opts
 
 -- | Format tokens as an HTML @pre@ block. If line numbering is
 -- selected, this is put into a table row with line numbers in the
 -- left cell.
 formatHtmlBlock :: FormatOptions -> [SourceLine] -> Html
-formatHtmlBlock opts ls =
-  if numberLines opts
-     then H.table ! A.class_ sourceCode
-                  $ H.tr ! A.class_ sourceCode
-                  $ nums >> source
-     else pre
-   where sourceCode = toValue "sourceCode"
+formatHtmlBlock opts ls = container ! A.class_ (toValue $ unwords classes)
+  where  container = if numberLines opts
+                        then H.table $ H.tr ! A.class_ sourceCode
+                                     $ nums >> source
+                        else pre
+         sourceCode = toValue "sourceCode"
+         classes = "sourceCode" :
+                   [x | x <- containerClasses opts, x /= "sourceCode"]
          pre = formatHtmlBlockPre opts ls
          source = H.td ! A.class_ sourceCode $ pre
          startNum = startNumber opts
