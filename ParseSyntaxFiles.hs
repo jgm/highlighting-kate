@@ -21,16 +21,12 @@ Requires HXT.
 module Main where
 
 import Text.XML.HXT.Core
-import Control.Arrow
-import Control.Arrow.ArrowList
 import Control.Monad
 import Data.List
-import Data.Maybe
 import Data.Char (toUpper, toLower, isAlphaNum)
 import qualified Data.Map as Map
 import System.Directory
 import System.Environment
-import System.Exit
 import System.FilePath
 import Text.PrettyPrint
 import Text.Printf (printf)
@@ -96,7 +92,10 @@ argFiles args = do
                    return $ map (combine dir) $ filter isXmlFile dc
   return $ nub (files ++ concat dirContents)
 
+libraryPath :: FilePath
 libraryPath = joinPath ["Text", "Highlighting", "Kate"]
+
+destDir :: FilePath
 destDir = joinPath [libraryPath, "Syntax"]
 
 main :: IO ()
@@ -179,8 +178,8 @@ processOneFile src = do
            render (mkParser syntax) ++ "\n"
 
 labelFor :: SyntaxDefinition -> String -> TokenType
-labelFor syntax attr =
-  case lookup attr (synItemDatas syntax) of
+labelFor syntax attr' =
+  case lookup attr' (synItemDatas syntax) of
        Just "dsKeyword" -> KeywordTok
        Just "dsDataType" -> DataTypeTok
        Just "dsDecVal" -> DecValTok
@@ -290,7 +289,7 @@ mkRules syntax context =
 
 mkSyntaxParser :: SyntaxDefinition -> SyntaxContext -> SyntaxParser -> Doc
 mkSyntaxParser syntax context parser =
-  let attr  = case parserAttribute parser of
+  let attr' = case parserAttribute parser of
                    "" -> labelFor syntax $ contAttribute context
                    x  -> labelFor syntax x
       mainParser = text $ case parserType parser of
@@ -317,9 +316,9 @@ mkSyntaxParser syntax context parser =
             "LineContinue"     -> "pLineContinue"
             "IncludeRules"     -> case parserContext parser of
                                       ('#':'#':xs) -> langNameToModule xs ++ ".parseExpression" ++
-                                                      if parserIncludeAttrib parser || attr == NormalTok
+                                                      if parserIncludeAttrib parser || attr' == NormalTok
                                                          then ""
-                                                         else " >>= ((withAttribute " ++ show attr ++ ") . snd)"
+                                                         else " >>= ((withAttribute " ++ show attr' ++ ") . snd)"
                                       xs           -> "parseRules " ++ show xs
             "DetectSpaces"     -> "pDetectSpaces"
             "DetectIdentifier" -> "pDetectIdentifier"
@@ -335,7 +334,7 @@ mkSyntaxParser syntax context parser =
                      then mainParser <> char ')'
                      else (if parserLookAhead parser
                              then text "lookAhead (" <> mainParser <> text ") >> return (NormalTok,\"\") "
-                             else mainParser <> text " >>= withAttribute " <> text (show attr)) <>
+                             else mainParser <> text " >>= withAttribute " <> text (show attr')) <>
                           char ')' <> switchContext (parserContext parser) (text " >>~ " <>)
       childParsers = parserChildren parser
   in  char '(' <>
@@ -354,6 +353,7 @@ switchContext next finalizer =
      ""      -> empty
      x       -> finalizer $ text ("pushContext " ++ show x)
 
+langNameToModule :: String -> String
 langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
   case str of
     "Alerts" -> "Alert"
@@ -515,14 +515,17 @@ getKeywordAttrs = listA $ multi $ hasName "keywords"
                                                       { keywordCaseSensitive = vBool True caseSensitive
                                                       , keywordDelims = (standardDelims ++ additionalDelim) \\ weakDelim }
 
+standardDelims :: [Char]
 standardDelims = " \n\t.():!+,-<=>%&*/;?[]^{|}~\\"
 
+defaultKeywordAttr :: SyntaxKeywordAttr
 defaultKeywordAttr = SyntaxKeywordAttr { keywordCaseSensitive = True
                                        , keywordDelims = standardDelims }
 
-stripWhitespaceLeft = dropWhile isWhitespace
-isWhitespace x = elem x [' ', '\t', '\n']
+stripWhitespace :: String -> String
 stripWhitespace = reverse . stripWhitespaceLeft . reverse . stripWhitespaceLeft
+  where stripWhitespaceLeft = dropWhile isWhitespace
+        isWhitespace x = x `elem` [' ', '\t', '\n']
 
 vBool :: Bool -> String -> Bool
 vBool defaultVal value = case value of
@@ -535,7 +538,7 @@ vBool defaultVal value = case value of
 fillTemplate :: Int -> [(String,String)] -> String -> String
 fillTemplate _ _ [] = []
 fillTemplate _ [] lst = lst
-fillTemplate n subs ('\n':xs) = '\n' : fillTemplate 0 subs xs
+fillTemplate _ subs ('\n':xs) = '\n' : fillTemplate 0 subs xs
 fillTemplate n subs ('@':xs) =
   let (pref, suff) = break (=='@') xs
   in  if length pref > 0 && all isAlphaNum pref && length suff > 0
