@@ -51,15 +51,15 @@ styleOf (Sty s : _) = case map toLower s of
                             "tango"      -> Just tango
                             "haddock"    -> Just haddock
                             "monochrome" -> Just monochrome
-                            _            -> error $ "Unknown style: " ++ s
+                            _            -> Nothing -- error $ "Unknown style: " ++ s
 styleOf (_ : xs) = styleOf xs
 
 formatOf :: [Flag] -> String
 formatOf [] = "html" -- default
 formatOf (Format s : _) = case map toLower s of
-                            "html"   -> "html"
                             "latex"  -> "latex"
-                            _        -> error $ "Unknown format: " ++ s
+                            _        -> "html" -- default
+                            -- _        -> error $ "Unknown format: " ++ s
 formatOf (_ : xs) = formatOf xs
 
 filterNewlines :: String -> String
