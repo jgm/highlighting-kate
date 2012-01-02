@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+{-# OPTIONS -fno-warn-name-shadowing -fno-warn-unused-do-bind #-}
 {- |
    Module      : Text.Highlighting.Kate.Common
    Copyright   : Copyright (C) 2008 John MacFarlane
@@ -29,7 +30,7 @@ import qualified Data.Set as Set
 -- | Match filename against a list of globs contained in a semicolon-separated
 -- string.
 matchGlobs :: String -> String -> Bool
-matchGlobs fn globs = any (flip matchGlob fn) (splitBySemi $ filter (/=' ') globs)
+matchGlobs fn globs = either (const False) (any (flip matchGlob fn)) (splitBySemi $ filter (/=' ') globs)
 
 -- | Match filename against a glob pattern with asterisks.
 matchGlob :: String -> String -> Bool
@@ -39,14 +40,14 @@ matchGlob "" "" = True
 matchGlob _ _   = False
 
 -- | Splits semicolon-separated list
-splitBySemi :: String -> [String]
-splitBySemi "" = []
+splitBySemi :: String -> Either String [String]
+splitBySemi "" = Right []
 splitBySemi xs =
   let (pref, suff) = break (==';') xs
   in  case suff of
-         []       -> [pref]
-         (';':ys) -> pref : splitBySemi ys
-         _        -> error $ "The impossible happened (splitBySemi)"
+         []       -> Right [pref]
+         (';':ys) -> fmap (pref :) (splitBySemi ys)
+         _        -> Left "The impossible happened (splitBySemi)"
 
 -- | Like >>, but returns the operation on the left.
 -- (Suggested by Tillmann Rendel on Haskell-cafe list.)
@@ -190,29 +191,30 @@ isOctalDigit :: Char -> Bool
 isOctalDigit c = c == '0' || c == '1' || c == '2' || c == '3'
               || c == '4' || c == '5' || c == '6' || c == '7'
 
-compileRegex :: String -> Regex
+compileRegex :: String -> Either String Regex
 #ifdef _PCRE_LIGHT
 compileRegex regexpStr = compile ('.' : convertOctal regexpStr) [anchored]
 #else
 compileRegex regexpStr =
   case unsafePerformIO $ compile (compAnchored) (execNotEmpty)
        ('.' : convertOctal regexpStr) of
-        Left _ -> error $ "Error compiling regex: " ++ show regexpStr
-        Right r -> r
+        Left _ -> Left $ "Error compiling regex: " ++ show regexpStr
+        Right r -> Right r
 #endif
 
-matchRegex :: Regex -> String -> Maybe [String]
+matchRegex :: Regex -> String -> Either String (Maybe [String])
 #ifdef _PCRE_LIGHT
 matchRegex r s = match r s [exec_notempty]
 #else
 matchRegex r s = case unsafePerformIO (regexec r s) of
-                      Right (Just (_, mat, _ , capts)) -> Just (mat : capts)
-                      Right Nothing -> Nothing
-                      Left matchError -> error $ show matchError
+                      Right (Just (_, mat, _ , capts)) -> Right $ Just (mat : capts)
+                      Right Nothing -> Right Nothing
+                      Left matchError -> Left $ show matchError
 #endif
 
-pRegExpr :: Regex -> KateParser String
-pRegExpr compiledRegex = do
+pRegExpr :: Either String Regex -> KateParser String
+pRegExpr (Left err) = fail err
+pRegExpr (Right compiledRegex) = do
   rest <- getInput
   prevChar <- fromState synStPrevChar
   -- Note: we keep one preceding character, so initial \b can match or not...
@@ -220,11 +222,12 @@ pRegExpr compiledRegex = do
                   then ' ':rest
                   else prevChar:rest
   case matchRegex compiledRegex target of
-        Just (x:xs) | null x -> error "Regex matched null string!"
-                    | otherwise -> do
-                          unless (null xs) $
-                            updateState (\st -> st {synStCaptures = xs})
-                          count (length x - 1) anyChar
+        Right (Just (x:xs))
+          | null x -> fail "Regex matched null string!"
+          | otherwise -> do
+            unless (null xs) $
+              updateState (\st -> st {synStCaptures = xs})
+            count (length x - 1) anyChar
         _           -> pzero
 
 pRegExprDynamic :: [Char] -> KateParser String
@@ -233,25 +236,25 @@ pRegExprDynamic regexpStr = do
   let compiledRegex = compileRegex regexpStr'
   pRegExpr compiledRegex
 
-integerRegex :: Regex
+integerRegex :: Either String Regex
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
 pInt :: KateParser String
 pInt = pRegExpr integerRegex
 
-floatRegex :: Regex
+floatRegex :: Either String Regex
 floatRegex = compileRegex "\\b[-+]?(([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)([Ee][-+]?[0-9]+)?|[0-9]+[Ee][-+]?[0-9]+)\\b"
 
 pFloat :: KateParser String
 pFloat = pRegExpr floatRegex
 
-octRegex :: Regex
+octRegex :: Either String Regex
 octRegex = compileRegex "\\b[-+]?0[Oo][0-7]+\\b"
 
 pHlCOct :: KateParser String
 pHlCOct = pRegExpr octRegex
 
-hexRegex :: Regex
+hexRegex :: Either String Regex
 hexRegex = compileRegex "\\b[-+]?0[Xx][0-9A-Fa-f]+\\b"
 
 pHlCHex :: KateParser String
