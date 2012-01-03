@@ -320,12 +320,12 @@
       <AnyChar attribute="Special"          context="#stay" String="∷⇒→←∀∃" />
       <RegExpr attribute="Signature"        context="#stay" String="\s*[a-z][a-zA-Z0-9_']*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
       <RegExpr attribute="Signature"        context="#stay" String="\s*(\([\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]*\))*\s*(?=::[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:])" />
+      <RegExpr    attribute="Float"   context="#stay" String="\d+\.\d+" />
+      <Int        attribute="Decimal" context="#stay" />
       <RegExpr attribute="Function"         context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[a-z][a-zA-Z0-9_']*" />
       <RegExpr attribute="Operator"         context="#stay" String="([A-Z][a-zA-Z0-0_']*\.)*[\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]+" />
       <RegExpr attribute="Type"             context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[A-Z][a-zA-Z0-9_']*" />
 
-      <Int        attribute="Decimal" context="#stay" />
-      <RegExpr    attribute="Float"   context="#stay" String="\d+\.\d+" />
       <DetectChar attribute="Char"    context="char" char="'" />
       <DetectChar attribute="String"  context="string" char="&quot;" />
 
