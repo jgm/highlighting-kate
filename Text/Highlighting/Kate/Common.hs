@@ -190,28 +190,28 @@ isOctalDigit :: Char -> Bool
 isOctalDigit c = c == '0' || c == '1' || c == '2' || c == '3'
               || c == '4' || c == '5' || c == '6' || c == '7'
 
-compileRegex :: String -> Regex
+compileRegex :: String -> KateParser Regex
 #ifdef _PCRE_LIGHT
-compileRegex regexpStr = compile ('.' : convertOctal regexpStr) [anchored]
+compileRegex regexpStr = return $ compile ('.' : convertOctal regexpStr) [anchored]
 #else
 compileRegex regexpStr =
   case unsafePerformIO $ compile (compAnchored) (execNotEmpty)
        ('.' : convertOctal regexpStr) of
-        Left _ -> error $ "Error compiling regex: " ++ show regexpStr
-        Right r -> r
+        Left _  -> fail $ "Error compiling regex: " ++ show regexpStr
+        Right r -> return r
 #endif
 
-matchRegex :: Regex -> String -> Maybe [String]
+matchRegex :: Regex -> String -> KateParser (Maybe [String])
 #ifdef _PCRE_LIGHT
 matchRegex r s = match r s [exec_notempty]
 #else
 matchRegex r s = case unsafePerformIO (regexec r s) of
-                      Right (Just (_, mat, _ , capts)) -> Just (mat : capts)
-                      Right Nothing -> Nothing
-                      Left matchError -> error $ show matchError
+                      Right (Just (_, mat, _ , capts)) -> return $ Just (mat : capts)
+                      Right Nothing -> return Nothing
+                      Left matchError -> fail $ show matchError
 #endif
 
-pRegExpr :: Regex -> KateParser String
+pRegExpr :: KateParser Regex -> KateParser String
 pRegExpr compiledRegex = do
   rest <- getInput
   prevChar <- fromState synStPrevChar
@@ -219,8 +219,10 @@ pRegExpr compiledRegex = do
   let target = if prevChar == '\n'
                   then ' ':rest
                   else prevChar:rest
-  case matchRegex compiledRegex target of
-        Just (x:xs) | null x -> error "Regex matched null string!"
+  regex <- compiledRegex
+  matches <- matchRegex regex target
+  case matches of
+        Just (x:xs) | null x -> fail "Regex matched null string!"
                     | otherwise -> do
                           unless (null xs) $
                             updateState (\st -> st {synStCaptures = xs})
@@ -230,28 +232,27 @@ pRegExpr compiledRegex = do
 pRegExprDynamic :: [Char] -> KateParser String
 pRegExprDynamic regexpStr = do
   regexpStr' <- subDynamic regexpStr
-  let compiledRegex = compileRegex regexpStr'
-  pRegExpr compiledRegex
+  pRegExpr $ compileRegex regexpStr'
 
-integerRegex :: Regex
+integerRegex :: KateParser Regex
 integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
 pInt :: KateParser String
 pInt = pRegExpr integerRegex
 
-floatRegex :: Regex
+floatRegex :: KateParser Regex
 floatRegex = compileRegex "\\b[-+]?(([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)([Ee][-+]?[0-9]+)?|[0-9]+[Ee][-+]?[0-9]+)\\b"
 
 pFloat :: KateParser String
 pFloat = pRegExpr floatRegex
 
-octRegex :: Regex
+octRegex :: KateParser Regex
 octRegex = compileRegex "\\b[-+]?0[Oo][0-7]+\\b"
 
 pHlCOct :: KateParser String
 pHlCOct = pRegExpr octRegex
 
-hexRegex :: Regex
+hexRegex :: KateParser Regex
 hexRegex = compileRegex "\\b[-+]?0[Xx][0-9A-Fa-f]+\\b"
 
 pHlCHex :: KateParser String
