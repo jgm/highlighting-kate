@@ -213,12 +213,11 @@
     </list>
 
     <contexts>
-      <context name="Base" attribute="Comment" lineEndContext="Normal">
+      <context name="Base" attribute="Comment" lineEndContext="Normal" fallthrough="true" fallthroughContext="Normal">
         <RegExpr attribute="Comment" context="Normal" String="#!.*$" column="0" />
-        <RegExpr attribute="Comment" context="Normal" String="^.*$" lookAhead="true" />
       </context>
       <context name="Normal"        attribute="Normal Text" lineEndContext="#stay">
-        <IncludeRules context="##DoxygenLua" />
+        <!--        <IncludeRules context="##DoxygenLua" /> -->
         <keyword      attribute="Error"  context="#stay" String="deprecated" />
         <DetectSpaces />
         <RegExpr      attribute="Comment"  context="Block Comment" beginRegion="block comment"  String="--\[(=*)\[" dynamic="true" />
