@@ -13,9 +13,7 @@ functions.
 A typical application will combine a highlighter and a formatter.
 This one reads ruby code from stdin and writes HTML:
 
-> import Text.Highlighting.Kate (highlightAs)
-> import Text.Highlighting.Kate.Styles (tango)
-> import Text.Highlighting.Kate.Format.HTML (formatHtmlBlock, styleToHtml)
+> import Text.Highlighting.Kate
 > import Text.Blaze.Renderer.String (renderHtml)
 > import Text.Blaze (toHtml)
 > import Text.Blaze.Html5 as H
@@ -34,11 +32,17 @@ module Text.Highlighting.Kate ( highlightAs
                               , languages
                               , languagesByExtension
                               , languagesByFilename
-                              , highlightingKateVersion,
-                              module Text.Highlighting.Kate.Types
+                              , highlightingKateVersion
+                              , module Text.Highlighting.Kate.Types
+                              , module Text.Highlighting.Kate.Styles
+                              , module Text.Highlighting.Kate.Format.HTML
+                              , module Text.Highlighting.Kate.Format.LaTeX
                               ) where
 import Text.Highlighting.Kate.Syntax
 import Text.Highlighting.Kate.Types
+import Text.Highlighting.Kate.Styles
+import Text.Highlighting.Kate.Format.HTML
+import Text.Highlighting.Kate.Format.LaTeX
 import Data.Version (showVersion)
 import Paths_highlighting_kate (version)
 
