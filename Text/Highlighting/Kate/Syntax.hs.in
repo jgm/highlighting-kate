@@ -13,7 +13,7 @@ Token lexer for various languages.
 module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension,
                                        languagesByFilename ) where
 import Data.Char (toLower)
-import Text.Highlighting.Kate.Definitions
+import Text.Highlighting.Kate.Types
 import Text.Highlighting.Kate.Common (matchGlobs)
 @imports@
 

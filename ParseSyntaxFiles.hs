@@ -31,7 +31,7 @@ import System.FilePath
 import Text.PrettyPrint
 import Text.Printf (printf)
 import Data.Char (ord)
-import Text.Highlighting.Kate.Definitions
+import Text.Highlighting.Kate.Types
 import qualified Data.ByteString as B
 import Data.ByteString.UTF8 (fromString, toString)
 import Text.Regex.Posix ((=~))
@@ -164,7 +164,7 @@ processOneFile src = do
            "module Text.Highlighting.Kate.Syntax." ++ name ++ "\n          " ++
            "(highlight, parseExpression, syntaxName, syntaxExtensions)" ++
            "\nwhere\n\
-           \import Text.Highlighting.Kate.Definitions\n\
+           \import Text.Highlighting.Kate.Types\n\
            \import Text.Highlighting.Kate.Common\n" ++
            unlines includeImports ++
            "import Text.ParserCombinators.Parsec hiding (State)\n\

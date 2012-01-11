@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 {- |
-   Module      : Text.Highlighting.Kate.Definitions
+   Module      : Text.Highlighting.Kate.Types
    Copyright   : Copyright (C) 2008 John MacFarlane
    License     : GNU GPL, version 2 or above 
 
@@ -11,7 +11,7 @@
 Definitions for data structures needed by highlighting-kate.
 -}
 
-module Text.Highlighting.Kate.Definitions where
+module Text.Highlighting.Kate.Types where
 import qualified Data.Map as Map
 import Text.ParserCombinators.Parsec
 import Data.Word
@@ -115,3 +115,23 @@ data Style = Style {
   , lineNumberBackgroundColor :: Maybe Color
   } deriving (Read, Show)
 
+-- | Options for formatting source code.
+data FormatOptions = FormatOptions{
+         numberLines      :: Bool     -- ^ Number lines
+       , startNumber      :: Int      -- ^ Number of first line
+       , lineAnchors      :: Bool     -- ^ Anchors on each line number
+       , titleAttributes  :: Bool     -- ^ Html titles with token types
+       , codeClasses      :: [String] -- ^ Additional classes for Html code tag
+       , containerClasses :: [String] -- ^ Additional classes for Html container tag
+                                      --   (pre or table depending on numberLines)
+       } deriving (Eq, Show, Read)
+
+defaultFormatOpts :: FormatOptions
+defaultFormatOpts = FormatOptions{
+                      numberLines = False
+                    , startNumber = 1
+                    , lineAnchors = False
+                    , titleAttributes = False
+                    , codeClasses = []
+                    , containerClasses = []
+                    }

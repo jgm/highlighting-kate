@@ -18,7 +18,7 @@ import Text.Regex.PCRE.Light.Char8
 import System.IO.Unsafe (unsafePerformIO)
 import Text.Regex.PCRE.String
 #endif
-import Text.Highlighting.Kate.Definitions
+import Text.Highlighting.Kate.Types
 import Text.ParserCombinators.Parsec hiding (State)
 import Data.Char (isDigit, toLower, isSpace)
 import Data.List (tails)

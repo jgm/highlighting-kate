@@ -150,9 +150,10 @@ Library
   Build-Depends:     parsec, mtl, blaze-html >= 0.4.2 && < 0.5
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
-                     Text.Highlighting.Kate.Definitions
+                     Text.Highlighting.Kate.Types
                      Text.Highlighting.Kate.Styles
-                     Text.Highlighting.Kate.Format
+                     Text.Highlighting.Kate.Format.HTML
+                     Text.Highlighting.Kate.Format.LaTeX
   Other-Modules:     Text.Highlighting.Kate.Common
                      Paths_highlighting_kate
                      Text.Highlighting.Kate.Syntax.Actionscript

@@ -1,6 +1,9 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
 module Main where
 import Text.Highlighting.Kate
+import Text.Highlighting.Kate.Styles
+import Text.Highlighting.Kate.Format.HTML
+import Text.Highlighting.Kate.Format.LaTeX
 import System.IO (hPutStrLn, stderr)
 import System.Environment
 import System.Console.GetOpt

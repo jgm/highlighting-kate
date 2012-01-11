@@ -13,7 +13,9 @@ functions.
 A typical application will combine a highlighter and a formatter.
 This one reads ruby code from stdin and writes HTML:
 
-> import Text.Highlighting.Kate
+> import Text.Highlighting.Kate (highlightAs)
+> import Text.Highlighting.Kate.Styles (tango)
+> import Text.Highlighting.Kate.Format.HTML (formatHtmlBlock, styleToHtml)
 > import Text.Blaze.Renderer.String (renderHtml)
 > import Text.Blaze (toHtml)
 > import Text.Blaze.Html5 as H
@@ -23,7 +25,7 @@ This one reads ruby code from stdin and writes HTML:
 >   putStrLn $ renderHtml
 >            $ do H.head (styleToHtml tango)
 >                 H.body $ toHtml
->                        $ formatHtmlBlock defaultFormatOpts
+>                        $ formatBlock defaultFormatOpts
 >                        $ highlightAs "ruby" code
 
 -}
@@ -32,35 +34,11 @@ module Text.Highlighting.Kate ( highlightAs
                               , languages
                               , languagesByExtension
                               , languagesByFilename
-                              , highlightingKateVersion
-                              -- * Basic types
-                              , SourceLine
-                              , Token
-                              , TokenType (..)
-                              , TokenStyle (..)
-                              , Color (..)
-                              -- * Formatting
-                              , FormatOptions (..)
-                              , formatHtmlInline
-                              , formatHtmlBlock
-                              , styleToHtml
-                              , formatLaTeXInline
-                              , formatLaTeXBlock
-                              , styleToLaTeX
-                              , defaultFormatOpts
-                              -- * Styles
-                              , Style (..)
-                              , pygments
-                              , espresso
-                              , tango
-                              , kate
-                              , haddock
-                              , monochrome
+                              , highlightingKateVersion,
+                              module Text.Highlighting.Kate.Types
                               ) where
-import Text.Highlighting.Kate.Format
-import Text.Highlighting.Kate.Styles
 import Text.Highlighting.Kate.Syntax
-import Text.Highlighting.Kate.Definitions
+import Text.Highlighting.Kate.Types
 import Data.Version (showVersion)
 import Paths_highlighting_kate (version)
 

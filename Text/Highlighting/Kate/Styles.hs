@@ -13,7 +13,7 @@ Styles for rendering annotated source lines.
 module Text.Highlighting.Kate.Styles ( pygments, kate, espresso, tango,
                                        haddock, monochrome )
 where
-import Text.Highlighting.Kate.Definitions
+import Text.Highlighting.Kate.Types
 
 -- | Style based on pygments's default colors.
 pygments :: Style
