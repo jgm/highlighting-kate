@@ -23,7 +23,7 @@ This one reads ruby code from stdin and writes HTML:
 >   putStrLn $ renderHtml
 >            $ do H.head (styleToHtml tango)
 >                 H.body $ toHtml
->                        $ formatBlock defaultFormatOpts
+>                        $ formatHtmlBlock defaultFormatOpts
 >                        $ highlightAs "ruby" code
 
 -}
