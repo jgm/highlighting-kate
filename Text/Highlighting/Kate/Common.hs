@@ -157,6 +157,9 @@ pString dynamic str =
 pAnyChar :: [Char] -> KateParser [Char]
 pAnyChar chars = oneOf chars >>= return . (:[])
 
+pDefault :: KateParser [Char]
+pDefault = (:[]) `fmap` anyChar
+
 subDynamic :: [Char] -> KateParser [Char]
 subDynamic ('%':x:xs) | isDigit x = do
   captures <- getState >>= return . synStCaptures

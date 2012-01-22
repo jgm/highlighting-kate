@@ -170,7 +170,8 @@ processOneFile src = do
            "import Text.ParserCombinators.Parsec hiding (State)\n\
            \import Data.Map (fromList)\n\
            \import Control.Monad.State\n\
-           \import Data.Char (isSpace)\n" ++
+           \import Data.Char (isSpace)\n\
+           \import Data.Maybe (fromMaybe)\n" ++
            (if null (synLists syntax)
                then "\n"
                else "import qualified Data.Set as Set\n\n") ++
@@ -207,7 +208,9 @@ mkParser syntax =
                    text "updateState $ \\st -> st { synStPrevChar = last txt" $$
                    text "                        , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
                    text "return (attr, txt)")
-      parseExpressionInternal = text "parseExpressionInternal = currentContext >>= parseRules"
+      parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $
+                                  text "context <- currentContext" $$
+                                  text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe NormalTok $ lookup context defaultAttributes))")
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
                         text "parseExpression :: KateParser Token" $$
                         text "parseExpression = do" $$ (nest 2 $
@@ -220,6 +223,7 @@ mkParser syntax =
                           text "optional $ eof >> pEndLine" $$
                           text "updateState $ \\st -> st { synStLanguage = oldLang }" $$
                           text "return result")
+      defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> (contName cont, labelFor syntax $ contAttribute cont)) $ synContexts syntax)
       -- Note: lineBeginContexts seems not to be used in any of the xml files
       -- lineBeginContexts =
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
@@ -262,8 +266,8 @@ mkParser syntax =
       regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
                                                               parserType x == "RegExpr", parserDynamic x == False]
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, lineParser, parseExpression, initState,
-                                      endLineParser, withAttr, parseExpressionInternal, lists, regexes]
-                                      {- , lineBeginContexts -} ++ contexts ++ [contextNull, contextCatchAll]
+                                      endLineParser, withAttr, parseExpressionInternal, lists, regexes,
+                                      defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextNull, contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
 mkAlternatives docs =
@@ -274,11 +278,10 @@ mkAlternatives docs =
 
 mkRules :: SyntaxDefinition -> SyntaxContext -> Doc
 mkRules syntax context =
-  let defaultParser = parens $ text $ "count 1 anyChar >>= withAttribute " ++ show (labelFor syntax $ contAttribute context)
-      fallthroughParser = if contFallthrough context
+  let fallthroughParser = if contFallthrough context
                              then [parens (switchContext (contFallthroughContext context) (<> text " >> ") <>
                                    text "currentContext >>= parseRules")]
-                             else [defaultParser]
+                             else []
   in  text ("parseRules " ++ show (contName context) ++ " =") $$
       if null (contParsers context) && null fallthroughParser
          then nest 2 (text "pzero")
