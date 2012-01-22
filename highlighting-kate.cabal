@@ -19,7 +19,6 @@ Author:              John MacFarlane
 Maintainer:          jgm@berkeley.edu
 Homepage:            http://github.com/jgm/highlighting-kate
 Extra-Source-Files:  README
-                     BUGS
                      changelog
                      Highlight.hs
                      ParseSyntaxFiles.hs
@@ -269,4 +268,3 @@ Executable Highlight
     Buildable:      True
   else
     Buildable:      False
-
