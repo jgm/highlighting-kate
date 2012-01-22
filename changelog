@@ -1,3 +1,95 @@
+highlighting-kate 0.4 (21 Jan 2012)
+
+  * Text.Highlighting.Kate.Definitions has been renamed as
+    Text.Highlighting.Kate.Types.
+
+  * Text.Highlighting.Kate.Format was replaced by two modules,
+    Text.Highlighting.Format.HTML and Text.Highlighting.Format.LaTeX.
+
+  * Text.Highlighting.Kate no longer exports functions from Style or
+    Format.
+
+  * highlightAs now lazily consumes lines and returns a list
+    of SourceLine.  Previously, the entire input had to be
+    parsed before any output was produced. The output type
+    is no longer an Either; if a parsing error occurs, the
+    offending line is highlighted as ErrorTok, and we continue
+    with the next line without change of state.
+    If you call highlightAs with a language that isn't supported,
+    all lines will be highlighted as NormalTok.
+
+  * Monadic 'fail' now used instead of 'error'.  Closes Issue #10.
+    Thanks to mcmaniac for suggesting these changes.
+
+  * TokenType is used instead of String for token types.
+
+  * Completely changed Formatting API.
+
+    + Instead of formatAsHtml, we now have four functions:
+      formatHtmlInline, formatHtmlBlock, formatLaTeXInline,
+      formatLaTeXBlock.
+
+    + The options parameter is now a record, FormatOptions,
+      rather than a list, [FormatOption].
+
+    + "Inline" is no longer a format option, since there are separate
+      formatting functions for block and inline.
+
+    + formatHtml no longer has a string parameter for language
+      name, and the language name is no longer added as a class.
+
+    + highlightingCss has been removed; we now have styleToHtml
+      and styleToLaTeX, which take a Style and produce code for
+      the HTML header or LaTeX preamble.
+
+    + Only the short form of the attribute is now used.
+      Removed OptDetailed.
+
+  * blaze-html is now used instead of xhtml for HTML formatting.
+
+  * Modules for individual languages are no longer exposed.
+
+  * Removed BUGS; added link to github issue tracker in README.
+
+  * Removed ilerp, mediawiki, xharbour syntaxes.
+
+  * Updated haskell xml.  Changed order of parsers in haskell.xml.
+    This is needed so that floats can be parsed as floats.
+    Otherwise '33.3' gets parsed as an integer, a function (.),
+    and an integer. (These changes should be submitted upstream.)
+
+  * Fixed lua highlighting problems.
+    Improved lua highlighter.  Removed doxygen-lua, which was messing
+    things up.
+
+  * Made pMatchRegex slightly faster.
+
+  * Improved efficiency of pKeyword by checking to see if a
+    potential keyword lies ahead.
+
+  * Fixed normalizeTokens so that comments etc. don't get split up.
+
+  * Made KateParser a synonym for GenParser Char SyntaxState.
+
+  * Simplified pDefault. The check for non-newline is no longer
+    needed.
+
+  * Add sourceCode class to tr in tables.
+
+  * Improved ParseSyntaxFiles.hs.  It now generates no -Wall
+    warnings. In addition, it produces cleaner syntax parsers.
+
+  * Changed the SyntaxState type:
+    Removed synStCurrentLine, synStCharsParsedInLine.
+    Added synStLineNumber, synStPrevNonspace.
+
+  * Common: Removed pHandleEndline.  Added fromState.
+    Added mkParseSourceLine.
+
+  * Highlight executable: removed --css flag, added --style, --format.
+
+  * Cleaned up Makefile, added clean, distclean targets.
+
 highlighting-kate 0.3.1 (27 Nov 2011)
 
   * Fixed a release bug in 0.3.  The Clojure module was not included
