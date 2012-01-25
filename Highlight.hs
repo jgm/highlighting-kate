@@ -129,7 +129,7 @@ hlHtml frag fname opts sty lang code =
     then putStrLn $ renderHtml fragment
     else putStrLn $ renderHtml $ H.head (pageTitle >> metadata >> css) >> H.body (toHtml fragment)
   where fragment = formatHtmlBlock opts $ highlightAs lang code
-        css = styleToHtml sty
+        css = H.style ! A.type_ "text/css" $ toHtml $ styleToCss sty
         pageTitle = H.title $ toHtml fname
         metadata = H.meta ! A.httpEquiv "Content-Type" ! A.content "text/html; charset=UTF-8" >>
                     H.meta ! A.name "generator" ! A.content "highlight-kate"

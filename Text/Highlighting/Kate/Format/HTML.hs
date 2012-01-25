@@ -11,7 +11,7 @@ Formatters that convert a list of annotated source lines to HTML.
 -}
 
 module Text.Highlighting.Kate.Format.HTML (
-      formatHtmlInline, formatHtmlBlock, styleToHtml
+      formatHtmlInline, formatHtmlBlock, styleToCss
    ) where
 import Text.Highlighting.Kate.Types
 import Text.Blaze
@@ -88,11 +88,9 @@ formatHtmlBlock opts ls = container ! A.class_ (toValue $ unwords classes)
                               >> toHtml "\n"
                         else toHtml $ show n ++ "\n"
 
--- | Returns an HTML @style@ block with definitions for
--- formatting highlighted code according to the given style.
-styleToHtml :: Style -> Html
-styleToHtml f = H.style ! A.type_ (toValue "text/css") $ toHtml
-  $ unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
+-- | Returns CSS for styling highlighted code according to the given style.
+styleToCss :: Style -> String
+styleToCss f = unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
    where colorspec = case (defaultColor f, backgroundColor f) of
                           (Nothing, Nothing) -> []
                           (Just c, Nothing)  -> ["pre, code { color: " ++ fromColor c ++ "; }"]
@@ -123,5 +121,4 @@ toCss (t,tf) = "code > span." ++ short t ++ " { "
         weightspec = if tokenBold tf then "font-weight: bold; " else ""
         stylespec  = if tokenItalic tf then "font-style: italic; " else ""
         decorationspec = if tokenUnderline tf then "text-decoration: underline; " else ""
-
 
