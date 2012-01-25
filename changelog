@@ -1,3 +1,8 @@
+highlighting-kate 0.5 (25 Jan 2012)
+
+  * Text.Highlighting.Kate.Format.HTML now exports styleToCss
+    instead of styleToHtml.
+
 highlighting-kate 0.4 (21 Jan 2012)
 
   * Text.Highlighting.Kate.Definitions has been renamed as
