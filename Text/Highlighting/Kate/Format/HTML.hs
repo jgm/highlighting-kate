@@ -100,7 +100,7 @@ styleToCss f = unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
          tablespec = [
            "table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {"
           ,"  margin: 0; padding: 0; vertical-align: baseline; border: none; }"
-          ,"table.sourceCode { " ++
+          ,"table.sourceCode { width: 100%; " ++
              maybe "" (\c -> "background-color: " ++ fromColor c ++ "; ") (backgroundColor f) ++
              maybe "" (\c -> "color: " ++ fromColor c ++ "; ") (defaultColor f) ++
              "}"
