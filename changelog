@@ -1,3 +1,8 @@
+highlighting-kate 0.5.0.1 (31 Jan 2012)
+
+  * Give table.sourceCode width of 100%, for consistency
+    between numbered and unnumbered code blocks.
+
 highlighting-kate 0.5 (25 Jan 2012)
 
   * Text.Highlighting.Kate.Format.HTML now exports styleToCss
