@@ -332,10 +332,12 @@ mkSyntaxParser syntax context parser =
                      else empty) <>
                   if parserType parser == "IncludeRules"
                      then mainParser <> char ')'
-                     else (if parserLookAhead parser
-                             then text "lookAhead (" <> mainParser <> text ") >> return (NormalTok,\"\") "
-                             else mainParser <> text " >>= withAttribute " <> text (show attr')) <>
-                          char ')' <> switchContext (parserContext parser) (text " >>~ " <>)
+                     else if parserLookAhead parser
+                            then text "lookAhead (" <> mainParser <> char ')'
+                                  <> switchContext (parserContext parser) (text " >> " <>)
+                                  <> text " >> currentContext >>= parseRules)"
+                            else mainParser <> text " >>= withAttribute " <> text (show attr') <> char ')'
+                                  <> switchContext (parserContext parser) (text " >>~ " <>)
       childParsers = parserChildren parser
   in  char '(' <>
       (if null childParsers
