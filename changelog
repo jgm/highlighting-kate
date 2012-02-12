@@ -1,3 +1,14 @@
+highlighting-kate 0.5.0.3 (12 Feb 2012)
+
+  * Fixed compilation with the 'pcre-light' flag.
+
+highlighting-kate 0.5.0.2 (08 Feb 2012)
+
+  * Fixed bug with lookahead parsers.
+    Previously they didn't consume input, which caused an error
+    starting with parsec 3.1.2 -- even though in fact there was
+    no threat of infinite looping.
+
 highlighting-kate 0.5.0.1 (31 Jan 2012)
 
   * Give table.sourceCode width of 100%, for consistency
