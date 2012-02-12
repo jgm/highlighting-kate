@@ -203,7 +203,7 @@ compileRegex regexpStr =
 
 matchRegex :: Regex -> String -> KateParser (Maybe [String])
 #ifdef _PCRE_LIGHT
-matchRegex r s = match r s [exec_notempty]
+matchRegex r s = return $ match r s [exec_notempty]
 #else
 matchRegex r s = case unsafePerformIO (regexec r s) of
                       Right (Just (_, mat, _ , capts)) -> return $ Just (mat : capts)

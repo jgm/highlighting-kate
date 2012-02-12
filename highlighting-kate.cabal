@@ -142,7 +142,7 @@ Library
   else
     Build-Depends:   base < 3
   if flag(pcre-light)
-    Build-depends:   pcre-light
+    Build-depends:   pcre-light >= 4.0 && < 4.1
     cpp-options:     -D_PCRE_LIGHT
   else
     Build-depends:   regex-pcre-builtin
