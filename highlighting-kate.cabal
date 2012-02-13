@@ -1,5 +1,5 @@
 Name:                highlighting-kate
-Version:             0.5.0.3
+Version:             0.5.0.4
 Cabal-Version:       >= 1.6
 Build-Type:          Simple
 Category:            Text
@@ -142,7 +142,7 @@ Library
   else
     Build-Depends:   base < 3
   if flag(pcre-light)
-    Build-depends:   pcre-light >= 4.0 && < 4.1
+    Build-depends:   pcre-light >= 0.4 && < 0.5
     cpp-options:     -D_PCRE_LIGHT
   else
     Build-depends:   regex-pcre-builtin

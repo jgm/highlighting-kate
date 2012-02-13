@@ -1,5 +1,9 @@
 highlighting-kate 0.5.0.3 (12 Feb 2012)
 
+  * Fixed typo in version bounds for pcre-light.
+
+highlighting-kate 0.5.0.3 (12 Feb 2012)
+
   * Fixed compilation with the 'pcre-light' flag.
 
 highlighting-kate 0.5.0.2 (08 Feb 2012)
