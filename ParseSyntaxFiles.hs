@@ -247,7 +247,8 @@ mkParser syntax =
       lineParser = text   $ "parseSourceLine :: String -> State SyntaxState SourceLine\n\
                             \parseSourceLine = mkParseSourceLine parseExpressionInternal pEndLine"
       endLineParser = text "pEndLine = do" $$
-                      (nest 2 $ text "context <- currentContext" $$
+                      (nest 2 $ text "updateState $ \\st -> st{ synStPrevNonspace = False }" $$
+                                text "context <- currentContext" $$
                                 text "case context of" $$
                                 (nest 2 $ (vcat $ map (\cont -> text (show $ contName cont) <> text " -> " <>
                                             switchContext (contLineEndContext cont) (<> text " >> ") <>
