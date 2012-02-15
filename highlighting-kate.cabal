@@ -52,7 +52,6 @@ Extra-Source-Files:  README
                      xml/diff.xml
                      xml/djangotemplate.xml
                      xml/doxygen.xml
-                     xml/doxygenlua.xml.bkp
                      xml/dtd.xml
                      xml/eiffel.xml
                      xml/email.xml
@@ -76,7 +75,6 @@ Extra-Source-Files:  README
                      xml/lex.xml
                      xml/literate-haskell.xml
                      xml/lua.xml
-                     xml/lua.xml.bkp
                      xml/makefile.xml
                      xml/mandoc.xml
                      xml/matlab.xml
