@@ -1,4 +1,10 @@
-highlighting-kate 0.5.0.3 (12 Feb 2012)
+highlighting-kate 0.5.0.5 (14 Feb 2012)
+
+  * Update 'synStPrevNonspace' at end of line.
+    This fixes a bug affecting every lexer that uses the 'first
+    nonspace' property.  (e.g. bash)
+
+highlighting-kate 0.5.0.4 (12 Feb 2012)
 
   * Fixed typo in version bounds for pcre-light.
 
