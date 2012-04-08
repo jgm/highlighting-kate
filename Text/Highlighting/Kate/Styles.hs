@@ -11,7 +11,7 @@ Styles for rendering annotated source lines.
 -}
 
 module Text.Highlighting.Kate.Styles ( pygments, kate, espresso, tango,
-                                       haddock, monochrome )
+                                       haddock, monochrome, zenburn )
 where
 import Text.Highlighting.Kate.Types
 
@@ -136,5 +136,28 @@ monochrome = Style{
     , (CommentTok, defStyle{ tokenItalic = True })
     , (AlertTok, defStyle{ tokenBold = True })
     , (ErrorTok, defStyle{ tokenBold = True })
+    ]
+  }
+
+-- | Style based on the popular zenburn vim color scheme
+zenburn :: Style
+zenburn = Style{
+    backgroundColor = toColor "#303030"
+  , defaultColor = toColor "#cccccc"
+  , lineNumberColor = Nothing
+  , lineNumberBackgroundColor = Nothing
+  , tokenStyles =
+    [ (KeywordTok, defStyle{ tokenColor = toColor "#f0dfaf" })
+    , (DataTypeTok, defStyle{ tokenColor = toColor "#dfdfbf" })
+    , (DecValTok, defStyle{ tokenColor = toColor "#dcdccc" })
+    , (BaseNTok, defStyle{ tokenColor = toColor "#dca3a3" })
+    , (FloatTok, defStyle{ tokenColor = toColor "#c0bed1" })
+    , (CharTok, defStyle{ tokenColor = toColor "#dca3a3" })
+    , (StringTok, defStyle{ tokenColor = toColor "#cc9393" })
+    , (CommentTok, defStyle{ tokenColor = toColor "#7f9f7f" })
+    , (OtherTok, defStyle{ tokenColor = toColor "#efef8f" })
+    , (AlertTok, defStyle{ tokenColor = toColor "#ffcfaf" })
+    , (FunctionTok, defStyle{ tokenColor = toColor "#efef8f" })
+    , (ErrorTok, defStyle{ tokenColor = toColor "#c3bf9f" })
     ]
   }
