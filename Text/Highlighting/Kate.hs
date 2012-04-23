@@ -14,8 +14,8 @@ A typical application will combine a highlighter and a formatter.
 This one reads ruby code from stdin and writes HTML:
 
 > import Text.Highlighting.Kate
-> import Text.Blaze.Renderer.String (renderHtml)
-> import Text.Blaze (toHtml)
+> import Text.Blaze.Html.Renderer.String (renderHtml)
+> import Text.Blaze.Html (toHtml)
 > import Text.Blaze.Html5 as H
 > import Text.Blaze.Html5.Attributes as A
 >

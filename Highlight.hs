@@ -8,8 +8,8 @@ import System.Exit
 import System.FilePath (takeFileName)
 import Data.Maybe (listToMaybe)
 import Data.Char (toLower)
-import Text.Blaze.Renderer.String
-import Text.Blaze
+import Text.Blaze.Html.Renderer.String
+import Text.Blaze.Html
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
