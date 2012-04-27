@@ -8,8 +8,13 @@ import System.Exit
 import System.FilePath (takeFileName)
 import Data.Maybe (listToMaybe)
 import Data.Char (toLower)
-import Text.Blaze.Html.Renderer.String
+#if MIN_VERSION_blaze_html(5,0,0)
 import Text.Blaze.Html
+import Text.Blaze.Html.Renderer.String
+#else
+import Text.Blaze
+import Text.Blaze.Renderer.String
+#endif
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 

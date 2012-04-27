@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {- |
    Module      : Text.Highlighting.Kate.Format.HTML
    Copyright   : Copyright (C) 2008-2011 John MacFarlane
@@ -14,7 +15,11 @@ module Text.Highlighting.Kate.Format.HTML (
       formatHtmlInline, formatHtmlBlock, styleToCss
    ) where
 import Text.Highlighting.Kate.Types
+#if MIN_VERSION_blaze_html(5,0,0)
 import Text.Blaze.Html
+#else
+import Text.Blaze
+#endif
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Data.Monoid
