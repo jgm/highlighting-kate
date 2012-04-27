@@ -8,7 +8,7 @@ import System.Exit
 import System.FilePath (takeFileName)
 import Data.Maybe (listToMaybe)
 import Data.Char (toLower)
-#if MIN_VERSION_blaze_html(5,0,0)
+#if MIN_VERSION_blaze_html(0,5,0)
 import Text.Blaze.Html
 import Text.Blaze.Html.Renderer.String
 #else

@@ -15,7 +15,7 @@ module Text.Highlighting.Kate.Format.HTML (
       formatHtmlInline, formatHtmlBlock, styleToCss
    ) where
 import Text.Highlighting.Kate.Types
-#if MIN_VERSION_blaze_html(5,0,0)
+#if MIN_VERSION_blaze_html(0,5,0)
 import Text.Blaze.Html
 #else
 import Text.Blaze
