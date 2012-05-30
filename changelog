@@ -1,3 +1,14 @@
+highlighting-kate 0.5.1 (29 May 2012)
+
+  * Fixed inline LaTeX formatting:  it should be `|...|`
+    rather than `\Verb{...}`.
+
+highlighting-kate 0.5.0.6 (27 Apr 2012)
+
+  * Added zenburn style.
+
+  * Updated for compatibility with blaze-html 0.5.*.
+
 highlighting-kate 0.5.0.5 (14 Feb 2012)
 
   * Update 'synStPrevNonspace' at end of line.
