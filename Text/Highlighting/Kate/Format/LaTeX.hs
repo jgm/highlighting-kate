@@ -23,10 +23,11 @@ formatLaTeX :: FormatOptions -> [SourceLine] -> String
 formatLaTeX _ = intercalate "\n" . map sourceLineToLaTeX
 
 -- | Formats tokens as LaTeX using custom commands inside
--- a @\\Highlight@ command.  A @KeywordTok@ is rendered
--- using @\\KeywordTok{..}@, and so on.
+-- @|@ characters. Assumes that @|@ is defined as a short verbatim
+-- command by the macros produced by 'styleToLaTeX'.
+-- A @KeywordTok@ is rendered using @\\KeywordTok{..}@, and so on.
 formatLaTeXInline :: FormatOptions -> [SourceLine] -> String
-formatLaTeXInline opts ls = "\\Verb{" ++ formatLaTeX opts ls ++ "}"
+formatLaTeXInline opts ls = "|" ++ formatLaTeX opts ls ++ "|"
 
 sourceLineToLaTeX :: SourceLine -> String
 sourceLineToLaTeX contents = concatMap tokenToLaTeX contents
