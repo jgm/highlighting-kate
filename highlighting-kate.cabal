@@ -42,7 +42,7 @@ Extra-Source-Files:  README
                      xml/changelog.xml
                      xml/clojure.xml
                      xml/cmake.xml
-                     xml/coffeescript.xml
+                     xml/coffee.xml
                      xml/coldfusion.xml
                      xml/commonlisp.xml
                      xml/cpp.xml
@@ -168,7 +168,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Changelog
                      Text.Highlighting.Kate.Syntax.Clojure
                      Text.Highlighting.Kate.Syntax.Cmake
-                     Text.Highlighting.Kate.Syntax.Coffeescript
+                     Text.Highlighting.Kate.Syntax.Coffee
                      Text.Highlighting.Kate.Syntax.Coldfusion
                      Text.Highlighting.Kate.Syntax.Commonlisp
                      Text.Highlighting.Kate.Syntax.Cpp
