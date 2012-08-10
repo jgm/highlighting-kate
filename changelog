@@ -1,3 +1,9 @@
+highlighting-kate 0.5.2 (10 Aug 2012)
+
+  * Updated xml syntax definitions from kate repository:
+    bash, c, clojure, coffee (formerly coffeescript),
+    cpp, doxygen, fortran, go, latex, prolog, r, ruby, tcl.
+
 highlighting-kate 0.5.1 (29 May 2012)
 
   * Fixed inline LaTeX formatting:  it should be `|...|`
