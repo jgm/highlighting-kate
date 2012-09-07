@@ -1,3 +1,19 @@
+highlighting-kate 0.5.3 (07 Sep 2012)
+
+  * Improved handling of include directives.  This fixes
+    bugs in comments caused by doxygen and javadoc includes.
+
+  * Changes to internal Types and Common:
+
+    - Context is now a (String, String) rather than a String.
+      The first is the syntax name, the second the context name.
+    - ContextStack is now a list of Contexts.
+    - synStLanguage has been removed.
+    - pEndLine parameter has been removed from mkParseSourceLine.
+    - parseExpression now handles the endline.
+    - parseExpressionInternal has been removed in the
+      individual parsers; we now use parseExpression.
+
 highlighting-kate 0.5.2 (10 Aug 2012)
 
   * Updated xml syntax definitions from kate repository:
