@@ -24,7 +24,6 @@ import Text.XML.HXT.Core
 import Control.Monad
 import Data.List
 import Data.Char (toUpper, toLower, isAlphaNum)
-import qualified Data.Map as Map
 import System.Directory
 import System.Environment
 import System.FilePath
@@ -168,7 +167,6 @@ processOneFile src = do
            \import Text.Highlighting.Kate.Common\n" ++
            unlines includeImports ++
            "import Text.ParserCombinators.Parsec hiding (State)\n\
-           \import Data.Map (fromList)\n\
            \import Control.Monad.State\n\
            \import Data.Char (isSpace)\n\
            \import Data.Maybe (fromMaybe)\n" ++
@@ -208,32 +206,36 @@ mkParser syntax =
                    text "updateState $ \\st -> st { synStPrevChar = last txt" $$
                    text "                        , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
                    text "return (attr, txt)")
-      parseExpressionInternal = text "parseExpressionInternal = do" $$ (nest 2 $
-                                  text "context <- currentContext" $$
-                                  text "parseRules context <|> (pDefault >>= withAttribute (fromMaybe NormalTok $ lookup context defaultAttributes))")
+      lang = synLanguage syntax
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
                         text "parseExpression :: KateParser Token" $$
                         text "parseExpression = do" $$ (nest 2 $
-                          text "st <- getState" $$
-                          text "let oldLang = synStLanguage st" $$
-                          text ("setState $ st { synStLanguage = " ++ show (synLanguage syntax) ++ " }") $$
-                          text ("context <- currentContext <|> (pushContext " ++ show (contName $ head $ synContexts syntax) ++
-                                " >> currentContext)") $$
-                          text "result <- parseRules context" $$
-                          text "optional $ eof >> pEndLine" $$
-                          text "updateState $ \\st -> st { synStLanguage = oldLang }" $$
+                          text "(lang,cont) <- currentContext" $$
+                          text "let defAttr = fromMaybe NormalTok $ lookup (lang,cont) defaultAttributes" $$
+                          text ("result <- if lang == " ++ show lang) $$
+                          text ("             then parseRules (lang,cont) <|>") $$
+                          text ("                    (pDefault >>= withAttribute defAttr)") $$
+                          text ("             else parseRules " ++ show (lang, contName (head $ synContexts syntax))) $$
+                          text "optional $ do eof" $$
+                          text "              updateState $ \\st -> st{ synStPrevChar = '\\n' }" $$
+                          text "              pEndLine" $$
                           text "return result")
-      defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> (contName cont, labelFor syntax $ contAttribute cont)) $ synContexts syntax)
+      defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> ((synLanguage syntax, contName cont), labelFor syntax $ contAttribute cont)) $ synContexts syntax)
       -- Note: lineBeginContexts seems not to be used in any of the xml files
       -- lineBeginContexts =
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
       startingContext = head (synContexts syntax)
-      contextNull = text $ "parseRules \"\" = parseRules " ++ show (contName startingContext)
-      contextCatchAll = text $ "parseRules x = fail $ \"Unknown context\" ++ x"
+      -- contextNull = text $ "parseRules \"\" = parseRules " ++ show (synLanguage syntax, contName startingContext)
+      isIncludeRules p = parserType p == "IncludeRules" && "##" `isPrefixOf`
+                              parserContext p
+      includeLangs = nub $ map (drop 2 . parserContext) $
+                     filter isIncludeRules $
+                     concatMap contParsers $ synContexts syntax
+      foreignContexts = vcat $ map (\l -> text ("parseRules (" ++ show l ++ ", _) = " ++ langNameToModule l ++ ".parseExpression")) includeLangs
+      contextCatchAll = text $ "parseRules x = fail $ \"Unknown context\" ++ show x"
       contexts = map (mkRules syntax) $ synContexts syntax
-      initialContextStack = Map.fromList [(synLanguage syntax, [contName startingContext])]
+      initialContextStack = [(synLanguage syntax, contName startingContext)]
       startingState = SyntaxState { synStContexts = initialContextStack
-                                  , synStLanguage = synLanguage syntax
                                   , synStLineNumber = 0
                                   , synStPrevNonspace = False
                                   , synStPrevChar = '\n'
@@ -245,18 +247,18 @@ mkParser syntax =
                             \highlight :: String -> [SourceLine]\n\
                             \highlight input = evalState (mapM parseSourceLine $ lines input) startingState"
       lineParser = text   $ "parseSourceLine :: String -> State SyntaxState SourceLine\n\
-                            \parseSourceLine = mkParseSourceLine parseExpressionInternal pEndLine"
+                            \parseSourceLine = mkParseSourceLine parseExpression"
       endLineParser = text "pEndLine = do" $$
                       (nest 2 $ text "updateState $ \\st -> st{ synStPrevNonspace = False }" $$
                                 text "context <- currentContext" $$
                                 text "case context of" $$
-                                (nest 2 $ (vcat $ map (\cont -> text (show $ contName cont) <> text " -> " <>
-                                            switchContext (contLineEndContext cont) (<> text " >> ") <>
+                                (nest 2 $ (vcat $ map (\cont -> text (show (synLanguage syntax, contName cont)) <> text " -> " <>
+                                            switchContext (synLanguage syntax, contLineEndContext cont) (<> text " >> ") <>
                                             if "#pop" `isPrefixOf` (contLineEndContext cont)
                                                then text "pEndLine"
                                                else text "return ()") $ synContexts syntax) $$
                                           (text $ "_ -> return ()")))
-                                {- text "pushContext (fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$ -}
+                                {- text "pushContext (synLanguage syntax, fromMaybe \"#stay\" $ lookup context lineBeginContexts)" $$ -}
       -- we use 'words "blah blah2 blah3"' to keep ghc from inlining the list, which makes compiling take a long time
       listDef (n, list) = text $ listName n ++ " = Set.fromList $ words $ " ++
                                show (if keywordCaseSensitive (synKeywordAttr syntax)
@@ -267,8 +269,8 @@ mkParser syntax =
       regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
                                                               parserType x == "RegExpr", parserDynamic x == False]
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, lineParser, parseExpression, initState,
-                                      endLineParser, withAttr, parseExpressionInternal, lists, regexes,
-                                      defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [contextNull, contextCatchAll]
+                                      endLineParser, withAttr, lists, regexes,
+                                      defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [foreignContexts, contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
 mkAlternatives docs =
@@ -280,10 +282,10 @@ mkAlternatives docs =
 mkRules :: SyntaxDefinition -> SyntaxContext -> Doc
 mkRules syntax context =
   let fallthroughParser = if contFallthrough context
-                             then [parens (switchContext (contFallthroughContext context) (<> text " >> ") <>
+                             then [parens (switchContext (synLanguage syntax, contFallthroughContext context) (<> text " >> ") <>
                                    text "currentContext >>= parseRules")]
                              else []
-  in  text ("parseRules " ++ show (contName context) ++ " =") $$
+  in  text ("parseRules " ++ show (synLanguage syntax, contName context) ++ " =") $$
       if null (contParsers context) && null fallthroughParser
          then nest 2 (text "pzero")
          else nest 2 $ mkAlternatives $ (map (mkSyntaxParser syntax context) $ contParsers context) ++ fallthroughParser
@@ -320,7 +322,7 @@ mkSyntaxParser syntax context parser =
                                                       if parserIncludeAttrib parser || attr' == NormalTok
                                                          then ""
                                                          else " >>= ((withAttribute " ++ show attr' ++ ") . snd)"
-                                      xs           -> "parseRules " ++ show xs
+                                      xs           -> "parseRules " ++ show (synLanguage syntax, xs)
             "DetectSpaces"     -> "pDetectSpaces"
             "DetectIdentifier" -> "pDetectIdentifier"
             _                  -> "pUnimplemented"
@@ -335,10 +337,10 @@ mkSyntaxParser syntax context parser =
                      then mainParser <> char ')'
                      else if parserLookAhead parser
                             then text "lookAhead (" <> mainParser <> char ')'
-                                  <> switchContext (parserContext parser) (text " >> " <>)
+                                  <> switchContext (synLanguage syntax, parserContext parser) (text " >> " <>)
                                   <> text " >> currentContext >>= parseRules)"
                             else mainParser <> text " >>= withAttribute " <> text (show attr') <> char ')'
-                                  <> switchContext (parserContext parser) (text " >>~ " <>)
+                                  <> switchContext (synLanguage syntax, parserContext parser) (text " >>~ " <>)
       childParsers = parserChildren parser
   in  char '(' <>
       (if null childParsers
@@ -346,15 +348,15 @@ mkSyntaxParser syntax context parser =
           else text "withChildren " <> parserDoc <> char ' ' <> (mkAlternatives $ map (mkSyntaxParser syntax context) childParsers)) <>
       char ')'
 
-switchContext :: String -> (Doc -> Doc) -> Doc
-switchContext next finalizer =
+switchContext :: Context -> (Doc -> Doc) -> Doc
+switchContext (lang,next) finalizer =
   case next of
      x | "#pop" `isPrefixOf` x -> finalizer $
           char '(' <> text (concat $ intersperse " >> "
                                    $ replicate (length (filter (=='#') x)) "popContext") <> char ')'
      "#stay" -> empty
      ""      -> empty
-     x       -> finalizer $ text ("pushContext " ++ show x)
+     x       -> finalizer $ text ("pushContext " ++ show (lang,x))
 
 langNameToModule :: String -> String
 langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++

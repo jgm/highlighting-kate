@@ -12,19 +12,20 @@ Definitions for data structures needed by highlighting-kate.
 -}
 
 module Text.Highlighting.Kate.Types where
-import qualified Data.Map as Map
 import Text.ParserCombinators.Parsec
 import Data.Word
 import Text.Printf
 
--- | A stack of context names for each language.  (Language-specific context
+-- | A context: pair of syntax name and context name.
+type Context = (String, String)
+
+-- | A stack of contexts.  (Language-specific context
 -- stacks must be maintained because of IncludeRules.)
-type ContextStack = Map.Map String [String]
+type ContextStack = [Context]
 
 -- | State for syntax parser.
 data SyntaxState = SyntaxState
   { synStContexts             :: ContextStack -- ^ Stack of contexts
-  , synStLanguage             :: String       -- ^ Language being parsed
   , synStLineNumber           :: Int          -- ^ Number of current line
   , synStPrevChar             :: Char         -- ^ Last character parsed
   , synStPrevNonspace         :: Bool         -- ^ True if we've parsed a nonspace

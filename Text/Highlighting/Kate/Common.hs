@@ -23,7 +23,6 @@ import Text.ParserCombinators.Parsec hiding (State)
 import Data.Char (isDigit, toLower, isSpace)
 import Data.List (tails)
 import Control.Monad.State
-import qualified Data.Map as Map
 import qualified Data.Set as Set
 
 -- | Match filename against a list of globs contained in a semicolon-separated
@@ -62,36 +61,26 @@ normalizeHighlighting ((a,x):(b,y):xs)
   | a == b = normalizeHighlighting ((a, x++y):xs)
 normalizeHighlighting (x:xs) = x : normalizeHighlighting xs
 
-pushContext :: [Char] -> KateParser ()
-pushContext context = if context == "#stay"
+pushContext :: Context -> KateParser ()
+pushContext (lang,context) =
+                      if context == "#stay"
                          then return ()
                          else do st <- getState
                                  let contexts = synStContexts st
-                                 let lang = synStLanguage st
-                                 let addContext c x = case x of
-                                                       Nothing -> Just [c]
-                                                       Just cs -> Just (c:cs)
-                                 let newContexts = Map.alter (addContext context) lang contexts
-                                 updateState $ \st -> st { synStContexts = newContexts }
+                                 updateState $ \st -> st{ synStContexts =
+                                                (lang,context) : contexts }
 
 popContext :: KateParser ()
 popContext = do st <- getState
-                let contexts = synStContexts st
-                let lang = synStLanguage st
-                case Map.lookup lang contexts of
-                    Just (_:_) -> updateState $ \st ->
-                                    st{ synStContexts = Map.adjust tail lang contexts }
-                    Just []    -> fail $ "Stack empty for language " ++ lang
-                    Nothing    -> fail $ "No context stack for language " ++ lang
+                case synStContexts st of
+                    (_:xs) -> updateState $ \st -> st{ synStContexts = xs }
+                    []     -> fail "Stack empty"
 
-currentContext :: KateParser String
+currentContext :: KateParser Context
 currentContext = do st <- getState
-                    let contexts = synStContexts st
-                    let lang = synStLanguage st
-                    case Map.lookup lang contexts of
-                         Just []    -> return ""
-                         Just (c:_) -> return c
-                         Nothing    -> fail $ "No context stack for language " ++ lang
+                    case synStContexts st of
+                         (x:_) -> return x
+                         []    -> fail "Stack empty"
 
 withChildren :: KateParser Token
              -> KateParser Token
@@ -298,16 +287,13 @@ fromState :: (SyntaxState -> a) -> KateParser a
 fromState f = f `fmap` getState
 
 mkParseSourceLine :: KateParser Token    -- ^ parseExpressionInternal
-                  -> KateParser ()       -- ^ pEndline
                   -> String
                   -> State SyntaxState SourceLine
-mkParseSourceLine parseExpressionInternal pEndLine ln = do
+mkParseSourceLine parseExpression ln = do
   modify $ \st -> st{ synStLineNumber = synStLineNumber st + 1 }
   st <- get
   let lineName = "line " ++ show (synStLineNumber st)
-  let pline = do ts <- many parseExpressionInternal
-                 updateState $ \st -> st{ synStPrevChar = '\n' }
-                 pEndLine
+  let pline = do ts <- many parseExpression
                  s  <- getState
                  return (s, ts)
   let (newst, result) = case runParser pline st lineName ln of
