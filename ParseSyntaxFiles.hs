@@ -501,8 +501,15 @@ getParsers = listA $ getChildren
                                                                 else Just (read column)
                                     , parserDynamic = vBool False dynamic
                                     , parserString = if tildeRegex then drop 1 str else str
-                                    , parserChar = if length char0 == 1 then head char0 else '*'
-                                    , parserChar1 = if length char1 == 1 then head char1 else '*'
+                                    -- Note, some xml files have "\\" for a backslash,
+                                    -- others have "\".  Not sure what the rules are, but
+                                    -- this covers both bases:
+                                    , parserChar = case char0 of
+                                                         [c] -> c
+                                                         _   -> read $ "'" ++ char0 ++ "'"
+                                    , parserChar1 = case char1 of
+                                                         [c] -> c
+                                                         _   -> read $ "'" ++ char1 ++ "'"
                                     , parserChildren = children }
 
 getKeywordAttrs :: IOSArrow XmlTree [SyntaxKeywordAttr]
