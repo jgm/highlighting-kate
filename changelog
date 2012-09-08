@@ -1,3 +1,12 @@
+highlighting-kate 0.5.3.1 (07 Sep 2012)
+
+  * More changes to properly handle includes.  This
+    closes issue #22 with doxygen comments.  pDefault
+    has been incorporated into the ends of the context
+    parsers, instead of being put in parseExpression.
+
+  * Re-added doxygenlua, which now works.
+
 highlighting-kate 0.5.3 (07 Sep 2012)
 
   * Improved handling of include directives.  This fixes
