@@ -52,6 +52,7 @@ Extra-Source-Files:  README
                      xml/diff.xml
                      xml/djangotemplate.xml
                      xml/doxygen.xml
+                     xml/doxygenlua.xml
                      xml/dtd.xml
                      xml/eiffel.xml
                      xml/email.xml
@@ -178,6 +179,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
                      Text.Highlighting.Kate.Syntax.Doxygen
+                     Text.Highlighting.Kate.Syntax.Doxygenlua
                      Text.Highlighting.Kate.Syntax.Dtd
                      Text.Highlighting.Kate.Syntax.Eiffel
                      Text.Highlighting.Kate.Syntax.Email
