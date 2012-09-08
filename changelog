@@ -1,3 +1,10 @@
+highlighting-kate 0.5.3.2 (07 Sep 2012)
+
+  * Fixed handling of backslash in bash highlighting.
+    Sometimes "\\" is used for backslash in the
+    syntax definitions (as in bash), other times "\".
+    We now handle both cases.
+
 highlighting-kate 0.5.3.1 (07 Sep 2012)
 
   * More changes to properly handle includes.  This
