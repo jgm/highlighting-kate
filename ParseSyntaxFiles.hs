@@ -206,16 +206,11 @@ mkParser syntax =
                    text "updateState $ \\st -> st { synStPrevChar = last txt" $$
                    text "                        , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
                    text "return (attr, txt)")
-      lang = synLanguage syntax
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
                         text "parseExpression :: KateParser Token" $$
                         text "parseExpression = do" $$ (nest 2 $
                           text "(lang,cont) <- currentContext" $$
-                          text "let defAttr = fromMaybe NormalTok $ lookup (lang,cont) defaultAttributes" $$
-                          text ("result <- if lang == " ++ show lang) $$
-                          text ("             then parseRules (lang,cont) <|>") $$
-                          text ("                    (pDefault >>= withAttribute defAttr)") $$
-                          text ("             else parseRules " ++ show (lang, contName (head $ synContexts syntax))) $$
+                          text ("result <- parseRules (lang,cont)") $$
                           text "optional $ do eof" $$
                           text "              updateState $ \\st -> st{ synStPrevChar = '\\n' }" $$
                           text "              pEndLine" $$
@@ -232,7 +227,7 @@ mkParser syntax =
                      filter isIncludeRules $
                      concatMap contParsers $ synContexts syntax
       foreignContexts = vcat $ map (\l -> text ("parseRules (" ++ show l ++ ", _) = " ++ langNameToModule l ++ ".parseExpression")) includeLangs
-      contextCatchAll = text $ "parseRules x = fail $ \"Unknown context\" ++ show x"
+      contextCatchAll = text $ "parseRules x = parseRules " ++ show (synLanguage syntax, contName startingContext) ++ " <|> fail (\"Unknown context\" ++ show x)"
       contexts = map (mkRules syntax) $ synContexts syntax
       initialContextStack = [(synLanguage syntax, contName startingContext)]
       startingState = SyntaxState { synStContexts = initialContextStack
@@ -281,11 +276,12 @@ mkAlternatives docs =
 
 mkRules :: SyntaxDefinition -> SyntaxContext -> Doc
 mkRules syntax context =
-  let fallthroughParser = if contFallthrough context
+  let ctx = (synLanguage syntax, contName context)
+      fallthroughParser = if contFallthrough context
                              then [parens (switchContext (synLanguage syntax, contFallthroughContext context) (<> text " >> ") <>
                                    text "currentContext >>= parseRules")]
-                             else []
-  in  text ("parseRules " ++ show (synLanguage syntax, contName context) ++ " =") $$
+                             else [parens $ text $ "currentContext >>= \\x -> guard (x == " ++ show ctx ++ ") >> pDefault >>= withAttribute (fromMaybe NormalTok $ lookup " ++ show ctx ++ " defaultAttributes)"]
+  in  text ("parseRules " ++ show ctx ++ " =") $$
       if null (contParsers context) && null fallthroughParser
          then nest 2 (text "pzero")
          else nest 2 $ mkAlternatives $ (map (mkSyntaxParser syntax context) $ contParsers context) ++ fallthroughParser
