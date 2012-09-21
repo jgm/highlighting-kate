@@ -89,10 +89,10 @@ formatHtmlBlock opts ls = container ! A.class_ (toValue $ unwords classes)
                      $ H.pre
                      $ mapM_ lineNum [startNum..(startNum + length ls - 1)]
          lineNum n = if lineAnchors opts
-                        then (H.a ! A.id (toValue $ show n) $ toHtml $ show n)
+                        then (H.a ! A.id (toValue nStr) ! A.href (toValue $ "#" ++ nStr) $ toHtml $ show n)
                               >> toHtml "\n"
                         else toHtml $ show n ++ "\n"
-
+           where nStr = show n
 -- | Returns CSS for styling highlighted code according to the given style.
 styleToCss :: Style -> String
 styleToCss f = unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
