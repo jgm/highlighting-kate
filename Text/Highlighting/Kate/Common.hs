@@ -293,7 +293,7 @@ mkParseSourceLine parseExpression ln = do
   modify $ \st -> st{ synStLineNumber = synStLineNumber st + 1 }
   st <- get
   let lineName = "line " ++ show (synStLineNumber st)
-  let pline = do ts <- many parseExpression
+  let pline = do ts <- manyTill parseExpression eof
                  s  <- getState
                  return (s, ts)
   let (newst, result) = case runParser pline st lineName ln of
