@@ -1,6 +1,6 @@
 Name:                highlighting-kate
 Version:             0.5.3.2
-Cabal-Version:       >= 1.6
+Cabal-Version:       >= 1.10
 Build-Type:          Simple
 Category:            Text
 Synopsis:            Syntax highlighting
@@ -255,7 +255,9 @@ Library
 
 Executable Highlight
   Main-Is:          Highlight.hs
-  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.6, filepath
+  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.6, filepath,
+                    highlighting-kate
+  Hs-Source-Dirs:   extra
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
   Ghc-Options:      -W -O0 -rtsopts
