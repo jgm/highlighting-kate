@@ -1,3 +1,37 @@
+highlighting-kate 0.5.3.4 (04 Jan 2013)
+
+  * Don't pop context on line end if we're already at root context.
+    This helps with the erlang.xml file, which has some odd
+    `#pop`s in it. Closes #26.
+
+  * Avoid superfluous table lookup.  We find the default attribute
+    in ParseSyntaxFiles and embed it directly in the parser, rather
+    than looking it up at runtime.  This simplifies the parsers
+    and should boost performance.
+
+  * Don't pop last context in context stack.  This helps with the
+    erlang.xml file, which has some odd `#pop`s.
+
+  * Changed cabal file so library need not be recompiled for executable.
+    Moved Highlight.hs to extra/ directory.
+
+  * Fixed alignment of line numbers with lines.
+
+  * Make sure we parse the whole line when an error occurs.
+    This fixes a problem wherein ends of lines were dropped
+    after errors.
+
+highlighting-kate 0.5.3.3 (12 Oct 2012)
+
+  * LaTeX output:  Use \char13 and \char18 for ' and `.
+    Reason:  Otherwise these appear as curly quotes.
+    The upquote package can alternatively be used, but it seems better to
+    make it unnecessary to use it.
+
+  * Make line number anchors into clickable links.
+    This makes it easier to obtain the URL for a specific line
+    of code.  (Alp Mestanogullari)
+
 highlighting-kate 0.5.3.2 (07 Sep 2012)
 
   * Fixed handling of backslash in bash highlighting.
