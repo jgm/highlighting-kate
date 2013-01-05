@@ -73,6 +73,7 @@ pushContext (lang,context) =
 popContext :: KateParser ()
 popContext = do st <- getState
                 case synStContexts st of
+                    [x]    -> return () -- stay if we're at the root
                     (_:xs) -> updateState $ \st -> st{ synStContexts = xs }
                     []     -> fail "Stack empty"
 
