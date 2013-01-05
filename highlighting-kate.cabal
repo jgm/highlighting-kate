@@ -247,6 +247,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Yaml
   -- disable optimizations; it doesn't hurt performance much and
   -- massively improves compilation speed and memory usage
+  Default-Language:    Haskell98
   Ghc-Options:       -W -O0
   Ghc-Prof-Options:  -auto-all -caf-all
   -- the following line is needed to prevent gcc from consuming huge amounts of
@@ -258,6 +259,7 @@ Executable Highlight
   Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.6, filepath,
                     highlighting-kate
   Hs-Source-Dirs:   extra
+  Default-Language:    Haskell98
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
   Ghc-Options:      -W -O0 -rtsopts
