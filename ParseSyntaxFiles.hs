@@ -168,8 +168,7 @@ processOneFile src = do
            unlines includeImports ++
            "import Text.ParserCombinators.Parsec hiding (State)\n\
            \import Control.Monad.State\n\
-           \import Data.Char (isSpace)\n\
-           \import Data.Maybe (fromMaybe)\n" ++
+           \import Data.Char (isSpace)\n" ++
            (if null (synLists syntax)
                then "\n"
                else "import qualified Data.Set as Set\n\n") ++
@@ -215,7 +214,7 @@ mkParser syntax =
                           text "              updateState $ \\st -> st{ synStPrevChar = '\\n' }" $$
                           text "              pEndLine" $$
                           text "return result")
-      defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> ((synLanguage syntax, contName cont), labelFor syntax $ contAttribute cont)) $ synContexts syntax)
+      -- defaultAttributes = text $ "defaultAttributes = " ++ (show $ map (\cont -> ((synLanguage syntax, contName cont), labelFor syntax $ contAttribute cont)) $ synContexts syntax)
       -- Note: lineBeginContexts seems not to be used in any of the xml files
       -- lineBeginContexts =
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
@@ -264,8 +263,8 @@ mkParser syntax =
       regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
                                                               parserType x == "RegExpr", parserDynamic x == False]
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, lineParser, parseExpression, initState,
-                                      endLineParser, withAttr, lists, regexes,
-                                      defaultAttributes {- , lineBeginContexts -}] ++ contexts ++ [foreignContexts, contextCatchAll]
+                                      endLineParser, withAttr, lists, regexes
+                                      {- ,defaultAttributes , lineBeginContexts -}] ++ contexts ++ [foreignContexts, contextCatchAll]
 
 mkAlternatives :: [Doc] -> Doc
 mkAlternatives docs =
@@ -280,7 +279,7 @@ mkRules syntax context =
       fallthroughParser = if contFallthrough context
                              then [parens (switchContext (synLanguage syntax, contFallthroughContext context) (<> text " >> ") <>
                                    text "currentContext >>= parseRules")]
-                             else [parens $ text $ "currentContext >>= \\x -> guard (x == " ++ show ctx ++ ") >> pDefault >>= withAttribute (fromMaybe NormalTok $ lookup " ++ show ctx ++ " defaultAttributes)"]
+                             else [parens $ text $ "currentContext >>= \\x -> guard (x == " ++ show ctx ++ ") >> pDefault >>= withAttribute " ++ show (labelFor syntax (contAttribute context))]
   in  text ("parseRules " ++ show ctx ++ " =") $$
       if null (contParsers context) && null fallthroughParser
          then nest 2 (text "pzero")
