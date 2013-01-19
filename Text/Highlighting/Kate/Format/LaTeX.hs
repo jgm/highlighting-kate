@@ -42,8 +42,6 @@ escapeLaTeX = concatMap escapeLaTeXChar
         escapeLaTeXChar '{'  = "\\{"
         escapeLaTeXChar '}'  = "\\}"
         escapeLaTeXChar '|'  = "\\textbar{}" -- used in inline verbatim
-        escapeLaTeXChar '`'  = "{\\char18}"  -- otherwise will be curly
-        escapeLaTeXChar '\'' = "{\\char13}"  -- otherwise will be curly
         escapeLaTeXChar x    = [x]
 
 -- LaTeX
