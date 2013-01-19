@@ -20,7 +20,6 @@ Maintainer:          jgm@berkeley.edu
 Homepage:            http://github.com/jgm/highlighting-kate
 Extra-Source-Files:  README
                      changelog
-                     Highlight.hs
                      ParseSyntaxFiles.hs
                      Text/Highlighting/Kate/Syntax.hs.in
                      css/hk-espresso.css
