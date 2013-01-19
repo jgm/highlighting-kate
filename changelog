@@ -1,3 +1,9 @@
+highlighting-kate 0.5.3.5 (19 Jan 2013)
+
+  * Reverted use of \char13 and \char18 for ' and `.
+    This is not robust enough across encodings.  Recommend using
+    upquote package instead.
+
 highlighting-kate 0.5.3.4 (04 Jan 2013)
 
   * Don't pop context on line end if we're already at root context.
