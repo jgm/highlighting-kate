@@ -198,6 +198,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Javascript
                      Text.Highlighting.Kate.Syntax.Json
                      Text.Highlighting.Kate.Syntax.Jsp
+                     Text.Highlighting.Kate.Syntax.Julia
                      Text.Highlighting.Kate.Syntax.Latex
                      Text.Highlighting.Kate.Syntax.Lex
                      Text.Highlighting.Kate.Syntax.LiterateHaskell
