@@ -71,6 +71,7 @@ Extra-Source-Files:  README
                      xml/javascript.xml.bkp
                      xml/json.xml
                      xml/jsp.xml
+                     xml/julia.xml
                      xml/language.dtd
                      xml/latex.xml
                      xml/lex.xml
