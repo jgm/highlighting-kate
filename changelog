@@ -6,6 +6,8 @@ highlighting-kate 0.5.3.6 (16 Feb 2013)
 
   * Fixed language extensions value for asn1 (Stanley).
 
+  * Updated xml descriptions from kate repository.
+
 highlighting-kate 0.5.3.5 (19 Jan 2013)
 
   * Reverted use of \char13 and \char18 for ' and `.
