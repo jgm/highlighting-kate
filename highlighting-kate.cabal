@@ -177,6 +177,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Cpp
                      Text.Highlighting.Kate.Syntax.Cs
                      Text.Highlighting.Kate.Syntax.Css
+                     Text.Highlighting.Kate.Syntax.Curry
                      Text.Highlighting.Kate.Syntax.D
                      Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
@@ -202,6 +203,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Julia
                      Text.Highlighting.Kate.Syntax.Latex
                      Text.Highlighting.Kate.Syntax.Lex
+                     Text.Highlighting.Kate.Syntax.LiterateCurry
                      Text.Highlighting.Kate.Syntax.LiterateHaskell
                      Text.Highlighting.Kate.Syntax.Lua
                      Text.Highlighting.Kate.Syntax.Makefile
