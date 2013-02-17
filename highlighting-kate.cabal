@@ -48,6 +48,7 @@ Extra-Source-Files:  README
                      xml/cpp.xml
                      xml/cs.xml
                      xml/css.xml
+                     xml/curry.xml
                      xml/d.xml
                      xml/diff.xml
                      xml/djangotemplate.xml
@@ -75,6 +76,7 @@ Extra-Source-Files:  README
                      xml/language.dtd
                      xml/latex.xml
                      xml/lex.xml
+                     xml/literate-curry.xml
                      xml/literate-haskell.xml
                      xml/lua.xml
                      xml/makefile.xml

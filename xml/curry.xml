@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd"
+[
+  <!-- qualification of entities -->
+  <!ENTITY qualify     "([A-Z][a-zA-Z0-9_']*\.)*">
+  <!-- identifier -->
+  <!ENTITY ident       "[a-z][a-zA-Z0-9_']*">
+  <!-- Type -->
+  <!ENTITY type        "[A-Z][a-zA-Z0-9_']*">
+  <!-- infix operator characters -->
+  <!ENTITY infixchar   "~!@#\$&#37;\^&amp;\*\+\-=&lt;&gt;\?\./\|\\:">
+  <!-- identifier in prefix notation, e.g.: id, ($) -->
+  <!ENTITY prefixIdent "(&ident;|\([&infixchar;]+\))">
+]>
+<language name="Curry" version="0.1" kateversion="2.3"
+          section="Sources" extensions="*.curry" mimetype="text/x-curry"
+          author="Björn Peemöller (bjp@informatik.uni-kiel.de)" license="LGPL"
+          indenter="haskell">
+  <highlighting>
+  <list name="keywords">
+    <item> case </item>
+    <item> data </item>
+    <item> do </item>
+    <item> else </item>
+    <item> external </item>
+    <item> fcase </item>
+    <item> free </item>
+    <item> if </item>
+<!-- Although import is a keyword, it is handled in a special context
+     to highlight "qualified", "as" and "hiding" in keyword style,
+     albeit these lexemes are no keywords.
+    <item> import </item>
+  -->
+    <item> in </item>
+    <item> infix </item>
+    <item> infixl </item>
+    <item> infixr </item>
+    <item> let </item>
+    <item> module </item>
+    <item> of </item>
+    <item> then </item>
+    <item> type </item>
+    <item> where </item>
+  </list>
+  <list name="Prelude Fun">
+    <item> and </item>
+    <item> all </item>
+    <item> any </item>
+    <item> appendFile </item>
+    <item> best </item>
+    <item> break </item>
+    <item> browse </item>
+    <item> browseList </item>
+    <item> chr </item>
+    <item> concat </item>
+    <item> concatMap </item>
+    <item> const </item>
+    <item> curry </item>
+    <item> div </item>
+    <item> done </item>
+    <item> doSolve </item>
+    <item> drop </item>
+    <item> dropWhile </item>
+    <item> either </item>
+    <item> elem </item>
+    <item> ensureNotFree </item>
+    <item> ensureSpine </item>
+    <item> enumFrom </item>
+    <item> enumFromThen </item>
+    <item> enumFromTo </item>
+    <item> enumFromThenTo </item>
+    <item> error </item>
+    <item> failed </item>
+    <item> filter </item>
+    <item> findall </item>
+    <item> flip </item>
+    <item> foldl </item>
+    <item> foldl1 </item>
+    <item> foldr </item>
+    <item> foldr1 </item>
+    <item> fst </item>
+    <item> getChar </item>
+    <item> getLine </item>
+    <item> id </item>
+    <item> if_then_else </item>
+    <item> iterate </item>
+    <item> head </item>
+    <item> length </item>
+    <item> lines </item>
+    <item> lookup </item>
+    <item> map </item>
+    <item> mapIO </item>
+    <item> mapIO_ </item>
+    <item> max </item>
+    <item> maybe </item>
+    <item> min </item>
+    <item> mod </item>
+    <item> negate </item>
+    <item> not </item>
+    <item> notElem </item>
+    <item> null </item>
+    <item> once </item>
+    <item> or </item>
+    <item> ord </item>
+    <item> otherwise </item>
+    <item> print </item>
+    <item> putChar </item>
+    <item> putStr </item>
+    <item> putStrLn </item>
+    <item> readFile </item>
+    <item> repeat </item>
+    <item> replicate </item>
+    <item> return </item>
+    <item> reverse </item>
+    <item> seq </item>
+    <item> sequenceIO </item>
+    <item> sequenceIO_ </item>
+    <item> show </item>
+    <item> snd </item>
+    <item> solveAll </item>
+    <item> span </item>
+    <item> splitAt </item>
+    <item> success </item>
+    <item> tail </item>
+    <item> take </item>
+    <item> takeWhile </item>
+    <item> try </item>
+    <item> uncurry </item>
+    <item> unknown </item>
+    <item> unlines </item>
+    <item> unpack </item>
+    <item> until </item>
+    <item> unwords </item>
+    <item> unzip </item>
+    <item> unzip3 </item>
+    <item> writeFile </item>
+    <item> words </item>
+    <item> zip </item>
+    <item> zip3 </item>
+    <item> zipWith </item>
+    <item> zipWith3 </item>
+  </list>
+  <list name="Prelude Type">
+    <item> Bool </item>
+    <item> Char </item>
+    <item> Either </item>
+    <item> Float </item>
+    <item> Int </item>
+    <item> IO </item>
+    <item> Maybe </item>
+    <item> Ordering </item>
+    <item> String </item>
+    <item> Success </item>
+  </list>
+  <list name="Prelude Cons">
+    <item> False </item>
+    <item> True </item>
+    <item> Left </item>
+    <item> Right </item>
+    <item> Just </item>
+    <item> Nothing </item>
+    <item> EQ </item>
+    <item> LT </item>
+    <item> GT </item>
+  </list>
+  <contexts>
+    <context attribute="Normal" lineEndContext="#stay" name="Normal">
+      <!-- pragmas, currydoc, comments -->
+      <StringDetect attribute="Pragma"      context="Pragma"            String="{-#"        beginRegion="Pragma"  />
+      <Detect2Chars attribute="Comment"     context="Multiline Comment" char="{" char1="-"  beginRegion="Comment" />
+      <StringDetect attribute="Currydoc"    context="Currydoc"          String="---"        />
+      <Detect2Chars attribute="Comment"     context="Comment"           char="-" char1="-"  />
+
+      <!-- keywords, Prelude entities -->
+      <keyword      attribute="Keyword"     context="#stay"   String="keywords" />
+      <keyword      attribute="Prelude"     context="#stay"   String="Prelude Fun" />
+      <keyword      attribute="Type"        context="#stay"   String="Prelude Type" />
+      <keyword      attribute="Constructor" context="#stay"   String="Prelude Cons" />
+      <RegExpr      attribute="Keyword"     context="Import"  String="import\s+(qualified)?" />
+
+      <!-- Literals -->
+      <Float        attribute="Float"       context="#stay"   />
+      <RegExpr      attribute="Octal"       context="#stay"   String="0(o|O)[0-7]+" />
+      <HlCHex       attribute="Hex"         context="#stay"   />
+      <Int          attribute="Decimal"     context="#stay"   />
+      <DetectChar   attribute="Char"        context="Char"    char="'" />
+      <DetectChar   attribute="String"      context="String"  char="&quot;" />
+
+      <!-- Others -->
+      <RegExpr      attribute="Special"     context="#stay"   String="(::|:=|:&gt;|\-&gt;|&lt;\-|\.\.)" />
+      <RegExpr      attribute="Signature"   context="#stay"   String="\s*&prefixIdent;\s*(,\s*&prefixIdent;)*\s*(?=::[^&infixchar;])" />
+      <RegExpr      attribute="Function"    context="#stay"   String="&qualify;&ident;" />
+      <RegExpr      attribute="Operator"    context="#stay"   String="&qualify;[&infixchar;]+" />
+      <RegExpr      attribute="Type"        context="#stay"   String="&qualify;&type;" />
+      <DetectChar   attribute="Infix"       context="Infix"   char="`" />
+    </context>
+
+    <!-- Pragma -->
+    <context attribute="Pragma"  lineEndContext="#stay" name="Pragma">
+      <StringDetect attribute="Pragma" context="#pop" String="#-}" endRegion="Pragma" />
+    </context>
+
+    <!-- Multiline comment -->
+    <context attribute="Comment"  lineEndContext="#stay" name="Multiline Comment">
+      <Detect2Chars attribute="Comment" context="#pop" char="-" char1="}" endRegion="Comment" />
+    </context>
+
+    <!-- Currydoc -->
+    <context attribute="Currydoc" lineEndContext="#pop"  name="Currydoc" />
+
+    <!-- Single line comment -->
+    <context attribute="Comment"  lineEndContext="#pop"  name="Comment"  />
+
+    <!-- Import section -->
+    <context attribute="Normal" lineEndContext="#pop" name="Import">
+      <RegExpr      attribute="Type"    context="#stay" String="&qualify;&type;" />
+      <Detect2Chars attribute="Keyword" context="#stay" char="a" char1="s" />
+      <StringDetect attribute="Keyword" context="#stay" String="hiding" />
+      <!-- Pop context at open paren to highlight imported entities -->
+      <DetectChar   attribute="Normal" context="#pop"   char="(" />
+      <RegExpr      attribute="Error"  context="#stay"  String="\S+" />
+    </context>
+
+    <!-- This could be more elaborate w.r.t escape sequences and restricting
+         to one character, but we keep it simple for the moment -->
+    <context attribute="Char" lineEndContext="#pop" name="Char">
+      <RegExpr    attribute="Char" context="#stay" String="\\." />
+      <DetectChar attribute="Char" context="#pop"  char="'" />
+    </context>
+
+    <!-- This could be more elaborate, w.r.t escape sequences,
+         but we keep it simple for the moment -->
+    <context attribute="String" lineEndContext="#stay" name="String">
+      <RegExpr    attribute="String" context="#stay" String="\\." />
+      <DetectChar attribute="String" context="#pop"  char="&quot;" />
+    </context>
+
+    <!-- Infix application -->
+    <context attribute="Infix" lineEndContext="#stay" name="Infix">
+      <DetectChar attribute="Infix" context="#pop" char="`"/>
+    </context>
+  </contexts>
+
+  <itemDatas>
+    <itemData name="Normal"      defStyleNum="dsNormal"   spellChecking="false" />
+
+    <!-- Comments -->
+    <itemData name="Pragma"      defStyleNum="dsOthers"   spellChecking="false" />
+    <itemData name="Comment"     defStyleNum="dsComment"  />
+    <itemData name="Currydoc"    defStyleNum="dsComment"  color="#008000" selColor="#FFFFFF"/>
+
+    <!-- Keywords, predefined entities -->
+    <itemData name="Keyword"     defStyleNum="dsKeyword"  spellChecking="false" />
+    <itemData name="Type"        defStyleNum="dsDataType" spellChecking="false" />
+    <itemData name="Prelude"     defStyleNum="dsFunction" spellChecking="false" />
+    <itemData name="Constructor" defStyleNum="dsKeyword"  spellChecking="false" />
+
+    <!-- Literals -->
+    <itemData name="Float"       defStyleNum="dsFloat"    spellChecking="false" />
+    <itemData name="Octal"       defStyleNum="dsBaseN"    spellChecking="false" />
+    <itemData name="Hex"         defStyleNum="dsBaseN"    spellChecking="false" />
+    <itemData name="Decimal"     defStyleNum="dsDecVal"   spellChecking="false" />
+    <itemData name="Char"        defStyleNum="dsChar"     spellChecking="false" />
+    <itemData name="String"      defStyleNum="dsString"   />
+
+    <!-- Others -->
+    <itemData name="Signature"   defStyleNum="dsOthers"   spellChecking="false" />
+    <itemData name="Function"    defStyleNum="dsNormal"   spellChecking="false" />
+    <itemData name="Operator"    defStyleNum="dsFunction" spellChecking="false" />
+    <itemData name="Type"        defStyleNum="dsDataType" spellChecking="false" />
+    <itemData name="Special"     defStyleNum="dsOthers"   spellChecking="false" />
+    <itemData name="Infix"       defStyleNum="dsOthers"   spellChecking="false" />
+    <itemData name="Error"       defStyleNum="dsError"    spellChecking="false" />
+  </itemDatas>
+  </highlighting>
+  <general>
+    <folding indentationsensitive="1"/>
+    <comments>
+      <comment name="singleLine" start="--" />
+      <comment name="multiLine" start="{-" end="-}" region="Comment" />
+    </comments>
+    <keywords casesensitive="1" />
+  </general>
+</language>

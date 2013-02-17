@@ -22,6 +22,7 @@ Currently, the following languages/formats are supported:
 - Cpp
 - Cs
 - Css
+- Curry
 - D
 - Diff
 - Djangotemplate
@@ -46,6 +47,7 @@ Currently, the following languages/formats are supported:
 - Jsp
 - Latex
 - Lex
+- LiterateCurry
 - LiterateHaskell
 - Lua
 - Makefile
