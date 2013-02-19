@@ -148,7 +148,7 @@ Library
     cpp-options:     -D_PCRE_LIGHT
   else
     Build-depends:   regex-pcre-builtin
-  Build-Depends:     parsec, mtl, blaze-html >= 0.4.2 && < 0.6
+  Build-Depends:     parsec, mtl, blaze-html >= 0.4.2 && < 0.7
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Types
@@ -260,7 +260,7 @@ Library
 
 Executable Highlight
   Main-Is:          Highlight.hs
-  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.6, filepath,
+  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.7, filepath,
                     highlighting-kate
   Hs-Source-Dirs:   extra
   Default-Language:    Haskell98
