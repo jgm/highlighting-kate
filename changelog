@@ -1,3 +1,7 @@
+highlighting-kate 0.5.3.7 (20 Feb 2013)
+
+  * Bumped version bound on blaze-html to 0.7.
+
 highlighting-kate 0.5.3.6 (16 Feb 2013)
 
   * Added support for Curry and literate Curry (Björn Peemöller).
