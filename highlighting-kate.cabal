@@ -1,5 +1,5 @@
 Name:                highlighting-kate
-Version:             0.5.3.7
+Version:             0.5.3.8
 Cabal-Version:       >= 1.10
 Build-Type:          Simple
 Category:            Text
@@ -105,6 +105,7 @@ Extra-Source-Files:  README
                      xml/relaxngcompact.xml
                      xml/rhtml.xml
                      xml/ruby.xml
+                     xml/rust.xml
                      xml/scala.xml
                      xml/scheme.xml
                      xml/sci.xml
@@ -232,6 +233,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
                      Text.Highlighting.Kate.Syntax.Rhtml
                      Text.Highlighting.Kate.Syntax.Ruby
+                     Text.Highlighting.Kate.Syntax.Rust
                      Text.Highlighting.Kate.Syntax.Scala
                      Text.Highlighting.Kate.Syntax.Scheme
                      Text.Highlighting.Kate.Syntax.Sci
