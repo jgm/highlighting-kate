@@ -1,3 +1,7 @@
+highlighting-kate 0.5.3.8 (05 Mar 2013)
+
+  * Support mozilla rust.
+
 highlighting-kate 0.5.3.7 (20 Feb 2013)
 
   * Bumped version bound on blaze-html to 0.7.
