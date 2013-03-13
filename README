@@ -78,6 +78,7 @@ Currently, the following languages/formats are supported:
 - Relaxngcompact
 - Rhtml
 - Ruby
+- Rust
 - Scala
 - Scheme
 - Sci
