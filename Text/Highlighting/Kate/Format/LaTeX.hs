@@ -19,29 +19,31 @@ import Data.List (intercalate)
 import Control.Monad (mplus)
 import Data.Char (isSpace)
 
-formatLaTeX :: FormatOptions -> [SourceLine] -> String
-formatLaTeX _ = intercalate "\n" . map sourceLineToLaTeX
+formatLaTeX :: Bool -> [SourceLine] -> String
+formatLaTeX inline = intercalate "\n" . map (sourceLineToLaTeX inline)
 
 -- | Formats tokens as LaTeX using custom commands inside
 -- @|@ characters. Assumes that @|@ is defined as a short verbatim
 -- command by the macros produced by 'styleToLaTeX'.
 -- A @KeywordTok@ is rendered using @\\KeywordTok{..}@, and so on.
 formatLaTeXInline :: FormatOptions -> [SourceLine] -> String
-formatLaTeXInline opts ls = "|" ++ formatLaTeX opts ls ++ "|"
+formatLaTeXInline _opts ls = "|" ++ formatLaTeX True ls ++ "|"
 
-sourceLineToLaTeX :: SourceLine -> String
-sourceLineToLaTeX contents = concatMap tokenToLaTeX contents
+sourceLineToLaTeX :: Bool -> SourceLine -> String
+sourceLineToLaTeX inline contents = concatMap (tokenToLaTeX inline) contents
 
-tokenToLaTeX :: Token -> String
-tokenToLaTeX (NormalTok, txt) | all isSpace txt = escapeLaTeX txt
-tokenToLaTeX (toktype, txt)   = '\\':(show toktype ++ "{" ++ escapeLaTeX txt ++ "}")
+tokenToLaTeX :: Bool -> Token -> String
+tokenToLaTeX inline (NormalTok, txt) | all isSpace txt = escapeLaTeX inline txt
+tokenToLaTeX inline (toktype, txt)   = '\\':(show toktype ++ "{" ++ escapeLaTeX inline txt ++ "}")
 
-escapeLaTeX :: String -> String
-escapeLaTeX = concatMap escapeLaTeXChar
+escapeLaTeX :: Bool -> String -> String
+escapeLaTeX inline = concatMap escapeLaTeXChar
   where escapeLaTeXChar '\\' = "\\textbackslash{}"
         escapeLaTeXChar '{'  = "\\{"
         escapeLaTeXChar '}'  = "\\}"
-        escapeLaTeXChar '|'  = "\\textbar{}" -- used in inline verbatim
+        escapeLaTeXChar '|'  = if inline
+                                  then "\\textbar{}" -- used in inline verbatim
+                                  else "|"
         escapeLaTeXChar x    = [x]
 
 -- LaTeX
@@ -65,7 +67,7 @@ formatLaTeXBlock opts ls = unlines
                 then ""
                 else ",firstnumber=" ++ show (startNumber opts)) ++ ","
        else "") ++ "]"
-  ,formatLaTeX opts ls
+  ,formatLaTeX False ls
   ,"\\end{Highlighting}"
   ,"\\end{Shaded}"]
 
