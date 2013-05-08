@@ -42,7 +42,7 @@ escapeLaTeX inline = concatMap escapeLaTeXChar
         escapeLaTeXChar '{'  = "\\{"
         escapeLaTeXChar '}'  = "\\}"
         escapeLaTeXChar '|'  = if inline
-                                  then "\\textbar{}" -- used in inline verbatim
+                                  then "\\VerbBar{}" -- used in inline verbatim
                                   else "|"
         escapeLaTeXChar x    = [x]
 
@@ -90,6 +90,7 @@ styleToLaTeX :: Style -> String
 styleToLaTeX f = unlines $
   [ "\\usepackage{color}"
   , "\\usepackage{fancyvrb}"
+  , "\\newcommand{\\VerbBar}{|}"
   , "\\DefineShortVerb[commandchars=\\\\\\{\\}]{\\|}"
   , "\\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\\\\{\\}}"
   , "% Add ',fontsize=\\small' for more characters per line"
