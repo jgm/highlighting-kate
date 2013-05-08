@@ -1,3 +1,11 @@
+highlighting-kate 0.5.3.9 (06 May 2013)
+
+  * LaTeX formatter:  Avoid using \textbar, which gives a bar that
+    is narrow and in a proportional font.  Instead, use literal | in
+    block code and a new macro \VerbBar in inline code.
+
+  * Updated Curry highlighting (Björn Peemöller).
+
 highlighting-kate 0.5.3.8 (05 Mar 2013)
 
   * Support mozilla rust.
