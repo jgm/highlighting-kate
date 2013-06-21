@@ -165,7 +165,7 @@ The syntax definitions can then be found in
     kate/part/syntax/data
 
 There is information on the syntax highlighting definitions at
-<http://docs.kde.org/stable/en/kde-baseapps/kate/highlight.html>.  See also
+<http://docs.kde.org/stable/en/applications/kate/highlight.html>.  See also
 <http://kate-editor.org/2005/03/24/writing-a-syntax-highlighting-file/>.
 
 Thanks are due to all the authors of these syntax definitions.
