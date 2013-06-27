@@ -1,3 +1,12 @@
+highlighting-kate 0.5.4 (26 June 2013)
+
+
+  * LaTeX formatter:  Render inline code as `\VERB|code|`
+    rather than `|code|`.  Define `\VERB` macro in preamble
+    rather than defining `|` as a shortverb character.  This
+    prevents troublesome clashes with `|` characters in array
+    environments and such.  See pandoc#891.
+
 highlighting-kate 0.5.3.9 (06 May 2013)
 
   * LaTeX formatter:  Avoid using \textbar, which gives a bar that
