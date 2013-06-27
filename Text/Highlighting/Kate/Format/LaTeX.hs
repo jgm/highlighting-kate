@@ -27,7 +27,7 @@ formatLaTeX inline = intercalate "\n" . map (sourceLineToLaTeX inline)
 -- command by the macros produced by 'styleToLaTeX'.
 -- A @KeywordTok@ is rendered using @\\KeywordTok{..}@, and so on.
 formatLaTeXInline :: FormatOptions -> [SourceLine] -> String
-formatLaTeXInline _opts ls = "|" ++ formatLaTeX True ls ++ "|"
+formatLaTeXInline _opts ls = "\\VERB|" ++ formatLaTeX True ls ++ "|"
 
 sourceLineToLaTeX :: Bool -> SourceLine -> String
 sourceLineToLaTeX inline contents = concatMap (tokenToLaTeX inline) contents
@@ -91,7 +91,7 @@ styleToLaTeX f = unlines $
   [ "\\usepackage{color}"
   , "\\usepackage{fancyvrb}"
   , "\\newcommand{\\VerbBar}{|}"
-  , "\\DefineShortVerb[commandchars=\\\\\\{\\}]{\\|}"
+  , "\\newcommand{\\VERB}{\\Verb[commandchars=\\\\\\{\\}]}"
   , "\\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\\\\{\\}}"
   , "% Add ',fontsize=\\small' for more characters per line"
   ] ++
