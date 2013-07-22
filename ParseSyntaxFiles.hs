@@ -218,9 +218,10 @@ mkParser syntax =
                    text "                        , synStPrevNonspace = synStPrevNonspace st || not (all isSpace txt) }" $$
                    text "return (attr, txt)")
       parseExpression = text "-- | Parse an expression using appropriate local context." $$
-                        text "parseExpression :: KateParser Token" $$
-                        text "parseExpression = do" $$ (nest 2 $
-                          text "(lang,cont) <- currentContext" $$
+                        text "parseExpression :: Maybe (String,String)" $$
+                        text "                -> KateParser Token" $$
+                        text "parseExpression mbcontext = do" $$ (nest 2 $
+                          text "(lang,cont) <- maybe currentContext return mbcontext" $$
                           text ("result <- parseRules (lang,cont)") $$
                           text "optional $ do eof" $$
                           text "              updateState $ \\st -> st{ synStPrevChar = '\\n' }" $$
@@ -235,7 +236,7 @@ mkParser syntax =
       -- includeLangs = nub $ map (drop 2 . parserContext) $
       --                filter isIncludeRules $
       --                concatMap contParsers $ synContexts syntax
-      foreignContexts = vcat $ map (\l -> text ("parseRules (" ++ show l ++ ", _) = " ++ langNameToModule l ++ ".parseExpression")) (includeLangs syntax)
+      foreignContexts = vcat $ map (\l -> text ("parseRules (" ++ show l ++ ", _) = " ++ langNameToModule l ++ ".parseExpression Nothing")) (includeLangs syntax)
       contextCatchAll = text $ "parseRules x = parseRules " ++ show (synLanguage syntax, contName startingContext) ++ " <|> fail (\"Unknown context\" ++ show x)"
       contexts = map (mkRules syntax) $ synContexts syntax
       initialContextStack = [(synLanguage syntax, contName startingContext)]
@@ -251,7 +252,7 @@ mkParser syntax =
                             \highlight :: String -> [SourceLine]\n\
                             \highlight input = evalState (mapM parseSourceLine $ lines input) startingState"
       lineParser = text   $ "parseSourceLine :: String -> State SyntaxState SourceLine\n\
-                            \parseSourceLine = mkParseSourceLine parseExpression"
+                            \parseSourceLine = mkParseSourceLine (parseExpression Nothing)"
       endLineParser = text "pEndLine = do" $$
                       (nest 2 $ text "updateState $ \\st -> st{ synStPrevNonspace = False }" $$
                                 text "context <- currentContext" $$
@@ -325,12 +326,15 @@ mkSyntaxParser syntax context parser =
             "HlCChar"          -> "pHlCChar"
             "RangeDetect"      -> "pRangeDetect " ++ show (parserChar parser) ++ " " ++ show (parserChar1 parser)
             "LineContinue"     -> "pLineContinue"
-            "IncludeRules"     -> case parserContext parser of
-                                      ('#':'#':xs) -> langNameToModule xs ++ ".parseExpression" ++
-                                                      if parserIncludeAttrib parser || attr' == NormalTok
-                                                         then ""
-                                                         else " >>= ((withAttribute " ++ show attr' ++ ") . snd)"
-                                      xs           -> "parseRules " ++ show (synLanguage syntax, xs)
+            "IncludeRules"     ->
+                  case break (=='#') $ parserContext parser of
+                       (cont,'#':'#':lang) ->
+                          langNameToModule lang ++ ".parseExpression (" ++
+                          show (Just (lang, cont)) ++
+                          if parserIncludeAttrib parser || attr' == NormalTok
+                             then ")"
+                             else ") >>= ((withAttribute " ++ show attr' ++ ") . snd)"
+                       (cont,_)     -> "parseRules " ++ show (synLanguage syntax, cont)
             "DetectSpaces"     -> "pDetectSpaces"
             "DetectIdentifier" -> "pDetectIdentifier"
             _                  -> "pUnimplemented"
