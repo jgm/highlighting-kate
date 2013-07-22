@@ -104,6 +104,7 @@ Extra-Source-Files:  README
                      xml/r.xml
                      xml/relaxngcompact.xml
                      xml/rhtml.xml
+                     xml/roff.xml
                      xml/ruby.xml
                      xml/rust.xml
                      xml/scala.xml
@@ -232,6 +233,7 @@ Library
                      Text.Highlighting.Kate.Syntax.R
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
                      Text.Highlighting.Kate.Syntax.Rhtml
+                     Text.Highlighting.Kate.Syntax.Roff
                      Text.Highlighting.Kate.Syntax.Ruby
                      Text.Highlighting.Kate.Syntax.Rust
                      Text.Highlighting.Kate.Syntax.Scala
