@@ -148,15 +148,20 @@ isIncludeRules :: SyntaxParser -> Bool
 isIncludeRules p =
   parserType p == "IncludeRules" && "##" `isInfixOf` parserContext p
 
+includeLangs :: SyntaxDefinition -> [String]
+includeLangs syntax =
+  nub $ map (drop 2 . parserContext) $
+        filter isIncludeRules $ concatMap contParsers $ synContexts syntax
+
 processOneFile :: FilePath -> IO ()
 processOneFile src = do
   [syntax] <- runX $ application src
   let name = nameFromPath src
   let outFile = joinPath [libraryPath, "Syntax", addExtension name "hs"]
-  let includeLangs = nub $ filter (/= name) $ map (drop 2 . parserContext) $
-        filter isIncludeRules $ concatMap contParsers $ synContexts syntax
+  -- let includeLangs = nub $ filter (/= name) $ map (drop 2 . parserContext) $
+  --      filter isIncludeRules $ concatMap contParsers $ synContexts syntax
   let includeImports = map (("import qualified " ++) . langNameToModule)
-                        includeLangs
+                        (filter (/= name) $ includeLangs syntax)
   putStrLn $ "Writing " ++ outFile
   B.writeFile outFile $ fromString $
            "{- This module was generated from data in the Kate syntax\n\
@@ -222,10 +227,10 @@ mkParser syntax =
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
       startingContext = head (synContexts syntax)
       -- contextNull = text $ "parseRules \"\" = parseRules " ++ show (synLanguage syntax, contName startingContext)
-      includeLangs = nub $ map (drop 2 . parserContext) $
-                     filter isIncludeRules $
-                     concatMap contParsers $ synContexts syntax
-      foreignContexts = vcat $ map (\l -> text ("parseRules (" ++ show l ++ ", _) = " ++ langNameToModule l ++ ".parseExpression")) includeLangs
+      -- includeLangs = nub $ map (drop 2 . parserContext) $
+      --                filter isIncludeRules $
+      --                concatMap contParsers $ synContexts syntax
+      foreignContexts = vcat $ map (\l -> text ("parseRules (" ++ show l ++ ", _) = " ++ langNameToModule l ++ ".parseExpression")) (includeLangs syntax)
       contextCatchAll = text $ "parseRules x = parseRules " ++ show (synLanguage syntax, contName startingContext) ++ " <|> fail (\"Unknown context\" ++ show x)"
       contexts = map (mkRules syntax) $ synContexts syntax
       initialContextStack = [(synLanguage syntax, contName startingContext)]
