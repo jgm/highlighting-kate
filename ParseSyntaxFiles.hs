@@ -150,8 +150,13 @@ isIncludeRules p =
 
 includeLangs :: SyntaxDefinition -> [String]
 includeLangs syntax =
-  nub $ map (drop 2 . parserContext) $
+  nub $ map (takeLang . parserContext) $
         filter isIncludeRules $ concatMap contParsers $ synContexts syntax
+
+takeLang :: String -> String
+takeLang [] = []
+takeLang ('#':'#':xs) = xs
+takeLang (_:xs) = takeLang xs
 
 processOneFile :: FilePath -> IO ()
 processOneFile src = do
