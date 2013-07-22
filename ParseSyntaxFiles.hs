@@ -144,13 +144,15 @@ writeCabalFile names = do
   putStrLn "Modified highlighting-kate.cabal."
   putStrLn "Backed up original as highlighting-kate.cabal.orig."
 
+isIncludeRules :: SyntaxParser -> Bool
+isIncludeRules p =
+  parserType p == "IncludeRules" && "##" `isInfixOf` parserContext p
+
 processOneFile :: FilePath -> IO ()
 processOneFile src = do
   [syntax] <- runX $ application src
   let name = nameFromPath src
   let outFile = joinPath [libraryPath, "Syntax", addExtension name "hs"]
-  let isIncludeRules p = parserType p == "IncludeRules" && "##" `isPrefixOf`
-                              parserContext p
   let includeLangs = nub $ filter (/= name) $ map (drop 2 . parserContext) $
         filter isIncludeRules $ concatMap contParsers $ synContexts syntax
   let includeImports = map (("import qualified " ++) . langNameToModule)
@@ -220,8 +222,6 @@ mkParser syntax =
       --   text $ "lineBeginContexts = " ++ (show $ map (\cont -> (contName cont, contLineBeginContext cont)) $ synContexts syntax)
       startingContext = head (synContexts syntax)
       -- contextNull = text $ "parseRules \"\" = parseRules " ++ show (synLanguage syntax, contName startingContext)
-      isIncludeRules p = parserType p == "IncludeRules" && "##" `isPrefixOf`
-                              parserContext p
       includeLangs = nub $ map (drop 2 . parserContext) $
                      filter isIncludeRules $
                      concatMap contParsers $ synContexts syntax
