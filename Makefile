@@ -11,7 +11,7 @@ XMLS=$(glob xml/*.xml)
 .PHONY: prep all
 
 all: prep
-	cabal install -fexecutable
+	cabal install -fexecutable --force
 
 prep: clean ParseSyntaxFiles $(XMLS)
 	./ParseSyntaxFiles xml
