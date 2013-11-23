@@ -53,6 +53,7 @@ Currently, the following languages/formats are supported:
 - Lua
 - Makefile
 - Mandoc
+- Markdown
 - Matlab
 - Maxima
 - Mediawiki
