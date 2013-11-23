@@ -39,7 +39,7 @@
 
    Enhance tr/// and y/// support.
 -->
-<language name="Perl" version="1.25" kateversion="2.4" section="Scripts" extensions="*.pl;*.pm" mimetype="application/x-perl;text/x-perl" author="Anders Lund (anders@alweb.dk)" license="LGPL">
+<language name="Perl" version="1.29" kateversion="2.4" section="Scripts" extensions="*.pl;*.PL;*.pm" mimetype="application/x-perl;text/x-perl" priority="5" author="Anders Lund (anders@alweb.dk)" license="LGPL">
   <highlighting>
     <list name="keywords">
       <item> if </item>
@@ -56,18 +56,18 @@
       <item> break </item>
       <item> continue </item>
       <item> return </item>
-      <item> use </item>
-      <item> no </item>
-      <item> require </item>
       <item> my </item>
       <item> our </item>
       <item> local </item>
+      <item> state </item>
       <item> BEGIN </item>
       <item> END </item>
-      <item>require</item>
       <item> package </item>
       <item> sub </item>
       <item> do </item>
+      <item> given  </item>
+      <item> when  </item>
+      <item> default </item>
       <item> __END__ </item>
       <item> __DATA__ </item>
       <item> __FILE__ </item>
@@ -221,6 +221,7 @@
       <item>msgget</item>
       <item>msgrcv</item>
       <item>msgsnd</item>
+      <item>no</item>
       <item>oct</item>
       <item>open</item>
       <item>opendir</item>
@@ -244,6 +245,7 @@
       <item>redo</item>
       <item>ref</item>
       <item>rename</item>
+      <item>require</item>
       <item>reset</item>
       <item>return</item>
       <item>reverse</item>
@@ -307,6 +309,7 @@
       <item>unpack</item>
       <item>unshift</item>
       <item>untie</item>
+      <item>use</item>
       <item>utime</item>
       <item>values</item>
       <item>vec</item>
@@ -347,9 +350,12 @@
         <DetectSpaces />
         <DetectChar attribute="Comment" context="comment" char="#" />
 
-        <HlCOct attribute="Octal" context="slash_safe_escape" />
-        <HlCHex attribute="Hex" context="slash_safe_escape" />
-        <Float attribute="Float" context="slash_safe_escape" />
+        <!-- Numeric values. Note that we have to allow underscores between two digits (thus the creepy regular expressions). -->
+        <RegExpr attribute="Hex" String="\b\-?0[xX]([0-9a-fA-F]|_[0-9a-fA-F])+" context="slash_safe_escape"/>
+        <RegExpr attribute="Bin" String="\b\-?0[bB]([01]|_[01])+" context="slash_safe_escape"/>
+        <RegExpr attribute="Octal" String="\b\-?0[1-7]([0-7]|_[0-7])*" context="slash_safe_escape"/>
+        <RegExpr attribute="Float" String="\b\-?[0-9]([0-9]|_[0-9])*\.[0-9]([0-9]|_[0-9])*([eE]\-?[1-9]([0-9]|_[0-9])*(\.[0-9]*)?)?" context="slash_safe_escape"/>
+        <RegExpr attribute="Decimal" String="\b\-?[1-9]([0-9]|_[0-9])*\b" context="slash_safe_escape"/>
         <Int attribute="Decimal" context="slash_safe_escape" />
 
         <RegExpr attribute="Normal Text" context="#stay" String="\\([&quot;'])[^\1]" />
@@ -366,7 +372,7 @@
 
         <RegExpr attribute="Normal Text" context="#stay" String="\s*\}\s*/{1,2}" endRegion="Block"/>
         <RegExpr attribute="Normal Text" context="#stay" String="\s*[)\]]\s*/{1,2}" />
-        
+
         <RegExpr attribute="Function" context="sub_name_def" String="\w+::" />
         <RegExpr attribute="Normal Text" context="#stay" String="\w+[=]" />
 
@@ -379,7 +385,7 @@
         <RegExpr attribute="Normal Text" context="#stay" String="[\w_]+\s*/" />
         <RegExpr attribute="Normal Text" context="#stay" String="[&lt;&gt;&quot;':]/" />
         <DetectChar attribute="Operator" context="pattern_slash" char="/" beginRegion="Pattern" />
-        <RegExpr attribute="Operator" context="#stay" String="-[rwxoRWXOeszfdlpSbctugkTBMAC]" />
+        <RegExpr attribute="Operator" context="#stay" String="-[rwxoRWXOeszfdlpSbctugkTBMAC]\b" />
 
         <DetectChar attribute="Normal Text" context="#stay" char="{" beginRegion="Block" />
         <DetectChar attribute="Normal Text" context="#stay" char="}" endRegion="Block" />
@@ -571,8 +577,8 @@
 
       <context name="tr" attribute="Pattern" lineEndContext="#pop" fallthrough="true" fallthroughContext="#pop" >
         <RegExpr attribute="Pattern" context="#pop" String="\([^)]*\)\s*\(?:[^)]*\)" />
-        <RegExpr attribute="Pattern" context="#pop" String="{[^}]*\}\s*\{[^}]*\}" />
-        <RegExpr attribute="Pattern" context="#pop" String="\[[^}]*\]\s*\[[^\]]*\]" />
+        <RegExpr attribute="Pattern" context="#pop" String="\{[^}]*\}\s*\{[^}]*\}" />
+        <RegExpr attribute="Pattern" context="#pop" String="\[[^]]*\]\s*\[[^\]]*\]" />
         <RegExpr attribute="Pattern" context="#pop" String="([^a-zA-Z0-9_\s[\]{}()]).*\1.*\1" minimal="true"/>
       </context>
 
@@ -624,7 +630,7 @@
       <context name="regex_pattern_internal_rules_2" lineEndContext="#stay">
         <Detect2Chars attribute="Pattern Internal Operator" context="pat_ext" char="(" char1="?" />
         <DetectChar attribute="Pattern Internal Operator" context="pat_char_class" char="[" />
-        <RegExpr attribute="Pattern Internal Operator" context="#stay" String="[()?\^*+|]" />
+        <RegExpr attribute="Pattern Internal Operator" context="#stay" String="[()?^*+|]" />
         <RegExpr attribute="Pattern Internal Operator" context="#stay" String="\{[\d, ]+\}" />
         <DetectChar attribute="Pattern Internal Operator" context="#stay" char="$" />
         <RegExpr attribute="Comment" context="#stay" String="\s{3,}#.*$" />
@@ -640,7 +646,7 @@
              This is because perl considers
              s{foo$} {bar} OK as well as s{foo$}} {bar}, and detecting that is a huge work overload
              for something that is unlikely to happen. -->
-        <RegExpr attribute="Data Type" context="find_variable_unsafe" String="[$@][^\]\s{}()|&gt;']" lookAhead="true" />
+        <RegExpr attribute="Data Type" context="find_variable_unsafe" String="[$@][^]\s{}()|&gt;']" lookAhead="true" />
         <IncludeRules context="regex_pattern_internal_rules_2" />
       </context>
       <context name="pat_ext" attribute="Pattern Internal Operator" lineEndContext="#stay">
@@ -652,7 +658,7 @@
         <DetectChar attribute="Pattern Internal Operator" context="#stay" char="^" />
         <Detect2Chars attribute="Pattern Character Class" context="#stay" char="\" char1="\" />
         <Detect2Chars attribute="Pattern Character Class" context="#stay" char="\" char1="]" />
-        <RegExpr attribute="Pattern Character Class" context="#stay" String="\[:\^?[a-z]+:\]" />
+        <RegExpr attribute="Pattern Character Class" context="#stay" String="\[:^?[a-z]+:\]" />
         <DetectChar attribute="Pattern Internal Operator" context="#pop" char="]" />
       </context>
 
@@ -812,6 +818,7 @@
       <itemData name="Decimal"                   defStyleNum="dsDecVal" />
       <itemData name="Octal"                     defStyleNum="dsBaseN" />
       <itemData name="Hex"                       defStyleNum="dsBaseN" />
+      <itemData name="Bin"                       defStyleNum="dsBaseN" />
       <itemData name="Float"                     defStyleNum="dsFloat" />
       <itemData name="String"                    defStyleNum="dsString" color="#FF6C6C" selColor="#FF6C6C" bold="0" italic="0" />
       <itemData name="String (interpolated)"     defStyleNum="dsString" />
