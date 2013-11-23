@@ -80,10 +80,12 @@ Extra-Source-Files:  README
                      xml/lua.xml
                      xml/makefile.xml
                      xml/mandoc.xml
+                     xml/markdown.xml
                      xml/matlab.xml
                      xml/maxima.xml
                      xml/metafont.xml
                      xml/mips.xml
+                     xml/modelines.xml
                      xml/modula-2.xml
                      xml/modula-3.xml
                      xml/monobasic.xml
@@ -210,10 +212,12 @@ Library
                      Text.Highlighting.Kate.Syntax.Lua
                      Text.Highlighting.Kate.Syntax.Makefile
                      Text.Highlighting.Kate.Syntax.Mandoc
+                     Text.Highlighting.Kate.Syntax.Markdown
                      Text.Highlighting.Kate.Syntax.Matlab
                      Text.Highlighting.Kate.Syntax.Maxima
                      Text.Highlighting.Kate.Syntax.Metafont
                      Text.Highlighting.Kate.Syntax.Mips
+                     Text.Highlighting.Kate.Syntax.Modelines
                      Text.Highlighting.Kate.Syntax.Modula2
                      Text.Highlighting.Kate.Syntax.Modula3
                      Text.Highlighting.Kate.Syntax.Monobasic
