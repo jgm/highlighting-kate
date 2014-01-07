@@ -105,6 +105,7 @@ Extra-Source-Files:  README
                      xml/python.xml
                      xml/r.xml
                      xml/relaxngcompact.xml
+                     xml/restructuredtext.xml
                      xml/rhtml.xml
                      xml/roff.xml
                      xml/ruby.xml
