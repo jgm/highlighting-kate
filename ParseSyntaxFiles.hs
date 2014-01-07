@@ -383,6 +383,7 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
     "JavaScript" -> "Javascript"
     "SQL (MySQL)" -> "SqlMysql"
     "DoxygenLua" -> "Doxygenlua"
+    "reStructuredText" -> "Restructuredtext"
     x -> x
 
 listName :: String -> String
