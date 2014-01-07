@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE language SYSTEM "language.dtd">
-<language name="Rust" version="0.9-pre" kateversion="2.4" section="Sources" extensions="*.rs;*.rc" mimetype="text/x-rust" priority="15">
+<!DOCTYPE language SYSTEM "language.dtd"
+[
+	<!-- TODO: Kate's regex engine has very limited support for
+	predefined char classes, so making rustIdent consistent with actual
+	Rust identifiers will be a bit difficult -->
+	<!ENTITY rustIdent "[a-zA-Z_][a-zA-Z_0-9]*">
+	<!ENTITY rustIntSuf "([iu](8|16|32|64)?)?">
+]>
+<language name="Rust" version="0.9" kateversion="2.4" section="Sources" extensions="*.rs;*.rc" mimetype="text/x-rust" priority="15">
 <highlighting>
 	<list name="fn">
 		<item> fn </item>
