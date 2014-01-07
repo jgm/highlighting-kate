@@ -1,5 +1,5 @@
 Name:                highlighting-kate
-Version:             0.5.5.1
+Version:             0.5.6
 Cabal-Version:       >= 1.10
 Build-Type:          Simple
 Category:            Text
@@ -237,6 +237,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Python
                      Text.Highlighting.Kate.Syntax.R
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
+                     Text.Highlighting.Kate.Syntax.Restructuredtext
                      Text.Highlighting.Kate.Syntax.Rhtml
                      Text.Highlighting.Kate.Syntax.Roff
                      Text.Highlighting.Kate.Syntax.Ruby
