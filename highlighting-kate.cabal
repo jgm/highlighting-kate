@@ -219,6 +219,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Abc
                      Text.Highlighting.Kate.Syntax.Actionscript
                      Text.Highlighting.Kate.Syntax.Ada
+                     Text.Highlighting.Kate.Syntax.Agda
                      Text.Highlighting.Kate.Syntax.Alert
                      Text.Highlighting.Kate.Syntax.Alert_indent
                      Text.Highlighting.Kate.Syntax.Apache
