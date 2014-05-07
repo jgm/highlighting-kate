@@ -37,4 +37,6 @@
   <general>
     <folding indentationsensitive="1" />
   </general>
+  <itemDatas>  <!-- JGM: otherwise ParseSyntaxFiles chokes here -->
+  </itemDatas>
 </language>
