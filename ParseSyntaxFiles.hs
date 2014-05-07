@@ -384,6 +384,8 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
     "SQL (MySQL)" -> "SqlMysql"
     "DoxygenLua" -> "Doxygenlua"
     "reStructuredText" -> "Restructuredtext"
+    "ISO C++" -> "Isocpp"
+    "GCCExtensions" -> "Gcc"
     x -> x
 
 listName :: String -> String

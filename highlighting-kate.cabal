@@ -59,12 +59,14 @@ Extra-Source-Files:  README
                      xml/erlang.xml
                      xml/fortran.xml
                      xml/fsharp.xml
+                     xml/gcc.xml
                      xml/gnuassembler.xml
                      xml/go.xml
                      xml/haskell.xml
                      xml/haxe.xml
                      xml/html.xml
                      xml/ini.xml
+                     xml/isocpp.xml
                      xml/java.xml
                      xml/javadoc.xml
                      xml/javascript.xml
@@ -194,12 +196,14 @@ Library
                      Text.Highlighting.Kate.Syntax.Erlang
                      Text.Highlighting.Kate.Syntax.Fortran
                      Text.Highlighting.Kate.Syntax.Fsharp
+                     Text.Highlighting.Kate.Syntax.Gcc
                      Text.Highlighting.Kate.Syntax.Gnuassembler
                      Text.Highlighting.Kate.Syntax.Go
                      Text.Highlighting.Kate.Syntax.Haskell
                      Text.Highlighting.Kate.Syntax.Haxe
                      Text.Highlighting.Kate.Syntax.Html
                      Text.Highlighting.Kate.Syntax.Ini
+                     Text.Highlighting.Kate.Syntax.Isocpp
                      Text.Highlighting.Kate.Syntax.Java
                      Text.Highlighting.Kate.Syntax.Javadoc
                      Text.Highlighting.Kate.Syntax.Javascript
