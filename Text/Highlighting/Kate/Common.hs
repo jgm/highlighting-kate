@@ -182,10 +182,15 @@ isOctalDigit c = c == '0' || c == '1' || c == '2' || c == '3'
 
 compileRegex :: String -> KateParser Regex
 #ifdef _PCRE_LIGHT
-compileRegex regexpStr = return $ compile ('.' : convertOctal regexpStr) [anchored]
+compileRegex regexpStr = do
+  st <- getState
+  let opts = [anchored] + [caseless | not (synStCaseSensitive st)]
+  return $ compile ('.' : convertOctal regexpStr) opts
 #else
-compileRegex regexpStr =
-  case unsafePerformIO $ compile (compAnchored) (execNotEmpty)
+compileRegex regexpStr = do
+  st <- getState
+  let opts = compAnchored + if synStCaseSensitive st then 0 else compCaseless
+  case unsafePerformIO $ compile opts (execNotEmpty)
        ('.' : convertOctal regexpStr) of
         Left _  -> fail $ "Error compiling regex: " ++ show regexpStr
         Right r -> return r
