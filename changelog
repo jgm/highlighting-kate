@@ -1,3 +1,9 @@
+highlighting-kate 0.5.7 (07 May 2014)
+
+  * Added Gcc and Isocpp (needed by Cpp).
+  * Updated syntax definitions.
+  * Made regex matches respect the `casesensitive` setting of the style.
+
 highlighting-kate 0.5.6.1 (27 Jan 2014)
 
   * Allow blaze-html 0.7.
