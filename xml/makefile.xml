@@ -7,7 +7,7 @@
 <!-- small priority to allow for example Makefile.cpp to be detected as cpp file -->
 <language name="Makefile" section="Other"
           version="2.0" kateversion="2.4"
-          extensions="GNUmakefile;Makefile;makefile;GNUmakefile.*;Makefile.*;makefile.*"
+          extensions="GNUmakefile;Makefile;makefile;GNUmakefile.*;Makefile.*;makefile.*;*.mk"
           mimetype="text/x-makefile"
           author="Per Wigren (wigren@home.se)" license="">
   <highlighting>
@@ -64,10 +64,11 @@
     <contexts>
       <context name="normal" attribute="Normal" lineEndContext="#stay">
         <DetectSpaces/>
+        <RegExpr attribute="Comment"  context="#stay" String="#.*$"/>
         <keyword attribute="Keyword"  context="#stay" String="keywords"/>
         <RegExpr attribute="Variable" context="assign" String="[^\s:+?]*\s*(?=:=|=|\+=|\?=)"/>
-        <RegExpr attribute="Section"  context="prereq" String="^[.].*:"/>
-        <RegExpr attribute="Target"   context="prereq" String="^.*:"/>
+        <RegExpr attribute="Section"  context="prereq" String="^\.[^.][^:]*:"/>
+        <RegExpr attribute="Target"   context="prereq" String="^[^:]*:"/>
         <DetectIdentifier/>
         <DetectChar attribute="String" context="string&quot;" char="&quot;"/>
         <DetectChar attribute="String" context="string'" char="'"/>
@@ -75,12 +76,12 @@
         <Detect2Chars attribute="Special" context="#stay" char="\" char1="#"/>
         <Detect2Chars attribute="Special" context="#stay" char="\" char1="\"/>
         <AnyChar attribute="Operator" context="silent" String="@-" firstNonSpace="1"/>
-        <RegExpr attribute="Comment"  context="#stay" String="#.*$"/>
       </context>
 
       <context name="prereq" attribute="Prereq" lineEndContext="rule">
         <DetectSpaces/>
         <DetectIdentifier/>
+        <LineContinue attribute="Operator" context="#stay"/>
         <DetectChar attribute="Operator" context="dollar" char="$"/>
         <Detect2Chars attribute="Special" context="#stay" char="\" char1="#"/>
         <Detect2Chars attribute="Special" context="#stay" char="\" char1="\"/>
