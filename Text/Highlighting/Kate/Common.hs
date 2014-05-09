@@ -16,7 +16,7 @@ module Text.Highlighting.Kate.Common where
 import Text.Regex.PCRE.Light.Char8
 #else
 import System.IO.Unsafe (unsafePerformIO)
-import Text.Regex.PCRE.String
+import Text.Regex.PCRE.ByteString
 #endif
 import Text.Highlighting.Kate.Types
 import Text.ParserCombinators.Parsec hiding (State)
