@@ -1,3 +1,8 @@
+highlighting-kate 0.5.7.1 (09 May 2014)
+
+  * Fix typo in list append operator in pcre-light-using code
+    (Clint Adams).
+
 highlighting-kate 0.5.7 (07 May 2014)
 
   * Added Gcc and Isocpp (needed by Cpp).
