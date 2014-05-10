@@ -184,7 +184,7 @@ compileRegex :: String -> KateParser Regex
 #ifdef _PCRE_LIGHT
 compileRegex regexpStr = do
   st <- getState
-  let opts = [anchored] + [caseless | not (synStCaseSensitive st)]
+  let opts = [anchored] ++ [caseless | not (synStCaseSensitive st)]
   return $ compile ('.' : convertOctal regexpStr) opts
 #else
 compileRegex regexpStr = do
