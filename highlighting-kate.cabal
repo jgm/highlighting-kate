@@ -28,6 +28,7 @@ Extra-Source-Files:  README.md
                      css/hk-tango.css
                      xml/actionscript.xml
                      xml/ada.xml
+                     xml/agda.xml
                      xml/alert.xml
                      xml/alert_indent.xml
                      xml/apache.xml
