@@ -180,20 +180,19 @@ isOctalDigit :: Char -> Bool
 isOctalDigit c = c == '0' || c == '1' || c == '2' || c == '3'
               || c == '4' || c == '5' || c == '6' || c == '7'
 
-compileRegex :: String -> KateParser Regex
+compileRegex :: Bool -> String -> Regex
+compileRegex caseSensitive regexpStr =
 #ifdef _PCRE_LIGHT
-compileRegex regexpStr = do
-  st <- getState
-  let opts = [anchored] ++ [caseless | not (synStCaseSensitive st)]
-  return $ compile ('.' : convertOctal regexpStr) opts
+  let opts = [anchored] ++ [caseless | not caseSensitive]
+  in  compile ('.' : convertOctal regexpStr) opts
 #else
-compileRegex regexpStr = do
-  st <- getState
-  let opts = compAnchored + if synStCaseSensitive st then 0 else compCaseless
-  case unsafePerformIO $ compile opts (execNotEmpty)
-       ('.' : convertOctal regexpStr) of
-        Left _  -> fail $ "Error compiling regex: " ++ show regexpStr
-        Right r -> return r
+  let opts = compAnchored + if caseSensitive
+                               then 0
+                               else compCaseless
+  in  case unsafePerformIO $ compile opts (execNotEmpty)
+           ('.' : convertOctal regexpStr) of
+            Left _  -> error $ "Error compiling regex: " ++ show regexpStr
+            Right r -> r
 #endif
 
 matchRegex :: Regex -> String -> KateParser (Maybe [String])
@@ -206,15 +205,14 @@ matchRegex r s = case unsafePerformIO (regexec r s) of
                       Left matchError -> fail $ show matchError
 #endif
 
-pRegExpr :: KateParser Regex -> KateParser String
-pRegExpr compiledRegex = do
+pRegExpr :: Regex -> KateParser String
+pRegExpr regex = do
   rest <- getInput
   prevChar <- fromState synStPrevChar
   -- Note: we keep one preceding character, so initial \b can match or not...
   let target = if prevChar == '\n'
                   then ' ':rest
                   else prevChar:rest
-  regex <- compiledRegex
   matches <- matchRegex regex target
   case matches of
         Just (x:xs) | null x -> fail "Regex matched null string!"
@@ -227,28 +225,30 @@ pRegExpr compiledRegex = do
 pRegExprDynamic :: [Char] -> KateParser String
 pRegExprDynamic regexpStr = do
   regexpStr' <- subDynamic regexpStr
-  pRegExpr $ compileRegex regexpStr'
+  caseSensitive <- synStCaseSensitive `fmap` getState
+  pRegExpr $ compileRegex caseSensitive regexpStr'
 
-integerRegex :: KateParser Regex
-integerRegex = compileRegex "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
+integerRegex :: Regex
+integerRegex =
+  compileRegex True "\\b[-+]?(0[Xx][0-9A-Fa-f]+|0[Oo][0-7]+|[0-9]+)\\b"
 
 pInt :: KateParser String
 pInt = pRegExpr integerRegex
 
-floatRegex :: KateParser Regex
-floatRegex = compileRegex "\\b[-+]?(([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)([Ee][-+]?[0-9]+)?|[0-9]+[Ee][-+]?[0-9]+)\\b"
+floatRegex :: Regex
+floatRegex = compileRegex True "\\b[-+]?(([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)([Ee][-+]?[0-9]+)?|[0-9]+[Ee][-+]?[0-9]+)\\b"
 
 pFloat :: KateParser String
 pFloat = pRegExpr floatRegex
 
-octRegex :: KateParser Regex
-octRegex = compileRegex "\\b[-+]?0[Oo][0-7]+\\b"
+octRegex :: Regex
+octRegex = compileRegex True "\\b[-+]?0[Oo][0-7]+\\b"
 
 pHlCOct :: KateParser String
 pHlCOct = pRegExpr octRegex
 
-hexRegex :: KateParser Regex
-hexRegex = compileRegex "\\b[-+]?0[Xx][0-9A-Fa-f]+\\b"
+hexRegex :: Regex
+hexRegex = compileRegex True "\\b[-+]?0[Xx][0-9A-Fa-f]+\\b"
 
 pHlCHex :: KateParser String
 pHlCHex = pRegExpr hexRegex
