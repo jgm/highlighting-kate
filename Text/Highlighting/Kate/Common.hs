@@ -15,8 +15,9 @@ module Text.Highlighting.Kate.Common where
 #ifdef _PCRE_LIGHT
 import Text.Regex.PCRE.Light.Char8
 #else
+import Data.ByteString.UTF8 (fromString, toString)
 import System.IO.Unsafe (unsafePerformIO)
-import Text.Regex.PCRE.String
+import Text.Regex.PCRE.ByteString
 #endif
 import Text.Highlighting.Kate.Types
 import Text.ParserCombinators.Parsec hiding (State)
@@ -186,11 +187,10 @@ compileRegex caseSensitive regexpStr =
   let opts = [anchored] ++ [caseless | not caseSensitive]
   in  compile ('.' : convertOctal regexpStr) opts
 #else
-  let opts = compAnchored + if caseSensitive
-                               then 0
-                               else compCaseless
+  let opts = compAnchored + {- compUTF8 + -}
+               if caseSensitive then 0 else compCaseless
   in  case unsafePerformIO $ compile opts (execNotEmpty)
-           ('.' : convertOctal regexpStr) of
+           (fromString ('.' : convertOctal regexpStr)) of
             Left _  -> error $ "Error compiling regex: " ++ show regexpStr
             Right r -> r
 #endif
@@ -199,8 +199,9 @@ matchRegex :: Regex -> String -> KateParser (Maybe [String])
 #ifdef _PCRE_LIGHT
 matchRegex r s = return $ match r s [exec_notempty]
 #else
-matchRegex r s = case unsafePerformIO (regexec r s) of
-                      Right (Just (_, mat, _ , capts)) -> return $ Just (mat : capts)
+matchRegex r s = case unsafePerformIO (regexec r (fromString s)) of
+                      Right (Just (_, mat, _ , capts)) -> return $
+                                       Just $ map toString (mat : capts)
                       Right Nothing -> return Nothing
                       Left matchError -> fail $ show matchError
 #endif
