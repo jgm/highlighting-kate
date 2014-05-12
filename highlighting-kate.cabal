@@ -18,7 +18,7 @@ License-file:        LICENSE
 Author:              John MacFarlane
 Maintainer:          jgm@berkeley.edu
 Homepage:            http://github.com/jgm/highlighting-kate
-Extra-Source-Files:  README
+Extra-Source-Files:  README.md
                      changelog
                      ParseSyntaxFiles.hs
                      Text/Highlighting/Kate/Syntax.hs.in
