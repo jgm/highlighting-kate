@@ -187,7 +187,7 @@ compileRegex caseSensitive regexpStr =
   let opts = [anchored] ++ [caseless | not caseSensitive]
   in  compile ('.' : convertOctal regexpStr) opts
 #else
-  let opts = compAnchored + {- compUTF8 + -}
+  let opts = compAnchored + compUTF8 +
                if caseSensitive then 0 else compCaseless
   in  case unsafePerformIO $ compile opts (execNotEmpty)
            (fromString ('.' : convertOctal regexpStr)) of
