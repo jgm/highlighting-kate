@@ -2,7 +2,7 @@ highlighting-kate 0.5.8 (12 May 2014)
 
   * Enable UTF-8 support with the regex-pcre-builtin backend.
     (This requires regex-pcre-builtin >= 0.94.4.8.8.35, and it
-    adds a dependency on utf8-string.) (Clint Adams, #42)
+    adds a dependency on utf8-string.) (Matthias Troffaes, #42)
   * Fixed performance regression: added a caseSensitive parameter
     to compileRegex and made it non-monadic.  (Checking state was
     a serious performance hit, and was not necessary in this case.)
