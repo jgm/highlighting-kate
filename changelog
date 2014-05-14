@@ -1,3 +1,9 @@
+highlighting-kate 0.5.8.1 (14 May 2014)
+
+  * Update fsharp and ocaml xml files for regex syntax compatibility (#44).
+    We need `\o{0355}`, not `\0355`.  See the pcre man page.
+  * Give better information when there is a regex compile failure.
+
 highlighting-kate 0.5.8 (12 May 2014)
 
   * Enable UTF-8 support with the regex-pcre-builtin backend.
