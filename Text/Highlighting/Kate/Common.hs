@@ -191,7 +191,8 @@ compileRegex caseSensitive regexpStr =
                if caseSensitive then 0 else compCaseless
   in  case unsafePerformIO $ compile opts (execNotEmpty)
            (fromString ('.' : convertOctal regexpStr)) of
-            Left _  -> error $ "Error compiling regex: " ++ show regexpStr
+            Left e  -> error $ "Error compiling regex: " ++ show regexpStr ++
+                               "\n" ++ show e
             Right r -> r
 #endif
 
