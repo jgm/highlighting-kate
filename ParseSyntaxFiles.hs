@@ -240,14 +240,11 @@ mkParser syntax =
       contextCatchAll = text $ "parseRules x = parseRules " ++ show (synLanguage syntax, contName startingContext) ++ " <|> fail (\"Unknown context\" ++ show x)"
       contexts = map (mkRules syntax) $ synContexts syntax
       initialContextStack = [(synLanguage syntax, contName startingContext)]
-      startingState = SyntaxState { synStContexts = initialContextStack
-                                  , synStLineNumber = 0
-                                  , synStPrevNonspace = False
-                                  , synStPrevChar = '\n'
-                                  , synStCaseSensitive = synCaseSensitive syntax
-                                  , synStKeywordCaseSensitive = keywordCaseSensitive (synKeywordAttr syntax)
-                                  , synStCaptures = [] }
-      initState = text $ "startingState = " ++ show startingState
+      initState = text $ "startingState = " ++ show
+                    defaultSyntaxState{
+                        synStContexts = initialContextStack
+                      , synStKeywordCaseSensitive =
+                          keywordCaseSensitive (synKeywordAttr syntax) }
       mainFunction = text $ "-- | Highlight source code using this syntax definition.\n\
                             \highlight :: String -> [SourceLine]\n\
                             \highlight input = evalState (mapM parseSourceLine $ lines input) startingState"
@@ -273,7 +270,7 @@ mkParser syntax =
                                         then unwords list
                                         else map toLower (unwords list))
       lists = vcat $ map listDef $ synLists syntax
-      regexDef re = text $ compiledRegexName re ++ " = compileRegex " ++ show re
+      regexDef re = text $ compiledRegexName re ++ " = compileRegex " ++ show (synCaseSensitive syntax) ++ " " ++ show re
       regexes = vcat $ map regexDef $ nub $ [parserString x | x <- concatMap contParsers (synContexts syntax),
                                                               parserType x == "RegExpr", parserDynamic x == False]
   in  vcat $ intersperse (text "") $ [name, exts, mainFunction, lineParser, parseExpression, initState,
@@ -383,6 +380,9 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
     "JavaScript" -> "Javascript"
     "SQL (MySQL)" -> "SqlMysql"
     "DoxygenLua" -> "Doxygenlua"
+    "reStructuredText" -> "Restructuredtext"
+    "ISO C++" -> "Isocpp"
+    "GCCExtensions" -> "Gcc"
     x -> x
 
 listName :: String -> String

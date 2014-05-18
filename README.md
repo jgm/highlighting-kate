@@ -1,5 +1,9 @@
-highlighting-kate is a Haskell source code highlighting library, based
-on Kate's syntax description files (http://kate-editor.org/).
+highlighting-kate
+-----------------
+
+A Haskell source code highlighting library, based
+on Kate's syntax description files (http://kate-editor.org/).  It
+can produce both HTML and LaTeX output.
 
 Currently, the following languages/formats are supported:
 
@@ -53,6 +57,7 @@ Currently, the following languages/formats are supported:
 - Lua
 - Makefile
 - Mandoc
+- Markdown
 - Matlab
 - Maxima
 - Mediawiki
@@ -76,6 +81,7 @@ Currently, the following languages/formats are supported:
 - Python
 - R
 - Relaxngcompact
+- Restructuredtext
 - Rhtml
 - Ruby
 - Rust

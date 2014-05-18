@@ -1,5 +1,5 @@
 Name:                highlighting-kate
-Version:             0.5.5
+Version:             0.5.8.1
 Cabal-Version:       >= 1.10
 Build-Type:          Simple
 Category:            Text
@@ -18,7 +18,7 @@ License-file:        LICENSE
 Author:              John MacFarlane
 Maintainer:          jgm@berkeley.edu
 Homepage:            http://github.com/jgm/highlighting-kate
-Extra-Source-Files:  README
+Extra-Source-Files:  README.md
                      changelog
                      ParseSyntaxFiles.hs
                      Text/Highlighting/Kate/Syntax.hs.in
@@ -59,12 +59,14 @@ Extra-Source-Files:  README
                      xml/erlang.xml
                      xml/fortran.xml
                      xml/fsharp.xml
+                     xml/gcc.xml
                      xml/gnuassembler.xml
                      xml/go.xml
                      xml/haskell.xml
                      xml/haxe.xml
                      xml/html.xml
                      xml/ini.xml
+                     xml/isocpp.xml
                      xml/java.xml
                      xml/javadoc.xml
                      xml/javascript.xml
@@ -80,10 +82,12 @@ Extra-Source-Files:  README
                      xml/lua.xml
                      xml/makefile.xml
                      xml/mandoc.xml
+                     xml/markdown.xml
                      xml/matlab.xml
                      xml/maxima.xml
                      xml/metafont.xml
                      xml/mips.xml
+                     xml/modelines.xml
                      xml/modula-2.xml
                      xml/modula-3.xml
                      xml/monobasic.xml
@@ -103,6 +107,7 @@ Extra-Source-Files:  README
                      xml/python.xml
                      xml/r.xml
                      xml/relaxngcompact.xml
+                     xml/restructuredtext.xml
                      xml/rhtml.xml
                      xml/roff.xml
                      xml/ruby.xml
@@ -148,8 +153,8 @@ Library
     Build-depends:   pcre-light >= 0.4 && < 0.5
     cpp-options:     -D_PCRE_LIGHT
   else
-    Build-depends:   regex-pcre-builtin
-  Build-Depends:     parsec, mtl, blaze-html >= 0.4.2 && < 0.7
+    Build-depends:   regex-pcre-builtin >= 0.94.4.8.8.35
+  Build-Depends:     parsec, mtl, blaze-html >= 0.4.2 && < 0.8, utf8-string
   Exposed-Modules:   Text.Highlighting.Kate
                      Text.Highlighting.Kate.Syntax
                      Text.Highlighting.Kate.Types
@@ -191,6 +196,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Erlang
                      Text.Highlighting.Kate.Syntax.Fortran
                      Text.Highlighting.Kate.Syntax.Fsharp
+                     Text.Highlighting.Kate.Syntax.Gcc
                      Text.Highlighting.Kate.Syntax.Ghci
                      Text.Highlighting.Kate.Syntax.Gnuassembler
                      Text.Highlighting.Kate.Syntax.Go
@@ -198,6 +204,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Haxe
                      Text.Highlighting.Kate.Syntax.Html
                      Text.Highlighting.Kate.Syntax.Ini
+                     Text.Highlighting.Kate.Syntax.Isocpp
                      Text.Highlighting.Kate.Syntax.Java
                      Text.Highlighting.Kate.Syntax.Javadoc
                      Text.Highlighting.Kate.Syntax.Javascript
@@ -211,10 +218,12 @@ Library
                      Text.Highlighting.Kate.Syntax.Lua
                      Text.Highlighting.Kate.Syntax.Makefile
                      Text.Highlighting.Kate.Syntax.Mandoc
+                     Text.Highlighting.Kate.Syntax.Markdown
                      Text.Highlighting.Kate.Syntax.Matlab
                      Text.Highlighting.Kate.Syntax.Maxima
                      Text.Highlighting.Kate.Syntax.Metafont
                      Text.Highlighting.Kate.Syntax.Mips
+                     Text.Highlighting.Kate.Syntax.Modelines
                      Text.Highlighting.Kate.Syntax.Modula2
                      Text.Highlighting.Kate.Syntax.Modula3
                      Text.Highlighting.Kate.Syntax.Monobasic
@@ -233,6 +242,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Python
                      Text.Highlighting.Kate.Syntax.R
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
+                     Text.Highlighting.Kate.Syntax.Restructuredtext
                      Text.Highlighting.Kate.Syntax.Rhtml
                      Text.Highlighting.Kate.Syntax.Roff
                      Text.Highlighting.Kate.Syntax.Ruby
@@ -266,7 +276,7 @@ Library
 
 Executable Highlight
   Main-Is:          Highlight.hs
-  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.7, filepath,
+  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.8, filepath,
                     highlighting-kate
   Hs-Source-Dirs:   extra
   Default-Language:    Haskell98

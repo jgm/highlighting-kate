@@ -1,3 +1,43 @@
+highlighting-kate 0.5.8.1 (14 May 2014)
+
+  * Update fsharp and ocaml xml files for regex syntax compatibility (#44).
+    We need `\o{0355}`, not `\0355`.  See the pcre man page.
+  * Give better information when there is a regex compile failure.
+
+highlighting-kate 0.5.8 (12 May 2014)
+
+  * Enable UTF-8 support with the regex-pcre-builtin backend.
+    (This requires regex-pcre-builtin >= 0.94.4.8.8.35, and it
+    adds a dependency on utf8-string.) (Matthias Troffaes, #42)
+  * Fixed performance regression: added a caseSensitive parameter
+    to compileRegex and made it non-monadic.  (Checking state was
+    a serious performance hit, and was not necessary in this case.)
+  * Improved README and added .md extension.
+  * Added defaultSyntaxState in Types.
+
+highlighting-kate 0.5.7.1 (09 May 2014)
+
+  * Fix typo in list append operator in pcre-light-using code
+    (Clint Adams).
+
+highlighting-kate 0.5.7 (07 May 2014)
+
+  * Added Gcc and Isocpp (needed by Cpp).
+  * Updated syntax definitions.
+  * Made regex matches respect the `casesensitive` setting of the style.
+
+highlighting-kate 0.5.6.1 (27 Jan 2014)
+
+  * Allow blaze-html 0.7.
+
+highlighting-kate 0.5.6 (07 Jan 2014)
+
+  * Added restructuredtext.
+  * Updated rust syntax definition.
+  * Changed lua highlighting so variables/constants not highlighted
+    as keywords.
+  * Updated kate syntax definitions for python, cmake.
+
 highlighting-kate 0.5.4 (26 June 2013)
 
 

@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances, CPP #-}
 {- |
    Module      : Text.Highlighting.Kate.Types
    Copyright   : Copyright (C) 2008 John MacFarlane
@@ -33,7 +33,18 @@ data SyntaxState = SyntaxState
   , synStKeywordCaseSensitive :: Bool         -- ^ Keywords are case-sensitive
   , synStCaptures             :: [String]     -- ^ List of regex captures from
                                               --   last capturing match
-  } deriving (Read, Show)
+  } deriving Show
+
+defaultSyntaxState :: SyntaxState
+defaultSyntaxState = SyntaxState{
+    synStContexts = []
+  , synStLineNumber = 0
+  , synStPrevNonspace = False
+  , synStPrevChar = '\n'
+  , synStCaseSensitive = True
+  , synStKeywordCaseSensitive = True
+  , synStCaptures = []
+  }
 
 -- | A pair consisting of a list of attributes and some text.
 type Token = (TokenType, String)

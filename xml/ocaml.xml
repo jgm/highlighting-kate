@@ -3,7 +3,9 @@
 <!DOCTYPE language SYSTEM "language.dtd"
 [
 <!-- Regular expresion constants: -->
-<!ENTITY LETTER "A-Za-z\0300-\0326\0330-\0366\0370-\0377">          <!-- Latin-1 letters. -->
+<!-- note: the following line modified by JGM for pcre compatibility.
+     We need \o{0366}, not \0366 as in the original xml file. -->
+<!ENTITY LETTER "A-Za-z\o{0300}-\o{0326}\o{0330}-\o{0366}\o{0370}-\o{0377}"> <!-- Latin-1 letters. -->
 <!ENTITY IDENT  "[&LETTER;_][&LETTER;0-9_']*">                      <!-- OCaml identifiers. -->
 <!ENTITY MIDENT "[A-Z][&LETTER;0-9_']*">                            <!-- OCaml uppercase identifiers. -->
 <!ENTITY ESC    "(\\[ntbr'&quot;\\]|\\[0-9]{3}|\\x[0-9A-Fa-f]{2})"> <!-- OCaml character code escapes. -->

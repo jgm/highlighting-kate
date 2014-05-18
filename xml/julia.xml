@@ -46,7 +46,6 @@
     </list>
     <list name="block_eb">
       <item> catch </item>
-      <item> finally </item>
       <item> else </item>
       <item> elseif </item>
     </list>
@@ -63,15 +62,12 @@
       <item> export </item>
       <item> global </item>
       <item> import </item>
-      <item> importall </item>
       <item> in </item>
       <item> local </item>
       <item> macro </item>
       <item> module </item>
-      <item> baremodule </item>
       <item> return </item>
       <item> typealias </item>
-      <item> using </item>
     </list>
     <list name="types">
       <item> AbstractArray </item>
@@ -102,7 +98,6 @@
       <item> Int16 </item>
       <item> Int32 </item>
       <item> Int64 </item>
-      <item> Int128 </item>
       <item> Integer </item>
       <item> IntSet </item>
       <item> IO </item>
@@ -138,7 +133,6 @@
       <item> Uint16 </item>
       <item> Uint32 </item>
       <item> Uint64 </item>
-      <item> Uint128 </item>
       <item> Union </item>
       <item> Unsigned </item>
       <item> UTF8String </item>
