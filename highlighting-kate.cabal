@@ -238,6 +238,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Pike
                      Text.Highlighting.Kate.Syntax.Postscript
                      Text.Highlighting.Kate.Syntax.Prolog
+                     Text.Highlighting.Kate.Syntax.Pure
                      Text.Highlighting.Kate.Syntax.Python
                      Text.Highlighting.Kate.Syntax.R
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
