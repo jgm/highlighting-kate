@@ -1,3 +1,7 @@
+highlighting-kate 0.5.8.2 (27 May 2014)
+
+  * Updated perl xml file for regex syntax compatibility (pandoc #1317).
+
 highlighting-kate 0.5.8.1 (14 May 2014)
 
   * Update fsharp and ocaml xml files for regex syntax compatibility (#44).
