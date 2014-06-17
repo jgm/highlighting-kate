@@ -78,6 +78,7 @@ Currently, the following languages/formats are supported:
 - Pike
 - Postscript
 - Prolog
+- Pure
 - Python
 - R
 - Relaxngcompact
