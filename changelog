@@ -1,3 +1,9 @@
+highlighting-kate 0.5.8.3 (19 Jun 2014)
+
+  * Added pure language.
+  * Added fallthrough to php.xml, so the `<?php` prefix is no longer
+    needed (pandoc #1271).
+
 highlighting-kate 0.5.8.2 (27 May 2014)
 
   * Updated perl xml file for regex syntax compatibility (pandoc #1317).
