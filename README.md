@@ -181,6 +181,7 @@ Changes have been made to the following xml files (the originals have
 been left in the directory, with .bkp extensions):
 
 - perl.xml:  Fixed regexes - needed backslash-escapes before ] and ^
+- php.xml:  Added fallthrough so `<?php` prefix not needed
 - base report bugs on the github issue tracker:
 <https://github.com/jgm/highlighting-kate/issues>.
 
