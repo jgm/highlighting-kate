@@ -1,3 +1,8 @@
+highlighting-kate 0.5.8.4 (15 Jul 2014)
+
+  * Fixed DetectIdentifier so it allows underscores.  (This reflects a
+    change in kate some time since this library was first written.)
+
 highlighting-kate 0.5.8.3 (19 Jun 2014)
 
   * Added pure language.
