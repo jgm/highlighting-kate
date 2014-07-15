@@ -285,10 +285,12 @@ pLineContinue = try $ char '\\' >> eof >> return "\\"
 pDetectSpaces :: KateParser [Char]
 pDetectSpaces = many1 (satisfy $ \c -> c == ' ' || c == '\t')
 
+-- http://docs.kde.org/stable/en/applications/kate/kate-highlight-rules-detailled.html says this is
+-- [a-zA-Z_][a-zA-Z0-9_]*
 pDetectIdentifier :: KateParser [Char]
 pDetectIdentifier = do
-  first <- letter
-  rest <- many alphaNum
+  first <- letter <|> char '_'
+  rest <- many (alphaNum <|> char '_')
   return (first:rest)
 
 fromState :: (SyntaxState -> a) -> KateParser a
