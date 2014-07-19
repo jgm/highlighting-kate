@@ -7,6 +7,8 @@ highlighting-kate 0.5.8.5 (15 Jul 2014)
     in debian).  It also now generally leaves octal escapes in place,
     converting to unicode characters only when a compatible octal
     escape isn't available.  Addresses debian #753299.
+  * Updated syntax definitions for prolog, modelines, makefile, isocpp,
+    html, css, go, doxygen, cpp, cmake, ada.
 
 highlighting-kate 0.5.8.4 (15 Jul 2014)
 
