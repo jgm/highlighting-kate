@@ -165,16 +165,27 @@ subDynamic ('%':x:xs) | isDigit x = do
 subDynamic (x:xs) = subDynamic xs >>= return . (x:)
 subDynamic "" = return ""
 
+-- convert octal escapes to the form pcre wants.  Note:
+-- need at least pcre 8.34 for the form \o{dddd}.
+-- So we prefer \ddd when possible.
 convertOctal :: String -> String
 convertOctal [] = ""
-convertOctal ('\\':'0':x:y:z:rest) | isOctalDigit x && isOctalDigit y && isOctalDigit z =
-  case reads ['\\','o',x,y,z] of
-        ((x,rest):_) -> x : convertOctal rest
-        _            -> '\\':'o':x:y:z: convertOctal rest
-convertOctal ('\\':x:y:z:rest) | isOctalDigit x && isOctalDigit y && isOctalDigit z =
-  case reads ['\\','o',x,y,z] of
-        ((x,rest):_) -> x : convertOctal rest
-        _            -> '\\':'o':x:y:z: convertOctal rest
+convertOctal ('\\':'0':x:y:z:rest)
+  | all isOctalDigit [x,y,z] = '\\':x:y:z: convertOctal rest
+convertOctal ('\\':x:y:z:rest)
+  | all isOctalDigit [x,y,z] ='\\':x:y:z: convertOctal rest
+convertOctal ('\\':'o':'{':zs) =
+  case break (=='}') zs of
+       (ds, '}':rest) | all isOctalDigit ds && not (null ds) ->
+         if length ds <= 3
+            then '\\': pad3 ds ++ convertOctal rest
+            else case reads ('\\':'o':ds) of
+                   ((c,[]):_) -> c : convertOctal rest
+                   _          -> '\\':'o':'{': convertOctal zs
+       _  -> '\\':'o':'{': convertOctal zs
+    where pad3 [x]   = ['0','0',x]
+          pad3 [x,y] = ['0',x,y]
+          pad3 xs    = xs
 convertOctal (x:xs) = x : convertOctal xs
 
 isOctalDigit :: Char -> Bool
