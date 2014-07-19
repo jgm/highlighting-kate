@@ -1,3 +1,13 @@
+highlighting-kate 0.5.8.5 (15 Jul 2014)
+
+  * Use utf8 option with pcre-light.
+  * Text.Highlighting.Kate.Common:  Fixed convertOctal.
+    It now converts `\o{0377}` to `\377`, for compatibility
+    with earlier versions of pcre (including the one currently
+    in debian).  It also now generally leaves octal escapes in place,
+    converting to unicode characters only when a compatible octal
+    escape isn't available.  Addresses debian #753299.
+
 highlighting-kate 0.5.8.4 (15 Jul 2014)
 
   * Fixed DetectIdentifier so it allows underscores.  (This reflects a
