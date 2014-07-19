@@ -195,7 +195,7 @@ isOctalDigit c = c == '0' || c == '1' || c == '2' || c == '3'
 compileRegex :: Bool -> String -> Regex
 compileRegex caseSensitive regexpStr =
 #ifdef _PCRE_LIGHT
-  let opts = [anchored] ++ [caseless | not caseSensitive]
+  let opts = [anchored, utf8] ++ [caseless | not caseSensitive]
   in  compile ('.' : convertOctal regexpStr) opts
 #else
   let opts = compAnchored + compUTF8 +
