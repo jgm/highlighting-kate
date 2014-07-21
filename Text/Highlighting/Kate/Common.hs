@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP, ScopedTypeVariables #-}
 {- |
    Module      : Text.Highlighting.Kate.Common
    Copyright   : Copyright (C) 2008 John MacFarlane
@@ -23,6 +23,7 @@ import Text.Highlighting.Kate.Types
 import Text.ParserCombinators.Parsec hiding (State)
 import Data.Char (isDigit, toLower, isSpace)
 import Data.List (tails)
+import Text.Printf
 import Control.Monad.State
 import qualified Data.Set as Set
 
@@ -167,7 +168,7 @@ subDynamic "" = return ""
 
 -- convert octal escapes to the form pcre wants.  Note:
 -- need at least pcre 8.34 for the form \o{dddd}.
--- So we prefer \ddd when possible.
+-- So we prefer \ddd or \x{...}.
 convertOctal :: String -> String
 convertOctal [] = ""
 convertOctal ('\\':'0':x:y:z:rest)
@@ -177,15 +178,10 @@ convertOctal ('\\':x:y:z:rest)
 convertOctal ('\\':'o':'{':zs) =
   case break (=='}') zs of
        (ds, '}':rest) | all isOctalDigit ds && not (null ds) ->
-         if length ds <= 3
-            then '\\': pad3 ds ++ convertOctal rest
-            else case reads ('\\':'o':ds) of
-                   ((c,[]):_) -> c : convertOctal rest
-                   _          -> '\\':'o':'{': convertOctal zs
+            case reads ('0':'o':ds) of
+                 ((n :: Int,[]):_) -> printf "\\x{%x}" n ++ convertOctal rest
+                 _          -> error $ "Unable to read octal number: " ++ ds
        _  -> '\\':'o':'{': convertOctal zs
-    where pad3 [x]   = ['0','0',x]
-          pad3 [x,y] = ['0',x,y]
-          pad3 xs    = xs
 convertOctal (x:xs) = x : convertOctal xs
 
 isOctalDigit :: Char -> Bool
