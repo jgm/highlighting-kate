@@ -197,6 +197,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Fortran
                      Text.Highlighting.Kate.Syntax.Fsharp
                      Text.Highlighting.Kate.Syntax.Gcc
+                     Text.Highlighting.Kate.Syntax.Ghci
                      Text.Highlighting.Kate.Syntax.Gnuassembler
                      Text.Highlighting.Kate.Syntax.Go
                      Text.Highlighting.Kate.Syntax.Haskell
