@@ -1,0 +1,10 @@
+diff --git a/perl.xml b/perl.xml
+index fc2fd41..21e24e1 100644
+--- a/perl.xml
++++ b/perl.xml
+@@ -660,3 +660,4 @@
+         <Detect2Chars attribute="Pattern Character Class" context="#stay" char="\" char1="]" />
+-        <RegExpr attribute="Pattern Character Class" context="#stay" String="\[:^?[a-z]+:\]" />
++        <!-- JGM:  added \ before ^ in the following regex -->
++        <RegExpr attribute="Pattern Character Class" context="#stay" String="\[:\^?[a-z]+:\]" />
+         <DetectChar attribute="Pattern Internal Operator" context="#pop" char="]" />
