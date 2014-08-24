@@ -2,11 +2,12 @@ highlighting-kate
 -----------------
 
 A Haskell source code highlighting library, based
-on Kate's syntax description files (http://kate-editor.org/).  It
-can produce both HTML and LaTeX output.
+on Kate's syntax description files (http://kate-editor.org/),
+now [part of the KDE Framework's "KTextEditor" component](http://kate-editor.org/2013/11/11/kate-on-5-the-future-of-ktexteditor-and-kate-part/).
+It can produce both HTML and LaTeX output.
 
 Currently, the following languages/formats are supported:
-
+- Abc
 - Actionscript
 - Ada
 - Apache
@@ -30,20 +31,24 @@ Currently, the following languages/formats are supported:
 - D
 - Diff
 - Djangotemplate
+- Dot
 - Doxygen
 - Dtd
 - Eiffel
 - Email
 - Erlang
+- Fasm
 - Fortran
 - Fsharp
+- Gcc
+- Glsl
 - Gnuassembler
 - Go
 - Haskell
 - Haxe
 - Html
-- Ilerpg
 - Ini
+- Isocpp
 - Java
 - Javadoc
 - Javascript
@@ -52,12 +57,15 @@ Currently, the following languages/formats are supported:
 - Julia
 - Latex
 - Lex
+- Lilypond
 - LiterateCurry
 - LiterateHaskell
 - Lua
+- M4
 - Makefile
 - Mandoc
 - Markdown
+- Mathematica
 - Matlab
 - Maxima
 - Mediawiki
@@ -72,6 +80,7 @@ Currently, the following languages/formats are supported:
 - Objectivecpp
 - Ocaml
 - Octave
+- Opencl
 - Pascal
 - Perl
 - Php
@@ -81,9 +90,11 @@ Currently, the following languages/formats are supported:
 - Pure
 - Python
 - R
+- Relaxng
 - Relaxngcompact
-- Restructuredtext
+- Rest
 - Rhtml
+- Roff
 - Ruby
 - Rust
 - Scala
@@ -95,6 +106,7 @@ Currently, the following languages/formats are supported:
 - SqlMysql
 - SqlPostgresql
 - Tcl
+- Tcsh
 - Texinfo
 - Verilog
 - Vhdl
@@ -104,12 +116,13 @@ Currently, the following languages/formats are supported:
 - Xul
 - Yacc
 - Yaml
+- Zsh
 
 To install, use the cabal tool:
 
     cabal install
 
-Note:  If you have checked out the source from the darcs repository,
+Note:  If you have checked out the source from the git repository,
 you will first need to do:
 
     make prep
@@ -162,14 +175,14 @@ or
 
 Note that ParseSyntaxFiles.hs requires the HXT package (>= 9.0.0).
 
-To get the current Kate syntax highlighting files, clone the kate
+To get the current Kate syntax highlighting files, clone the ktexteditor
 repository:
 
-    git clone git://anongit.kde.org/kate
+    git clone git://anongit.kde.org/ktexteditor
 
 The syntax definitions can then be found in
 
-    kate/part/syntax/data
+    src/syntax/data
 
 There is information on the syntax highlighting definitions at
 <http://docs.kde.org/stable/en/applications/kate/highlight.html>.  See also
@@ -177,11 +190,13 @@ There is information on the syntax highlighting definitions at
 
 Thanks are due to all the authors of these syntax definitions.
 
-Changes have been made to the following xml files (the originals have
-been left in the directory, with .bkp extensions):
+Changes have been made to the following xml files (diffs have
+been left in the directory, with .patch extensions):
 
-- perl.xml:  Fixed regexes - needed backslash-escapes before ] and ^
-- php.xml:  Added fallthrough so `<?php` prefix not needed
-- base report bugs on the github issue tracker:
+- lua.xml:  Variables and constants highlighted as "normal", not keywords.
+- php.xml:  Added fallthrough so `<?php` prefix not needed.
+- tcsh.xml: Replace invalid character assignment(?) of regex '\s' with ' '.
+
+- base report bugs on the GitHub issue tracker:
 <https://github.com/jgm/highlighting-kate/issues>.
 
