@@ -8,17 +8,26 @@
 
 XMLS=$(glob xml/*.xml)
 
-.PHONY: prep all
+.PHONY: prep all test clean distclean install
 
 all: prep
-	cabal install -fexecutable --force
+	cabal configure -fexecutable --enable-tests
+	cabal build
 
 prep: clean ParseSyntaxFiles $(XMLS)
+	cabal install -fexecutable --enable-tests --only-dependencies
 	./ParseSyntaxFiles xml
 	@echo "Syntax parsers have been generated."
 	@echo "You may now use cabal to build the package."
 
+install:
+	cabal install
+
+test:
+	cabal test
+
 ParseSyntaxFiles: ParseSyntaxFiles.hs
+	cabal install HXT
 	ghc --make -Wall ParseSyntaxFiles.hs  # requires HXT >= 9.0.0
 
 clean:
