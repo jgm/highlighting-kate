@@ -52,6 +52,7 @@ Extra-Source-Files:  README.md
                      xml/d.xml
                      xml/diff.xml
                      xml/djangotemplate.xml
+                     xml/dockerfile.xml
                      xml/doxygen.xml
                      xml/doxygenlua.xml
                      xml/dtd.xml
@@ -242,6 +243,7 @@ Library
                      Text.Highlighting.Kate.Syntax.D
                      Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
+                     Text.Highlighting.Kate.Syntax.Dockerfile
                      Text.Highlighting.Kate.Syntax.Dot
                      Text.Highlighting.Kate.Syntax.Doxygen
                      Text.Highlighting.Kate.Syntax.Doxygenlua
