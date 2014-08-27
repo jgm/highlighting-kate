@@ -1,0 +1,54 @@
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style></head><body><pre class="sourceCode"><code class="sourceCode"><span class="ot" title="OtherTok">#include &lt;iostream&gt;</span>
+<span class="ot" title="OtherTok">#include &lt;vector&gt;</span>
+<span class="ot" title="OtherTok">#include &lt;string&gt;</span>
+<span class="ot" title="OtherTok">#include &lt;set&gt;</span>
+<span class="ot" title="OtherTok">#include &lt;cctype&gt;</span>
+
+
+<span class="kw" title="KeywordTok">typedef</span> std::pair&lt;<span class="dt" title="DataTypeTok">char</span>,<span class="dt" title="DataTypeTok">char</span>&gt; item_t;
+<span class="kw" title="KeywordTok">typedef</span> std::vector&lt;item_t&gt; list_t;
+
+<span class="dt" title="DataTypeTok">bool</span> can_make_word(<span class="dt" title="DataTypeTok">const</span> std::string&amp; w, <span class="dt" title="DataTypeTok">const</span> list_t&amp; vals) {
+    std::set&lt;<span class="dt" title="DataTypeTok">uint32_t</span>&gt; used;
+    <span class="kw" title="KeywordTok">while</span> (used.size() &lt; w.size()) {
+        <span class="dt" title="DataTypeTok">const</span> <span class="dt" title="DataTypeTok">char</span> c = toupper(w[used.size()]);
+        <span class="dt" title="DataTypeTok">uint32_t</span> x = used.size();
+        <span class="kw" title="KeywordTok">for</span> (<span class="dt" title="DataTypeTok">uint32_t</span> i = <span class="dv" title="DecValTok">0</span>, ii = vals.size(); i &lt; ii; ++i) {
+            <span class="kw" title="KeywordTok">if</span> (used.find(i) == used.end()) {
+                <span class="kw" title="KeywordTok">if</span> (toupper(vals[i].first) == c || toupper(vals[i].second) == c) {
+                    used.insert(i);
+                    <span class="kw" title="KeywordTok">break</span>;
+                }
+            }
+        }
+        <span class="kw" title="KeywordTok">if</span> (x == used.size()) <span class="kw" title="KeywordTok">break</span>;
+    }
+    <span class="kw" title="KeywordTok">return</span> used.size() == w.size();
+}
+
+
+<span class="dt" title="DataTypeTok">int</span> main() {
+    list_t vals{ {<span class="st" title="StringTok">&#39;B&#39;</span>,<span class="st" title="StringTok">&#39;O&#39;</span>}, {<span class="st" title="StringTok">&#39;X&#39;</span>,<span class="st" title="StringTok">&#39;K&#39;</span>}, {<span class="st" title="StringTok">&#39;D&#39;</span>,<span class="st" title="StringTok">&#39;Q&#39;</span>}, {<span class="st" title="StringTok">&#39;C&#39;</span>,<span class="st" title="StringTok">&#39;P&#39;</span>}, {<span class="st" title="StringTok">&#39;N&#39;</span>,<span class="st" title="StringTok">&#39;A&#39;</span>}, {<span class="st" title="StringTok">&#39;G&#39;</span>,<span class="st" title="StringTok">&#39;T&#39;</span>}, {<span class="st" title="StringTok">&#39;R&#39;</span>,<span class="st" title="StringTok">&#39;E&#39;</span>}, {<span class="st" title="StringTok">&#39;T&#39;</span>,<span class="st" title="StringTok">&#39;G&#39;</span>}, {<span class="st" title="StringTok">&#39;Q&#39;</span>,<span class="st" title="StringTok">&#39;D&#39;</span>}, {<span class="st" title="StringTok">&#39;F&#39;</span>,<span class="st" title="StringTok">&#39;S&#39;</span>}, {<span class="st" title="StringTok">&#39;J&#39;</span>,<span class="st" title="StringTok">&#39;W&#39;</span>}, {<span class="st" title="StringTok">&#39;H&#39;</span>,<span class="st" title="StringTok">&#39;U&#39;</span>}, {<span class="st" title="StringTok">&#39;V&#39;</span>,<span class="st" title="StringTok">&#39;I&#39;</span>}, {<span class="st" title="StringTok">&#39;A&#39;</span>,<span class="st" title="StringTok">&#39;N&#39;</span>}, {<span class="st" title="StringTok">&#39;O&#39;</span>,<span class="st" title="StringTok">&#39;B&#39;</span>}, {<span class="st" title="StringTok">&#39;E&#39;</span>,<span class="st" title="StringTok">&#39;R&#39;</span>}, {<span class="st" title="StringTok">&#39;F&#39;</span>,<span class="st" title="StringTok">&#39;S&#39;</span>}, {<span class="st" title="StringTok">&#39;L&#39;</span>,<span class="st" title="StringTok">&#39;Y&#39;</span>}, {<span class="st" title="StringTok">&#39;P&#39;</span>,<span class="st" title="StringTok">&#39;C&#39;</span>}, {<span class="st" title="StringTok">&#39;Z&#39;</span>,<span class="st" title="StringTok">&#39;M&#39;</span>} };
+    std::vector&lt;std::string&gt; words{<span class="st" title="StringTok">&quot;A&quot;</span>,<span class="st" title="StringTok">&quot;BARK&quot;</span>,<span class="st" title="StringTok">&quot;BOOK&quot;</span>,<span class="st" title="StringTok">&quot;TREAT&quot;</span>,<span class="st" title="StringTok">&quot;COMMON&quot;</span>,<span class="st" title="StringTok">&quot;SQUAD&quot;</span>,<span class="st" title="StringTok">&quot;CONFUSE&quot;</span>};
+    <span class="kw" title="KeywordTok">for</span> (<span class="dt" title="DataTypeTok">const</span> std::string&amp; w : words) {
+        std::cout &lt;&lt; w &lt;&lt; <span class="st" title="StringTok">&quot;: &quot;</span> &lt;&lt; std::boolalpha &lt;&lt; can_make_word(w,vals) &lt;&lt; <span class="st" title="StringTok">&quot;.</span><span class="ch" title="CharTok">\n</span><span class="st" title="StringTok">&quot;</span>;
+    }
+
+}</code></pre></body>

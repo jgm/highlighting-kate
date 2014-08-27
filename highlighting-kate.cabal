@@ -292,3 +292,11 @@ Executable Highlight
     Buildable:      True
   else
     Buildable:      False
+
+test-suite test-highlighting-kate
+  Type:           exitcode-stdio-1.0
+  Main-Is:        test-highlighting-kate.hs
+  Hs-Source-Dirs: tests
+  build-depends:  base >= 4, directory, highlighting-kate, filepath,
+                  process, Diff, containers, blaze-html >= 0.4.2 && < 0.8
+  default-language: Haskell98
