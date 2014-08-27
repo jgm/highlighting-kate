@@ -130,6 +130,54 @@ Extra-Source-Files:  README.md
                      xml/xul.xml
                      xml/yacc.xml
                      xml/yaml.xml
+                     tests/abc.ada
+                     tests/abc.ada.html
+                     tests/abc.c
+                     tests/abc.c.html
+                     tests/abc.clojure
+                     tests/abc.clojure.html
+                     tests/abc.cpp
+                     tests/abc.cpp.html
+                     tests/abc.cs
+                     tests/abc.cs.html
+                     tests/abc.d
+                     tests/abc.d.html
+                     tests/abc.fortran
+                     tests/abc.fortran.html
+                     tests/abc.go
+                     tests/abc.go.html
+                     tests/abc.haskell
+                     tests/abc.haskell.html
+                     tests/abc.java
+                     tests/abc.java.html
+                     tests/abc.javascript
+                     tests/abc.javascript.html
+                     tests/abc.julia
+                     tests/abc.julia.html
+                     tests/abc.lisp
+                     tests/abc.lisp.html
+                     tests/abc.matlab
+                     tests/abc.matlab.html
+                     tests/abc.ocaml
+                     tests/abc.ocaml.html
+                     tests/abc.perl
+                     tests/abc.perl.html
+                     tests/abc.php
+                     tests/abc.php.html
+                     tests/abc.prolog
+                     tests/abc.prolog.html
+                     tests/abc.python
+                     tests/abc.python.html
+                     tests/abc.r
+                     tests/abc.r.html
+                     tests/abc.ruby
+                     tests/abc.ruby.html
+                     tests/abc.scala
+                     tests/abc.scala.html
+                     tests/abc.scheme
+                     tests/abc.scheme.html
+                     tests/abc.tcl
+                     tests/abc.tcl.html
 Flag splitBase
   Description:       Choose the new, smaller, split-up base package.
   Default:           True
