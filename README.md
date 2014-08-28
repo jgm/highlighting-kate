@@ -31,6 +31,7 @@ Currently, the following languages/formats are supported:
 - D
 - Diff
 - Djangotemplate
+- Dockerfile
 - Dot
 - Doxygen
 - Dtd
