@@ -1,3 +1,28 @@
+highlighting-kate 0.5.9 (24 Aug 2014)
+
+  * Added cabal test suite.
+  * Update .cabal file and README.md to reflect new upstream repo
+    (Geoff Nixon).
+  * Added new syntaxes: ABC, Lilypond (musical typesetting),
+    FASM/[NASM/MASM/YASM] (Intel Style Assembly Language), GraphViz Dot (graph
+    notation), GLSL (graphics language), M4 (macro language, used by GNU
+    autotools), Mathematica, MediaWiki (wiki markup), OpenCL (GPGPU language),
+    RELAX NG (XML schema) [as the alternate RELAX NG compact syntax is already
+    included], tcsh [C shell] (scripting/shell language [with small patch for
+    parsing error]).  (Geoff Nixon)
+  * Add language.xsd and validatehl.sh script from upstream: useful (Geoff
+    Nixon).
+  * Replace restructuredtext.xml with updated (renamed) rest.xml (Geoff
+    Nixon).
+  * Update from upstream: alert_indent, awk, css, diff, doxygen, email,
+    fsharp, haskell, javadoc, literate-haskell, markdown, maxima, perl,
+    prolog, python, vhdl, yacc. (Geoff Nixon)
+  * Added .patch files in xml directory where local changes have been
+    made (Geoff Nixon).
+  * Common:  Convert `\o{...}` to `\x{..}` in regexes.
+    `\x{..}` has been supported for a long time in pcre.
+  * Added .travis.yml.
+
 highlighting-kate 0.5.8.5 (15 Jul 2014)
 
   * Use utf8 option with pcre-light.
