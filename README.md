@@ -197,7 +197,9 @@ Thanks are due to all the authors of these syntax definitions.
 Changes have been made to the following xml files (diffs have
 been left in the directory, with .patch extensions):
 
+- haskell.xml: Small changes to mapping of styles to token types.
 - lua.xml:  Variables and constants highlighted as "normal", not keywords.
+- perl.xml:  Small regex change due to differences in regex engines.
 - php.xml:  Added fallthrough so `<?php` prefix not needed.
 - tcsh.xml: Replace invalid character assignment(?) of regex '\s' with ' '.
 
