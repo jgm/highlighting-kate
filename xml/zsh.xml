@@ -8,8 +8,10 @@
         <!ENTITY noword   "(?![\w$+-])">                <!-- no word, $, + or - following -->
         <!ENTITY pathpart "([\w_@.&#37;*?+-]|\\ )">     <!-- valid character in a file name -->
 ]>
-<language name="Bash" version="2.12" kateversion="2.4" section="Scripts" extensions="*.sh;*.bash;*.ebuild;*.eclass;.bashrc;.bash_profile;.bash_login;.profile" mimetype="application/x-shellscript" casesensitive="1" author="Wilbert Berendsen (wilbert@kde.nl)" license="LGPL">
+<language name="Zsh" version="0.1" kateversion="2.4" section="Scripts" extensions="*.sh;*.zsh;.zshrc;.zprofile;.zlogin;.zlogout;.profile" mimetype="application/x-shellscript" casesensitive="1" author="Jonathan Kolberg (bulldog98@kubuntu-de.org)" license="LGPL">
 
+<!-- (c) 2011 by Jonathan Kolberg (bulldog98@kubuntu-de.org)
+  modified for zsh -->
 <!-- (c) 2004 by Wilbert Berendsen (wilbert@kde.nl)
     Changes by Matthew Woehlke (mw_triad@users.sourceforge.net)
     Changes by Sebastian Pipping (webmaster@hartwork.org)
@@ -29,65 +31,121 @@
       <item> set </item>
     </list>
 
-    <list name="builtins">
-      <item> : </item>
-      <item> source </item>
-      <item> alias </item>
-      <item> bg </item>
-      <item> bind </item>
-      <item> break </item>
-      <item> builtin </item>
-      <item> cd </item>
-      <item> caller </item>
-      <item> command </item>
-      <item> compgen </item>
-      <item> complete </item>
-      <item> continue </item>
-      <item> dirs </item>
-      <item> disown </item>
-      <item> echo </item>
-      <item> enable </item>
-      <item> eval </item>
-      <item> exec </item>
-      <item> exit </item>
-      <item> fc </item>
-      <item> fg </item>
-      <item> getopts </item>
-      <item> hash </item>
-      <item> help </item>
-      <item> history </item>
-      <item> jobs </item>
-      <item> kill </item>
-      <item> let </item>
-      <item> logout </item>
-      <item> popd </item>
-      <item> printf </item>
-      <item> pushd </item>
-      <item> pwd </item>
-      <item> return </item>
-      <item> set </item>
-      <item> shift </item>
-      <item> shopt </item>
-      <item> suspend </item>
-      <item> test </item>
-      <item> time </item>
-      <item> times </item>
-      <item> trap </item>
-      <item> type </item>
-      <item> ulimit </item>
-      <item> umask </item>
-      <item> unalias </item>
-      <item> wait </item>
+<list name="builtins"><!-- see man zshbuiltins -->
+	<item> - </item>
+	<item> . </item>
+	<item> : </item>
+	<item> alias </item>
+	<item> autoload </item>
+	<item> bg </item>
+	<item> bindkey </item>
+	<item> break </item>
+	<item> builtin </item>
+	<item> bye </item>
+	<item> cap </item>
+	<item> cd </item>
+	<item> chdir </item>
+	<item> clone </item>
+	<item> command </item>
+	<item> comparguments </item>
+	<item> compcall </item>
+	<item> compctl </item>
+	<item> compdescribe </item>
+	<item> compfiles </item>
+	<item> compgroups </item>
+	<item> compquote </item>
+	<item> comptags </item>
+	<item> comptry </item>
+	<item> compvalues </item>
+	<item> continue </item>
+	<item> dirs </item>
+	<item> disable </item>
+	<item> disown </item>
+	<item> echo </item>
+	<item> echotc </item>
+	<item> echoti </item>
+	<item> emulate </item>
+	<item> enable </item>
+	<item> eval </item>
+	<item> exec </item>
+	<item> exit </item>
+	<item> false </item>
+	<item> fc </item>
+	<item> fg </item>
+	<item> functions </item>
+	<item> getcap </item>
+	<item> getopts </item>
+	<item> hash </item>
+	<item> history </item>
+	<item> jobs </item>
+	<item> kill </item>
+	<item> let </item>
+	<item> limit </item>
+	<item> log </item>
+	<item> logout </item>
+	<item> noglob </item>
+	<item> popd </item>
+	<item> print </item>
+	<item> printf </item>
+	<item> pushd </item>
+	<item> pushln </item>
+	<item> pwd </item>
+	<item> r </item>
+	<item> rehash </item>
+	<item> return </item>
+	<item> sched </item>
+	<item> set </item>
+	<item> setcap </item>
+	<item> setopt </item>
+	<item> shift </item>
+	<item> source </item>
+	<item> stat </item>
+	<item> suspend </item>
+	<item> test </item>
+	<item> times </item>
+	<item> trap </item>
+	<item> true </item>
+	<item> ttyctl </item>
+	<item> type </item>
+	<item> ulimit </item>
+	<item> umask </item>
+	<item> unalias </item>
+	<item> unfunction </item>
+	<item> unhash </item>
+	<item> unlimit </item>
+	<item> unset </item>
+	<item> unsetopt </item>
+	<item> vared </item>
+	<item> wait </item>
+	<item> whence </item>
+	<item> where </item>
+	<item> which </item>
+	<item> zcompile </item>
+	<item> zformat </item>
+	<item> zftp </item>
+	<item> zle </item>
+	<item> zmodload </item>
+	<item> zparseopts </item>
+	<item> zprof </item>
+	<item> zpty </item>
+	<item> zregexparse </item>
+	<item> zsocket </item>
+	<item> zstyle </item>
+	<item> ztcp </item>
     </list>
 
     <list name="builtins_var">
-      <item> export </item>
-      <item> unset </item>
-      <item> declare </item>
-      <item> typeset </item>
-      <item> local </item>
-      <item> read </item>
-      <item> readonly </item>
+	<item> declare </item>
+	<item> export </item>
+	<item> float </item>
+	<item> getln </item>
+	<item> integer </item>
+	<item> unset </item>
+	<item> declare </item>
+	<item> typeset </item>
+	<item> local </item>
+	<item> read </item>
+	<item> readonly </item>
     </list>
 
     <list name="unixcommands">
@@ -517,7 +575,7 @@
         <!-- match do and if blocks -->
         <RegExpr attribute="Keyword" context="#stay" String="\bdo&noword;" beginRegion="do" />
         <RegExpr attribute="Keyword" context="#stay" String="\bdone&noword;" endRegion="do" />
-        <RegExpr attribute="Keyword" context="#stay" String="\bif &noword;" beginRegion="if" />
+        <RegExpr attribute="Keyword" context="#stay" String="\bif&eos;" beginRegion="if" />
         <RegExpr attribute="Keyword" context="#stay" String="\bfi&noword;" endRegion="if" />
         <!-- handle case as a special case -->
         <RegExpr attribute="Keyword" context="Case" String="\bcase&noword;" beginRegion="case" />

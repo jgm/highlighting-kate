@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
-<language name="C" section="Sources"
-          version="1.45" kateversion="2.4"
+<language name="OpenCL" section="Sources"
+          version="1.44" kateversion="2.4"
           indenter="cstyle"
-          extensions="*.c;*.C;*.h"
-          mimetype="text/x-csrc;text/x-c++src;text/x-chdr"
+          extensions="*.cl"
+          mimetype="text/x-clsrc"
           priority="5">
-<!--
-##########################################################################
-## Fixes by Sebastian Pipping (webmaster@hartwork.org)
-##
-## NOTE: Keep in sync with C++ highlighter! (cpp.xml)
-##########################################################################
--->
   <highlighting>
     <list name="keywords">
+      <item> __constant </item>
+      <item> __global </item>
+      <item> __local </item>
+      <item> __private </item>
+      <item> __kernel </item>
+      <item> __read_only </item>
+      <item> __write_only </item>
+      <item> constant </item>
+      <item> global </item>
+      <item> local </item>
+      <item> private </item>
+      <item> kernel </item>
+      <item> read_only </item>
+      <item> write_only </item>
       <item> break </item>
       <item> case </item>
       <item> continue </item>
@@ -22,7 +29,6 @@
       <item> do </item>
       <item> else </item>
       <item> enum </item>
-      <item> extern </item>
       <item> for </item>
       <item> goto </item>
       <item> if </item>
@@ -36,33 +42,85 @@
       <item> while </item>
     </list>
     <list name="types">
-      <item> auto </item>
+      <item> bool </item>
+      <item> uchar </item>
+      <item> uchar2 </item>
+      <item> uchar3 </item>
+      <item> uchar4 </item>
+      <item> uchar8 </item>
+      <item> uchar16 </item>
       <item> char </item>
+      <item> char2 </item>
+      <item> char3 </item>
+      <item> char4 </item>
+      <item> char8 </item>
+      <item> char16 </item>
       <item> const </item>
       <item> double </item>
+      <item> double2 </item>
+      <item> double3 </item>
+      <item> double4 </item>
+      <item> double8 </item>
+      <item> double16 </item>
+      <item> event_t </item>
       <item> float </item>
-      <item> int </item>
+      <item> float2 </item>
+      <item> float3 </item>
+      <item> float4 </item>
+      <item> float8 </item>
+      <item> float16 </item>
+      <item> half </item>
+      <item> half2 </item>
+      <item> half3 </item>
+      <item> half4 </item>
+      <item> half8 </item>
+      <item> half16 </item>
+      <item> image1d_t </item>
+      <item> image2d_t </item>
+      <item> image3d_t </item>
+      <item> uint </item>
+      <item> uint2 </item>
+      <item> uint3 </item>
+      <item> uint4 </item>
+      <item> uint8 </item>
+      <item> uint16 </item>
+	  <item> int </item>
+      <item> int2 </item>
+      <item> int3 </item>
+      <item> int4 </item>
+      <item> int8 </item>
+      <item> int16 </item>
+      <item> ulong </item>
+      <item> ulong2 </item>
+      <item> ulong3 </item>
+      <item> ulong4 </item>
+      <item> ulong8 </item>
+      <item> ulong16 </item>
       <item> long </item>
-      <item> register </item>
+      <item> long2 </item>
+      <item> long3 </item>
+      <item> long4 </item>
+      <item> long8 </item>
+      <item> long16 </item>
       <item> restrict </item>
+      <item> sampler_t </item>
+      <item> ushort </item>
+      <item> ushort2 </item>
+      <item> ushort3 </item>
+      <item> ushort4 </item>
+      <item> ushort8 </item>
+      <item> ushort16 </item>
       <item> short </item>
+      <item> short2 </item>
+      <item> short3 </item>
+      <item> short4 </item>
+      <item> short8 </item>
+      <item> short16 </item>
       <item> signed </item>
       <item> static </item>
       <item> unsigned </item>
       <item> void </item>
       <item> volatile </item>
-      <item> int8_t </item>
-      <item> int16_t </item>
-      <item> int32_t </item>
-      <item> int64_t </item>
-      <item> uint8_t </item>
-      <item> uint16_t </item>
-      <item> uint32_t </item>
-      <item> uint64_t </item>
-      <item> wchar_t </item>
-      <item> _Imaginary </item>
-      <item> _Complex </item>
-      <item> _Bool </item>
     </list>
     <contexts>
       <context attribute="Normal Text" lineEndContext="#stay" name="Normal">
@@ -81,7 +139,6 @@
         </Float>
         <HlCOct attribute="Octal" context="#stay"/>
         <HlCHex attribute="Hex" context="#stay"/>
-        <RegExpr attribute="Binary" context="#stay" String="0b[01]+[ul]{0,3}" insensitive="true" />
         <Int attribute="Decimal" context="#stay" >
           <StringDetect attribute="Decimal" context="#stay" String="ULL" insensitive="true"/>
           <StringDetect attribute="Decimal" context="#stay" String="LUL" insensitive="true"/>
@@ -124,11 +181,6 @@
         <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*if(?:def|ndef)?(?=\s+\S)" insensitive="true" beginRegion="PP" firstNonSpace="true" />
         <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*endif" insensitive="true" endRegion="PP" firstNonSpace="true" />
         <RegExpr attribute="Preprocessor" context="Define" String="#\s*define.*((?=\\))" insensitive="true" firstNonSpace="true" />
-        
-        <!-- folding for apple style #pragma mark - label -->
-        <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*pragma\s+mark\s+-\s*$" insensitive="true" firstNonSpace="true" endRegion="pragma_mark" />
-        <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*pragma\s+mark" insensitive="true" firstNonSpace="true" endRegion="pragma_mark" beginRegion="pragma_mark" />
-        
         <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*(?:el(?:se|if)|include(?:_next)?|define|undef|line|error|warning|pragma)" insensitive="true" firstNonSpace="true" />
         <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s+[0-9]+" insensitive="true" firstNonSpace="true" />
       </context>
@@ -182,7 +234,6 @@
       <itemData name="Decimal"      defStyleNum="dsDecVal" spellChecking="false"/>
       <itemData name="Octal"        defStyleNum="dsBaseN" spellChecking="false"/>
       <itemData name="Hex"          defStyleNum="dsBaseN" spellChecking="false"/>
-      <itemData name="Binary"       defStyleNum="dsBaseN" spellChecking="false"/>
       <itemData name="Float"        defStyleNum="dsFloat" spellChecking="false"/>
       <itemData name="Char"         defStyleNum="dsChar" spellChecking="false"/>
       <itemData name="String"       defStyleNum="dsString"/>

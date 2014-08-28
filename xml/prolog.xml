@@ -105,7 +105,7 @@ to make the rules more expressive. -->
     <!ENTITY bs         "\">
 ]>
 <language name="Prolog" section="Sources"
-	  version="1.2" kateversion="2.3"
+	  version="1.3" kateversion="2.3"
 	  mimetype="text/x-prolog"
 	  extensions="*.prolog;*.dcg;*.pro"
 	  author="Torsten Eichstädt (torsten.eichstaedt@web.de)"
@@ -825,10 +825,10 @@ TODO sorted by priority
 
 	    <!-- id,var,graphic: ASSERT calling context ashured 1st char is ok
 				 ASSERT we get the 1st char for id & var -->
-	    <context name="id" attribute="Syntax Error" >
+	    <context name="id" attribute="Syntax Error" lineEndContext="#stay" >
 		<DetectIdentifier context="#pop" attribute="Normal Text" />
 	    </context>
-	    <context name="var" attribute="Syntax Error" >
+	    <context name="var" attribute="Syntax Error" lineEndContext="#stay" >
 		<DetectIdentifier context="#pop" attribute="_VARIABLE" />
 	    </context>
 	    <context name="graphic" lineEndContext="#pop" attribute="Syntax Error" fallthrough="true" fallthroughContext="#pop" >

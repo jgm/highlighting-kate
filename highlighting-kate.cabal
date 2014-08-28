@@ -25,6 +25,7 @@ Extra-Source-Files:  README.md
                      css/hk-espresso.css
                      css/hk-kate.css
                      css/hk-pyg.css
+                     css/hk-tango.css
                      xml/actionscript.xml
                      xml/ada.xml
                      xml/alert.xml
@@ -215,6 +216,7 @@ Library
                      Text.Highlighting.Kate.Format.LaTeX
   Other-Modules:     Text.Highlighting.Kate.Common
                      Paths_highlighting_kate
+                     Text.Highlighting.Kate.Syntax.Abc
                      Text.Highlighting.Kate.Syntax.Actionscript
                      Text.Highlighting.Kate.Syntax.Ada
                      Text.Highlighting.Kate.Syntax.Alert
@@ -240,15 +242,18 @@ Library
                      Text.Highlighting.Kate.Syntax.D
                      Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
+                     Text.Highlighting.Kate.Syntax.Dot
                      Text.Highlighting.Kate.Syntax.Doxygen
                      Text.Highlighting.Kate.Syntax.Doxygenlua
                      Text.Highlighting.Kate.Syntax.Dtd
                      Text.Highlighting.Kate.Syntax.Eiffel
                      Text.Highlighting.Kate.Syntax.Email
                      Text.Highlighting.Kate.Syntax.Erlang
+                     Text.Highlighting.Kate.Syntax.Fasm
                      Text.Highlighting.Kate.Syntax.Fortran
                      Text.Highlighting.Kate.Syntax.Fsharp
                      Text.Highlighting.Kate.Syntax.Gcc
+                     Text.Highlighting.Kate.Syntax.Glsl
                      Text.Highlighting.Kate.Syntax.Gnuassembler
                      Text.Highlighting.Kate.Syntax.Go
                      Text.Highlighting.Kate.Syntax.Haskell
@@ -264,14 +269,18 @@ Library
                      Text.Highlighting.Kate.Syntax.Julia
                      Text.Highlighting.Kate.Syntax.Latex
                      Text.Highlighting.Kate.Syntax.Lex
+                     Text.Highlighting.Kate.Syntax.Lilypond
                      Text.Highlighting.Kate.Syntax.LiterateCurry
                      Text.Highlighting.Kate.Syntax.LiterateHaskell
                      Text.Highlighting.Kate.Syntax.Lua
+                     Text.Highlighting.Kate.Syntax.M4
                      Text.Highlighting.Kate.Syntax.Makefile
                      Text.Highlighting.Kate.Syntax.Mandoc
                      Text.Highlighting.Kate.Syntax.Markdown
+                     Text.Highlighting.Kate.Syntax.Mathematica
                      Text.Highlighting.Kate.Syntax.Matlab
                      Text.Highlighting.Kate.Syntax.Maxima
+                     Text.Highlighting.Kate.Syntax.Mediawiki
                      Text.Highlighting.Kate.Syntax.Metafont
                      Text.Highlighting.Kate.Syntax.Mips
                      Text.Highlighting.Kate.Syntax.Modelines
@@ -284,6 +293,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Objectivecpp
                      Text.Highlighting.Kate.Syntax.Ocaml
                      Text.Highlighting.Kate.Syntax.Octave
+                     Text.Highlighting.Kate.Syntax.Opencl
                      Text.Highlighting.Kate.Syntax.Pascal
                      Text.Highlighting.Kate.Syntax.Perl
                      Text.Highlighting.Kate.Syntax.Php
@@ -293,8 +303,9 @@ Library
                      Text.Highlighting.Kate.Syntax.Pure
                      Text.Highlighting.Kate.Syntax.Python
                      Text.Highlighting.Kate.Syntax.R
+                     Text.Highlighting.Kate.Syntax.Relaxng
                      Text.Highlighting.Kate.Syntax.Relaxngcompact
-                     Text.Highlighting.Kate.Syntax.Restructuredtext
+                     Text.Highlighting.Kate.Syntax.Rest
                      Text.Highlighting.Kate.Syntax.Rhtml
                      Text.Highlighting.Kate.Syntax.Roff
                      Text.Highlighting.Kate.Syntax.Ruby
@@ -308,6 +319,7 @@ Library
                      Text.Highlighting.Kate.Syntax.SqlMysql
                      Text.Highlighting.Kate.Syntax.SqlPostgresql
                      Text.Highlighting.Kate.Syntax.Tcl
+                     Text.Highlighting.Kate.Syntax.Tcsh
                      Text.Highlighting.Kate.Syntax.Texinfo
                      Text.Highlighting.Kate.Syntax.Verilog
                      Text.Highlighting.Kate.Syntax.Vhdl
@@ -317,6 +329,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Xul
                      Text.Highlighting.Kate.Syntax.Yacc
                      Text.Highlighting.Kate.Syntax.Yaml
+                     Text.Highlighting.Kate.Syntax.Zsh
   -- disable optimizations; it doesn't hurt performance much and
   -- massively improves compilation speed and memory usage
   Default-Language:    Haskell98

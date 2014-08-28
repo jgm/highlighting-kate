@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
-<language name="Haskell" version="2.2" kateversion="2.3" section="Sources" extensions="*.hs;*.chs" mimetype="text/x-haskell" author="Nicolas Wu (zenzike@gmail.com)" license="LGPL" indenter="haskell">
+<language name="Haskell" version="2.4" kateversion="2.3" section="Sources" extensions="*.hs;*.chs" mimetype="text/x-haskell" author="Nicolas Wu (zenzike@gmail.com)" license="LGPL" indenter="haskell" style="haskell">
   <highlighting>
   <list name="keywords">
     <item> case </item>
@@ -24,6 +24,8 @@
     <item> where </item>
   </list>
   <list name="prelude function">
+    <item> FilePath </item>
+    <item> IOError </item>
     <item> abs </item>
     <item> acos </item>
     <item> acosh </item>
@@ -341,8 +343,10 @@
       <RegExpr attribute="Operator"         context="#stay" String="([A-Z][a-zA-Z0-0_']*\.)*[\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:]+" />
       <RegExpr attribute="Type"             context="#stay" String="([A-Z][a-zA-Z0-9_']*\.)*[A-Z][a-zA-Z0-9_']*" />
 
+      <RegExpr    attribute="Float"   context="#stay" String ="\d+\.\d+([Ee][+-]?\d+)?|\d+[Ee][+-]?\d+"/>
+      <RegExpr    attribute="Octal"   context="#stay" String="0[Oo][0-7]+"/>
+      <RegExpr    attribute="Hex"     context="#stay" String="0[Xx][0-9A-Fa-f]+"/>
       <Int        attribute="Decimal" context="#stay" />
-      <RegExpr    attribute="Float"   context="#stay" String="\d+\.\d+" />
       <DetectChar attribute="Char"    context="char" char="'" />
       <DetectChar attribute="String"  context="string" char="&quot;" />
 
@@ -418,9 +422,9 @@
 
     <itemData name="Keyword"          defStyleNum="dsKeyword"  spellChecking="false" />
     <itemData name="Type Prelude"     defStyleNum="dsDataType" spellChecking="false" />
-    <itemData name="Function Prelude" defStyleNum="dsNormal" spellChecking="false" />
-    <itemData name="Data Prelude"     defStyleNum="dsDataType"  spellChecking="false" />
-    <itemData name="Class Prelude"    defStyleNum="dsDataType"  spellChecking="false" />
+    <itemData name="Function Prelude" defStyleNum="dsFunction" spellChecking="false" />
+    <itemData name="Data Prelude"     defStyleNum="dsKeyword"  spellChecking="false" />
+    <itemData name="Class Prelude"    defStyleNum="dsKeyword"  spellChecking="false" />
 
     <itemData name="Signature"        defStyleNum="dsOthers"  spellChecking="false" />
     <itemData name="Function"         defStyleNum="dsNormal"   spellChecking="false" />
@@ -428,6 +432,8 @@
     <itemData name="Type"             defStyleNum="dsDataType" spellChecking="false" />
     <itemData name="Special"          defStyleNum="dsOthers"  spellChecking="false" />
 
+    <itemData name="Octal"            defStyleNum="dsBaseN"    spellChecking="false" />
+    <itemData name="Hex"              defStyleNum="dsBaseN"    spellChecking="false" />
     <itemData name="Decimal"          defStyleNum="dsDecVal"   spellChecking="false" />
     <itemData name="Float"            defStyleNum="dsFloat"    spellChecking="false" />
     <itemData name="Char"             defStyleNum="dsChar"     spellChecking="false" />

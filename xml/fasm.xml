@@ -1,77 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 <!--
-  NASM Intel x86 assembly syntax
+"Intel x86 (FASM)" is based on ver. 1.3 of "Intel x86 (NASM)" by Nicola Gigante and Bogdan Drozdowski
 
-  Created: Nicola Gigante <nicola.gigante@gmail.com>
-    Changes: Bogdan Drozdowski (bogdandr@op.pl)
-  Version: 1.3
-             Lyle Putnam (lcputnam@gmail.com)
-  Version: 1.4
+Known issues:
+* Does not include all 64-bit registers and instructions
+* "near" and "far" as in "jmp near MyLabel" is unhandeled.
+* Confuses and,or,not,xor,shl instructions,with operators with same name, e.g. "2 shl 4"
+* May confuse ah,bh,ch,dh with hexadecimal numbers.
 
-Changes from 1.0:
-  15/01/2006: version 1.1
-    Added the rol instruction (bytewise rotate left) to the keywords list.
-  17/01/2006: version 1.2
-    Remade the list of instructions directly from the nasm documentation.
-  22/04/2006: version 1.3 from Bogdan Drozdowski (bogdandr@op.pl):
-    Removed duplicates form the instruction list and made it alphabetical.
-    Added new instructions (some SSE* and 64-bit, NASM may not know all of them).
-    Corrections in register list and a few new ones (not 64-bit).
-    Changed regexes for hex, octal and bin numbers. Now words like
-      "change" and "blah" will NOT have the "ch" and "ah" coloured.
-  24/07/2011: Version 1.4 from Lyle Putnam (lcputnam@gmail.com):
-    The above change to fix the regex for hex numbers was incorrect on Kate
-    3.6.2. Fixed.
-
-  GNU GENERAL PUBLIC LICENCE
-
-This program, including associated files, is free software.  You may
-distribute it and/or modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation; either Version 2 of
-the license, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
-
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+Notes:
+* "used" and "defined" are treated opperators and are not highlighted.
 -->
-<language name="Intel x86 (NASM)" section="Assembler" version="1.40" kateversion="2.3" extensions="*.asm" mimetype="" author="Nicola Gigante (nicola.gigante@gmail.com)" license="GPL">
+
+<language name="Intel x86 (FASM)" section="Assembler" version="0.2" kateversion="4.5" extensions="*.asm;*.inc;*.fasm" mimetype="" author="rCX (rCX12@yahoo.com)" license="GPL">
   <highlighting>
     <list name="registers">
       <!-- General purpose registers -->
+      <item>rax</item>
       <item>eax</item>
       <item>ax</item>
       <item>ah</item>
       <item>al</item>
+      <item>rbx</item>
       <item>ebx</item>
       <item>bx</item>
       <item>bh</item>
       <item>bl</item>
+      <item>rcx</item>
       <item>ecx</item>
       <item>cx</item>
       <item>ch</item>
       <item>cl</item>
+      <item>rdx</item>
       <item>edx</item>
       <item>dx</item>
       <item>dh</item>
       <item>dl</item>
+      <item>rbp</item>
       <item>ebp</item>
       <item>bp</item>
+      <item>rsi</item>
       <item>esi</item>
       <item>si</item>
+      <item>rdi</item>
       <item>edi</item>
       <item>di</item>
-      <!--
-      <item>eip</item>
-      <item>ip</item>
-      -->
+      <item>rsp</item>
       <item>esp</item>
       <item>sp</item>
+      <item>r8</item>
+      <item>r9</item>
+      <item>r10</item>
+      <item>r11</item>
+      <item>r12</item>
+      <item>r13</item>
+      <item>r14</item>
+      <item>r15</item>
       <!-- Segmentation registers -->
       <item>cs</item>
       <item>ds</item>
@@ -774,83 +759,105 @@ with this program; if not, write to the Free Software Foundation, Inc.,
       <item>xorpd</item>
       <item>xorps</item>
     </list>
+
     <list name="Data">
-      <!-- repeat some data declaration -->
-      <item>times</item>
-      <!-- constants -->
-      <item>equ</item>
-      <!-- Initialized data -->
+      <!-- Initialized data (1.2.2)-->
       <item>db</item>
       <item>dw</item>
+      <item>du</item>
       <item>dd</item>
+      <item>dp</item>
+      <item>df</item>
       <item>dq</item>
       <item>dt</item>
-      <!-- Uninitialized data -->
-      <item>resb</item>
-      <item>resw</item>
-      <item>resd</item>
-      <item>resq</item>
-      <item>rest</item>
-      <!-- binary file include -->
-      <item>incbin</item>
-      <!-- operand size -->
+      <!-- Uninitialized data (1.2.2)-->
+      <item>rb</item>
+      <item>rw</item>
+      <item>rd</item>
+      <item>rp</item>
+      <item>rf</item>
+      <item>rq</item>
+      <item>rt</item>
+      <!-- binary file include (1.2.2)-->
+      <item>file</item>
+      <!-- operand size from (1.2.1)-->
       <item>byte</item>
       <item>word</item>
       <item>dword</item>
+      <item>pword</item>
       <item>qword</item>
-      <item>short</item>
+      <item>tbyte</item>
+      <item>tword</item>
+      <item>dqword</item>
       <item>ptr</item>
     </list>
-    <list name="NASM Keywords">
-      <!-- NASM directives -->
-      <item>absolute</item>
-      <item>bits</item>
+
+    <list name="Preprocessor Keywords"> <!-- Contains keywords for macros, structures, etc... -->
+      <item>append</item>
+      <item>at</item>   <!-- As in "virtual at"-->
+      <item>break</item>
       <item>common</item>
-      <item>extern</item>
-      <item>global</item>
+      <item>display</item>
+      <item>else</item>
+      <item>end</item> <!-- As in "end if"-->
+      <item>equ</item>
+      <item>fix</item>
+      <item>foward</item>
+      <item>if</item>
+      <item>irp</item>
+      <item>irps</item>
+      <item>label</item>
+      <item>local</item>
+      <item>match</item>
+      <item>macro</item>
+      <item>purge</item>
+      <item>repeat</item>
+      <item>rept</item>
+      <item>reverse</item>
+      <item>restore</item>
+      <item>struc</item>
+      <item>times</item>
+      <item>while</item>
+      <item>virtual</item>
+    </list>
+
+    <list name="Instruction-like Keywords"> <!-- Contains instruction-like keywords -->
+      <item>align</item>
+      <item>entry</item>
+      <item>extrn</item>
+      <item>format</item>
+      <item>include</item>
+      <item>invoke</item>
+      <item>data</item>
+      <item>load</item>
+      <item>from</item>
+      <item>heap</item>
       <item>org</item>
+      <item>proc</item>
+      <item>public</item>
       <item>section</item>
-      <item>seg</item>
       <item>segment</item>
-      <item>strict</item>
+      <item>stack</item>
+      <item>store</item>
       <item>use16</item>
       <item>use32</item>
-      <item>wrt</item>
-      <!-- NASM standard macros -->
-      <item>struc</item>
-      <item>endstruc</item>
-      <item>istruc</item>
-      <item>at</item>
-      <item>iend</item>
-      <item>align</item>
-      <item>alignb</item>
-
-      <item>__SECT__</item>
-      <item>__NASM_MAJOR__</item>
-      <item>__NASM_MINOR__</item>
-      <item>__NASM_SUBMINOR__</item>
-      <item>___NASM_PATCHLEVEL__</item>
-      <item>__NASM_VERSION_ID__</item>
-      <item>__NASM_VER__</item>
-      <item>__FILE__</item>
-      <item>__LINE__</item>
+      <item>use64</item>
     </list>
+
     <contexts>
       <context name="Normal" attribute="Normal Text" lineEndContext="#stay">
         <keyword attribute="Registers" context="#stay" String="registers"/>
         <keyword attribute="Data" context="#stay" String="Data"/>
         <keyword attribute="Instructions" context="#stay" String="instructions"/>
-        <keyword attribute="NASM Keywords" context="#stay" String="NASM Keywords"/>
+        <keyword attribute="Instructions" context="#stay" String="Instruction-like Keywords"/>
+        <keyword attribute="Preprocessor" context="#stay" String="Preprocessor Keywords"/>
         <DetectChar attribute="Comment" context="Comment" char=";"/>
-        <DetectChar attribute="Preprocessor" context="Preprocessor" char="%"/>
         <AnyChar attribute="String" context="String" String="&quot;'"/>
-        <RegExpr attribute="Label" context="#stay" String="^\s*[A-Za-z0-9_.$]+:"/>
+        <RegExpr attribute="Label" context="#stay" String="^\s*[A-Za-z0-9@_.$?]+:"/>
         <!-- Conditional instructions -->
         <RegExpr attribute="Instructions" context="#stay" String="(cmov|fcmov|j|loop|set)(a|ae|b|be|c|e|g|ge|l|le|na|nae|nb|nbe|nc|ne|ng|nge|nl|nle|no|np|ns|nz|o|p|pe|po|s|z)"/>
-        <!-- The NASM's CPU directive -->
-        <RegExpr attribute="NASM Keywords" context="#stay" String="cpu (pentium|ppro|p2|p3|katmai|p4|willamette|prescott|ia64)*"/>
         <!-- hexadecimal numbers -->
-        <RegExpr attribute="BaseN" context="#stay" insensitive="true" String="(^|[ \t,]+)((\$|0x){1}[0-9]+[a-f0-9]*|[0-9]+[a-f0-9]*h)([ \t,]+|$)"/>
+        <RegExpr attribute="BaseN" context="#stay" insensitive="true" String="(^|[ \t,]+)((\$|0x){1}[0-9]+[a-f0-9]*|[a-f0-9]+h)([ \t,]+|$)"/>
         <!-- octal and binary numbers -->
         <RegExpr attribute="BaseN" context="#stay" insensitive="true" String="(^|[ \t,]+)([0-7]+(q|o)|[01]+b)([ \t,]+|$)"/>
         <DetectChar attribute="Number" context="#stay" char="$"/>
@@ -871,7 +878,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
       <itemData name="Normal Text" defStyleNum="dsNormal"/>
       <itemData name="Registers" defStyleNum="dsKeyword"/>
       <itemData name="Instructions" defStyleNum="dsKeyword"/>
-      <itemData name="NASM Keywords" defStyleNum="dsKeyword"/>
       <itemData name="Comment" defStyleNum="dsComment"/>
       <itemData name="Label" defStyleNum="dsFunction"/>
       <itemData name="Data" defStyleNum="dsDataType"/>
