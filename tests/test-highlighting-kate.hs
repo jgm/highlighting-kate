@@ -1,5 +1,6 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
 module Main where
+import Data.Char (toLower)
 import Control.Monad
 import System.Exit
 import System.Directory
@@ -28,8 +29,7 @@ data TestResult = Pass | Fail | Error
 
 main = do
   inputs <- map ("tests" </>) <$>
-            filter (\f -> takeBaseName f == "abc") <$>
-               getDirectoryContents "tests"
+            filter isTestFile <$> getDirectoryContents "tests"
   args <- getArgs
   let regen = "--regenerate" `elem` args
   results <- forM inputs (runTest regen)
@@ -38,6 +38,11 @@ main = do
   exitWith $ if numfailures == 0 && numerrors == 0
                 then ExitSuccess
                 else ExitFailure $ numfailures + numerrors
+
+isTestFile :: FilePath -> Bool
+isTestFile f = case drop 1 $ takeExtension f of
+                    x -> x `elem` map (map toLower) languages &&
+                          null (takeExtension (dropExtension f))
 
 err :: String -> IO ()
 err = hPutStrLn stderr
