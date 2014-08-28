@@ -178,6 +178,10 @@ Extra-Source-Files:  README.md
                      tests/abc.scheme.html
                      tests/abc.tcl
                      tests/abc.tcl.html
+                     tests/archive.rhtml
+                     tests/archive.rhtml.html
+                     tests/life.lua
+                     tests/life.lua.html
 Flag splitBase
   Description:       Choose the new, smaller, split-up base package.
   Default:           True

@@ -125,6 +125,10 @@ To generate the documentation:
 
     cabal haddock
 
+To run the test suite:
+
+    cabal test
+
 For an example of the use of the library, see Highlight.hs.
 To compile this program along with the library, specify the 'executable'
 flag in the configure step above:
