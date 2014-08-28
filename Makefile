@@ -8,10 +8,14 @@
 
 XMLS=$(glob xml/*.xml)
 
-.PHONY: prep all test clean distclean install
+.PHONY: prep all test clean distclean install prof
 
 all: prep
 	cabal configure -fexecutable --enable-tests
+	cabal build
+
+prof:
+	cabal configure --enable-library-profiling --enable-executable-profiling --disable-optimization -fexecutable
 	cabal build
 
 prep: clean ParseSyntaxFiles $(XMLS)
