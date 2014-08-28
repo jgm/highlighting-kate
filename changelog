@@ -21,7 +21,6 @@ highlighting-kate 0.5.9 (24 Aug 2014)
     made (Geoff Nixon).
   * Common:  Convert `\o{...}` to `\x{..}` in regexes.
     `\x{..}` has been supported for a long time in pcre.
-  * Added .travis.yml.
 
 highlighting-kate 0.5.8.5 (15 Jul 2014)
 
