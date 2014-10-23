@@ -17,6 +17,7 @@
     <DetectIdentifier/>
     <StringDetect attribute="Comment" context="Comment" String="&lt;!--" beginRegion="comment" />
     <StringDetect attribute="CDATA" context="CDATA" String="&lt;![CDATA[" beginRegion="cdata" />
+    <!-- NOTE: the kate source had insensitive="true", but "false" is correct -->
     <RegExpr attribute="Doctype" context="Doctype" String="&lt;!DOCTYPE\s+" insensitive="false" beginRegion="doctype"  />
     <RegExpr attribute="Processing Instruction" context="PI" String="&lt;\?[\w:-]*" beginRegion="pi" />
     <RegExpr attribute="Element" context="CSS" String="&lt;style\b" insensitive="true" beginRegion="style" />
