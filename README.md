@@ -10,6 +10,7 @@ Currently, the following languages/formats are supported:
 - Abc
 - Actionscript
 - Ada
+- Agda
 - Apache
 - Asn1
 - Asp
