@@ -141,6 +141,7 @@ Library
                      Text.Highlighting.Kate.Syntax.D
                      Text.Highlighting.Kate.Syntax.Diff
                      Text.Highlighting.Kate.Syntax.Djangotemplate
+                     Text.Highlighting.Kate.Syntax.Dockerfile
                      Text.Highlighting.Kate.Syntax.Dot
                      Text.Highlighting.Kate.Syntax.Doxygen
                      Text.Highlighting.Kate.Syntax.Doxygenlua
