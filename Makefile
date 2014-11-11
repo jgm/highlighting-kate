@@ -19,7 +19,6 @@ prof:
 	cabal build
 
 prep: clean ParseSyntaxFiles $(XMLS)
-	cabal install -fexecutable --enable-tests --only-dependencies
 	./ParseSyntaxFiles xml
 	@echo "Syntax parsers have been generated."
 	@echo "You may now use cabal to build the package."
