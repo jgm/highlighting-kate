@@ -287,7 +287,11 @@ pRangeDetect startChar endChar = try $ do
   return $ startChar : (body ++ [endChar])
 
 pLineContinue :: KateParser String
-pLineContinue = try $ char '\\' >> eof >> return "\\"
+pLineContinue = try $ do
+  char '\\'
+  eof
+  updateState $ \st -> st{ synStContinuation = True }
+  return "\\"
 
 pDetectSpaces :: KateParser [Char]
 pDetectSpaces = many1 (satisfy $ \c -> c == ' ' || c == '\t')

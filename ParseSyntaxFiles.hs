@@ -254,8 +254,10 @@ mkParser syntax =
                       (nest 2 $ text "updateState $ \\st -> st{ synStPrevNonspace = False }" $$
                                 text "context <- currentContext" $$
                                 text "contexts <- synStContexts `fmap` getState" $$
+                                text "st <- getState" $$
                                 text "if length contexts >= 2" $$
                                 text "  then case context of" $$
+                                (nest 4 $ text "_ | synStContinuation st -> updateState $ \\st -> st{ synStContinuation = False }") $$
                                 (nest 4 $ (vcat $ map (\cont -> text (show (synLanguage syntax, contName cont)) <> text " -> " <>
                                             switchContext (synLanguage syntax, contLineEndContext cont) (<> text " >> ") <>
                                             if "#pop" `isPrefixOf` (contLineEndContext cont)

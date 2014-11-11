@@ -29,6 +29,8 @@ data SyntaxState = SyntaxState
   , synStLineNumber           :: Int          -- ^ Number of current line
   , synStPrevChar             :: Char         -- ^ Last character parsed
   , synStPrevNonspace         :: Bool         -- ^ True if we've parsed a nonspace
+  , synStContinuation         :: Bool         -- ^ True if last thing parsed is
+                                              --   a LineContinue
   , synStCaseSensitive        :: Bool         -- ^ Language is case-sensitive
   , synStKeywordCaseSensitive :: Bool         -- ^ Keywords are case-sensitive
   , synStCaptures             :: [String]     -- ^ List of regex captures from
@@ -40,6 +42,7 @@ defaultSyntaxState = SyntaxState{
     synStContexts = []
   , synStLineNumber = 0
   , synStPrevNonspace = False
+  , synStContinuation = False
   , synStPrevChar = '\n'
   , synStCaseSensitive = True
   , synStKeywordCaseSensitive = True
