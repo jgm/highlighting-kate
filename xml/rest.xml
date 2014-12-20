@@ -3,7 +3,7 @@
 [
         <!ENTITY inlinestart "(^|[-\s&apos;&quot;\(\[{&lt;/:‘“’«¡¿‐‑‒–— ])">
         <!ENTITY inlineend "(?=[-\s’”»‐‑‒–— &apos;&quot;\)\]}&gt;/:\.,;!\?\\]|$)">
-        <!ENTITY SimpleReferenceNameChars "\w_\.:\+-">
+        <!ENTITY SimpleReferenceNameChars "\w_\.:\+\-">
 ]>
 <!--
   This file is part of KDE's kate project.
