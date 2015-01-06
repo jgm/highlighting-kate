@@ -159,6 +159,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Haskell
                      Text.Highlighting.Kate.Syntax.Haxe
                      Text.Highlighting.Kate.Syntax.Html
+                     Text.Highlighting.Kate.Syntax.Idris
                      Text.Highlighting.Kate.Syntax.Ini
                      Text.Highlighting.Kate.Syntax.Isocpp
                      Text.Highlighting.Kate.Syntax.Java
