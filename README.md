@@ -49,6 +49,7 @@ Currently, the following languages/formats are supported:
 - Haskell
 - Haxe
 - Html
+- Idris
 - Ini
 - Isocpp
 - Java
