@@ -1,0 +1,13 @@
+diff --git a/xml/isocpp.xml b/xml/isocpp.xml
+index 88e7b88..2d2da8a 100644
+--- a/xml/isocpp.xml
++++ b/xml/isocpp.xml
+@@ -191,7 +191,7 @@
+         <!-- NOTE Order is important! -->
+         <RegExpr attribute="Hex" context="#stay" String="[\+\-]?0x[0-9A-Fa-f]('?[0-9A-Fa-f]+)*([Uu][Ll]{0,2}|[Ll]{0,2}[Uu]?|_[_0-9A-Za-z]*)?\b" />
+         <RegExpr attribute="Binary" context="#stay" String="0[Bb][01]('?[01]+)*([Uu][Ll]{0,2}|[Ll]{0,2}[Uu]?|_[_0-9A-Za-z]*)?\b" />
+-        <RegExpr attribute="Float" context="#stay" String="[\+\-]?([0-9]+[Ee][\+\-]?[0-9]+|([0-9]+\.|\.[0-9]+|[0-9]+\.[0-9]+)([Ee][\+\-]?[0-9]+)?)[FfLl]?" />
++        <RegExpr attribute="Float" context="#stay" String="[\+\-]?([0-9]+[Ee][\+\-]?[0-9]+|([0-9]*\.[0-9]+|[0-9]+\.[0-9]*)([Ee][\+\-]?[0-9]+)?)[FfLl]?" />
+         <RegExpr attribute="Octal" context="#stay" String="[\+\-]?0'?[0-7]('?[0-7]+)*([Uu][Ll]{0,2}|[Ll]{0,2}[Uu]?|_[_0-9A-Za-z]*)?\b" />
+         <RegExpr attribute="Decimal" context="#stay" String="[\+\-]?(0|[1-9]('?[0-9]+)*)([Uu][Ll]{0,2}|[Ll]{0,2}[Uu]?|_[_0-9A-Za-z]*)?\b" />
+         <RegExpr attribute="Error" context="#stay" String="[\+\-]?(0x?|[1-9][0-9]*)[0-9A-Za-z][_0-9A-Za-z]*\b" />
