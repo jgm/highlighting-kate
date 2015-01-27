@@ -30,7 +30,7 @@ test:
 	cabal test
 
 ParseSyntaxFiles: ParseSyntaxFiles.hs
-	cabal install HXT
+	cabal install HXT regex-posix
 	ghc --make -Wall ParseSyntaxFiles.hs  # requires HXT >= 9.0.0
 
 clean:
