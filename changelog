@@ -1,4 +1,14 @@
-highlighting-kate 0.5.11.1 (19 Dec 2014)
+highlighting-kate 0.5.12 (19 Mar 2015)
+
+  * Added Data and Typeable instances for types used in pandoc's
+    ReaderOptions and WriterOptions (Shahbaz Youssefi).
+  * Bumped blaze-html upper bounds (RyanGlScott).
+  * Added idris syntax definition (Alexander Shabalin).
+  * Added regex-posix install to 'make prep' step (@johguenther).
+  * Modified isocpp.xml to fix float parsing. The float regex in
+    isocpp.xml seems to work fine with Kate's regex engine, but gives
+    different results with pcre. Added isocpp.xml.patch to keep track of
+    the divergence from upstream.
 
 highlighting-kate 0.5.11.1 (19 Dec 2014)
 
