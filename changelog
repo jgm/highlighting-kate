@@ -1,5 +1,7 @@
 highlighting-kate 0.5.11.1 (19 Dec 2014)
 
+highlighting-kate 0.5.11.1 (19 Dec 2014)
+
   * Fixed rest.xml regex (#54).
 
 highlighting-kate 0.5.11 (11 Nov 2014)
