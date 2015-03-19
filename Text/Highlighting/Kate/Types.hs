@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances, CPP #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances, CPP, DeriveDataTypeable #-}
 {- |
    Module      : Text.Highlighting.Kate.Types
    Copyright   : Copyright (C) 2008 John MacFarlane
@@ -15,6 +15,8 @@ module Text.Highlighting.Kate.Types where
 import Text.ParserCombinators.Parsec
 import Data.Word
 import Text.Printf
+import Data.Data (Data)
+import Data.Typeable (Typeable)
 
 -- | A context: pair of syntax name and context name.
 type Context = (String, String)
@@ -66,7 +68,7 @@ data TokenType = KeywordTok
                | RegionMarkerTok
                | ErrorTok
                | NormalTok
-               deriving (Read, Show, Eq, Enum)
+               deriving (Read, Show, Eq, Enum, Data, Typeable)
 
 -- | A line of source, list of labeled source items.
 type SourceLine = [Token]
@@ -79,7 +81,7 @@ data TokenStyle = TokenStyle {
   , tokenBold       :: Bool
   , tokenItalic     :: Bool
   , tokenUnderline  :: Bool
-  } deriving (Show, Read)
+  } deriving (Show, Read, Data, Typeable)
 
 defStyle :: TokenStyle
 defStyle = TokenStyle {
@@ -90,7 +92,7 @@ defStyle = TokenStyle {
   , tokenUnderline  = False
   }
 
-data Color = RGB Word8 Word8 Word8 deriving (Show, Read)
+data Color = RGB Word8 Word8 Word8 deriving (Show, Read, Data, Typeable)
 
 class ToColor a where
   toColor :: a -> Maybe Color
@@ -128,7 +130,7 @@ data Style = Style {
   , backgroundColor           :: Maybe Color
   , lineNumberColor           :: Maybe Color
   , lineNumberBackgroundColor :: Maybe Color
-  } deriving (Read, Show)
+  } deriving (Read, Show, Data, Typeable)
 
 -- | Options for formatting source code.
 data FormatOptions = FormatOptions{
