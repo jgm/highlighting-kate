@@ -72,12 +72,12 @@ formatHtmlBlockPre opts = H.pre . formatHtmlInline opts
 
 -- | Format tokens as an HTML @pre@ block. If line numbering is
 -- selected, this is put into a table row with line numbers in the
--- left cell.
+-- left cell and the table is wrapped in a @pre@ block.
 formatHtmlBlock :: FormatOptions -> [SourceLine] -> Html
 formatHtmlBlock opts ls = container ! A.class_ (toValue $ unwords classes)
   where  container = if numberLines opts
-                        then H.table $ H.tr ! A.class_ sourceCode
-                                     $ nums >> source
+                        then H.pre $ H.table $ H.tr ! A.class_ sourceCode
+                                             $ nums >> source
                         else pre
          sourceCode = toValue "sourceCode"
          classes = "sourceCode" :
