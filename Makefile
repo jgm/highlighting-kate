@@ -31,7 +31,7 @@ test:
 
 ParseSyntaxFiles: ParseSyntaxFiles.hs
 	cabal install HXT regex-posix
-	ghc --make -Wall ParseSyntaxFiles.hs  # requires HXT >= 9.0.0
+	cabal exec ghc -- --make -Wall ParseSyntaxFiles.hs  # requires HXT >= 9.0.0
 
 clean:
 	rm -rf Text/Highlighting/Kate/Syntax/*
