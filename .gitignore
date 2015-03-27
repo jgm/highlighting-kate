@@ -4,3 +4,5 @@ ParseSyntaxFiles
 Text/Highlighting/Kate/Syntax.hs
 Text/Highlighting/Kate/Syntax/
 dist/
+.cabal-sandbox/
+cabal.sandbox.config
