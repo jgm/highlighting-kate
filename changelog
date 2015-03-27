@@ -1,3 +1,21 @@
+highlighting-kate 0.5.13 (27 Mar 2015)
+
+  * Wrap HTML table with line numbers in a pre element (Adam Sapek).
+    HTML tables are impossible to format via styles for different
+    screen widths. This means that pandoc generated pages with code
+    blocks must have a fixed minimal width, making them hard to read on
+    narrower screens.
+
+    Wrapping the table in a pre block allows formating of code
+    blocks to have a horizontal scroll bar if the content doesn't fit
+    the screen width, by adding the following style:
+
+         pre.sourceCode {
+             overflow-x: auto;
+         }
+
+    This enables pandoc to generate responsive HTML pages.
+
 highlighting-kate 0.5.12 (19 Mar 2015)
 
   * Added Data and Typeable instances for types used in pandoc's
