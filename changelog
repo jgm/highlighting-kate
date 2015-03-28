@@ -1,3 +1,14 @@
+highlighting-kate 0.5.14 (28 Mar 2015)
+
+  * Put code blocks in a div. This reverts the change in 0.5.13,
+    wrapping all blocks in a pre element.  (Pre elements are only
+    supposed to contain flow content, not block-level elements like
+    tables.)  Instead we now wrap each code block in a div with class
+    `sourceCode`.
+  * The default CSS now includes `div.sourceCode { x-overflow: auto; }`,
+    so that a scroll bar will appear on small screens. See jgm/pandoc#1903
+    and jgm/highlighting-kate#65 for background.
+
 highlighting-kate 0.5.13 (27 Mar 2015)
 
   * Wrap HTML table with line numbers in a pre element (Adam Sapek).
