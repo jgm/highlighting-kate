@@ -1,4 +1,5 @@
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
@@ -15,7 +16,7 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
-</style></head><body><pre class="sourceCode"><code class="sourceCode">abc_problem <span class="kw" title="KeywordTok">:-</span>
+</style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode">abc_problem <span class="kw" title="KeywordTok">:-</span>
         maplist(abc_problem<span class="kw" title="KeywordTok">,</span> [&#39;&#39;, &#39;<span class="er" title="ErrorTok">A</span>&#39;, bark, bOOk, treAT, &#39;<span class="er" title="ErrorTok">COmmon</span>&#39;, sQuaD, &#39;<span class="er" title="ErrorTok">CONFUSE</span>&#39;])<span class="kw" title="KeywordTok">.</span>
 
 
@@ -37,4 +38,4 @@ can_makeword(<span class="dt" title="DataTypeTok">_L</span><span class="kw" titl
 can_makeword(<span class="dt" title="DataTypeTok">L</span><span class="kw" title="KeywordTok">,</span> [<span class="dt" title="DataTypeTok">H</span> <span class="fu" title="FunctionTok">|</span> <span class="dt" title="DataTypeTok">T</span>]) <span class="kw" title="KeywordTok">:-</span>
         (   select([<span class="dt" title="DataTypeTok">H</span>, <span class="dt" title="DataTypeTok">_</span>]<span class="kw" title="KeywordTok">,</span> <span class="dt" title="DataTypeTok">L</span><span class="kw" title="KeywordTok">,</span> <span class="dt" title="DataTypeTok">L1</span>)<span class="kw" title="KeywordTok">;</span> select([<span class="dt" title="DataTypeTok">_</span>, <span class="dt" title="DataTypeTok">H</span>]<span class="kw" title="KeywordTok">,</span> <span class="dt" title="DataTypeTok">L</span><span class="kw" title="KeywordTok">,</span> <span class="dt" title="DataTypeTok">L1</span>))<span class="kw" title="KeywordTok">,</span>
         can_makeword(<span class="dt" title="DataTypeTok">L1</span><span class="kw" title="KeywordTok">,</span> <span class="dt" title="DataTypeTok">T</span>)<span class="kw" title="KeywordTok">.</span>
-</code></pre></body>
+</code></pre></div></body>

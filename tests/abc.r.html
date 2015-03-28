@@ -1,4 +1,5 @@
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
@@ -15,7 +16,7 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
-</style></head><body><pre class="sourceCode"><code class="sourceCode">canMakeNoRecursion &lt;-<span class="st" title="StringTok"> </span>function(x) {
+</style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode">canMakeNoRecursion &lt;-<span class="st" title="StringTok"> </span>function(x) {
   x &lt;-<span class="st" title="StringTok"> </span><span class="kw" title="KeywordTok">toupper</span>(x)
   charList &lt;-<span class="st" title="StringTok"> </span><span class="kw" title="KeywordTok">strsplit</span>(x, <span class="kw" title="KeywordTok">character</span>(<span class="dv" title="DecValTok">0</span>))
   getCombos &lt;-<span class="st" title="StringTok"> </span>function(chars) {
@@ -35,4 +36,4 @@ code > span.er { color: #ff0000; font-weight: bold; }
            <span class="st" title="StringTok">&quot;TREAT&quot;</span>,
            <span class="st" title="StringTok">&quot;COMMON&quot;</span>,
            <span class="st" title="StringTok">&quot;SQUAD&quot;</span>,
-           <span class="st" title="StringTok">&quot;CONFUSE&quot;</span>))</code></pre></body>
+           <span class="st" title="StringTok">&quot;CONFUSE&quot;</span>))</code></pre></div></body>

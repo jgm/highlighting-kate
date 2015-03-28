@@ -1,4 +1,5 @@
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
@@ -15,7 +16,7 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
-</style></head><body><pre class="sourceCode"><code class="sourceCode">#lang racket
+</style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode">#lang racket
 (<span class="kw" title="KeywordTok">define</span><span class="fu" title="FunctionTok"> block-strings</span>
   (<span class="kw" title="KeywordTok">list</span> <span class="st" title="StringTok">&quot;BO&quot;</span> <span class="st" title="StringTok">&quot;XK&quot;</span> <span class="st" title="StringTok">&quot;DQ&quot;</span> <span class="st" title="StringTok">&quot;CP&quot;</span> <span class="st" title="StringTok">&quot;NA&quot;</span>
         <span class="st" title="StringTok">&quot;GT&quot;</span> <span class="st" title="StringTok">&quot;RE&quot;</span> <span class="st" title="StringTok">&quot;TG&quot;</span> <span class="st" title="StringTok">&quot;QD&quot;</span> <span class="st" title="StringTok">&quot;FS&quot;</span>
@@ -57,4 +58,4 @@ code > span.er { color: #ff0000; font-weight: bold; }
   (check-true  (can-make-word? <span class="st" title="StringTok">&quot;TREAT&quot;</span>))
   (check-false (can-make-word? <span class="st" title="StringTok">&quot;COMMON&quot;</span>))
   (check-true  (can-make-word? <span class="st" title="StringTok">&quot;SQUAD&quot;</span>))
-  (check-true  (can-make-word? <span class="st" title="StringTok">&quot;CONFUSE&quot;</span>)))</code></pre></body>
+  (check-true  (can-make-word? <span class="st" title="StringTok">&quot;CONFUSE&quot;</span>)))</code></pre></div></body>

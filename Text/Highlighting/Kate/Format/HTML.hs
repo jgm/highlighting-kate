@@ -72,12 +72,14 @@ formatHtmlBlockPre opts = H.pre . formatHtmlInline opts
 
 -- | Format tokens as an HTML @pre@ block. If line numbering is
 -- selected, this is put into a table row with line numbers in the
--- left cell and the table is wrapped in a @pre@ block.
+-- left cell.  The whole code block is wrapped in a @div@ element
+-- to aid styling (e.g. the overflow-x property).
 formatHtmlBlock :: FormatOptions -> [SourceLine] -> Html
-formatHtmlBlock opts ls = container ! A.class_ (toValue $ unwords classes)
+formatHtmlBlock opts ls = H.div ! A.class_ sourceCode $
+                            container ! A.class_ (toValue $ unwords classes)
   where  container = if numberLines opts
-                        then H.pre $ H.table $ H.tr ! A.class_ sourceCode
-                                             $ nums >> source
+                        then H.table $ H.tr ! A.class_ sourceCode $
+                                 nums >> source
                         else pre
          sourceCode = toValue "sourceCode"
          classes = "sourceCode" :
@@ -93,9 +95,10 @@ formatHtmlBlock opts ls = container ! A.class_ (toValue $ unwords classes)
                               >> toHtml "\n"
                         else toHtml $ show n ++ "\n"
            where nStr = show n
+
 -- | Returns CSS for styling highlighted code according to the given style.
 styleToCss :: Style -> String
-styleToCss f = unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
+styleToCss f = unlines $ divspec ++ tablespec ++ colorspec ++ map toCss (tokenStyles f)
    where colorspec = case (defaultColor f, backgroundColor f) of
                           (Nothing, Nothing) -> []
                           (Just c, Nothing)  -> ["pre, code { color: " ++ fromColor c ++ "; }"]
@@ -116,6 +119,7 @@ styleToCss f = unlines $ tablespec ++ colorspec ++ map toCss (tokenStyles f)
              "}"
           ,"td.sourceCode { padding-left: 5px; }"
           ]
+         divspec = [ "div.sourceCode { overflow-x: auto; }" ]
 
 toCss :: (TokenType, TokenStyle) -> String
 toCss (t,tf) = "code > span." ++ short t ++ " { "

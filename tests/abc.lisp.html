@@ -15,7 +15,7 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
-</style></head><body><pre class="sourceCode"><code class="sourceCode">
+</style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode">
 (<span class="kw" title="KeywordTok">defun</span><span class="fu" title="FunctionTok"> word-possible-p </span>(word blocks)
   (<span class="kw" title="KeywordTok">cond</span> 
     ((<span class="kw" title="KeywordTok">=</span> (<span class="kw" title="KeywordTok">length</span> word) <span class="dv" title="DecValTok">0</span>) <span class="kw" title="KeywordTok">t</span>)
@@ -29,4 +29,4 @@ code > span.er { color: #ff0000; font-weight: bold; }
                (<span class="kw" title="KeywordTok">loop</span> for b in bs
                      collect (word-possible-p
                                (<span class="kw" title="KeywordTok">subseq</span> word <span class="dv" title="DecValTok">1</span>)
-                               (<span class="kw" title="KeywordTok">remove</span> b blocks))))))))</code></pre></body>
+                               (<span class="kw" title="KeywordTok">remove</span> b blocks))))))))</code></pre></div></body>
