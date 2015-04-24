@@ -326,7 +326,7 @@
       <RegExpr attribute="Comment" context="comment"  String="--[^\-!#\$%&amp;\*\+/&lt;=&gt;\?&#92;@\^\|~\.:].*$" />
       <RegExpr attribute="Keyword" context="import"   String="import\s+" />
       <RegExpr attribute="C2HS Directive"  context="c2hs directive" String="\{#"/>
-      <RegExpr attribute="C2HS Directive"  context="c2hs include" String="#"/>
+      <RegExpr attribute="C2HS Directive"  context="c2hs include" String="#[a-zA-Z]"/>
 
       <keyword attribute="Keyword"          context="#stay" String="keywords" />
       <keyword attribute="Function Prelude" context="#stay" String="prelude function" />
