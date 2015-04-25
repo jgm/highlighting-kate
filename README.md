@@ -133,10 +133,6 @@ you will first need to do:
 which generates some of the needed source files from xml syntax
 definitions.
 
-If you get a linking error with GHC 7 on Mac OS X, "scattered reloc r_address
-too large for inferred architecture i386," the workaround is to use the flag
-`--disable-library-for-ghci` when you `cabal install`.
-
 To generate the documentation:
 
     cabal haddock
@@ -145,21 +141,21 @@ To run the test suite:
 
     cabal test
 
-For an example of the use of the library, see Highlight.hs.
+For an example of the use of the library, see highlighting-kate.hs.
 To compile this program along with the library, specify the 'executable'
 flag in the configure step above:
 
     cabal install -fexecutable
 
-To run Highlight, specify the language name using -s:
+To run `highlighting-kate`, specify the language name using -s:
 
-    Highlight -s haskell Highlight.hs > example.html
+    highlighting-kate -s haskell highlighting-kate.hs > example.html
 
-If you don't specify a language name, Highlight will try to guess it
-from the file extension.  Highlight can also be used as a pipe, reading
-input from STDIN.  For other options,
+If you don't specify a language name, `highlighting-kate` will try to guess it
+from the file extension.`highlighting-kate` can also be used as a pipe,
+reading input from STDIN.  For other options,
 
-    Highlight --help
+    highlighting-kate --help
 
 Styling is done using span tags.  The Highlight program will include
 default styles in the generated HTML, unless a link to a CSS file is

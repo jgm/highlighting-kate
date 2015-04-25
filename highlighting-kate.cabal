@@ -85,7 +85,7 @@ Flag splitBase
   Description:       Choose the new, smaller, split-up base package.
   Default:           True
 Flag executable
-  Description:       Build the Highlight executable.
+  Description:       Build the highlighting-kate executable.
   Default:           False
 Flag pcre-light
   Description:       Use the pcre-light library instead of regex-pcre-builtin
@@ -240,8 +240,8 @@ Library
   -- memory on platforms without a native code generator:
   Cc-Options:       -O0
 
-Executable Highlight
-  Main-Is:          Highlight.hs
+Executable highlighting-kate
+  Main-Is:          highlighting-kate.hs
   Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.9, filepath,
                     highlighting-kate
   Hs-Source-Dirs:   extra
