@@ -1,3 +1,9 @@
+highlighting-kate 0.5.15 (25 Apr 2015)
+
+  * Rename `Highlight` utility and `Highlight.hs` to `highlighting-kate` and
+    `highlighting-kate.hs` to avoid naming conflicts with other syntax
+    highlighting utilities.
+
 highlighting-kate 0.5.14 (28 Mar 2015)
 
   * Put code blocks in a div. This reverts the change in 0.5.13,
@@ -17,7 +23,7 @@ highlighting-kate 0.5.13 (27 Mar 2015)
     blocks must have a fixed minimal width, making them hard to read on
     narrower screens.
 
-    Wrapping the table in a pre block allows formating of code
+    Wrapping the table in a pre block allows formatting of code
     blocks to have a horizontal scroll bar if the content doesn't fit
     the screen width, by adding the following style:
 
