@@ -1,3 +1,24 @@
+highlighting-kate 0.6 (26 May 2015)
+
+  * Support new KF5 token attributes (#69).
+    + Added to `TokenType`: `ConstantTok`, `SpecialCharTok`,
+      `VerbatimStringTok`, `SpecialStringTok`, `ImportTok`,
+      `DocumentationTok`, `AnnotationTok`, `CommentVarTok`,
+      `VariableTok`, `ControlFlowTok`, `OperatorTok`, `BuiltInTok`,
+      `ExtensionTok`, `PreprocessorTok`, `AttributeTok`,
+      `InformationTok`, `WarningTok`.
+    + Revised styles to add clauses for the new `TokenType`s.
+    + Revised HTML formatter to produce CSS for all the new
+      `TokenType`s, and to include comments naming each type.
+    + Modified `ParseSyntaxFiles` to handle new types.
+    + Updated tests.
+  * Updated xml syntax definitions.  However, we retain an older
+    version of haskell.xml, since the new one didn't work properly.
+  * Added `ToColor` instance for `Int`.
+  * Renamed `Highlight[.hs]` to `highlighting-kate[.hs]` (Geoff Nixon).
+  * Allow `#` as an operator in Haskell (Ryan Yates).
+  * Added support for Kotlin (kotlinlang.org) (Sebastien Soudan).
+
 highlighting-kate 0.5.15 (25 Apr 2015)
 
   * Rename `Highlight` utility and `Highlight.hs` to `highlighting-kate` and
