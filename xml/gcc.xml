@@ -14,7 +14,7 @@
 <language
     name="GCCExtensions"
     version="0.4"
-    kateversion="2.4"
+    kateversion="3.4"
     section="Sources"
     extensions="*.c++;*.cxx;*.cpp;*.cc;*.C;*.h;*.hh;*.H;*.h++;*.hxx;*.hpp;*.hcc;"
     mimetype="text/x-c++src;text/x-c++hdr;text/x-chdr;text/x-csrc"

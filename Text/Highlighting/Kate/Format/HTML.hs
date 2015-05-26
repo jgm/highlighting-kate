@@ -32,8 +32,17 @@ import Data.List (intersperse)
 -- 'DecValTok' = @dv@, 'BaseNTok' = @bn@, 'FloatTok' = @fl@,
 -- 'CharTok' = @ch@, 'StringTok' = @st@, 'CommontTok' = @co@,
 -- 'OtherTok' = @ot@, 'AlertTok' = @al@, 'FunctionTok' = @fu@,
--- 'RegionMarkerTok' = @re@, 'ErrorTok' = @er@. A 'NormalTok'
--- is not marked up at all.
+-- 'RegionMarkerTok' = @re@, 'ErrorTok' = @er@,
+-- 'ConstantTok' = @cn@, 'SpecialCharTok' = @sc@,
+-- 'VerbatimStringTok' = @vs@, 'SpecialStringTok' = @ss@,
+-- 'ImportTok' = @im@, 'DocumentationTok' = @do@,
+-- 'AnnotationTok' = @an@, 'CommentVarTok' = @cv@,
+-- 'VariableTok' = @va@, 'ControlFlowTok' = @cf@,
+-- 'OperatorTok' = @op@, 'BuiltInTok' = @bu@,
+-- 'ExtensionTok' = @ex@, 'PreprocessorTok' = @pp@,
+-- 'AttributeTok' = @at@, 'InformationTok' = @in@,
+-- 'WarningTok' = @wa@.
+-- A 'NormalTok' is not marked up at all.
 formatHtmlInline :: FormatOptions -> [SourceLine] -> Html
 formatHtmlInline opts = (H.code ! A.class_ (toValue $ unwords
                                                     $ "sourceCode" : codeClasses opts))
@@ -62,6 +71,23 @@ short AlertTok          = "al"
 short FunctionTok       = "fu"
 short RegionMarkerTok   = "re"
 short ErrorTok          = "er"
+short ConstantTok       = "cn"
+short SpecialCharTok    = "sc"
+short VerbatimStringTok = "vs"
+short SpecialStringTok  = "ss"
+short ImportTok         = "im"
+short DocumentationTok  = "do"
+short AnnotationTok     = "an"
+short CommentVarTok     = "cv"
+short VariableTok       = "va"
+short ControlFlowTok    = "cf"
+short OperatorTok       = "op"
+short BuiltInTok        = "bu"
+short ExtensionTok      = "ex"
+short PreprocessorTok   = "pp"
+short AttributeTok      = "at"
+short InformationTok    = "in"
+short WarningTok        = "wa"
 short NormalTok         = ""
 
 sourceLineToHtml :: FormatOptions -> SourceLine -> Html
@@ -124,10 +150,13 @@ styleToCss f = unlines $ divspec ++ tablespec ++ colorspec ++ map toCss (tokenSt
 toCss :: (TokenType, TokenStyle) -> String
 toCss (t,tf) = "code > span." ++ short t ++ " { "
                 ++ colorspec ++ backgroundspec ++ weightspec ++ stylespec
-                ++ decorationspec ++ "}"
+                ++ decorationspec ++ "} /* " ++ showTokenType t ++ " */"
   where colorspec = maybe "" (\col -> "color: " ++ fromColor col ++ "; ") $ tokenColor tf
         backgroundspec = maybe "" (\col -> "background-color: " ++ fromColor col ++ "; ") $ tokenBackground tf
         weightspec = if tokenBold tf then "font-weight: bold; " else ""
         stylespec  = if tokenItalic tf then "font-style: italic; " else ""
         decorationspec = if tokenUnderline tf then "text-decoration: underline; " else ""
+        showTokenType t = case reverse (show t) of
+                             'k':'o':'T':xs -> reverse xs
+                             _              -> ""
 

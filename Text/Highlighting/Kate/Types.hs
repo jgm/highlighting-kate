@@ -16,6 +16,7 @@ import Text.ParserCombinators.Parsec
 import Data.Word
 import Text.Printf
 import Data.Data (Data)
+import Data.Bits
 import Data.Typeable (Typeable)
 
 -- | A context: pair of syntax name and context name.
@@ -59,13 +60,30 @@ data TokenType = KeywordTok
                | DecValTok
                | BaseNTok
                | FloatTok
+               | ConstantTok
                | CharTok
+               | SpecialCharTok
                | StringTok
+               | VerbatimStringTok
+               | SpecialStringTok
+               | ImportTok
                | CommentTok
+               | DocumentationTok
+               | AnnotationTok
+               | CommentVarTok
                | OtherTok
-               | AlertTok
                | FunctionTok
+               | VariableTok
+               | ControlFlowTok
+               | OperatorTok
+               | BuiltInTok
+               | ExtensionTok
+               | PreprocessorTok
+               | AttributeTok
                | RegionMarkerTok
+               | InformationTok
+               | WarningTok
+               | AlertTok
                | ErrorTok
                | NormalTok
                deriving (Read, Show, Eq, Enum, Data, Typeable)
@@ -103,6 +121,14 @@ instance ToColor String where
            ((r,g,b),_) : _ -> Just $ RGB r g b
            _                                         -> Nothing
   toColor _        = Nothing
+
+instance ToColor Int where
+  toColor x = toColor (fromIntegral x1 :: Word8,
+                       fromIntegral x2 :: Word8,
+                       fromIntegral x3 :: Word8)
+    where x1 = (shiftR x 16) .&. 0xFF
+          x2 = (shiftR x 8 ) .&. 0xFF
+          x3 = x             .&. 0xFF
 
 instance ToColor (Word8, Word8, Word8) where
   toColor (r,g,b) = Just $ RGB r g b

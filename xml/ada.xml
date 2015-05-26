@@ -2,7 +2,7 @@
 <!DOCTYPE language SYSTEM "language.dtd">
 <language name="Ada"
           version="1.08"
-          kateversion="2.5"
+          kateversion="3.3"
           section="Sources"
           extensions="*.adb;*.ads;*.ada;*.a"
           indenter="ada"

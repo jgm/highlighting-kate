@@ -13,7 +13,7 @@ Notes:
 * "used" and "defined" are treated opperators and are not highlighted.
 -->
 
-<language name="Intel x86 (FASM)" section="Assembler" version="0.2" kateversion="4.5" extensions="*.asm;*.inc;*.fasm" mimetype="" author="rCX (rCX12@yahoo.com)" license="GPL">
+<language name="Intel x86 (FASM)" section="Assembler" version="0.2" kateversion="2.3" extensions="*.asm;*.inc;*.fasm" mimetype="" author="rCX (rCX12@yahoo.com)" license="GPL">
   <highlighting>
     <list name="registers">
       <!-- General purpose registers -->

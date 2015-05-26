@@ -194,13 +194,30 @@ labelFor syntax attr' =
        Just "dsDecVal" -> DecValTok
        Just "dsBaseN" -> BaseNTok
        Just "dsFloat" -> FloatTok
+       Just "dsConstant" -> ConstantTok
        Just "dsChar" -> CharTok
+       Just "dsSpecialChar" -> SpecialCharTok
        Just "dsString" -> StringTok
+       Just "dsVerbatimString" -> VerbatimStringTok
+       Just "dsSpecialString" -> SpecialStringTok
+       Just "dsImport" -> ImportTok
        Just "dsComment" -> CommentTok
+       Just "dsDocumentation" -> DocumentationTok
+       Just "dsAnnotation" -> AnnotationTok
+       Just "dsCommentVar" -> CommentVarTok
        Just "dsOthers" -> OtherTok
-       Just "dsAlert" -> AlertTok
        Just "dsFunction" -> FunctionTok
+       Just "dsVariable" -> VariableTok
+       Just "dsControlFlow" -> ControlFlowTok
+       Just "dsOperator" -> OperatorTok
+       Just "dsBuiltIn" -> BuiltInTok
+       Just "dsExtension" -> ExtensionTok
+       Just "dsPreprocessor" -> PreprocessorTok
+       Just "dsAttribute" -> AttributeTok
        Just "dsRegionMarker" -> RegionMarkerTok
+       Just "dsInformation" -> InformationTok
+       Just "dsWarning" -> WarningTok
+       Just "dsAlert" -> AlertTok
        Just "dsError" -> ErrorTok
        _ -> NormalTok
 
