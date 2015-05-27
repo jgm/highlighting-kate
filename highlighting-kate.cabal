@@ -238,7 +238,7 @@ Library
   -- massively improves compilation speed and memory usage
   Default-Language:    Haskell98
   Ghc-Options:       -W -O0
-  Ghc-Prof-Options:  -auto-all -caf-all
+  Ghc-Prof-Options:  -fprof-auto-exported
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
   Cc-Options:       -O0
@@ -252,7 +252,7 @@ Executable highlighting-kate
   if flag(pcre-light)
     cpp-options:     -D_PCRE_LIGHT
   Ghc-Options:      -W -O0 -rtsopts
-  Ghc-Prof-Options: -auto-all -caf-all -rtsopts
+  Ghc-Prof-Options:  -fprof-auto-exported
   -- the following line is needed to prevent gcc from consuming huge amounts of
   -- memory on platforms without a native code generator:
   Cc-Options:       -O0
