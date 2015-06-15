@@ -99,7 +99,7 @@ Source-repository head
 
 Library
   if flag(splitBase)
-    Build-Depends:   base >= 3 && < 5, containers
+    Build-Depends:   base >= 4.4 && < 5, containers
   else
     Build-Depends:   base < 3
   if flag(pcre-light)
