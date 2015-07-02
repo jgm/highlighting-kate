@@ -31,6 +31,8 @@ Extra-Source-Files:  README.md
                      xml/*.xml.patch
                      tests/abc.ada
                      tests/abc.ada.html
+                     tests/abc.agda
+                     tests/abc.agda.html
                      tests/abc.c
                      tests/abc.c.html
                      tests/abc.clojure
