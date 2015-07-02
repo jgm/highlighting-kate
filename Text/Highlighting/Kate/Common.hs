@@ -12,10 +12,11 @@ Parsers used in all the individual syntax parsers.
 -}
 
 module Text.Highlighting.Kate.Common where
-#ifdef _PCRE_LIGHT
-import Text.Regex.PCRE.Light.Char8
-#else
 import Data.ByteString.UTF8 (fromString, toString)
+#ifdef _PCRE_LIGHT
+import Text.Regex.PCRE.Light
+import Data.ByteString (ByteString)
+#else
 import System.IO.Unsafe (unsafePerformIO)
 import Text.Regex.PCRE.ByteString
 #endif
@@ -192,7 +193,7 @@ compileRegex :: Bool -> String -> Regex
 compileRegex caseSensitive regexpStr =
 #ifdef _PCRE_LIGHT
   let opts = [anchored, utf8] ++ [caseless | not caseSensitive]
-  in  compile ('.' : convertOctal regexpStr) opts
+  in  compile (fromString ('.' : convertOctal regexpStr)) opts
 #else
   let opts = compAnchored + compUTF8 +
                if caseSensitive then 0 else compCaseless
@@ -205,7 +206,10 @@ compileRegex caseSensitive regexpStr =
 
 matchRegex :: Regex -> String -> KateParser (Maybe [String])
 #ifdef _PCRE_LIGHT
-matchRegex r s = return $ match r s [exec_notempty]
+matchRegex r s = return $ toString' $ match r (fromString s) [exec_notempty]
+    where toString' :: Maybe [ByteString] -> Maybe [String]
+          toString' (Just xs) = Just $ fmap toString xs
+          toString' Nothing = Nothing
 #else
 matchRegex r s = case unsafePerformIO (regexec r (fromString s)) of
                       Right (Just (_, mat, _ , capts)) -> return $
