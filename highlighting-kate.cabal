@@ -101,7 +101,7 @@ Library
                      parsec, mtl, blaze-html >= 0.4.2 && < 0.9,
                      utf8-string
   if flag(pcre-light)
-    Build-depends:   pcre-light >= 0.4 && < 0.5
+    Build-depends:   pcre-light >= 0.4 && < 0.5, bytestring
     cpp-options:     -D_PCRE_LIGHT
   else
     Build-depends:   regex-pcre-builtin >= 0.94.4.8.8.35
