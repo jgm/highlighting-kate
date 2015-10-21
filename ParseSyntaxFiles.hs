@@ -121,6 +121,9 @@ writeSyntaxFile names = do
                  names
   let languageExtensions = "[" ++ (intercalate ", " $ map (\name ->
         "(" ++ show name ++ ", " ++ name ++ ".syntaxExtensions)") names) ++ "]"
+  let languageFullNames = "[" ++ (intercalate ", " $ map (\name ->
+        "(" ++ show name ++ ", " ++
+                 name ++ ".syntaxName)") names) ++ "]"
   syntaxFileTemplate <- liftM toString $ B.readFile (syntaxFile <.> "in")
   let filledTemplate = fillTemplate 0
                           [("imports",imports),
@@ -128,6 +131,7 @@ writeSyntaxFile names = do
                            ("supportedlanguages", intercalate ", " $ map (\x ->
                                 "@" ++ map toLower x ++ "@") names),
                            ("languageExtensions",languageExtensions),
+                           ("languageFullNames",languageFullNames),
                            ("cases",cases)] syntaxFileTemplate
   B.writeFile syntaxFile $ fromString filledTemplate
 

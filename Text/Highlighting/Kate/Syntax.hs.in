@@ -10,7 +10,10 @@
 Token lexer for various languages.
 -}
 
-module Text.Highlighting.Kate.Syntax ( highlightAs, languages, languagesByExtension,
+module Text.Highlighting.Kate.Syntax ( highlightAs,
+                                       languages,
+                                       languageByFullName,
+                                       languagesByExtension,
                                        languagesByFilename ) where
 import Data.Char (toLower)
 import Text.Highlighting.Kate.Types
@@ -24,6 +27,18 @@ languages = @languages@
 -- | List of language extensions.
 languageExtensions :: [(String, String)]
 languageExtensions = @languageExtensions@
+
+-- | List of full names of languages.
+languageFullNames :: [(String, String)]
+languageFullNames = @languageFullNames@
+
+languageShortNames :: [(String, String)]
+languageShortNames =
+  [(map toLower y, map toLower x) | (x, y) <- languageFullNames]
+
+-- | Lookup canonical language name by full syntaxName (e.g. "C#" for "Cs").
+languageByFullName :: String -> Maybe String
+languageByFullName s = lookup s languageShortNames
 
 -- | Returns a list of languages appropriate for the given file extension.
 languagesByExtension :: String -> [String]
@@ -47,9 +62,13 @@ highlightAs lang =
   let lang'  = map toLower lang
       lang'' = if lang' `elem` map (map toLower) languages
                   then lang'
-                  else case languagesByExtension lang' of
-                            [l]  -> map toLower l  -- go by extension if unambiguous
-                            _    -> lang'
+                  else case languageByFullName lang' of
+                            Just l -> l
+                            Nothing ->
+                              case languagesByExtension lang' of
+                                    -- go by extension if unambiguous
+                                    [l]  -> map toLower l
+                                    _    -> lang'
   in  case lang'' of
         @cases@
         _ -> map (\l -> [(NormalTok, l)]) . lines
