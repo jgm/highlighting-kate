@@ -71,4 +71,6 @@ highlightAs lang =
                                     _    -> lang'
   in  case lang'' of
         @cases@
+        -- special cases:
+        "csharp" -> highlightAs "cs"
         _ -> map (\l -> [(NormalTok, l)]) . lines
