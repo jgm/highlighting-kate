@@ -39,13 +39,6 @@
       <item> extern </item>
       <item> extype </item>
       <item> extval </item>
-      <item> fn </item>
-      <item> fnx </item>
-      <item> fun </item>
-      <item> prfn </item>
-      <item> prfun </item>
-      <item> praxi </item>
-      <item> castfn </item>
       <item> if </item>
       <item> in </item>
       <item> infix </item>
@@ -53,13 +46,6 @@
       <item> infixr </item>
       <item> prefix </item>
       <item> postfix </item>
-      <item> implmnt </item>
-      <item> implement </item>
-      <item> primplmnt </item>
-      <item> primplement </item>
-      <item> lam </item>
-      <item> llam </item>
-      <item> fix </item>
       <item> let </item>
       <item> local </item>
       <item> macdef </item>
@@ -158,41 +144,58 @@
       <item> #then </item>
       <item> #undef </item>
     </list>
+    <list name="function keywords">
+      <item> fn </item>
+      <item> fnx </item>
+      <item> fun </item>
+      <item> prfn </item>
+      <item> prfun </item>
+      <item> praxi </item>
+      <item> castfn </item>
+      <item> implmnt </item>
+      <item> implement </item>
+      <item> primplmnt </item>
+      <item> primplement </item>
+      <item> lam </item>
+      <item> llam </item>
+      <item> fix </item>
+    </list>
     <contexts>
       <context attribute="Normal Text" lineEndContext="#stay" name="Normal">
-	<StringDetect attribute="Comment" context="Rest-of-file comment" String="////" beginRegion="comment" />
+        <StringDetect attribute="Comment" context="Rest-of-file Comment" String="////" beginRegion="comment" />
         <Detect2Chars attribute="Comment" context="Multiline Comment" char="(" char1="*" beginRegion="comment" />
-	<Detect2Chars attribute="Comment" context="Multiline C-style comment" char="/" char1="*" beginRegion="Comment"/>
-	<Detect2Chars attribute="Comment" context="Singleline C++ style comment" char="/" char1="/"/>
+        <Detect2Chars attribute="Comment" context="Multiline C-style Comment" char="/" char1="*" beginRegion="Comment"/>
+        <Detect2Chars attribute="Comment" context="Singleline C++ style Comment" char="/" char1="/"/>
 
-        <Detect2Chars attribute="Termination Metrics" context="Termination Metrics Constant" char="." char1="&lt;" />
+        <Detect2Chars attribute="Termination Metrics" context="Termination Metrics Context" char="." char1="&lt;" />
 
         <RegExpr attribute="Constructor" context="#stay" String="`\s*&IDENT;"/>
 
-        <!-- Identifiers and keywords. --> 
+        <!-- Identifiers and keywords. -->
         <keyword attribute="Keyword" context="#stay" String="keywords" />
+        <keyword attribute="Function Keyword" context="Function Keyword Context" String="function keywords" />
         <keyword attribute="Special Keyword" context="#stay" String="special keywords" />
         <RegExpr attribute="Identifier" context="#stay" String="&IDENT;" />
 
         <!-- Numeric constants. -->
-        <!-- Note that they may contain underscores. --> 
+        <!-- Note that they may contain underscores. -->
         <RegExpr attribute="Hexadecimal" context="#stay" String="-?0[xX][0-9A-Fa-f_]+" />
         <RegExpr attribute="Float" context="#stay" String="-?&DEC;((\.(&DEC;)?([eE][-+]?&DEC;)?)|([eE][-+]?&DEC;))" />
         <RegExpr attribute="Decimal" context="#stay" String="-?&DEC;" />
       </context>
 
-      <context attribute="Comment" lineEndContext="#stay" name="Rest-of-file comment"/>
+      <context attribute="Comment" lineEndContext="#stay" name="Rest-of-file Comment"/>
       <context attribute="Comment" lineEndContext="#stay" name="Multiline Comment">
         <!-- Support for nested comments -->
         <Detect2Chars attribute="Comment" context="#pop" char="*" char1=")" endRegion="comment" />
         <Detect2Chars attribute="Comment" context="Multiline Comment" char="(" char1="*" beginRegion="comment" />
       </context>
-      <context attribute="Comment" lineEndContext="#stay" name="Multiline C-style comment">
+      <context attribute="Comment" lineEndContext="#stay" name="Multiline C-style Comment">
         <Detect2Chars attribute="Comment" context="#pop" char="*" char1="/" endRegion="Comment"/>
       </context>
-      <context attribute="Comment" lineEndContext="#pop" name="Singleline C++ style comment"/>
+      <context attribute="Comment" lineEndContext="#pop" name="Singleline C++ style Comment"/>
 
-      <context attribute="String" lineEndContext="#stay" name="String Constant">
+      <context attribute="String" lineEndContext="#stay" name="String Context">
         <DetectChar attribute="String" context="#pop" char="&quot;" />
         <RegExpr attribute="Escaped characters" context="#stay" String="&ESC;" />
         <!-- An underscore at the end of a line in a string indicates  -->
@@ -200,18 +203,35 @@
         <RegExpr attribute="Escaped characters" context="#stay" String="\\$" />
       </context>
 
-      <context attribute="Termination Metrics" lineEndContext="#stay" name="Termination Metrics Constant">
-	<Detect2Chars attribute="Termination Metrics" context="#pop" char="&gt;" char1="." />
+      <context attribute="Termination Metrics" lineEndContext="#stay" name="Termination Metrics Context">
+        <Detect2Chars attribute="Termination Metrics" context="#pop" char="&gt;" char1="." />
       </context>
 
-    </contexts>
+      <context attribute="Normal text" lineEndContext="#stay" name="Function Keyword Context">
+        <DetectChar attribute="Normal text" context="#pop" char="=" />
+	<DetectChar attribute="Universal" context="Universal Context" char="{" />
+	<DetectChar attribute="Existential" context="Existential Context" char="[" />
+        <IncludeRules context="Normal"/>
+      </context>
+
+      <context attribute="Universal" lineEndContext="#stay" name="Universal Context">
+        <DetectChar attribute="Universal" context="#pop" char="}" />
+      </context>
+
+      <context attribute="Existential" lineEndContext="#stay" name="Existential Context">
+        <DetectChar attribute="Existential" context="#pop" char="]" />
+      </context>
+</contexts>
 
     <itemDatas>
       <itemData name="Normal Text" defStyleNum="dsNormal"/>
       <itemData name="Identifier" defStyleNum="dsNormal"/>
       <itemData name="Keyword"  defStyleNum="dsKeyword"/>
+      <itemData name="Function Keyword"  defStyleNum="dsKeyword"/>
       <itemData name="Special Keyword"  defStyleNum="dsDataType"/>
       <itemData name="Termination Metrics" defStyleNum="dsDataType"/>
+      <itemData name="Universal" defStyleNum="dsDataType"/>
+      <itemData name="Existential" defStyleNum="dsDataType"/>
       <itemData name="Decimal"  defStyleNum="dsDecVal"/>
       <itemData name="Hexadecimal"  defStyleNum="dsBaseN"/>
       <itemData name="Float"  defStyleNum="dsFloat"/>
