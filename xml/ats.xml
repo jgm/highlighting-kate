@@ -179,9 +179,9 @@
 
         <!-- Numeric constants. -->
         <!-- Note that they may contain underscores. -->
-        <RegExpr attribute="Hexadecimal" context="#stay" String="-?0[xX][0-9A-Fa-f_]+" />
-        <RegExpr attribute="Float" context="#stay" String="-?&DEC;((\.(&DEC;)?([eE][-+]?&DEC;)?)|([eE][-+]?&DEC;))" />
-        <RegExpr attribute="Decimal" context="#stay" String="-?&DEC;" />
+        <RegExpr attribute="Hexadecimal" context="#stay" String="~?0[xX][0-9A-Fa-f_]+" />
+        <RegExpr attribute="Float" context="#stay" String="~?&DEC;((\.(&DEC;)?([eE][-+]?&DEC;)?)|([eE][-+]?&DEC;))" />
+        <RegExpr attribute="Decimal" context="#stay" String="~?&DEC;" />
       </context>
 
       <context attribute="Comment" lineEndContext="#stay" name="Rest-of-file Comment"/>
