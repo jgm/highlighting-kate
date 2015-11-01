@@ -165,11 +165,7 @@
 	<Detect2Chars attribute="Comment" context="Multiline C-style comment" char="/" char1="*" beginRegion="Comment"/>
 	<Detect2Chars attribute="Comment" context="Singleline C++ style comment" char="/" char1="/"/>
 
-        <DetectChar attribute="Symbol" context="#stay" char="(" beginRegion="paren"/>
-        <DetectChar attribute="Symbol" context="#stay" char=")" endRegion="paren"/>
-
-        <DetectChar attribute="Symbol" context="#stay" char="{" beginRegion="record"/>
-        <DetectChar attribute="Symbol" context="#stay" char="}" endRegion="record"/>
+        <Detect2Chars attribute="Termination Metrics" context="Termination Metrics Constant" char="." char1="&lt;" />
 
         <RegExpr attribute="Constructor" context="#stay" String="`\s*&IDENT;"/>
 
@@ -203,14 +199,19 @@
         <!-- that the string will continue on the next line.           -->
         <RegExpr attribute="Escaped characters" context="#stay" String="\\$" />
       </context>
+
+      <context attribute="Termination Metrics" lineEndContext="#stay" name="Termination Metrics Constant">
+	<Detect2Chars attribute="Termination Metrics" context="#pop" char="&gt;" char1="." />
+      </context>
+
     </contexts>
 
     <itemDatas>
       <itemData name="Normal Text" defStyleNum="dsNormal"/>
       <itemData name="Identifier" defStyleNum="dsNormal"/>
-      <itemData name="Symbol" defStyleNum="dsNormal"/>
       <itemData name="Keyword"  defStyleNum="dsKeyword"/>
       <itemData name="Special Keyword"  defStyleNum="dsDataType"/>
+      <itemData name="Termination Metrics" defStyleNum="dsDataType"/>
       <itemData name="Decimal"  defStyleNum="dsDecVal"/>
       <itemData name="Hexadecimal"  defStyleNum="dsBaseN"/>
       <itemData name="Float"  defStyleNum="dsFloat"/>
