@@ -122,6 +122,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Apache
                      Text.Highlighting.Kate.Syntax.Asn1
                      Text.Highlighting.Kate.Syntax.Asp
+                     Text.Highlighting.Kate.Syntax.Ats
                      Text.Highlighting.Kate.Syntax.Awk
                      Text.Highlighting.Kate.Syntax.Bash
                      Text.Highlighting.Kate.Syntax.Bibtex
