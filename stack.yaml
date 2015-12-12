@@ -1,0 +1,8 @@
+flags:
+  highlighting-kate:
+    executable: true
+    pcre-light: false
+packages:
+- '.'
+extra-deps: []
+resolver: lts-3.16
