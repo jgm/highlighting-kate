@@ -1,3 +1,20 @@
+highlighting-kate 0.6.1 (12 Dec 2015)
+
+  * Fixed build on GHC 7.0 (Adam Bergmark).
+  * Don't use auto-all in ghc-prof-options.
+  * Removed splitBase flag and ability to compile on base < 4.4.
+  * Add agda tests with unicode input (Matthias C. M. Troffaes).
+  * Fix 'Text.Regex.PCRE.Light: Error in regex: invalid UTF-8 string'
+    error message (Matthias C. M. Traffaes).
+  * Reapplied isocpp.xml.patch (#57).
+  * Added `languageByFullName` (API change).  Changed behavior of
+    `highlightAs` so that languages can match on "full official name"
+    as well as the canonical name (derived from the xml filename.
+    Previously, only `cs` worked for C#.  Now you may use `C#` as
+    well.
+  * Allow `csharp` as a special-case alias for `cs` (jgm/pandoc#2117).
+  * Added support for llvm (#79).
+
 highlighting-kate 0.6 (26 May 2015)
 
   * Support new KF5 token attributes (#69).
