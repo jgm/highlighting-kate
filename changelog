@@ -5,7 +5,7 @@ highlighting-kate 0.6.1 (12 Dec 2015)
   * Removed splitBase flag and ability to compile on base < 4.4.
   * Add agda tests with unicode input (Matthias C. M. Troffaes).
   * Fix 'Text.Regex.PCRE.Light: Error in regex: invalid UTF-8 string'
-    error message (Matthias C. M. Traffaes).
+    error message (Matthias C. M. Troffaes).
   * Reapplied isocpp.xml.patch (#57).
   * Added `languageByFullName` (API change).  Changed behavior of
     `highlightAs` so that languages can match on "full official name"
