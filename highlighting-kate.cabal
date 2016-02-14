@@ -146,6 +146,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Doxygenlua
                      Text.Highlighting.Kate.Syntax.Dtd
                      Text.Highlighting.Kate.Syntax.Eiffel
+                     Text.Highlighting.Kate.Syntax.Elixir
                      Text.Highlighting.Kate.Syntax.Email
                      Text.Highlighting.Kate.Syntax.Erlang
                      Text.Highlighting.Kate.Syntax.Fasm
