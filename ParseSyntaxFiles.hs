@@ -333,6 +333,14 @@ mkSyntaxParser syntax context parser =
             "RegExpr"          -> if parserDynamic parser
                                      then "pRegExprDynamic " ++ show (parserString parser)
                                      else "pRegExpr " ++ compiledRegexName (parserString parser)
+            "WordDetect"      -> if parserDynamic parser
+                                     then "pRegExprDynamic " ++ wordRe
+                                     else "pRegExpr (compileRegex " ++ show caseSensitive ++ " " ++ show wordRe ++ ")"
+                                  where wordRe = "\\b" ++ concatMap esc (parserString parser) ++ "\\b"
+                                        esc c = if c `elem` "[]{}^$\\-*.+?"
+                                                   then ['\\',c]
+                                                   else [c]
+                                        caseSensitive = synCaseSensitive syntax
             "keyword"          -> "pKeyword " ++ show (keywordDelims $ synKeywordAttr syntax) ++ " " ++ list
                                      where list = case lookup string (synLists syntax) of
                                                    Just _   -> listName string
