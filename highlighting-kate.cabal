@@ -156,6 +156,7 @@ Library
                      Text.Highlighting.Kate.Syntax.Glsl
                      Text.Highlighting.Kate.Syntax.Gnuassembler
                      Text.Highlighting.Kate.Syntax.Go
+                     Text.Highlighting.Kate.Syntax.Hamlet
                      Text.Highlighting.Kate.Syntax.Haskell
                      Text.Highlighting.Kate.Syntax.Haxe
                      Text.Highlighting.Kate.Syntax.Html

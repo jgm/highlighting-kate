@@ -7,119 +7,19 @@ now [part of the KDE Framework's "KTextEditor" component](http://kate-editor.org
 It can produce both HTML and LaTeX output.
 
 Currently, the following languages/formats are supported:
-- Abc
-- Actionscript
-- Ada
-- Agda
-- Apache
-- Asn1
-- Asp
-- Awk
-- Bash
-- Bibtex
-- Boo
-- C
-- Changelog
-- Clojure
-- Cmake
-- Coffeescript
-- Coldfusion
-- Commonlisp
-- Cpp
-- Cs
-- Css
-- Curry
-- D
-- Diff
-- Djangotemplate
-- Dockerfile
-- Dot
-- Doxygen
-- Dtd
-- Eiffel
-- Email
-- Erlang
-- Fasm
-- Fortran
-- Fsharp
-- Gcc
-- Glsl
-- Gnuassembler
-- Go
-- Haskell
-- Haxe
-- Html
-- Idris
-- Ini
-- Isocpp
-- Java
-- Javadoc
-- Javascript
-- Json
-- Jsp
-- Julia
-- Latex
-- Lex
-- Lilypond
-- LiterateCurry
-- LiterateHaskell
-- Lua
-- M4
-- Makefile
-- Mandoc
-- Markdown
-- Mathematica
-- Matlab
-- Maxima
-- Mediawiki
-- Metafont
-- Mips
-- Modula2
-- Modula3
-- Monobasic
-- Nasm
-- Noweb
-- Objectivec
-- Objectivecpp
-- Ocaml
-- Octave
-- Opencl
-- Pascal
-- Perl
-- Php
-- Pike
-- Postscript
-- Prolog
-- Pure
-- Python
-- R
-- Relaxng
-- Relaxngcompact
-- Rest
-- Rhtml
-- Roff
-- Ruby
-- Rust
-- Scala
-- Scheme
-- Sci
-- Sed
-- Sgml
-- Sql
-- SqlMysql
-- SqlPostgresql
-- Tcl
-- Tcsh
-- Texinfo
-- Verilog
-- Vhdl
-- Xml
-- Xorg
-- Xslt
-- Xul
-- Yacc
-- Yaml
-- Zsh
+Abc Actionscript Ada Agda Alert Alert_indent Apache Asn1 Asp Awk
+Bash Bibtex Boo C Changelog Clojure Cmake Coffee Coldfusion
+Commonlisp Cpp Cs Css Curry D Diff Djangotemplate Dockerfile Dot
+Doxygen Doxygenlua Dtd Eiffel Elixir Email Erlang Fasm Fortran
+Fsharp Gcc Glsl Gnuassembler Go Hamlet Haskell Haxe Html Idris
+Ini Isocpp Java Javadoc Javascript Json Jsp Julia Kotlin Latex
+Lex Lilypond LiterateCurry LiterateHaskell Llvm Lua M4 Makefile
+Mandoc Markdown Mathematica Matlab Maxima Mediawiki Metafont
+Mips Modelines Modula2 Modula3 Monobasic Nasm Noweb Objectivec
+Objectivecpp Ocaml Octave Opencl Pascal Perl Php Pike Postscript
+Prolog Pure Python R Relaxng Relaxngcompact Rest Rhtml Roff Ruby
+Rust Scala Scheme Sci Sed Sgml Sql SqlMysql SqlPostgresql Tcl
+Tcsh Texinfo Verilog Vhdl Xml Xorg Xslt Xul Yacc Yaml Zsh
 
 To install, use the cabal tool:
 
