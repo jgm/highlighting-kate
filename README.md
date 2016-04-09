@@ -21,9 +21,11 @@ Prolog Pure Python R Relaxng Relaxngcompact Rest Rhtml Roff Ruby
 Rust Scala Scheme Sci Sed Sgml Sql SqlMysql SqlPostgresql Tcl
 Tcsh Texinfo Verilog Vhdl Xml Xorg Xslt Xul Yacc Yaml Zsh
 
-To install, use the cabal tool:
+To install, use the [stack] tool:
 
-    cabal install
+    stack install
+
+[stack]:  http://docs.haskellstack.org/en/stable/README/
 
 Note:  If you have checked out the source from the git repository,
 you will first need to do:
@@ -35,17 +37,19 @@ definitions.
 
 To generate the documentation:
 
-    cabal haddock
+    stack haddock
 
 To run the test suite:
 
-    cabal test
+    stack test
 
 For an example of the use of the library, see highlighting-kate.hs.
-To compile this program along with the library, specify the 'executable'
-flag in the configure step above:
 
-    cabal install -fexecutable
+By default, this installation method will install an executable,
+`highlighting-kate`, along with the library.  Normally this is
+put into `$HOME/.local/bin`.  To avoid creation of the
+executable, use `--flag highlighting-kate:-executable` with the
+`stack` commands above.
 
 To run `highlighting-kate`, specify the language name using -s:
 
@@ -72,11 +76,8 @@ the parsers by doing:
 
     make prep
 
-or
-
-    runghc ParseSyntaxFiles.hs xml
-
 Note that ParseSyntaxFiles.hs requires the HXT package (>= 9.0.0).
+`make prep` should install this automatically.
 
 To get the current Kate syntax highlighting files, clone the ktexteditor
 repository:

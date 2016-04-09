@@ -1,7 +1,7 @@
 # The build procedure, after a fresh checkout from the repository:
 
 #     make prep
-#     cabal install
+#     stack install --test
 #
 # 'make prep' generates the Haskell syntax parsers from kate
 # xml syntax definitions.
@@ -11,27 +11,22 @@ XMLS=$(glob xml/*.xml)
 .PHONY: prep all test clean distclean install prof
 
 all: prep
-	cabal configure -fexecutable --enable-tests
-	cabal build
+	stack build --install-ghc --test
 
 prof:
-	cabal configure --enable-library-profiling --enable-executable-profiling --disable-optimization -fexecutable
-	cabal build
+	stack build --library-profiling --executable-profiling --fast
 
-prep: clean ParseSyntaxFiles $(XMLS)
-	./ParseSyntaxFiles xml
+prep: clean $(XMLS)
+	stack install --install-ghc hxt regex-posix
+	stack runghc ./ParseSyntaxFiles.hs xml
 	@echo "Syntax parsers have been generated."
 	@echo "You may now use cabal to build the package."
 
 install:
-	cabal install
+	stack install
 
 test:
-	cabal test
-
-ParseSyntaxFiles: ParseSyntaxFiles.hs
-	cabal install HXT regex-posix
-	cabal exec ghc -- --make -Wall ParseSyntaxFiles.hs  # requires HXT >= 9.0.0
+	stack test
 
 clean:
 	rm -rf Text/Highlighting/Kate/Syntax/*

@@ -5,4 +5,4 @@ flags:
 packages:
 - '.'
 extra-deps: []
-resolver: lts-3.16
+resolver: lts-5.8
