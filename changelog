@@ -1,3 +1,11 @@
+highlighting-kate 0.6.2.1 (01 Jul 2016)
+
+  * Use `#pop` instead of `#stay` if `fallthrough` is true but
+    no `fallthroughContext` is given (#89, fixing a hang on certain
+    scheme inputs).
+ * Use stack for default build (Makefile), document stack build
+   procedure (#87).
+
 highlighting-kate 0.6.2 (17 Mar 2016)
 
   * Added support for WordDetect (#86).
