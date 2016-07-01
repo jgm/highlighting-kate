@@ -513,7 +513,7 @@ getContexts = listA $   multi (hasName "context")
                                            , contLineEndContext = if null lineEndContext then "#stay" else lineEndContext
                                            , contLineBeginContext = if null lineBeginContext then "#stay" else lineBeginContext
                                            , contFallthrough = vBool False fallthrough
-                                           , contFallthroughContext = if null fallthroughContext then "#stay" else fallthroughContext
+                                           , contFallthroughContext = if null fallthroughContext then "#pop" else fallthroughContext
                                            , contDynamic = vBool False dynamic
                                            , contParsers = parsers }
 
