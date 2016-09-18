@@ -3,7 +3,7 @@
 <!-- Author: Anders Lund <anders@alweb.dk> //-->
 <!-- Minor changes: Joseph Wenninger <jowenn@kde.org> //-->
 <!-- Full JavaScript 1.0 support by Whitehawk Stormchaser //-->
-<language name="JavaScript" version="1.23" kateversion="5.0" section="Scripts" extensions="*.js;*.kwinscript"
+<language name="JavaScript" version="2" kateversion="5.0" section="Scripts" extensions="*.js;*.kwinscript"
           mimetype="text/x-javascript;application/x-javascript" indenter="cstyle"
           author="Anders Lund (anders@alweb.dk), Joseph Wenninger (jowenn@kde.org), Whitehawk Stormchaser (zerokode@gmx.net)" license="">
   <highlighting>
@@ -156,11 +156,13 @@
 
       <context attribute="String" lineEndContext="#pop" name="String">
         <HlCStringChar attribute="Escape" />
+        <RegExpr attribute="Escape" String="\\u[0-9a-fA-F]{4}" />
         <LineContinue/>
         <DetectChar attribute="String" context="#pop" char="&quot;" />
       </context>
       <context attribute="String" lineEndContext="#pop" name="String SQ">
         <HlCStringChar attribute="Escape" />
+        <RegExpr attribute="Escape" String="\\u[0-9a-fA-F]{4}" />
         <LineContinue/>
         <DetectChar attribute="String" context="#pop" char="'" />
       </context>

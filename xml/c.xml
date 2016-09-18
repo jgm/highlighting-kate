@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 <language name="C" section="Sources"
-          version="1.46" kateversion="3.4"
+          version="2" kateversion="5.0"
           indenter="cstyle"
           extensions="*.c;*.C;*.h"
           mimetype="text/x-csrc;text/x-c++src;text/x-chdr"
@@ -14,26 +14,28 @@
 ##########################################################################
 -->
   <highlighting>
-    <list name="keywords">
+    <list name="controlflow">
       <item> break </item>
       <item> case </item>
       <item> continue </item>
       <item> default </item>
       <item> do </item>
       <item> else </item>
-      <item> enum </item>
-      <item> extern </item>
       <item> for </item>
       <item> goto </item>
       <item> if </item>
-      <item> inline </item>
       <item> return </item>
+      <item> switch </item>
+      <item> while </item>
+    </list>
+    <list name="keywords">
+      <item> enum </item>
+      <item> extern </item>
+      <item> inline </item>
       <item> sizeof </item>
       <item> struct </item>
-      <item> switch </item>
       <item> typedef </item>
       <item> union </item>
-      <item> while </item>
     </list>
     <list name="types">
       <item> auto </item>
@@ -59,7 +61,32 @@
       <item> uint16_t </item>
       <item> uint32_t </item>
       <item> uint64_t </item>
+      <item> int_least8_t </item>
+      <item> int_least16_t </item>
+      <item> int_least32_t </item>
+      <item> int_least64_t </item>
+      <item> uint_least8_t </item>
+      <item> uint_least16_t </item>
+      <item> uint_least32_t </item>
+      <item> uint_least64_t </item>
+      <item> int_fast8_t </item>
+      <item> int_fast16_t </item>
+      <item> int_fast32_t </item>
+      <item> int_fast64_t </item>
+      <item> uint_fast8_t </item>
+      <item> uint_fast16_t </item>
+      <item> uint_fast32_t </item>
+      <item> uint_fast64_t </item>
+      <item> size_t </item>
+      <item> ssize_t </item>
       <item> wchar_t </item>
+      <item> intptr_t </item>
+      <item> uintptr_t </item>
+      <item> intmax_t </item>
+      <item> uintmax_t </item>
+      <item> ptrdiff_t </item>
+      <item> sig_atomic_t </item>
+      <item> wint_t </item>
       <item> _Imaginary </item>
       <item> _Complex </item>
       <item> _Bool </item>
@@ -71,6 +98,7 @@
         <DetectChar context="AfterHash" char="#" firstNonSpace="true" lookAhead="true" />
         <StringDetect attribute="Region Marker" context="Region Marker" String="//BEGIN" beginRegion="Region1" firstNonSpace="true" />
         <StringDetect attribute="Region Marker" context="Region Marker" String="//END" endRegion="Region1" firstNonSpace="true" />
+        <keyword attribute="Control Flow" context="#stay" String="controlflow"/>
         <keyword attribute="Keyword" context="#stay" String="keywords"/>
         <keyword attribute="Data Type" context="#stay" String="types"/>
         <DetectIdentifier />
@@ -184,6 +212,7 @@
     </contexts>
     <itemDatas>
       <itemData name="Normal Text"  defStyleNum="dsNormal" spellChecking="false"/>
+      <itemData name="Control Flow" defStyleNum="dsControlFlow" spellChecking="false"/>
       <itemData name="Keyword"      defStyleNum="dsKeyword" spellChecking="false"/>
       <itemData name="Data Type"    defStyleNum="dsDataType" spellChecking="false"/>
       <itemData name="Decimal"      defStyleNum="dsDecVal" spellChecking="false"/>
@@ -193,11 +222,11 @@
       <itemData name="Float"        defStyleNum="dsFloat" spellChecking="false"/>
       <itemData name="Char"         defStyleNum="dsChar" spellChecking="false"/>
       <itemData name="String"       defStyleNum="dsString"/>
-      <itemData name="String Char"  defStyleNum="dsChar"/>
+      <itemData name="String Char"  defStyleNum="dsSpecialChar"/>
       <itemData name="Comment"      defStyleNum="dsComment"/>
       <itemData name="Symbol"       defStyleNum="dsNormal" spellChecking="false"/>
-      <itemData name="Preprocessor" defStyleNum="dsOthers" spellChecking="false"/>
-      <itemData name="Prep. Lib"    defStyleNum="dsOthers" spellChecking="false"/> <!--,Qt::darkYellow,Qt::yellow,false,false)); -->
+      <itemData name="Preprocessor" defStyleNum="dsPreprocessor" spellChecking="false"/>
+      <itemData name="Prep. Lib"    defStyleNum="dsImport" spellChecking="false"/>
       <itemData name="Alert"        defStyleNum="dsAlert" spellChecking="false"/>
       <itemData name="Region Marker" defStyleNum="dsRegionMarker" spellChecking="false"/>
       <itemData name="Error"        defStyleNum="dsError" spellChecking="false"/>

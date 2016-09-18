@@ -3,7 +3,10 @@
   SYSTEM 'language.dtd'>
 <!--
   Elixir syntax highlighting definition for Kate.
+
   Copyright (C) 2014  by Rubén Caro (ruben.caro.estevez@gmail.com)
+  Copyright (C) 2016  by Boris Egorov (egorov@linux.com)
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
@@ -18,17 +21,28 @@
   Boston, MA  02110-1301, USA.
 -->
 <!-- Hold the "language" opening tag on a single line, as mentioned in "language.dtd". -->
-<language author="Rubén Caro (ruben.caro.estevez@gmail.com)"
+<language author="Rubén Caro (ruben.caro.estevez@gmail.com), Boris Egorov (egorov@linux.com)"
           extensions="*.ex;*.exs;*.eex;*.xml.eex;*.js.eex"
           indenter="elixir"
-          kateversion="3.13"
+          kateversion="5.0"
           license="GPL"
           mimetype="text/x-elixir"
           name="Elixir"
           section="Sources"
           style="elixir"
-          version="0.1">
+          version="1">
   <highlighting>
+    <list name="control-flow">
+      <item>catch</item>
+      <item>cond</item>
+      <item>else</item>
+      <item>if</item>
+      <item>raise</item>
+      <item>rescue</item>
+      <item>throw</item>
+      <item>try</item>
+      <item>unless</item>
+    </list>
     <list name="keywords">
       <item>do</item>
       <item>end</item>
@@ -36,18 +50,9 @@
       <item>bc</item>
       <item>lc</item>
       <item>for</item>
-      <item>if</item>
-      <item>cond</item>
-      <item>unless</item>
-      <item>try</item>
       <item>receive</item>
       <item>exit</item>
       <item>after</item>
-      <item>rescue</item>
-      <item>catch</item>
-      <item>else</item>
-      <item>raise</item>
-      <item>throw</item>
       <item>quote</item>
       <item>unquote</item>
       <item>super</item>
@@ -95,6 +100,7 @@
 
         <!-- Defined words -->
         <keyword String="keywords" attribute="Keyword" context="#stay"/>
+        <keyword String="control-flow" attribute="Control Flow" context="#stay"/>
         <keyword String="definitions" attribute="Definition" context="#stay"/>
         <keyword String="pseudo-variables" attribute="Pseudo variable" context="#stay"/>
         <keyword String="mixin-macros" attribute="Mixin macros" context="#stay"/>
@@ -117,7 +123,7 @@
         <Detect2Chars attribute="Operator" char="&amp;" char1="&amp;" context="#stay"/>
         <Detect2Chars attribute="Operator" char="|" char1="|" context="#stay"/>
         <RegExpr String="\s[\?\:\%]\s" attribute="Operator" context="#stay"/>
-        <RegExpr String="[|&amp;&lt;&gt;\^\+*~\-=]+" attribute="Operator" context="#stay"/>
+        <RegExpr String="[|&amp;&lt;&gt;\^\+*~\-=/]+" attribute="Operator" context="#stay"/>
         <!-- regexp hack -->
         <RegExpr String="\s!" attribute="Operator" context="#stay"/>
         <RegExpr String="/=\s" attribute="Operator" context="#stay" insensitive="0"/>
@@ -129,14 +135,12 @@
         <StringDetect String="&quot;&quot;&quot;" attribute="String" context="Triple Quoted String"/>
         <DetectChar attribute="String" char="&quot;" context="Quoted String"/>
         <DetectChar attribute="Raw String" char="'" context="Apostrophed String"/>
-        <DetectChar attribute="Command" char="`" context="Command String"/>
         <StringDetect String="?#" attribute="Normal Text" context="#stay"/>
         <DetectChar attribute="Comment" char="#" context="General Comment"/>
         <DetectChar attribute="Delimiter" char="[" context="#stay"/>
         <DetectChar attribute="Delimiter" char="]" context="#stay"/>
         <RegExpr String="@[a-zA-Z_0-9]+" attribute="Attribute" context="#stay"/>
         <!-- handle the different regular expression formats -->
-        <DetectChar attribute="Regular Expression" char="/" context="RegEx 1"/>
         <DetectChar attribute="Normal Text" char=")" context="#stay"/>
         <DetectIdentifier attribute="Normal Text" context="#stay"/>
       </context>
@@ -168,19 +172,6 @@
         <RegExpr String="\\\'" attribute="String" context="#stay"/>
         <DetectChar attribute="Raw String" char="'" context="#pop"/>
       </context>
-      <context attribute="Command" lineEndContext="#stay" name="Command String">
-        <StringDetect String="\\" attribute="String" context="#stay"/>
-        <RegExpr String="\\\`" attribute="String" context="#stay"/>
-        <RegExpr String="#@{1,2}" attribute="Substitution" context="Short Subst"/>
-        <Detect2Chars attribute="Substitution" char="#" char1="{" context="Subst"/>
-        <DetectChar attribute="Command" char="`" context="#pop"/>
-      </context>
-      <context attribute="Regular Expression" lineEndContext="#stay" name="RegEx 1">
-        <RegExpr String="\\\/" attribute="Regular Expression" context="#stay"/>
-        <RegExpr String="#@{1,2}" attribute="Substitution" context="Short Subst"/>
-        <Detect2Chars attribute="Substitution" char="#" char1="{" context="Subst"/>
-        <RegExpr String="/[uiomxn]*" attribute="Regular Expression" context="#pop"/>
-      </context>
       <!-- Substitutions can be nested -->
       <context attribute="Normal Text" lineEndContext="#stay" name="Subst">
         <DetectChar attribute="Substitution" char="}" context="#pop"/>
@@ -207,44 +198,33 @@
       </context>
     </contexts>
     <itemDatas>
-      <itemData name="Global Constant" defStyleNum="dsDataType" color="#bb1188" bold="1"/>
-      <itemData name="Constant" defStyleNum="dsDataType" color="#bb1188" bold="1"/>
+      <itemData name="Global Constant" defStyleNum="dsConstant"/>
+      <itemData name="Constant" defStyleNum="dsConstant"/>
       <itemData defStyleNum="dsNormal" name="Normal Text"/>
       <itemData defStyleNum="dsKeyword" name="Keyword"/>
-      <itemData defStyleNum="dsOthers" name="Attribute Definition"/>
-      <itemData color="#0000FF" defStyleNum="dsKeyword" name="Access Control"/>
+      <itemData defStyleNum="dsControlFlow" name="Control Flow"/>
       <itemData defStyleNum="dsKeyword" name="Definition"/>
-      <itemData defStyleNum="dsKeyword" name="Mixin macros"/>
-      <itemData defStyleNum="dsDecVal" name="Pseudo variable"/>
+      <itemData defStyleNum="dsImport" name="Mixin macros"/>
+      <itemData defStyleNum="dsConstant" name="Pseudo variable"/>
       <itemData defStyleNum="dsDecVal" name="Dec"/>
       <itemData defStyleNum="dsFloat" name="Float"/>
       <itemData defStyleNum="dsChar" name="Char"/>
       <itemData defStyleNum="dsBaseN" name="Octal"/>
       <itemData defStyleNum="dsBaseN" name="Hex"/>
       <itemData defStyleNum="dsBaseN" name="Bin"/>
-      <itemData color="#D40000" defStyleNum="dsString" name="Symbol"/>
+      <itemData defStyleNum="dsVariable" name="Symbol"/>
       <itemData defStyleNum="dsString" name="String"/>
-      <itemData color="#DD4A4A" defStyleNum="dsString" name="Raw String" selColor="#DD4A4A"/>
-      <itemData color="#AA3000" defStyleNum="dsString" name="Command"/>
-      <itemData color="#4000A7" defStyleNum="dsNormal" name="Message"/>
-      <itemData color="#4A5704" defStyleNum="dsOthers" name="Regular Expression"/>
+      <itemData defStyleNum="dsVerbatimString" name="Raw String"/>
+      <itemData defStyleNum="dsSpecialString" name="Regular Expression"/>
       <itemData defStyleNum="dsOthers" name="Substitution"/>
       <itemData defStyleNum="dsNormal" name="Data"/>
-      <itemData bold="1" defStyleNum="dsDataType" name="Default globals"/>
-      <itemData defStyleNum="dsDataType" name="Global Variable"/>
-      <itemData defStyleNum="dsDataType" name="Constant Value"/>
-      <itemData defStyleNum="dsNormal" name="Member"/>
       <itemData defStyleNum="dsOthers" name="Attribute"/>
-      <itemData defStyleNum="dsOthers" name="Class Variable"/>
       <itemData defStyleNum="dsComment" name="Comment"/>
-      <itemData defStyleNum="dsComment" name="Blockcomment"/>
       <itemData defStyleNum="dsComment" name="DocComment"/>
-      <itemData color="#0000ff" defStyleNum="dsNormal" name="Region Marker"/>
       <!-- use these to mark errors and alerts things -->
       <itemData defStyleNum="dsError" name="Error"/>
       <itemData color="#FF9FEC" defStyleNum="dsNormal" name="Delimiter"/>
-      <itemData defStyleNum="dsOthers" name="Expression"/>
-      <itemData color="#FF9FEC" defStyleNum="dsNormal" name="Operator"/>
+      <itemData defStyleNum="dsOperator" name="Operator"/>
       <itemData name="MarkdownHead" defStyleNum="dsFunction" bold="true"/>
       <itemData name="MarkdownBullet" defStyleNum="dsFunction"/>
       <itemData name="MarkdownNumlist" defStyleNum="dsFunction"/>

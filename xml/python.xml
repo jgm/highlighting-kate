@@ -13,7 +13,8 @@
 <!-- v2.06 decorator names can (and often do) contain periods -->
 <!-- v2.07 add support for %prog and co, see bug 142832 -->
 <!-- v2.08 add missing overloaders, new Python 3 statements, builtins, and keywords -->
-<language name="Python" version="2.25" style="python" kateversion="5.0" section="Scripts" extensions="*.py;*.pyw;SConstruct;SConscript" mimetype="application/x-python;text/x-python" casesensitive="1" author="Michael Bueker" license="">
+<!-- v2.29 recognize escape sequenzes correctly -->
+<language name="Python" version="3" style="python" kateversion="5.0" section="Scripts" extensions="*.py;*.pyw;SConstruct;SConscript" mimetype="application/x-python;text/x-python" casesensitive="1" author="Michael Bueker" license="">
 	<highlighting>
 		<list name="import">
 			<item> import </item>
@@ -52,6 +53,8 @@
 			<item> while </item>
 			<item> with </item>
 			<item> yield </item>
+			<item> async </item>
+			<item> await </item>
 		</list>
 		<list name="builtinfuncs">
 			<item> __import__ </item>
@@ -248,6 +251,11 @@
 			<item>__format__</item>
 			<item>__next__</item>
 			<item>__dir__</item>
+			<item>__await__</item>
+			<item>__aiter__</item>
+			<item>__anext__</item>
+			<item>__aenter__</item>
+			<item>__aexit__</item>
 		</list>
 		<list name="exceptions">
 			<!--
@@ -325,7 +333,7 @@
 			<context name="Normal" attribute="Normal Text" lineEndContext="#stay">
 				<keyword attribute="Import" String="import" context="#stay"/>
 				<keyword attribute="Definition Keyword" String="defs" context="#stay"/>
-				<keyword attribute="Operator" String="operators" context="#stay"/>
+				<keyword attribute="Operator Keyword" String="operators" context="#stay"/>
 				<keyword attribute="Flow Control Keyword" String="flow" context="#stay"/>
 				<keyword attribute="Builtin Function" String="builtinfuncs" context="#stay"/>
 				<keyword attribute="Special Variable" String="specialvars" context="#stay"/>
@@ -352,15 +360,15 @@
 
 				<IncludeRules context="StringVariants" />
 
-				<AnyChar attribute="Operator" String="+*/%\|=;\!&lt;&gt;!^&amp;~-" context="#stay"/>
 				<RegExpr attribute="Decorator" String="@[_a-zA-Z][\._a-zA-Z0-9]*" firstNonSpace="true"/>
+				<AnyChar attribute="Operator" String="+*/%\|=;\!&lt;&gt;!^&amp;~-@" context="#stay"/>
 			</context>
 
 			<context name="#CheckForString" attribute="Normal Text" lineEndContext="#pop" fallthrough="true" fallthroughContext="#pop">
 				<DetectSpaces/>
 				<LineContinue attribute="Normal Text" context="CheckForStringNext"/>
 			</context>
-			
+
 			<context name="CheckForStringNext" attribute="Normal Text" lineEndContext="#pop" fallthrough="true" fallthroughContext="#pop">
 				<DetectSpaces/>
 				<LineContinue attribute="Normal Text" context="CheckForStringNext"/>
@@ -431,14 +439,14 @@
 				<IncludeRules context="StringVariants" />
 				<IncludeRules context="Normal" />
 			</context>
-			
+
 			<context name="List" attribute="Normal Text" lineEndContext="#stay" noIndentationBasedFolding="true">
 				<DetectSpaces/>
 				<DetectChar attribute="Normal Text" char="]" context="#pop" endRegion="List"/>
 				<IncludeRules context="StringVariants" />
 				<IncludeRules context="Normal" />
 			</context>
-			
+
 			<context name="Tuple" attribute="Normal Text" lineEndContext="#stay" noIndentationBasedFolding="true">
 				<DetectSpaces/>
 				<DetectChar attribute="Normal Text" char=")" context="#pop" endRegion="Tuple"/>
@@ -492,27 +500,41 @@
 				-->
 				<RegExpr attribute="String Substitution" String="%((\([a-zA-Z0-9_]+\))?[#0\- +]?([1-9][0-9]*|\*)?(\.([1-9][0-9]*|\*))?[hlL]?[crsdiouxXeEfFgG%]|prog|default)" context="#stay"/>
 				<!-- http://docs.python.org/2/library/string.html#format-string-syntax:
-				     replacement_field ::= "{" field_name ["!" conversion] [":" format_spec] "}"
-				     field_name ::= (identifier | integer) ("." attribute_name | "[" element_index "]")*
-				     attribute_name ::= identifier
-				     element_index ::= integer | index_string
-				     index_string ::= <any source character except "]"> +
-				     conversion ::= "r" | "s"
-				     format_spec ::= [[fill]align][sign][#][0][width][.precision][type]
-				     fill ::= <a character other than '}'>
-				     align ::= "<" | ">" | "=" | "^"
-				     sign ::= "+" | "-" | " "
-				     width ::= integer
-				     precision ::= integer
-				     type ::= "b" | "c" | "d" | "e" | "E" | "f" | "F" | "g" | "G" | "n" | "o" | "s" | "x" | "X" | "%"
+				     replacement_field ::=  "{" [field_name] ["!" conversion] [":" format_spec] "}"
+				     field_name        ::=  arg_name ("." attribute_name | "[" element_index "]")*
+				     arg_name          ::=  [identifier | integer]
+				     attribute_name    ::=  identifier
+				     element_index     ::=  integer | index_string
+				     index_string      ::=  <any source character except "]"> +
+				     conversion        ::=  "r" | "s"
+				     format_spec       ::=  [[fill]align][sign][#][0][width][,][.precision][type]
+				     fill              ::=  <any character>
+				     align             ::=  "<" | ">" | "=" | "^"
+				     sign              ::=  "+" | "-" | " "
+				     width             ::=  integer
+				     precision         ::=  integer
+				     type              ::=  "b" | "c" | "d" | "e" | "E" | "f" | "F" | "g" | "G" | "n" | "o" | "s" | "x" | "X" | "%"
 				-->
-				<RegExpr attribute="String Substitution" String="\{([a-zA-Z0-9_]+|[0-9]+)(\.[a-zA-Z0-9_]+|\[[^ \]]+\])*(![rs])?(:([^}]?[&lt;&gt;=^])?[ +-]?#?0?[0-9]*(\.[0-9]+)?[bcdeEfFgGnosxX%]?)?\}" context="#stay"/>
+				<RegExpr attribute="String Substitution" String="\{(([a-zA-Z0-9_]+|[0-9]+)(\.[a-zA-Z0-9_]+|\[[^ \]]+\])*)?(![rs])?(:([^}]?[&lt;&gt;=^])?[ +-]?#?0?[0-9]*(\.[0-9]+)?[bcdeEfFgGnosxX%]?)?\}" context="#stay"/>
 				<Detect2Chars attribute="String Substitution" char="{" char1="{" context="#stay" />
 				<Detect2Chars attribute="String Substitution" char="}" char1="}" context="#stay" />
 			</context>
 
+			<!-- escape characters -->
+			<context name="stringescape" attribute="String Char" lineEndContext="#stay">
+				<!-- As this highlighting style is for both, Python 2 and 3,
+				we do not know if a normal string is “unicode” or not. So we
+				-->
+				<RegExpr attribute="String Char" String="\\[\\'&quot;abfnrtv]" context="#stay"/>
+				<RegExpr attribute="String Char" String="\\[0-7]{1,3}" context="#stay"/>
+				<RegExpr attribute="String Char" String="\\x[0-9A-Fa-f]{2}" context="#stay"/>
+				<RegExpr attribute="String Char" String="\\u[0-9A-Fa-f]{4}" context="#stay"/>
+				<RegExpr attribute="String Char" String="\\U[0-9A-Fa-f]{8}" context="#stay"/>
+				<RegExpr attribute="String Char" String="\\N\{[a-zA-Z0-9\- ]+\}" context="#stay"/>
+			</context>
+
 			<context name="Tripple A-string" attribute="String" lineEndContext="#stay" noIndentationBasedFolding="true">
-				<HlCStringChar attribute="String Char" context="#stay"/>
+				<IncludeRules context="stringescape"/>
 				<IncludeRules context="stringformat"/>
 				<StringDetect attribute="String" String="'''" context="#pop#CheckForString" endRegion="Tripple A-region"/>
 			</context>
@@ -524,7 +546,7 @@
 			</context>
 
 			<context name="Tripple Q-string" attribute="String" lineEndContext="#stay" noIndentationBasedFolding="true">
-				<HlCStringChar attribute="String Char" context="#stay"/>
+				<IncludeRules context="stringescape"/>
 				<IncludeRules context="stringformat"/>
 				<StringDetect attribute="String" String="&quot;&quot;&quot;" context="#pop#CheckForString" endRegion="Tripple Q-region"/>
 			</context>
@@ -537,13 +559,13 @@
 
 
 			<context name="Single A-string" attribute="String" lineEndContext="#stay">
-				<HlCStringChar attribute="String Char" context="#stay"/>
+				<IncludeRules context="stringescape"/>
 				<IncludeRules context="stringformat"/>
 				<DetectChar attribute="String" char="'" context="#pop#CheckForString"/>
 			</context>
 
 			<context name="Single Q-string" attribute="String" lineEndContext="#stay">
-				<HlCStringChar attribute="String Char" context="#stay"/>
+				<IncludeRules context="stringescape"/>
 				<IncludeRules context="stringformat"/>
 				<DetectChar attribute="String" char="&quot;" context="#pop#CheckForString"/>
 			</context>
@@ -565,6 +587,7 @@
 			<itemData name="Normal Text" defStyleNum="dsNormal" spellChecking="false"/>
 			<itemData name="Definition Keyword" defStyleNum="dsKeyword" spellChecking="false"/>
 			<itemData name="Operator" defStyleNum="dsOperator" spellChecking="false"/>
+			<itemData name="Operator Keyword" defStyleNum="dsKeyword" spellChecking="false"/>
 			<itemData name="String Substitution" defStyleNum="dsSpecialChar" spellChecking="false"/>
 			<itemData name="Flow Control Keyword" defStyleNum="dsControlFlow" spellChecking="false"/>
 			<itemData name="Builtin Function" defStyleNum="dsBuiltIn" spellChecking="false"/>
