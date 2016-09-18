@@ -1,3 +1,7 @@
+highlighting-kate 0.6.3 (18 Sep 2016)
+
+  * Updated kate syntax definitions and rebuilt parsers.
+
 highlighting-kate 0.6.2.1 (01 Jul 2016)
 
   * Use `#pop` instead of `#stay` if `fallthrough` is true but
