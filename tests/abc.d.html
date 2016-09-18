@@ -37,12 +37,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <span class="kw" title="KeywordTok">alias</span> Block = <span class="dt" title="DataTypeTok">char</span>[<span class="dv" title="DecValTok">2</span>];
 
-<span class="dt" title="DataTypeTok">bool</span> canMakeWord(<span class="kw" title="KeywordTok">immutable</span> Block[] blocks, <span class="kw" title="KeywordTok">in</span> <span class="dt" title="DataTypeTok">string</span> word) <span class="kw" title="KeywordTok">pure</span> <span class="kw" title="KeywordTok">nothrow</span>
+<span class="dt" title="DataTypeTok">bool</span> canMakeWord(<span class="kw" title="KeywordTok">immutable</span> Block[] blocks, <span class="kw" title="KeywordTok">in</span> <span class="bu" title="BuiltInTok">string</span> word) <span class="kw" title="KeywordTok">pure</span> <span class="kw" title="KeywordTok">nothrow</span>
 <span class="kw" title="KeywordTok">in </span>{
     <span class="kw" title="KeywordTok">assert</span>(blocks.all!(w =&gt; w[].all!isAlpha));
     <span class="kw" title="KeywordTok">assert</span>(word.all!isAlpha);
 } <span class="kw" title="KeywordTok">body</span> {
-    <span class="dt" title="DataTypeTok">bool</span> inner(<span class="dt" title="DataTypeTok">size_t</span>[] indexes, <span class="kw" title="KeywordTok">in</span> <span class="dt" title="DataTypeTok">string</span> w) <span class="kw" title="KeywordTok">pure</span> <span class="kw" title="KeywordTok">nothrow</span> {
+    <span class="dt" title="DataTypeTok">bool</span> inner(<span class="bu" title="BuiltInTok">size_t</span>[] indexes, <span class="kw" title="KeywordTok">in</span> <span class="bu" title="BuiltInTok">string</span> w) <span class="kw" title="KeywordTok">pure</span> <span class="kw" title="KeywordTok">nothrow</span> {
         <span class="kw" title="KeywordTok">if</span> (w.empty)
             <span class="kw" title="KeywordTok">return</span> <span class="kw" title="KeywordTok">true</span>;
 
@@ -68,10 +68,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="st" title="StringTok">                           JW HU VI AN OB ER FS LY PC ZM&quot;</span>.split;
 
     <span class="kw" title="KeywordTok">foreach</span> (w; <span class="st" title="StringTok">&quot;&quot;</span> ~ <span class="st" title="StringTok">&quot;A BARK BoOK TrEAT COmMoN SQUAD conFUsE&quot;</span>.split)
-        writefln(<span class="st" title="StringTok">`&quot;%s&quot; %s`</span>, w, blocks.canMakeWord(w));
+        writefln(<span class="ss" title="SpecialStringTok">`&quot;%s&quot; %s`</span>, w, blocks.canMakeWord(w));
 
     <span class="co" title="CommentTok">// Extra test.</span>
     <span class="kw" title="KeywordTok">immutable</span> Block[] blocks2 = [<span class="st" title="StringTok">&quot;AB&quot;</span>, <span class="st" title="StringTok">&quot;AB&quot;</span>, <span class="st" title="StringTok">&quot;AC&quot;</span>, <span class="st" title="StringTok">&quot;AC&quot;</span>];
     <span class="kw" title="KeywordTok">immutable</span> word = <span class="st" title="StringTok">&quot;abba&quot;</span>;
-    writefln(<span class="st" title="StringTok">`&quot;%s&quot; %s`</span>, word, blocks2.canMakeWord(word));
+    writefln(<span class="ss" title="SpecialStringTok">`&quot;%s&quot; %s`</span>, word, blocks2.canMakeWord(word));
 }</code></pre></div></body>

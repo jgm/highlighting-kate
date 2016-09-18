@@ -34,18 +34,18 @@ code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Ann
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="kw" title="KeywordTok">def</span> mkword(w, b):
-    <span class="cf" title="ControlFlowTok">if</span> <span class="op" title="OperatorTok">not</span> w: <span class="cf" title="ControlFlowTok">return</span> []
+    <span class="cf" title="ControlFlowTok">if</span> <span class="kw" title="KeywordTok">not</span> w: <span class="cf" title="ControlFlowTok">return</span> []
 
     c,w <span class="op" title="OperatorTok">=</span> w[<span class="dv" title="DecValTok">0</span>],w[<span class="dv" title="DecValTok">1</span>:]
-    <span class="cf" title="ControlFlowTok">for</span> i <span class="op" title="OperatorTok">in</span> <span class="bu" title="BuiltInTok">range</span>(<span class="bu" title="BuiltInTok">len</span>(b)):
-        <span class="cf" title="ControlFlowTok">if</span> c <span class="op" title="OperatorTok">in</span> b[i]:
+    <span class="cf" title="ControlFlowTok">for</span> i <span class="kw" title="KeywordTok">in</span> <span class="bu" title="BuiltInTok">range</span>(<span class="bu" title="BuiltInTok">len</span>(b)):
+        <span class="cf" title="ControlFlowTok">if</span> c <span class="kw" title="KeywordTok">in</span> b[i]:
             m <span class="op" title="OperatorTok">=</span> mkword(w, b[<span class="dv" title="DecValTok">0</span>:i] <span class="op" title="OperatorTok">+</span> b[i<span class="dv" title="DecValTok">+1</span>:])
             <span class="cf" title="ControlFlowTok">if</span> m <span class="op" title="OperatorTok">!=</span> <span class="va" title="VariableTok">None</span>: <span class="cf" title="ControlFlowTok">return</span> [b[i]] <span class="op" title="OperatorTok">+</span> m
 
 <span class="kw" title="KeywordTok">def</span> abc(w, blk):
-    <span class="cf" title="ControlFlowTok">return</span> mkword(w.upper(), [a.upper() <span class="cf" title="ControlFlowTok">for</span> a <span class="op" title="OperatorTok">in</span> blk])
+    <span class="cf" title="ControlFlowTok">return</span> mkword(w.upper(), [a.upper() <span class="cf" title="ControlFlowTok">for</span> a <span class="kw" title="KeywordTok">in</span> blk])
 
 blocks <span class="op" title="OperatorTok">=</span> <span class="st" title="StringTok">&#39;BO XK DQ CP NA GT RE TG QD FS JW HU VI AN OB ER FS LY PC ZM&#39;</span>.split()
 
-<span class="cf" title="ControlFlowTok">for</span> w <span class="op" title="OperatorTok">in</span> <span class="st" title="StringTok">&quot;, A, bark, book, treat, common, SQUAD, conFUsEd&quot;</span>.split(<span class="st" title="StringTok">&#39;, &#39;</span>):
+<span class="cf" title="ControlFlowTok">for</span> w <span class="kw" title="KeywordTok">in</span> <span class="st" title="StringTok">&quot;, A, bark, book, treat, common, SQUAD, conFUsEd&quot;</span>.split(<span class="st" title="StringTok">&#39;, &#39;</span>):
     <span class="bu" title="BuiltInTok">print</span> <span class="st" title="StringTok">&#39;</span><span class="ch" title="CharTok">\&#39;</span><span class="st" title="StringTok">&#39;</span> <span class="op" title="OperatorTok">+</span> w <span class="op" title="OperatorTok">+</span> <span class="st" title="StringTok">&#39;</span><span class="ch" title="CharTok">\&#39;</span><span class="st" title="StringTok">&#39;</span> <span class="op" title="OperatorTok">+</span> <span class="st" title="StringTok">&#39; -&gt;&#39;</span>, abc(w, blocks)</code></pre></div></body>

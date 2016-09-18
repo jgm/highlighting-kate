@@ -34,20 +34,20 @@ code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Ann
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode">
-(<span class="kw" title="KeywordTok">def</span><span class="fu" title="FunctionTok"> blocks</span>
+(<span class="bu" title="BuiltInTok">def</span><span class="fu" title="FunctionTok"> blocks</span>
   (<span class="kw" title="KeywordTok">-&gt;</span> <span class="st" title="StringTok">&quot;BO XK DQ CP NA GT RE TG QD FS JW HU VI AN OB ER FS LY PC ZM&quot;</span> (.split <span class="st" title="StringTok">&quot; &quot;</span>) <span class="kw" title="KeywordTok">vec</span>))
 
-(<span class="kw" title="KeywordTok">defn</span><span class="fu" title="FunctionTok"> omit </span>
+(<span class="bu" title="BuiltInTok">defn</span><span class="fu" title="FunctionTok"> omit </span>
   <span class="st" title="StringTok">&quot;return bs with (one instance of) b omitted&quot;</span>
   [bs b] 
   (<span class="kw" title="KeywordTok">let</span> [[before after] (<span class="kw" title="KeywordTok">split-with</span> #(<span class="kw" title="KeywordTok">not=</span> b %) bs)]
     (<span class="kw" title="KeywordTok">concat</span> before (<span class="kw" title="KeywordTok">rest</span> after))))
 
-(<span class="kw" title="KeywordTok">defn</span><span class="fu" title="FunctionTok"> abc </span>
+(<span class="bu" title="BuiltInTok">defn</span><span class="fu" title="FunctionTok"> abc </span>
   <span class="st" title="StringTok">&quot;return lazy sequence of solutions (i.e. block lists)&quot;</span>
   [blocks [c &amp; cs]]
   (if-some c
-    (<span class="kw" title="KeywordTok">for</span> [b blocks <span class="kw" title="KeywordTok">:when</span> (<span class="kw" title="KeywordTok">some</span> #(<span class="kw" title="KeywordTok">=</span> c %) b)
+    (<span class="kw" title="KeywordTok">for</span> [b blocks <span class="at" title="AttributeTok">:when</span> (<span class="kw" title="KeywordTok">some</span> #(<span class="kw" title="KeywordTok">=</span> c %) b)
           bs (abc (omit blocks b) cs)]
       (<span class="kw" title="KeywordTok">cons</span> b bs))
     [[]]))

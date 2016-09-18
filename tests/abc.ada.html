@@ -38,7 +38,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <span class="kw" title="KeywordTok">package</span> Abc <span class="kw" title="KeywordTok">is</span>
-    <span class="kw" title="KeywordTok">type</span> Block_Faces <span class="kw" title="KeywordTok">is</span> <span class="kw" title="KeywordTok">array</span>(<span class="dv" title="DecValTok">1</span>..<span class="dv" title="DecValTok">2</span>) <span class="kw" title="KeywordTok">of</span> Character;
+    <span class="kw" title="KeywordTok">type</span> Block_Faces <span class="kw" title="KeywordTok">is</span> <span class="kw" title="KeywordTok">array</span>(<span class="dv" title="DecValTok">1</span>..<span class="dv" title="DecValTok">2</span>) <span class="kw" title="KeywordTok">of</span> <span class="dt" title="DataTypeTok">Character</span>;
     <span class="kw" title="KeywordTok">type</span> Block_List <span class="kw" title="KeywordTok">is</span> <span class="kw" title="KeywordTok">array</span>(positive <span class="kw" title="KeywordTok">range</span> &lt;&gt;) <span class="kw" title="KeywordTok">of</span> Block_Faces;
     <span class="kw" title="KeywordTok">function</span> Can_Make_Word(W: <span class="dt" title="DataTypeTok">String</span>; Blocks: Block_List) <span class="kw" title="KeywordTok">return</span> <span class="dt" title="DataTypeTok">Boolean</span>;
 <span class="kw" title="KeywordTok">end</span> Abc;
@@ -57,7 +57,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     wPos := W&#39;First;
     <span class="kw" title="KeywordTok">while</span> True <span class="kw" title="KeywordTok">loop</span>
         <span class="kw" title="KeywordTok">declare</span>
-            C : Character := To_Upper(W(wPos));
+            C : <span class="dt" title="DataTypeTok">Character</span> := To_Upper(W(wPos));
             X : <span class="kw" title="KeywordTok">constant</span> wIndex := wPos;
         <span class="kw" title="KeywordTok">begin</span>
             <span class="kw" title="KeywordTok">for</span> I <span class="kw" title="KeywordTok">in</span> Blocks&#39;Range <span class="kw" title="KeywordTok">loop</span>

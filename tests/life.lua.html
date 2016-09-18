@@ -33,19 +33,19 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-</style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="co" title="CommentTok">-- life.lua</span>
-<span class="co" title="CommentTok">-- original by Dave Bollinger </span><span class="kw" title="KeywordTok">&lt;DBollinger</span><span class="ot" title="OtherTok">@compuserve.com</span><span class="kw" title="KeywordTok">&gt;</span><span class="co" title="CommentTok"> posted to lua-l</span>
-<span class="co" title="CommentTok">-- modified to use ANSI terminal escape sequences</span>
-<span class="co" title="CommentTok">-- modified to use for instead of while</span>
+</style></head><body><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="do" title="DocumentationTok">-- life.lua</span>
+<span class="do" title="DocumentationTok">-- original by Dave Bollinger </span><span class="kw" title="KeywordTok">&lt;DBollinger</span><span class="ot" title="OtherTok">@compuserve.com</span><span class="kw" title="KeywordTok">&gt;</span><span class="do" title="DocumentationTok"> posted to lua-l</span>
+<span class="do" title="DocumentationTok">-- modified to use ANSI terminal escape sequences</span>
+<span class="do" title="DocumentationTok">-- modified to use for instead of while</span>
 
 <span class="kw" title="KeywordTok">local</span> <span class="fu" title="FunctionTok">write</span><span class="ot" title="OtherTok">=</span><span class="fu" title="FunctionTok">io.write</span>
 
 ALIVE<span class="ot" title="OtherTok">=</span><span class="st" title="StringTok">&quot;¥&quot;</span>	DEAD<span class="ot" title="OtherTok">=</span><span class="st" title="StringTok">&quot;þ&quot;</span>
 ALIVE<span class="ot" title="OtherTok">=</span><span class="st" title="StringTok">&quot;O&quot;</span>	DEAD<span class="ot" title="OtherTok">=</span><span class="st" title="StringTok">&quot;-&quot;</span>
 
-<span class="kw" title="KeywordTok">function</span> delay<span class="ot" title="OtherTok">()</span> <span class="co" title="CommentTok">-- NOTE: SYSTEM-DEPENDENT, adjust as necessary</span>
+<span class="kw" title="KeywordTok">function</span> delay<span class="ot" title="OtherTok">()</span> <span class="do" title="DocumentationTok">-- NOTE: SYSTEM-DEPENDENT, adjust as necessary</span>
   <span class="kw" title="KeywordTok">for</span> i<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">10000</span> <span class="kw" title="KeywordTok">do</span> <span class="kw" title="KeywordTok">end</span>
-  <span class="co" title="CommentTok">-- local i=os.clock()+1 while(os.clock()</span><span class="kw" title="KeywordTok">&lt;i</span><span class="ot" title="OtherTok">) do end</span>
+  <span class="do" title="DocumentationTok">-- local i=os.clock()+1 while(os.clock()</span><span class="kw" title="KeywordTok">&lt;i</span><span class="ot" title="OtherTok">) do end</span>
 <span class="kw" title="KeywordTok">end</span>
 
 <span class="kw" title="KeywordTok">function</span> ARRAY2D<span class="ot" title="OtherTok">(</span>w<span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">)</span>
@@ -61,7 +61,7 @@ ALIVE<span class="ot" title="OtherTok">=</span><span class="st" title="StringTok
 
 _CELLS <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherTok">{}</span>
 
-<span class="co" title="CommentTok">-- give birth to a &quot;shape&quot; within the cell array</span>
+<span class="do" title="DocumentationTok">-- give birth to a &quot;shape&quot; within the cell array</span>
 <span class="kw" title="KeywordTok">function</span> _CELLS:spawn<span class="ot" title="OtherTok">(</span>shape<span class="ot" title="OtherTok">,</span>left<span class="ot" title="OtherTok">,</span>top<span class="ot" title="OtherTok">)</span>
   <span class="kw" title="KeywordTok">for</span> y<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span>shape<span class="ot" title="OtherTok">.</span>h<span class="ot" title="OtherTok">-</span><span class="dv" title="DecValTok">1</span> <span class="kw" title="KeywordTok">do</span>
     <span class="kw" title="KeywordTok">for</span> x<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span>shape<span class="ot" title="OtherTok">.</span>w<span class="ot" title="OtherTok">-</span><span class="dv" title="DecValTok">1</span> <span class="kw" title="KeywordTok">do</span>
@@ -70,7 +70,7 @@ _CELLS <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherT
   <span class="kw" title="KeywordTok">end</span>
 <span class="kw" title="KeywordTok">end</span>
 
-<span class="co" title="CommentTok">-- run the CA and produce the next generation</span>
+<span class="do" title="DocumentationTok">-- run the CA and produce the next generation</span>
 <span class="kw" title="KeywordTok">function</span> _CELLS:evolve<span class="ot" title="OtherTok">(</span><span class="fu" title="FunctionTok">next</span><span class="ot" title="OtherTok">)</span>
   <span class="kw" title="KeywordTok">local</span> ym1<span class="ot" title="OtherTok">,</span>y<span class="ot" title="OtherTok">,</span>yp1<span class="ot" title="OtherTok">,</span>yi<span class="ot" title="OtherTok">=</span>self<span class="ot" title="OtherTok">.</span>h<span class="ot" title="OtherTok">-</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span>self<span class="ot" title="OtherTok">.</span>h<span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span>self<span class="ot" title="OtherTok">.</span>h
   <span class="kw" title="KeywordTok">while</span> yi <span class="ot" title="OtherTok">&gt;</span> <span class="dv" title="DecValTok">0</span> <span class="kw" title="KeywordTok">do</span>
@@ -86,9 +86,9 @@ _CELLS <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherT
   <span class="kw" title="KeywordTok">end</span>
 <span class="kw" title="KeywordTok">end</span>
 
-<span class="co" title="CommentTok">-- output the array to screen</span>
+<span class="do" title="DocumentationTok">-- output the array to screen</span>
 <span class="kw" title="KeywordTok">function</span> _CELLS:draw<span class="ot" title="OtherTok">()</span>
-  <span class="kw" title="KeywordTok">local</span> out<span class="ot" title="OtherTok">=</span><span class="st" title="StringTok">&quot;&quot;</span> <span class="co" title="CommentTok">-- accumulate to reduce flicker</span>
+  <span class="kw" title="KeywordTok">local</span> out<span class="ot" title="OtherTok">=</span><span class="st" title="StringTok">&quot;&quot;</span> <span class="do" title="DocumentationTok">-- accumulate to reduce flicker</span>
   <span class="kw" title="KeywordTok">for</span> y<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span>self<span class="ot" title="OtherTok">.</span>h <span class="kw" title="KeywordTok">do</span>
    <span class="kw" title="KeywordTok">for</span> x<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span>self<span class="ot" title="OtherTok">.</span>w <span class="kw" title="KeywordTok">do</span>
       out<span class="ot" title="OtherTok">=</span>out<span class="ot" title="OtherTok">..(((</span>self<span class="ot" title="OtherTok">[</span>y<span class="ot" title="OtherTok">][</span>x<span class="ot" title="OtherTok">]&gt;</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">)</span> <span class="kw" title="KeywordTok">and</span> ALIVE<span class="ot" title="OtherTok">)</span> <span class="kw" title="KeywordTok">or</span> DEAD<span class="ot" title="OtherTok">)</span>
@@ -98,7 +98,7 @@ _CELLS <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherT
   <span class="fu" title="FunctionTok">write</span><span class="ot" title="OtherTok">(</span>out<span class="ot" title="OtherTok">)</span>
 <span class="kw" title="KeywordTok">end</span>
 
-<span class="co" title="CommentTok">-- constructor</span>
+<span class="do" title="DocumentationTok">-- constructor</span>
 <span class="kw" title="KeywordTok">function</span> CELLS<span class="ot" title="OtherTok">(</span>w<span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">)</span>
   <span class="kw" title="KeywordTok">local</span> c <span class="ot" title="OtherTok">=</span> ARRAY2D<span class="ot" title="OtherTok">(</span>w<span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">)</span>
   c<span class="ot" title="OtherTok">.</span>spawn <span class="ot" title="OtherTok">=</span> _CELLS<span class="ot" title="OtherTok">.</span>spawn
@@ -107,39 +107,39 @@ _CELLS <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherT
   <span class="kw" title="KeywordTok">return</span> c
 <span class="kw" title="KeywordTok">end</span>
 
-<span class="co" title="CommentTok">--</span>
-<span class="co" title="CommentTok">-- shapes suitable for use with spawn() above</span>
-<span class="co" title="CommentTok">--</span>
+<span class="do" title="DocumentationTok">--</span>
+<span class="do" title="DocumentationTok">-- shapes suitable for use with spawn() above</span>
+<span class="do" title="DocumentationTok">--</span>
 HEART <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherTok">{</span> <span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">;</span> w<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">3</span><span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">3</span> <span class="ot" title="OtherTok">}</span>
 GLIDER <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherTok">{</span> <span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">;</span> w<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">3</span><span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">3</span> <span class="ot" title="OtherTok">}</span>
 EXPLODE <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherTok">{</span> <span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">;</span> w<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">3</span><span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">4</span> <span class="ot" title="OtherTok">}</span>
 FISH <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherTok">{</span> <span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">;</span> w<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">5</span><span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">4</span> <span class="ot" title="OtherTok">}</span>
 BUTTERFLY <span class="ot" title="OtherTok">=</span> <span class="ot" title="OtherTok">{</span> <span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">0</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">1</span><span class="ot" title="OtherTok">;</span> w<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">5</span><span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">5</span> <span class="ot" title="OtherTok">}</span>
 
-<span class="co" title="CommentTok">-- the main routine</span>
+<span class="do" title="DocumentationTok">-- the main routine</span>
 <span class="kw" title="KeywordTok">function</span> LIFE<span class="ot" title="OtherTok">(</span>w<span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">)</span>
-  <span class="co" title="CommentTok">-- create two arrays</span>
+  <span class="do" title="DocumentationTok">-- create two arrays</span>
   <span class="kw" title="KeywordTok">local</span> thisgen <span class="ot" title="OtherTok">=</span> CELLS<span class="ot" title="OtherTok">(</span>w<span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">)</span>
   <span class="kw" title="KeywordTok">local</span> nextgen <span class="ot" title="OtherTok">=</span> CELLS<span class="ot" title="OtherTok">(</span>w<span class="ot" title="OtherTok">,</span>h<span class="ot" title="OtherTok">)</span>
 
-  <span class="co" title="CommentTok">-- create some life</span>
-  <span class="co" title="CommentTok">-- about 1000 generations of fun, then a glider steady-state</span>
+  <span class="do" title="DocumentationTok">-- create some life</span>
+  <span class="do" title="DocumentationTok">-- about 1000 generations of fun, then a glider steady-state</span>
   thisgen:spawn<span class="ot" title="OtherTok">(</span>GLIDER<span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">5</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">4</span><span class="ot" title="OtherTok">)</span>
   thisgen:spawn<span class="ot" title="OtherTok">(</span>EXPLODE<span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">25</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">10</span><span class="ot" title="OtherTok">)</span>
   thisgen:spawn<span class="ot" title="OtherTok">(</span>FISH<span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">4</span><span class="ot" title="OtherTok">,</span><span class="dv" title="DecValTok">12</span><span class="ot" title="OtherTok">)</span>
 
-  <span class="co" title="CommentTok">-- run until break</span>
+  <span class="do" title="DocumentationTok">-- run until break</span>
   <span class="kw" title="KeywordTok">local</span> gen<span class="ot" title="OtherTok">=</span><span class="dv" title="DecValTok">1</span>
-  <span class="fu" title="FunctionTok">write</span><span class="ot" title="OtherTok">(</span><span class="st" title="StringTok">&quot;\027[2J&quot;</span><span class="ot" title="OtherTok">)</span>	<span class="co" title="CommentTok">-- ANSI clear screen</span>
+  <span class="fu" title="FunctionTok">write</span><span class="ot" title="OtherTok">(</span><span class="st" title="StringTok">&quot;\027[2J&quot;</span><span class="ot" title="OtherTok">)</span>	<span class="do" title="DocumentationTok">-- ANSI clear screen</span>
   <span class="kw" title="KeywordTok">while</span> <span class="dv" title="DecValTok">1</span> <span class="kw" title="KeywordTok">do</span>
     thisgen:evolve<span class="ot" title="OtherTok">(</span>nextgen<span class="ot" title="OtherTok">)</span>
     thisgen<span class="ot" title="OtherTok">,</span>nextgen <span class="ot" title="OtherTok">=</span> nextgen<span class="ot" title="OtherTok">,</span>thisgen
-    <span class="fu" title="FunctionTok">write</span><span class="ot" title="OtherTok">(</span><span class="st" title="StringTok">&quot;\027[H&quot;</span><span class="ot" title="OtherTok">)</span>	<span class="co" title="CommentTok">-- ANSI home cursor</span>
+    <span class="fu" title="FunctionTok">write</span><span class="ot" title="OtherTok">(</span><span class="st" title="StringTok">&quot;\027[H&quot;</span><span class="ot" title="OtherTok">)</span>	<span class="do" title="DocumentationTok">-- ANSI home cursor</span>
     thisgen:draw<span class="ot" title="OtherTok">()</span>
     <span class="fu" title="FunctionTok">write</span><span class="ot" title="OtherTok">(</span><span class="st" title="StringTok">&quot;Life - generation &quot;</span><span class="ot" title="OtherTok">,</span>gen<span class="ot" title="OtherTok">,</span><span class="st" title="StringTok">&quot;</span><span class="ot" title="OtherTok">\n</span><span class="st" title="StringTok">&quot;</span><span class="ot" title="OtherTok">)</span>
     gen<span class="ot" title="OtherTok">=</span>gen<span class="ot" title="OtherTok">+</span><span class="dv" title="DecValTok">1</span>
     <span class="kw" title="KeywordTok">if</span> gen<span class="ot" title="OtherTok">&gt;</span><span class="dv" title="DecValTok">2000</span> <span class="kw" title="KeywordTok">then</span> <span class="kw" title="KeywordTok">break</span> <span class="kw" title="KeywordTok">end</span>
-    <span class="co" title="CommentTok">--delay()		-- no delay</span>
+    <span class="do" title="DocumentationTok">--delay()		-- no delay</span>
   <span class="kw" title="KeywordTok">end</span>
 <span class="kw" title="KeywordTok">end</span>
 
