@@ -409,6 +409,7 @@ langNameToModule str =  "Text.Highlighting.Kate.Syntax." ++
     "HTML" -> "Html"
     "Javadoc" -> "Javadoc"
     "JavaScript" -> "Javascript"
+    "LaTeX" -> "Latex"
     "SQL (MySQL)" -> "SqlMysql"
     "DoxygenLua" -> "Doxygenlua"
     "reStructuredText" -> "Restructuredtext"
