@@ -89,7 +89,7 @@ The syntax definitions can then be found in
     src/syntax/data
 
 There is information on the syntax highlighting definitions at
-<http://docs.kde.org/stable/en/applications/kate/highlight.html>.  See also
+<https://docs.kde.org/stable5/en/applications/katepart/highlight.html>.  See also
 <http://kate-editor.org/2005/03/24/writing-a-syntax-highlighting-file/>.
 
 Thanks are due to all the authors of these syntax definitions.
