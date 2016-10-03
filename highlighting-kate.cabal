@@ -27,6 +27,7 @@ Extra-Source-Files:  README.md
                      css/hk-kate.css
                      css/hk-pyg.css
                      css/hk-tango.css
+                     xml/language.dtd
                      xml/*.xml
                      xml/*.xml.patch
                      tests/abc.ada
