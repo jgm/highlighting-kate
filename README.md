@@ -1,25 +1,13 @@
 highlighting-kate
------------------
+=================
 
 A Haskell source code highlighting library, based
 on Kate's syntax description files (http://kate-editor.org/),
 now [part of the KDE Framework's "KTextEditor" component](http://kate-editor.org/2013/11/11/kate-on-5-the-future-of-ktexteditor-and-kate-part/).
 It can produce both HTML and LaTeX output.
 
-Currently, the following languages/formats are supported:
-Abc Actionscript Ada Agda Alert Alert_indent Apache Asn1 Asp Awk
-Bash Bibtex Boo C Changelog Clojure Cmake Coffee Coldfusion
-Commonlisp Cpp Cs Css Curry D Diff Djangotemplate Dockerfile Dot
-Doxygen Doxygenlua Dtd Eiffel Elixir Email Erlang Fasm Fortran
-Fsharp Gcc Glsl Gnuassembler Go Hamlet Haskell Haxe Html Idris
-Ini Isocpp Java Javadoc Javascript Json Jsp Julia Kotlin Latex
-Lex Lilypond LiterateCurry LiterateHaskell Llvm Lua M4 Makefile
-Mandoc Markdown Mathematica Matlab Maxima Mediawiki Metafont
-Mips Modelines Modula2 Modula3 Monobasic Nasm Noweb Objectivec
-Objectivecpp Ocaml Octave Opencl Pascal Perl Php Pike Postscript
-Prolog Pure Python R Relaxng Relaxngcompact Rest Rhtml Roff Ruby
-Rust Scala Scheme Sci Sed Sgml Sql SqlMysql SqlPostgresql Tcl
-Tcsh Texinfo Verilog Vhdl Xml Xorg Xslt Xul Yacc Yaml Zsh
+Building
+--------
 
 To install, use the [stack] tool:
 
@@ -51,7 +39,15 @@ put into `$HOME/.local/bin`.  To avoid creation of the
 executable, use `--flag highlighting-kate:-executable` with the
 `stack` commands above.
 
-To run `highlighting-kate`, specify the language name using -s:
+Using
+-----
+
+If you want to use highlighting-kate as a library in a Haskell
+program, see the API documentation at
+<https://hackage.haskell.org/package/highlighting-kate>.
+
+To run the `highlighting-kate` program, specify the language
+name using `-s`:
 
     highlighting-kate -s haskell highlighting-kate.hs > example.html
 
@@ -68,6 +64,9 @@ in the css directory. These use generic class names (Normal, Keyword,
 DataType, DecVal, BaseN, Float, Char, String, Comment, Function, Others,
 Alert, Error). For more fine-grained highlighting, users may wish to
 create their own CSS files that use language-specific classes.
+
+Adding syntax definitions
+-------------------------
 
 The parsers in Text/Highlighting/Kate/Syntax were automatically generated
 from the Kate syntax definitions in the xml directory. You may modify
@@ -102,7 +101,4 @@ been left in the directory, with .patch extensions):
 - perl.xml:  Small regex change due to differences in regex engines.
 - php.xml:  Added fallthrough so `<?php` prefix not needed.
 - tcsh.xml: Replace invalid character assignment(?) of regex '\s' with ' '.
-
-- base report bugs on the GitHub issue tracker:
-<https://github.com/jgm/highlighting-kate/issues>.
 
