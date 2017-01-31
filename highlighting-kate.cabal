@@ -1,5 +1,5 @@
 Name:                highlighting-kate
-Version:             0.6.3
+Version:             0.6.4
 Cabal-Version:       >= 1.10
 Build-Type:          Simple
 Category:            Text
@@ -12,6 +12,9 @@ Description:         highlighting-kate is a syntax highlighting library
                      An (optional) command-line program is provided, along
                      with a utility for generating new parsers from Kate
                      XML syntax descriptions.
+
+                     __This library has been deprecated.
+                     Please use skylighting instead.__
 
 License:             GPL
 License-file:        LICENSE

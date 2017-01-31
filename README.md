@@ -1,6 +1,12 @@
 highlighting-kate
 =================
 
+**This library has been deprecated. Please use skylighting
+instead
+([Hackage](https://hackage.haskell.org/package/skylighting)
+|
+[GitHub](https://github.com/jgm/skylighting)).**
+
 A Haskell source code highlighting library, based
 on Kate's syntax description files (http://kate-editor.org/),
 now [part of the KDE Framework's "KTextEditor" component](http://kate-editor.org/2013/11/11/kate-on-5-the-future-of-ktexteditor-and-kate-part/).
