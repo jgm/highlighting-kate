@@ -99,7 +99,7 @@ Source-repository head
 
 Library
   Build-Depends:     base >= 4.4 && < 5, containers,
-                     parsec, mtl, blaze-html >= 0.4.2 && < 0.9,
+                     parsec, mtl, blaze-html >= 0.4.2 && < 0.10,
                      utf8-string
   if flag(pcre-light)
     Build-depends:   pcre-light >= 0.4 && < 0.5, bytestring
@@ -247,7 +247,7 @@ Library
 
 Executable highlighting-kate
   Main-Is:          highlighting-kate.hs
-  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.9, filepath,
+  Build-Depends:    base, containers, blaze-html >= 0.4.2 && < 0.10, filepath,
                     highlighting-kate
   Hs-Source-Dirs:   extra
   Default-Language:    Haskell98
@@ -269,5 +269,5 @@ test-suite test-highlighting-kate
   Main-Is:        test-highlighting-kate.hs
   Hs-Source-Dirs: tests
   build-depends:  base >= 4, directory, highlighting-kate, filepath,
-                  process, Diff, containers, blaze-html >= 0.4.2 && < 0.9
+                  process, Diff, containers, blaze-html >= 0.4.2 && < 0.10
   default-language: Haskell98
