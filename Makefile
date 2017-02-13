@@ -17,7 +17,7 @@ prof:
 	stack build --library-profiling --executable-profiling --fast
 
 prep: clean $(XMLS)
-	stack install --install-ghc hxt regex-posix
+	stack install --install-ghc hxt regex-posix utf8-string
 	stack runghc ./ParseSyntaxFiles.hs xml
 	@echo "Syntax parsers have been generated."
 	@echo "You may now use cabal to build the package."
